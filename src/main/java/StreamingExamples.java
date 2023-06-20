@@ -7,7 +7,7 @@ import dev.langchain4j.model.openai.OpenAiStreamingLanguageModel;
 import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
 import static dev.langchain4j.model.openai.OpenAiModelName.TEXT_DAVINCI_003;
 
-public class StreamingExample {
+public class StreamingExamples {
 
     static class StreamableChatLanguageModelExample {
 
