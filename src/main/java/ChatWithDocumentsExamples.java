@@ -8,15 +8,16 @@ import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
+import dev.langchain4j.model.huggingface.HuggingFaceEmbeddingModel;
 import dev.langchain4j.model.input.Prompt;
 import dev.langchain4j.model.input.PromptTemplate;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.openai.OpenAiEmbeddingModel;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
+import dev.langchain4j.store.embedding.InMemoryEmbeddingStore;
 import dev.langchain4j.store.embedding.PineconeEmbeddingStore;
 
 import java.nio.file.Paths;
-import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ import java.util.Map;
 import static dev.langchain4j.data.document.DocumentType.PDF;
 import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
 import static dev.langchain4j.model.openai.OpenAiModelName.TEXT_EMBEDDING_ADA_002;
+import static java.time.Duration.ofSeconds;
 import static java.util.stream.Collectors.joining;
 
 public class ChatWithDocumentsExamples {
@@ -54,7 +56,29 @@ public class ChatWithDocumentsExamples {
 
             // You can override above-mentioned behavior in ConversationalRetrievalChain builder
 
-            String answer = chain.execute("Who is Charlie?");
+            String answer = chain.execute("Who is Charlie? Answer in 10 words.");
+
+            System.out.println(answer);
+        }
+    }
+
+    static class HuggingFaceEmbeddingsExample {
+
+        public static void main(String[] args) {
+
+            ConversationalRetrievalChain chain = ConversationalRetrievalChain.builder()
+                    .documentLoader(DocumentLoader.from(Paths.get("src/main/resources/story-about-happy-carrot.pdf")))
+                    .embeddingModel(HuggingFaceEmbeddingModel.builder()
+                            .accessToken(System.getenv("HF_API_KEY")) // https://huggingface.co/settings/tokens
+                            .modelId("sentence-transformers/all-MiniLM-L6-v2")
+                            .build())
+                    .embeddingStore(new InMemoryEmbeddingStore(384, 1000))
+                    .chatLanguageModel(OpenAiChatModel.builder()
+                            .apiKey(System.getenv("OPENAI_API_KEY"))
+                            .build())
+                    .build();
+
+            String answer = chain.execute("Who is Charlie? Answer in 10 words.");
 
             System.out.println(answer);
         }
@@ -82,7 +106,7 @@ public class ChatWithDocumentsExamples {
             EmbeddingModel embeddingModel = OpenAiEmbeddingModel.builder()
                     .apiKey(System.getenv("OPENAI_API_KEY")) // https://platform.openai.com/account/api-keys
                     .modelName(TEXT_EMBEDDING_ADA_002)
-                    .timeout(Duration.ofSeconds(15))
+                    .timeout(ofSeconds(15))
                     .build();
 
             List<Embedding> embeddings = embeddingModel.embedAll(documentSegments).get();
@@ -102,7 +126,7 @@ public class ChatWithDocumentsExamples {
 
             // Define the question you want to ask the model and embed it
 
-            String question = "Who is Charlie?";
+            String question = "Who is Charlie? Answer in 10 words.";
 
             Embedding questionEmbedding = embeddingModel.embed(question).get();
 
