@@ -7,6 +7,7 @@ import dev.langchain4j.memory.chat.TokenWindowChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.openai.OpenAiTokenizer;
+import dev.langchain4j.service.AiServices;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,7 +19,31 @@ import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
 
 public class ChatMemoryExamples {
 
-    public static class IfYouNeedSimplicity {
+    static class AI_Service_with_Memory_Example {
+
+        interface Chat {
+
+            String chat(String userMessage);
+        }
+
+        public static void main(String[] args) {
+
+            String apiKey = System.getenv("OPENAI_API_KEY"); // https://platform.openai.com/account/api-keys
+
+            Chat chat = AiServices.builder(Chat.class)
+                    .chatLanguageModel(OpenAiChatModel.withApiKey(apiKey))
+                    .chatMemory(MessageWindowChatMemory.withCapacity(10))
+                    .build();
+
+            String answer = chat.chat("Hello, my name is Klaus");
+            System.out.println(answer); // Hello Klaus! How can I assist you today?
+
+            String answerWithName = chat.chat("What is my name?");
+            System.out.println(answerWithName); // Your name is Klaus.
+        }
+    }
+
+    public static class ConversationalChain_Example {
 
         public static void main(String[] args) throws IOException {
 
@@ -48,7 +73,7 @@ public class ChatMemoryExamples {
         }
     }
 
-    public static class IfYouNeedMoreControl {
+    public static class If_You_Need_More_Control {
 
         public static void main(String[] args) {
 

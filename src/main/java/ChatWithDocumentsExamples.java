@@ -34,14 +34,12 @@ public class ChatWithDocumentsExamples {
 
         public static void main(String[] args) {
 
+            String apiKey = System.getenv("OPENAI_API_KEY"); // https://platform.openai.com/account/api-keys
+
             ConversationalRetrievalChain chain = ConversationalRetrievalChain.builder()
                     .documentLoader(DocumentLoader.from(Paths.get("src/main/resources/story-about-happy-carrot.pdf")))
-                    .embeddingModel(OpenAiEmbeddingModel.builder()
-                            .apiKey(System.getenv("OPENAI_API_KEY")) // https://platform.openai.com/account/api-keys
-                            .build())
-                    .chatLanguageModel(OpenAiChatModel.builder()
-                            .apiKey(System.getenv("OPENAI_API_KEY"))
-                            .build())
+                    .embeddingModel(OpenAiEmbeddingModel.withApiKey(apiKey))
+                    .chatLanguageModel(OpenAiChatModel.withApiKey(apiKey))
                     .build();
 
             // By default,
@@ -62,7 +60,7 @@ public class ChatWithDocumentsExamples {
         }
     }
 
-    static class HuggingFaceEmbeddingsExample {
+    static class HuggingFace_Embeddings_Example {
 
         public static void main(String[] args) {
 
@@ -73,9 +71,7 @@ public class ChatWithDocumentsExamples {
                             .modelId("sentence-transformers/all-MiniLM-L6-v2")
                             .build())
                     .embeddingStore(new InMemoryEmbeddingStore(384, 1000))
-                    .chatLanguageModel(OpenAiChatModel.builder()
-                            .apiKey(System.getenv("OPENAI_API_KEY"))
-                            .build())
+                    .chatLanguageModel(OpenAiChatModel.withApiKey(System.getenv("OPENAI_API_KEY")))
                     .build();
 
             String answer = chain.execute("Who is Charlie? Answer in 10 words.");
@@ -84,7 +80,7 @@ public class ChatWithDocumentsExamples {
         }
     }
 
-    static class IfYouNeedMoreControl {
+    static class If_You_Need_More_Control {
 
         public static void main(String[] args) {
 

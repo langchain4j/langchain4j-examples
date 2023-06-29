@@ -4,19 +4,15 @@ import dev.langchain4j.model.language.StreamingLanguageModel;
 import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
 import dev.langchain4j.model.openai.OpenAiStreamingLanguageModel;
 
-import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
-import static dev.langchain4j.model.openai.OpenAiModelName.TEXT_DAVINCI_003;
-
 public class StreamingExamples {
 
-    static class StreamableChatLanguageModelExample {
+    static class StreamableChatLanguageModel_Example {
 
         public static void main(String[] args) {
 
-            StreamingChatLanguageModel model = OpenAiStreamingChatModel.builder()
-                    .apiKey(System.getenv("OPENAI_API_KEY")) // https://platform.openai.com/account/api-keys
-                    .modelName(GPT_3_5_TURBO)
-                    .build();
+            String apiKey = System.getenv("OPENAI_API_KEY"); // https://platform.openai.com/account/api-keys
+
+            StreamingChatLanguageModel model = OpenAiStreamingChatModel.withApiKey(apiKey);
 
             model.sendUserMessage("Tell me a joke", new StreamingResultHandler() {
 
@@ -38,14 +34,13 @@ public class StreamingExamples {
         }
     }
 
-    static class StreamableLanguageModelExample {
+    static class StreamableLanguageModel_Example {
 
         public static void main(String[] args) {
 
-            StreamingLanguageModel model = OpenAiStreamingLanguageModel.builder()
-                    .apiKey(System.getenv("OPENAI_API_KEY")) // https://platform.openai.com/account/api-keys
-                    .modelName(TEXT_DAVINCI_003)
-                    .build();
+            String apiKey = System.getenv("OPENAI_API_KEY"); // https://platform.openai.com/account/api-keys
+
+            StreamingLanguageModel model = OpenAiStreamingLanguageModel.withApiKey(apiKey);
 
             model.process("Tell me a joke", new StreamingResultHandler() {
 

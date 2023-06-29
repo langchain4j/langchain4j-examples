@@ -5,19 +5,19 @@ import java.util.Map;
 
 public class PromptTemplateExamples {
 
-    static class PromptTemplateWithOneVariable {
+    static class PromptTemplate_with_One_Variable_Example {
 
         public static void main(String[] args) {
 
-            PromptTemplate promptTemplate = PromptTemplate.from("Hi, my name is {{name}}.");
+            PromptTemplate promptTemplate = PromptTemplate.from("Hi, my name is {{it}}.");
 
-            Prompt prompt = promptTemplate.apply("name", "John");
+            Prompt prompt = promptTemplate.apply("John");
 
-            System.out.println(prompt.text());
+            System.out.println(prompt.text()); // Hi, my name is John.
         }
     }
 
-    static class PromptTemplateWithMultipleVariables {
+    static class PromptTemplate_With_Multiple_Variables_Example {
 
         public static void main(String[] args) {
 
@@ -28,7 +28,7 @@ public class PromptTemplateExamples {
                     "age", 35
             ));
 
-            System.out.println(prompt.text());
+            System.out.println(prompt.text()); // Hi, my name is John. I am 35 years old.
         }
     }
 }

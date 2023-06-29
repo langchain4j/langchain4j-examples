@@ -1,11 +1,10 @@
+import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.input.structured.StructuredPrompt;
 import dev.langchain4j.model.openai.OpenAiChatModel;
+import dev.langchain4j.model.openai.OpenAiModerationModel;
 import dev.langchain4j.model.output.structured.Description;
-import dev.langchain4j.service.AiServices;
-import dev.langchain4j.service.SystemMessage;
-import dev.langchain4j.service.UserMessage;
-import dev.langchain4j.service.V;
+import dev.langchain4j.service.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,43 +13,74 @@ import java.util.List;
 
 public class AiServicesExamples {
 
-    private static final ChatLanguageModel MODEL = OpenAiChatModel.builder()
-            .apiKey(System.getenv("OPENAI_API_KEY")) // https://platform.openai.com/account/api-keys
-            .build();
-
+    static String apiKey = System.getenv("OPENAI_API_KEY"); // https://platform.openai.com/account/api-keys
+    static ChatLanguageModel chatLanguageModel = OpenAiChatModel.withApiKey(apiKey);
 
     static class Simple_AI_Service_Example {
 
-        interface Comedian {
+        interface Chat {
 
-            String tellMeJoke();
-
-            String tellMeJokeAbout(String topic);
-
-            boolean isItFunny(String joke);
-
-            Funniness evaluate(String joke);
-        }
-
-        enum Funniness {
-            VERY_FUNNY, FUNNY, MEH, NOT_FUNNY
+            String chat(String userMessage);
         }
 
         public static void main(String[] args) {
 
-            Comedian comedian = AiServices.create(Comedian.class, MODEL);
+            Chat chat = AiServices.create(Chat.class, chatLanguageModel);
 
-            String joke = comedian.tellMeJoke();
-            System.out.println(joke); // Why couldn't the bicycle stand up by itself? Because it was two-tired!
+            String answer = chat.chat("Hello");
 
-            String anotherJoke = comedian.tellMeJokeAbout("tomato");
-            System.out.println(anotherJoke); // Why did the tomato turn red? Because it saw the salad dressing!
+            System.out.println(answer); // Hello! How can I assist you today?
+        }
+    }
 
-            boolean funny = comedian.isItFunny(joke);
-            System.out.println(funny); // true
 
-            Funniness funniness = comedian.evaluate(joke);
-            System.out.println(funniness); // MEH
+    static class AI_Service_with_Memory_Example {
+
+        interface Chat {
+
+            String chat(String userMessage);
+        }
+
+        public static void main(String[] args) {
+
+            Chat chat = AiServices.builder(Chat.class)
+                    .chatLanguageModel(chatLanguageModel)
+                    .chatMemory(MessageWindowChatMemory.withCapacity(10))
+                    .build();
+
+            String answer = chat.chat("Hello, my name is Klaus");
+            System.out.println(answer); // Hello Klaus! How can I assist you today?
+
+            String answerWithName = chat.chat("What is my name?");
+            System.out.println(answerWithName); // Your name is Klaus.
+        }
+    }
+
+
+    static class Sentiment_Extracting_AI_Service_Example {
+
+        enum Sentiment {
+            POSITIVE, NEUTRAL, NEGATIVE;
+        }
+
+        interface SentimentAnalyzer {
+
+            @UserMessage("Analyze sentiment of {{it}}")
+            Sentiment analyzeSentimentOf(String text);
+
+            @UserMessage("Does {{it}} have a positive sentiment?")
+            boolean isPositive(String text);
+        }
+
+        public static void main(String[] args) {
+
+            SentimentAnalyzer sentimentAnalyzer = AiServices.create(SentimentAnalyzer.class, chatLanguageModel);
+
+            Sentiment sentiment = sentimentAnalyzer.analyzeSentimentOf("It is good!");
+            System.out.println(sentiment); // POSITIVE
+
+            boolean positive = sentimentAnalyzer.isPositive("It is bad!");
+            System.out.println(positive); // false
         }
     }
 
@@ -59,16 +89,19 @@ public class AiServicesExamples {
 
         interface DateTimeExtractor {
 
+            @UserMessage("Extract date from {{it}}")
             LocalDate extractDateFrom(String text);
 
+            @UserMessage("Extract time from {{it}}")
             LocalTime extractTimeFrom(String text);
 
+            @UserMessage("Extract date and time from {{it}}")
             LocalDateTime extractDateTimeFrom(String text);
         }
 
         public static void main(String[] args) {
 
-            DateTimeExtractor extractor = AiServices.create(DateTimeExtractor.class, MODEL);
+            DateTimeExtractor extractor = AiServices.create(DateTimeExtractor.class, chatLanguageModel);
 
             String text = "The tranquility pervaded the evening of 1968, just fifteen minutes shy of midnight," +
                     " following the celebrations of Independence Day.";
@@ -105,12 +138,13 @@ public class AiServicesExamples {
 
         interface PersonExtractor {
 
+            @UserMessage("Extract information about a person from {{it}}")
             Person extractPersonFrom(String text);
         }
 
         public static void main(String[] args) {
 
-            PersonExtractor extractor = AiServices.create(PersonExtractor.class, MODEL);
+            PersonExtractor extractor = AiServices.create(PersonExtractor.class, chatLanguageModel);
 
             String text = "In 1968, amidst the fading echoes of Independence Day, "
                     + "a child named John arrived under the calm evening sky. "
@@ -166,7 +200,7 @@ public class AiServicesExamples {
 
         public static void main(String[] args) {
 
-            Chef chef = AiServices.create(Chef.class, MODEL);
+            Chef chef = AiServices.create(Chef.class, chatLanguageModel);
 
             Recipe recipe = chef.createRecipeFrom("cucumber", "tomato", "feta", "onion", "olives");
 
@@ -190,6 +224,7 @@ public class AiServicesExamples {
 
             Recipe anotherRecipe = chef.createRecipe(prompt);
             System.out.println(anotherRecipe);
+            // Recipe ...
         }
     }
 
@@ -204,10 +239,10 @@ public class AiServicesExamples {
 
         public static void main(String[] args) {
 
-            Chef chef = AiServices.create(Chef.class, MODEL);
+            Chef chef = AiServices.create(Chef.class, chatLanguageModel);
 
             String answer = chef.answer("How long should I grill chicken?");
-            System.out.println(answer); // It depends on the thickness of the chicken. As a general rule, ...
+            System.out.println(answer); // Grilling chicken usually takes around 10-15 minutes per side, depending on ...
         }
     }
 
@@ -225,7 +260,7 @@ public class AiServicesExamples {
 
         public static void main(String[] args) {
 
-            TextUtils utils = AiServices.create(TextUtils.class, MODEL);
+            TextUtils utils = AiServices.create(TextUtils.class, chatLanguageModel);
 
             String translation = utils.translate("Hello, how are you?", "italian");
             System.out.println(translation); // Ciao, come stai?
@@ -242,6 +277,30 @@ public class AiServicesExamples {
             //     "- It aims to create machines that mimic human intelligence",
             //     "- It can perform simple or complex tasks"
             // ]
+        }
+    }
+
+    static class AI_Service_with_Auto_Moderation_Example {
+
+        interface Chat {
+
+            @Moderate
+            String chat(String text);
+        }
+
+        public static void main(String[] args) {
+
+            Chat chat = AiServices.builder(Chat.class)
+                    .chatLanguageModel(chatLanguageModel)
+                    .moderationModel(OpenAiModerationModel.withApiKey(System.getenv("OPENAI_API_KEY")))
+                    .build();
+
+            try {
+                chat.chat("I WILL KILL YOU!!!");
+            } catch (ModerationException e) {
+                System.out.println(e.getMessage());
+                // Text "I WILL KILL YOU!!!" violates content policy
+            }
         }
     }
 }
