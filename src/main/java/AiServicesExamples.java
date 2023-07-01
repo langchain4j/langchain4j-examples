@@ -1,3 +1,4 @@
+import dev.langchain4j.agent.tool.Tool;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.input.structured.StructuredPrompt;
@@ -6,10 +7,15 @@ import dev.langchain4j.model.openai.OpenAiModerationModel;
 import dev.langchain4j.model.output.structured.Description;
 import dev.langchain4j.service.*;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+
+import static java.time.Month.JANUARY;
 
 public class AiServicesExamples {
 
@@ -18,16 +24,16 @@ public class AiServicesExamples {
 
     static class Simple_AI_Service_Example {
 
-        interface Chat {
+        interface Assistant {
 
-            String chat(String userMessage);
+            String chat(String message);
         }
 
         public static void main(String[] args) {
 
-            Chat chat = AiServices.create(Chat.class, chatLanguageModel);
+            Assistant assistant = AiServices.create(Assistant.class, chatLanguageModel);
 
-            String answer = chat.chat("Hello");
+            String answer = assistant.chat("Hello");
 
             System.out.println(answer); // Hello! How can I assist you today?
         }
@@ -36,23 +42,94 @@ public class AiServicesExamples {
 
     static class AI_Service_with_Memory_Example {
 
-        interface Chat {
+        interface Assistant {
 
-            String chat(String userMessage);
+            String chat(String message);
         }
 
         public static void main(String[] args) {
 
-            Chat chat = AiServices.builder(Chat.class)
+            Assistant assistant = AiServices.builder(Assistant.class)
                     .chatLanguageModel(chatLanguageModel)
                     .chatMemory(MessageWindowChatMemory.withCapacity(10))
                     .build();
 
-            String answer = chat.chat("Hello, my name is Klaus");
+            String answer = assistant.chat("Hello! My name is Klaus.");
             System.out.println(answer); // Hello Klaus! How can I assist you today?
 
-            String answerWithName = chat.chat("What is my name?");
+            String answerWithName = assistant.chat("What is my name?");
             System.out.println(answerWithName); // Your name is Klaus.
+        }
+    }
+
+
+    static class AI_Service_with_Tools_Example {
+
+        static class Booking {
+
+            String bookingNumber;
+            LocalDate bookingFrom;
+            LocalDate bookingTo;
+            Customer customer;
+        }
+
+        static class Customer {
+
+            String name;
+            String surname;
+        }
+
+        static class BookingTools {
+
+            @Tool("Get information about booking")
+            public Booking getBooking(String bookingNumber, String customerName, String customerSurname) {
+                // Imitating retrieval from DB
+                Booking booking = new Booking();
+                booking.bookingNumber = bookingNumber;
+                booking.bookingFrom = LocalDate.of(2024, JANUARY, 1);
+                booking.bookingTo = LocalDate.of(2024, JANUARY, 31);
+                booking.customer = new Customer();
+                booking.customer.name = customerName;
+                booking.customer.surname = customerSurname;
+                return booking;
+            }
+
+            @Tool("Cancel booking")
+            public void cancelBooking(String bookingNumber, String customerName, String customerSurname) {
+                // Imitating cancellation
+            }
+        }
+
+        interface CustomerSupportAgent {
+
+            @SystemMessage({
+                    "You are a customer support agent of a car rental company named 'Miles of Smiles'.",
+                    "Before providing information about booking or cancelling booking, you must always check:",
+                    "booking number, customer name and surname."
+            })
+            String chat(String message);
+        }
+
+        public static void main(String[] args) throws IOException {
+
+            CustomerSupportAgent customerSupportAgent = AiServices.builder(CustomerSupportAgent.class)
+                    .chatLanguageModel(chatLanguageModel)
+                    .chatMemory(MessageWindowChatMemory.withCapacity(20))
+                    .tools(new BookingTools())
+                    .build();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            while (true) {
+                System.out.print("User: ");
+                String messageFromUser = br.readLine();
+
+                if ("exit".equalsIgnoreCase(messageFromUser)) {
+                    return;
+                }
+
+                String responseFromAI = customerSupportAgent.chat(messageFromUser);
+                System.out.println("Customer support agent: " + responseFromAI);
+            }
         }
     }
 
