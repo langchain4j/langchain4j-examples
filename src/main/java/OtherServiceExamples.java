@@ -1,5 +1,3 @@
-package services;
-
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.input.structured.StructuredPrompt;
 import dev.langchain4j.model.openai.OpenAiChatModel;
@@ -11,7 +9,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-public class OtherExamples {
+public class OtherServiceExamples {
 
     static String apiKey = System.getenv("OPENAI_API_KEY"); // https://platform.openai.com/account/api-keys
     static ChatLanguageModel chatLanguageModel = OpenAiChatModel.withApiKey(apiKey);
