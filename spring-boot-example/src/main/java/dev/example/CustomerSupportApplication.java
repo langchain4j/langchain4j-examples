@@ -2,7 +2,6 @@ package dev.example;
 
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain4j.model.moderation.ModerationModel;
 import dev.langchain4j.service.AiServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -18,16 +17,12 @@ public class CustomerSupportApplication {
     @Autowired
     BookingTools bookingTools;
 
-    @Autowired
-    ModerationModel moderationModel;
-
     @Bean
     CustomerSupportAgent customerSupportAgent() {
         return AiServices.builder(CustomerSupportAgent.class)
                 .chatLanguageModel(chatLanguageModel)
                 .chatMemory(MessageWindowChatMemory.withCapacity(20))
                 .tools(bookingTools)
-                .moderationModel(moderationModel)
                 .build();
     }
 
