@@ -28,7 +28,7 @@ public class BookingService {
     private void ensureExists(String bookingNumber, String customerName, String customerSurname) {
         // Imitating check
         if (!bookingNumber.equals("123-456")) {
-            throw new RuntimeException("Booking is not found");
+            throw new BookingNotFoundException(bookingNumber);
         }
     }
 }
