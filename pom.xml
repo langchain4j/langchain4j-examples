@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>dev.langchain4j</groupId>
-    <artifactId>langchain4j-examples-parent</artifactId>
+    <artifactId>langchain4j-examples</artifactId>
     <version>0.8.0</version>
     <packaging>pom</packaging>
 
