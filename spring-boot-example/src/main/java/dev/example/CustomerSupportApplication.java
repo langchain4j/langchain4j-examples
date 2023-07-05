@@ -40,7 +40,14 @@ public class CustomerSupportApplication {
 
     @Bean
     Retriever<DocumentSegment> retriever(EmbeddingStore<DocumentSegment> embeddingStore, EmbeddingModel embeddingModel) {
-        return EmbeddingStoreRetriever.from(embeddingStore, embeddingModel, 2, 0.6);
+
+        // You will need to adjust these parameters to find the optimal setting, which will depend on two main factors:
+        // - The nature of your data
+        // - The embedding model you are using
+        int maxResultsRetrieved = 2;
+        double minSimilarity = 0.6;
+
+        return EmbeddingStoreRetriever.from(embeddingStore, embeddingModel, maxResultsRetrieved, minSimilarity);
     }
 
     @Bean
