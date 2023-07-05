@@ -1,8 +1,15 @@
+import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.model.StreamingResultHandler;
 import dev.langchain4j.model.chat.StreamingChatLanguageModel;
 import dev.langchain4j.model.language.StreamingLanguageModel;
 import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
 import dev.langchain4j.model.openai.OpenAiStreamingLanguageModel;
+
+import java.util.List;
+
+import static dev.langchain4j.data.message.SystemMessage.systemMessage;
+import static dev.langchain4j.data.message.UserMessage.userMessage;
+import static java.util.Arrays.asList;
 
 public class StreamingExamples {
 
@@ -14,7 +21,12 @@ public class StreamingExamples {
 
             StreamingChatLanguageModel model = OpenAiStreamingChatModel.withApiKey(apiKey);
 
-            model.sendUserMessage("Tell me a joke", new StreamingResultHandler() {
+            List<ChatMessage> messages = asList(
+                    systemMessage("You are a very sarcastic assistant"),
+                    userMessage("Tell me a joke")
+            );
+
+            model.sendMessages(messages, new StreamingResultHandler() {
 
                 @Override
                 public void onPartialResult(String partialResult) {

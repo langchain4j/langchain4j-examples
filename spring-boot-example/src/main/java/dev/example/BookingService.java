@@ -4,17 +4,15 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
-import static java.time.Month.JANUARY;
-
 @Component
 public class BookingService {
 
-    public Booking getBooking(String bookingNumber, String customerName, String customerSurname) {
+    public Booking getBookingDetails(String bookingNumber, String customerName, String customerSurname) {
         ensureExists(bookingNumber, customerName, customerSurname);
 
         // Imitating retrieval from DB
-        LocalDate bookingFrom = LocalDate.of(2024, JANUARY, 1);
-        LocalDate bookingTo = LocalDate.of(2024, JANUARY, 31);
+        LocalDate bookingFrom = LocalDate.now().plusDays(1);
+        LocalDate bookingTo = LocalDate.now().plusDays(3);
         Customer customer = new Customer(customerName, customerSurname);
         return new Booking(bookingNumber, bookingFrom, bookingTo, customer);
     }
@@ -23,11 +21,14 @@ public class BookingService {
         ensureExists(bookingNumber, customerName, customerSurname);
 
         // Imitating cancellation
+        throw new BookingCannotBeCancelledException(bookingNumber);
     }
 
     private void ensureExists(String bookingNumber, String customerName, String customerSurname) {
         // Imitating check
-        if (!bookingNumber.equals("123-456")) {
+        if (!(bookingNumber.equals("123-456")
+                && customerName.equals("Klaus")
+                && customerSurname.equals("Heisler"))) {
             throw new BookingNotFoundException(bookingNumber);
         }
     }

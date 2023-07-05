@@ -8,33 +8,28 @@ import org.springframework.boot.test.context.SpringBootTest;
 class CustomerSupportApplicationTest {
 
     @Autowired
-    CustomerSupportAgent customerSupportAgent;
+    CustomerSupportAgent agent;
 
     @Test
-    void should_provide_booking_details_and_cancel_booking() {
-        String firstMessage = "Hi, I forgot when my booking is.";
-        System.out.println("User: " + firstMessage);
-        String firstAnswer = customerSupportAgent.chat(firstMessage);
-        System.out.println("Agent: " + firstAnswer);
+    void should_provide_booking_details_and_explain_why_cancellation_is_not_possible() {
 
-        String secondMessage = "123-457";
-        System.out.println("User: " + secondMessage);
-        String secondResponse = customerSupportAgent.chat(secondMessage);
-        System.out.println("Agent: " + secondResponse);
+        // Please define API keys in application.properties before running this test.
+        // Tip: Use gpt-4 for this example, as gpt-3.5-turbo tends to hallucinate often and invent name and surname.
 
-        String thirdMessage = "I'm sorry I'm so inattentive today. Klaus Heisler.";
-        System.out.println("User: " + thirdMessage);
-        String thirdResponse = customerSupportAgent.chat(thirdMessage);
-        System.out.println("Agent: " + thirdResponse);
+        interact(agent, "Hi, I forgot when my booking is.");
+        interact(agent, "123-457");
+        interact(agent, "I'm sorry I'm so inattentive today. Klaus Heisler.");
+        interact(agent, "My bad, it's 123-456");
+        interact(agent, "My plans have changed, can I cancel my booking?");
 
-        String fourthMessage = "My bad, it's 123-456.";
-        System.out.println("User: " + fourthMessage);
-        String fourthResponse = customerSupportAgent.chat(fourthMessage);
-        System.out.println("Agent: " + fourthResponse);
+        // Here, information about the cancellation policy is automatically retrieved and injected into the LLM prompt.
+        // Although the LLM still attempts to cancel the booking, it fails to do so and will explain the reason why
+        // the booking cannot be cancelled, based on the cancellation policy.
+    }
 
-        String fifthMessage = "Please cancel my booking as my plans have changed.";
-        System.out.println("User: " + fifthMessage);
-        String fifthResponse = customerSupportAgent.chat(fifthMessage);
-        System.out.println("Agent: " + fifthResponse);
+    private static void interact(CustomerSupportAgent agent, String userMessage) {
+        System.out.println("[User]: " + userMessage);
+        String agentAnswer = agent.chat(userMessage);
+        System.out.println("[Agent]: " + agentAnswer);
     }
 }

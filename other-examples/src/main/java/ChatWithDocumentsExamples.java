@@ -14,15 +14,19 @@ import dev.langchain4j.model.input.PromptTemplate;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.openai.OpenAiEmbeddingModel;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
-import dev.langchain4j.store.embedding.InMemoryEmbeddingStore;
 import dev.langchain4j.store.embedding.PineconeEmbeddingStore;
 
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static dev.langchain4j.data.document.DocumentType.PDF;
+import static dev.langchain4j.data.document.DocumentType.TEXT;
 import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
 import static dev.langchain4j.model.openai.OpenAiModelName.TEXT_EMBEDDING_ADA_002;
 import static java.time.Duration.ofSeconds;
@@ -30,14 +34,16 @@ import static java.util.stream.Collectors.joining;
 
 public class ChatWithDocumentsExamples {
 
+    // Please also check ServiceWithRetrieverExample
+
     static class IfYouNeedSimplicity {
 
-        public static void main(String[] args) {
+        public static void main(String[] args) throws UnsupportedEncodingException, URISyntaxException, MalformedURLException {
 
             String apiKey = System.getenv("OPENAI_API_KEY"); // https://platform.openai.com/account/api-keys
 
             ConversationalRetrievalChain chain = ConversationalRetrievalChain.builder()
-                    .documentLoader(DocumentLoader.from(Paths.get("src/main/resources/story-about-happy-carrot.pdf")))
+                    .documentLoader(DocumentLoader.from(toPath("story-about-happy-carrot.txt")))
                     .embeddingModel(OpenAiEmbeddingModel.withApiKey(apiKey))
                     .chatLanguageModel(OpenAiChatModel.withApiKey(apiKey))
                     .build();
@@ -65,12 +71,11 @@ public class ChatWithDocumentsExamples {
         public static void main(String[] args) {
 
             ConversationalRetrievalChain chain = ConversationalRetrievalChain.builder()
-                    .documentLoader(DocumentLoader.from(Paths.get("src/main/resources/story-about-happy-carrot.pdf")))
+                    .documentLoader(DocumentLoader.from(toPath("story-about-happy-carrot.txt")))
                     .embeddingModel(HuggingFaceEmbeddingModel.builder()
                             .accessToken(System.getenv("HF_API_KEY")) // https://huggingface.co/settings/tokens
                             .modelId("sentence-transformers/all-MiniLM-L6-v2")
                             .build())
-                    .embeddingStore(new InMemoryEmbeddingStore(384, 1000))
                     .chatLanguageModel(OpenAiChatModel.withApiKey(System.getenv("OPENAI_API_KEY")))
                     .build();
 
@@ -84,10 +89,10 @@ public class ChatWithDocumentsExamples {
 
         public static void main(String[] args) {
 
-            // Load the PDF document that includes the information you'd like to "chat" about with the model.
+            // Load the document that includes the information you'd like to "chat" about with the model.
             // Currently, loading text and PDF files from file system and by URL is supported.
 
-            DocumentLoader documentLoader = DocumentLoader.from(Paths.get("src/main/resources/story-about-happy-carrot.pdf"), PDF);
+            DocumentLoader documentLoader = DocumentLoader.from(toPath("story-about-happy-carrot.txt"), TEXT);
             Document document = documentLoader.load();
 
 
@@ -144,7 +149,7 @@ public class ChatWithDocumentsExamples {
                             + "{{information}}");
 
             String information = relevantEmbeddings.stream()
-                    .map(match -> match.embedded().get().text())
+                    .map(match -> match.embedded().text())
                     .collect(joining("\n\n"));
 
             Map<String, Object> variables = new HashMap<>();
@@ -171,6 +176,15 @@ public class ChatWithDocumentsExamples {
 
             String answer = aiMessage.text();
             System.out.println(answer);
+        }
+    }
+
+    private static Path toPath(String fileName) {
+        try {
+            URL fileUrl = ChatWithDocumentsExamples.class.getResource(fileName);
+            return Paths.get(fileUrl.toURI());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
         }
     }
 }

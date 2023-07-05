@@ -75,6 +75,8 @@ public class ServiceWithToolsExample {
                 .tools(bookingTools)
                 .build();
 
+        // Now, you can ask the agent to provide information about the booking or cancel it
+
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
             System.out.print("User: ");
