@@ -1,0 +1,73 @@
+Why AI Will Save The World
+By Marc Andreessen
+
+The era of Artificial Intelligence is here, and boy are people freaking out.
+
+Fortunately, I am here to bring the good news: AI will not destroy the world, and in fact may save it.
+
+First, a short description of what AI is: The application of mathematics and software code to teach computers how to understand, synthesize, and generate knowledge in ways similar to how people do it. AI is a computer program like any other – it runs, takes input, processes, and generates output. AI’s output is useful across a wide range of fields, ranging from coding to medicine to law to the creative arts. It is owned by people and controlled by people, like any other technology.
+
+A shorter description of what AI isn’t: Killer software and robots that will spring to life and decide to murder the human race or otherwise ruin everything, like you see in the movies.
+
+An even shorter description of what AI could be: A way to make everything we care about better.
+
+Why AI Can Make Everything We Care About Better
+
+The most validated core conclusion of social science across many decades and thousands of studies is that human intelligence makes a very broad range of life outcomes better. Smarter people have better outcomes in almost every domain of activity: academic achievement, job performance, occupational status, income, creativity, physical health, longevity, learning new skills, managing complex tasks, leadership, entrepreneurial success, conflict resolution, reading comprehension, financial decision making, understanding others’ perspectives, creative arts, parenting outcomes, and life satisfaction.
+
+Further, human intelligence is the lever that we have used for millennia to create the world we live in today: science, technology, math, physics, chemistry, medicine, energy, construction, transportation, communication, art, music, culture, philosophy, ethics, morality. Without the application of intelligence on all these domains, we would all still be living in mud huts, scratching out a meager existence of subsistence farming. Instead we have used our intelligence to raise our standard of living on the order of 10,000X over the last 4,000 years.
+
+What AI offers us is the opportunity to profoundly augment human intelligence to make all of these outcomes of intelligence – and many others, from the creation of new medicines to ways to solve climate change to technologies to reach the stars – much, much better from here.
+
+AI augmentation of human intelligence has already started – AI is already around us in the form of computer control systems of many kinds, is now rapidly escalating with AI Large Language Models like ChatGPT, and will accelerate very quickly from here – if we let it.
+
+In our new era of AI:
+
+Every child will have an AI tutor that is infinitely patient, infinitely compassionate, infinitely knowledgeable, infinitely helpful. The AI tutor will be by each child’s side every step of their development, helping them maximize their potential with the machine version of infinite love.
+
+Every person will have an AI assistant/coach/mentor/trainer/advisor/therapist that is infinitely patient, infinitely compassionate, infinitely knowledgeable, and infinitely helpful. The AI assistant will be present through all of life’s opportunities and challenges, maximizing every person’s outcomes.
+
+Every scientist will have an AI assistant/collaborator/partner that will greatly expand their scope of scientific research and achievement. Every artist, every engineer, every businessperson, every doctor, every caregiver will have the same in their worlds.
+
+Every leader of people – CEO, government official, nonprofit president, athletic coach, teacher – will have the same. The magnification effects of better decisions by leaders across the people they lead are enormous, so this intelligence augmentation may be the most important of all.
+
+Productivity growth throughout the economy will accelerate dramatically, driving economic growth, creation of new industries, creation of new jobs, and wage growth, and resulting in a new era of heightened material prosperity across the planet.
+
+Scientific breakthroughs and new technologies and medicines will dramatically expand, as AI helps us further decode the laws of nature and harvest them for our benefit.
+
+The creative arts will enter a golden age, as AI-augmented artists, musicians, writers, and filmmakers gain the ability to realize their visions far faster and at greater scale than ever before.
+
+I even think AI is going to improve warfare, when it has to happen, by reducing wartime death rates dramatically. Every war is characterized by terrible decisions made under intense pressure and with sharply limited information by very limited human leaders. Now, military commanders and political leaders will have AI advisors that will help them make much better strategic and tactical decisions, minimizing risk, error, and unnecessary bloodshed.
+
+In short, anything that people do with their natural intelligence today can be done much better with AI, and we will be able to take on new challenges that have been impossible to tackle without AI, from curing all diseases to achieving interstellar travel.
+
+And this isn’t just about intelligence! Perhaps the most underestimated quality of AI is how humanizing it can be. AI art gives people who otherwise lack technical skills the freedom to create and share their artistic ideas. Talking to an empathetic AI friend really does improve their ability to handle adversity. And AI medical chatbots are already more empathetic than their human counterparts. Rather than making the world harsher and more mechanistic, infinitely patient and sympathetic AI will make the world warmer and nicer.
+
+The stakes here are high. The opportunities are profound. AI is quite possibly the most important – and best – thing our civilization has ever created, certainly on par with electricity and microchips, and probably beyond those.
+
+The development and proliferation of AI – far from a risk that we should fear – is a moral obligation that we have to ourselves, to our children, and to our future.
+
+We should be living in a much better world with AI, and now we can.
+
+So Why The Panic?
+
+In contrast to this positive view, the public conversation about AI is presently shot through with hysterical fear and paranoia.
+
+We hear claims that AI will variously kill us all, ruin our society, take all our jobs, cause crippling inequality, and enable bad people to do awful things.
+
+What explains this divergence in potential outcomes from near utopia to horrifying dystopia?
+
+Historically, every new technology that matters, from electric lighting to automobiles to radio to the Internet, has sparked a moral panic – a social contagion that convinces people the new technology is going to destroy the world, or society, or both. The fine folks at Pessimists Archive have documented these technology-driven moral panics over the decades; their history makes the pattern vividly clear. It turns out this present panic is not even the first for AI.
+
+Now, it is certainly the case that many new technologies have led to bad outcomes – often the same technologies that have been otherwise enormously beneficial to our welfare. So it’s not that the mere existence of a moral panic means there is nothing to be concerned about.
+
+But a moral panic is by its very nature irrational – it takes what may be a legitimate concern and inflates it into a level of hysteria that ironically makes it harder to confront actually serious concerns.
+
+And wow do we have a full-blown moral panic about AI right now.
+
+This moral panic is already being used as a motivating force by a variety of actors to demand policy action – new AI restrictions, regulations, and laws. These actors, who are making extremely dramatic public statements about the dangers of AI – feeding on and further inflaming moral panic – all present themselves as selfless champions of the public good.
+
+But are they?
+
+And are they right or wrong?
+
