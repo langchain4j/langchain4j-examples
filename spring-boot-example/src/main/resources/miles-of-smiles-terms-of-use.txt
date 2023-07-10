@@ -12,9 +12,8 @@ Miles of Smiles rents out vehicles to the end user. We reserve the right to temp
 3.3 All bookings are subject to vehicle availability.
 
 4. Cancellation Policy
-4.1 Reservations can be cancelled without charge up to 7 days prior to the start of the booking period. Cancellations must be made through the same channel that was used to book the rental.
+4.1 Reservations can be cancelled up to 7 days prior to the start of the booking period.
 4.2 If the booking period is less than 3 days, cancellations are not permitted.
-4.3 In the event of a cancellation within 7 days, a cancellation fee equal to one day's rental rate will apply.
 
 5. Use of Vehicle
 5.1 All cars rented from Miles of Smiles must not be used:

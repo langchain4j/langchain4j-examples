@@ -49,6 +49,7 @@
                 <version>3.11.0</version>
                 <configuration>
                     <compilerArgs>
+                        <!-- TODO This is required for ... -->
                         <arg>-parameters</arg>
                     </compilerArgs>
                 </configuration>

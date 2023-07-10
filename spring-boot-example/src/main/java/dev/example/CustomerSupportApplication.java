@@ -44,8 +44,8 @@ public class CustomerSupportApplication {
         // You will need to adjust these parameters to find the optimal setting, which will depend on two main factors:
         // - The nature of your data
         // - The embedding model you are using
-        int maxResultsRetrieved = 2;
-        double minSimilarity = 0.6;
+        int maxResultsRetrieved = 1;
+        double minSimilarity = 0.8;
 
         return EmbeddingStoreRetriever.from(embeddingStore, embeddingModel, maxResultsRetrieved, minSimilarity);
     }
