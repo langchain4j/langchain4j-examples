@@ -13,24 +13,23 @@ public class ServiceWithDynamicToolsExample {
 
     public static void main(String[] args) {
 
-        String apiKey = System.getenv("OPENAI_API_KEY"); // https://platform.openai.com/account/api-keys
+        String openAiApiKey = System.getenv("OPENAI_API_KEY"); // https://platform.openai.com/account/api-keys
         ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder()
-                .apiKey(apiKey)
+                .apiKey(openAiApiKey)
                 .temperature(0.0)
-//                .modelName("gpt-4-0613")
                 .build();
 
-        String judge0ApiKey = ""; // TODO where to get?
-        Judge0JavaScriptExecutionTool judge0JavaScriptExecutionTool = new Judge0JavaScriptExecutionTool(judge0ApiKey);
+        String rapidApiKey = System.getenv("RAPID_API_KEY"); // https://rapidapi.com/judge0-official/api/judge0-ce
+        Judge0JavaScriptExecutionTool judge0Tool = new Judge0JavaScriptExecutionTool(rapidApiKey);
 
         Assistant assistant = AiServices.builder(Assistant.class)
                 .chatLanguageModel(chatLanguageModel)
                 .chatMemory(MessageWindowChatMemory.withCapacity(10))
-                .tools(judge0JavaScriptExecutionTool)
+                .tools(judge0Tool)
                 .build();
 
         interact(assistant, "What is the square root of 49506838032859?");
-        interact(assistant, "Capitalize every third letter in the string 'abcabcabc'");
+        interact(assistant, "Capitalize every third letter: abcabc");
         interact(assistant, "What is the number of hours between 17:00 on 21 Feb 1988 and 04:00 on 12 Apr 2014?");
     }
 
