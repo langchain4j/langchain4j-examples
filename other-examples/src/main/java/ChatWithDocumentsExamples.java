@@ -1,11 +1,11 @@
 import dev.langchain4j.chain.ConversationalRetrievalChain;
 import dev.langchain4j.data.document.Document;
-import dev.langchain4j.data.document.DocumentLoader;
-import dev.langchain4j.data.document.DocumentSegment;
 import dev.langchain4j.data.document.DocumentSplitter;
+import dev.langchain4j.data.document.FileSystemDocumentLoader;
 import dev.langchain4j.data.document.splitter.SentenceSplitter;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.message.AiMessage;
+import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.huggingface.HuggingFaceEmbeddingModel;
@@ -13,7 +13,10 @@ import dev.langchain4j.model.input.Prompt;
 import dev.langchain4j.model.input.PromptTemplate;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.openai.OpenAiEmbeddingModel;
+import dev.langchain4j.retriever.EmbeddingStoreRetriever;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
+import dev.langchain4j.store.embedding.EmbeddingStore;
+import dev.langchain4j.store.embedding.EmbeddingStoreFiller;
 import dev.langchain4j.store.embedding.PineconeEmbeddingStore;
 
 import java.io.UnsupportedEncodingException;
@@ -26,7 +29,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static dev.langchain4j.data.document.DocumentType.TEXT;
 import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
 import static dev.langchain4j.model.openai.OpenAiModelName.TEXT_EMBEDDING_ADA_002;
 import static java.time.Duration.ofSeconds;
@@ -40,25 +42,34 @@ public class ChatWithDocumentsExamples {
 
         public static void main(String[] args) throws UnsupportedEncodingException, URISyntaxException, MalformedURLException {
 
+            Document document = FileSystemDocumentLoader.load(toPath("story-about-happy-carrot.txt"));
+
             String apiKey = System.getenv("OPENAI_API_KEY"); // https://platform.openai.com/account/api-keys
+            EmbeddingModel embeddingModel = OpenAiEmbeddingModel.withApiKey(apiKey);
+
+            EmbeddingStore<TextSegment> embeddingStore = EmbeddingStoreFiller.builder()
+                    .document(document)
+                    .embeddingModel(embeddingModel)
+                    .fill();
 
             ConversationalRetrievalChain chain = ConversationalRetrievalChain.builder()
-                    .documentLoader(DocumentLoader.from(toPath("story-about-happy-carrot.txt")))
-                    .embeddingModel(OpenAiEmbeddingModel.withApiKey(apiKey))
                     .chatLanguageModel(OpenAiChatModel.withApiKey(apiKey))
+                    .retriever(EmbeddingStoreRetriever.from(embeddingStore, embeddingModel))
                     .build();
 
+            // TODO chatMemory
             // By default,
             // - Document will be split into paragraphs
             // - Transient in-memory embedding store will be used
-            // - 5 most relevant embeddings will be retrieved on each chain execution
+            // - 2 most relevant embeddings will be retrieved on each chain execution
             // - The following prompt template will be used:
             // Answer the following question to the best of your ability: {{question}}
             //
             // Base your answer on the following information:
             // {{information}}
 
-            // You can override above-mentioned behavior in ConversationalRetrievalChain builder
+            // TODO
+            // You can override above-mentioned behavior in EmbeddingStoreRetrieverBuilder and ConversationalRetrievalChain builder
 
             String answer = chain.execute("Who is Charlie? Answer in 10 words.");
 
@@ -70,13 +81,21 @@ public class ChatWithDocumentsExamples {
 
         public static void main(String[] args) {
 
+            Document document = FileSystemDocumentLoader.load(toPath("story-about-happy-carrot.txt"));
+
+            EmbeddingModel embeddingModel = HuggingFaceEmbeddingModel.builder()
+                    .accessToken(System.getenv("HF_API_KEY")) // https://huggingface.co/settings/tokens
+                    .modelId("sentence-transformers/all-MiniLM-L6-v2")
+                    .build();
+
+            EmbeddingStore<TextSegment> embeddingStore = EmbeddingStoreFiller.builder()
+                    .document(document)
+                    .embeddingModel(embeddingModel)
+                    .fill();
+
             ConversationalRetrievalChain chain = ConversationalRetrievalChain.builder()
-                    .documentLoader(DocumentLoader.from(toPath("story-about-happy-carrot.txt")))
-                    .embeddingModel(HuggingFaceEmbeddingModel.builder()
-                            .accessToken(System.getenv("HF_API_KEY")) // https://huggingface.co/settings/tokens
-                            .modelId("sentence-transformers/all-MiniLM-L6-v2")
-                            .build())
                     .chatLanguageModel(OpenAiChatModel.withApiKey(System.getenv("OPENAI_API_KEY")))
+                    .retriever(EmbeddingStoreRetriever.from(embeddingStore, embeddingModel))
                     .build();
 
             String answer = chain.execute("Who is Charlie? Answer in 10 words.");
@@ -92,14 +111,13 @@ public class ChatWithDocumentsExamples {
             // Load the document that includes the information you'd like to "chat" about with the model.
             // Currently, loading text and PDF files from file system and by URL is supported.
 
-            DocumentLoader documentLoader = DocumentLoader.from(toPath("story-about-happy-carrot.txt"), TEXT);
-            Document document = documentLoader.load();
+            Document document = FileSystemDocumentLoader.load(toPath("story-about-happy-carrot.txt"));
 
 
-            // Split document into segments (one paragraph per segment)
+            // Split document into segments (one sentence == one segment)
 
             DocumentSplitter splitter = new SentenceSplitter();
-            List<DocumentSegment> documentSegments = splitter.split(document);
+            List<TextSegment> segments = splitter.split(document);
 
 
             // Embed segments (convert them into semantic vectors)
@@ -110,7 +128,7 @@ public class ChatWithDocumentsExamples {
                     .timeout(ofSeconds(15))
                     .build();
 
-            List<Embedding> embeddings = embeddingModel.embedAll(documentSegments).get();
+            List<Embedding> embeddings = embeddingModel.embedAll(segments).get();
 
 
             // Store embeddings into embedding store for further search / retrieval
@@ -122,7 +140,7 @@ public class ChatWithDocumentsExamples {
                     .index("test-s1-1536") // make sure the dimensions of the Pinecone index match the dimensions of the embedding model (1536 for text-embedding-ada-002)
                     .build();
 
-            pinecone.addAll(embeddings, documentSegments);
+            pinecone.addAll(embeddings, segments);
 
 
             // Define the question you want to ask the model and embed it
@@ -134,7 +152,7 @@ public class ChatWithDocumentsExamples {
 
             // Find relevant embeddings in embedding store by semantic similarity
 
-            List<EmbeddingMatch<DocumentSegment>> relevantEmbeddings = pinecone.findRelevant(questionEmbedding, 3);
+            List<EmbeddingMatch<TextSegment>> relevantEmbeddings = pinecone.findRelevant(questionEmbedding, 3);
 
 
             // Create a prompt for the model that includes question and relevant embeddings

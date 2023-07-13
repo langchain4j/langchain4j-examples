@@ -1,11 +1,11 @@
 package dev.example;
 
 import dev.langchain4j.data.document.Document;
-import dev.langchain4j.data.document.DocumentLoader;
-import dev.langchain4j.data.document.DocumentSegment;
 import dev.langchain4j.data.document.DocumentSplitter;
+import dev.langchain4j.data.document.UrlDocumentLoader;
 import dev.langchain4j.data.document.splitter.ParagraphSplitter;
 import dev.langchain4j.data.embedding.Embedding;
+import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
@@ -29,7 +29,7 @@ public class CustomerSupportApplication {
     @Bean
     CustomerSupportAgent customerSupportAgent(ChatLanguageModel chatLanguageModel,
                                               BookingTools bookingTools,
-                                              Retriever<DocumentSegment> retriever) {
+                                              Retriever<TextSegment> retriever) {
         return AiServices.builder(CustomerSupportAgent.class)
                 .chatLanguageModel(chatLanguageModel)
                 .chatMemory(MessageWindowChatMemory.withCapacity(20))
@@ -39,7 +39,7 @@ public class CustomerSupportApplication {
     }
 
     @Bean
-    Retriever<DocumentSegment> retriever(EmbeddingStore<DocumentSegment> embeddingStore, EmbeddingModel embeddingModel) {
+    Retriever<TextSegment> retriever(EmbeddingStore<TextSegment> embeddingStore, EmbeddingModel embeddingModel) {
 
         // You will need to adjust these parameters to find the optimal setting, which will depend on two main factors:
         // - The nature of your data
@@ -51,7 +51,7 @@ public class CustomerSupportApplication {
     }
 
     @Bean
-    EmbeddingStore<DocumentSegment> embeddingStore(EmbeddingModel embeddingModel, ResourceLoader resourceLoader) throws IOException {
+    EmbeddingStore<TextSegment> embeddingStore(EmbeddingModel embeddingModel, ResourceLoader resourceLoader) throws IOException {
 
         // Normally, you would already have your embedding store filled with your data.
         // However, for the purpose of this demonstration, we will:
@@ -62,21 +62,20 @@ public class CustomerSupportApplication {
         // 5. Store all the embeddings there
 
         Document document = loadDocument(resourceLoader);
-        List<DocumentSegment> documentSegments = splitIntoSegments(document);
-        List<Embedding> embeddings = embeddingModel.embedAll(documentSegments).get();
+        List<TextSegment> segments = splitIntoSegments(document);
+        List<Embedding> embeddings = embeddingModel.embedAll(segments).get();
 
-        EmbeddingStore<DocumentSegment> embeddingStore = new InMemoryEmbeddingStore<>();
-        embeddingStore.addAll(embeddings, documentSegments);
+        EmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
+        embeddingStore.addAll(embeddings, segments);
         return embeddingStore;
     }
 
     private static Document loadDocument(ResourceLoader resourceLoader) throws IOException {
         Resource resource = resourceLoader.getResource("classpath:miles-of-smiles-terms-of-use.txt");
-        DocumentLoader loader = DocumentLoader.from(resource.getURL());
-        return loader.load();
+        return UrlDocumentLoader.load(resource.getURL());
     }
 
-    private static List<DocumentSegment> splitIntoSegments(Document document) {
+    private static List<TextSegment> splitIntoSegments(Document document) {
         DocumentSplitter splitter = new ParagraphSplitter();
         return splitter.split(document);
     }
