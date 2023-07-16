@@ -5,12 +5,16 @@ import dev.langchain4j.model.openai.OpenAiChatModel;
 
 import java.util.List;
 
+import static java.time.Duration.ofSeconds;
 import static java.util.Arrays.asList;
 
 public class StructuredPromptTemplateExamples {
 
     static String apiKey = System.getenv("OPENAI_API_KEY"); // https://platform.openai.com/account/api-keys
-    static ChatLanguageModel model = OpenAiChatModel.withApiKey(apiKey);
+    static ChatLanguageModel model = OpenAiChatModel.builder()
+            .apiKey(apiKey)
+            .timeout(ofSeconds(60))
+            .build();
 
     static class Simple_Structured_Prompt_Example {
 

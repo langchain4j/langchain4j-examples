@@ -180,7 +180,7 @@ public class ChatWithDocumentsExamples {
                     .logRequests(true)
                     .build();
 
-            AiMessage aiMessage = chatModel.sendUserMessage(prompt);
+            AiMessage aiMessage = chatModel.sendUserMessage(prompt.toUserMessage());
 
             // See an answer from the model
             String answer = aiMessage.text();

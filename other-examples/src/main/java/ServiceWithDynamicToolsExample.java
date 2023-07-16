@@ -4,6 +4,8 @@ import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.service.AiServices;
 
+import static java.time.Duration.ofSeconds;
+
 public class ServiceWithDynamicToolsExample {
 
     interface Assistant {
@@ -17,6 +19,7 @@ public class ServiceWithDynamicToolsExample {
         ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder()
                 .apiKey(openAiApiKey)
                 .temperature(0.0)
+                .timeout(ofSeconds(60))
                 .build();
 
         String rapidApiKey = System.getenv("RAPID_API_KEY"); // https://rapidapi.com/judge0-official/api/judge0-ce

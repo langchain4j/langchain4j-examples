@@ -14,7 +14,7 @@ public class SimpleServiceExample {
         String apiKey = System.getenv("OPENAI_API_KEY"); // https://platform.openai.com/account/api-keys
         ChatLanguageModel chatLanguageModel = OpenAiChatModel.withApiKey(apiKey);
 
-        ServiceWithMemoryExample.Assistant assistant = AiServices.create(ServiceWithMemoryExample.Assistant.class, chatLanguageModel);
+        Assistant assistant = AiServices.create(Assistant.class, chatLanguageModel);
 
         String answer = assistant.chat("Hello");
 

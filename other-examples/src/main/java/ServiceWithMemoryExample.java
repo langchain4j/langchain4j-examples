@@ -18,7 +18,7 @@ public class ServiceWithMemoryExample {
 
         ChatMemory chatMemory = MessageWindowChatMemory.withCapacity(10);
 
-        SimpleServiceExample.Assistant assistant = AiServices.builder(SimpleServiceExample.Assistant.class)
+        Assistant assistant = AiServices.builder(Assistant.class)
                 .chatLanguageModel(chatLanguageModel)
                 .chatMemory(chatMemory)
                 .build();
