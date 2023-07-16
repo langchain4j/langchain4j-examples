@@ -12,7 +12,7 @@ public class HelloWorldExample {
         OpenAiChatModel model = OpenAiChatModel.withApiKey(apiKey);
 
         // Start interacting!
-        AiMessage answer = model.sendUserMessage("Hello world!").get();
+        AiMessage answer = model.sendUserMessage("Hello world!");
 
         System.out.println(answer.text()); // Hello! How can I assist you today?
     }

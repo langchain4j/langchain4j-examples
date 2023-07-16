@@ -2,7 +2,6 @@ import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.input.structured.StructuredPrompt;
 import dev.langchain4j.model.openai.OpenAiChatModel;
-import dev.langchain4j.model.output.Result;
 
 import java.util.List;
 
@@ -28,8 +27,8 @@ public class StructuredPromptTemplateExamples {
             prompt.dish = "salad";
             prompt.ingredients = asList("cucumber", "tomato", "feta", "onion", "olives");
 
-            Result<AiMessage> result = model.sendUserMessage(prompt);
-            System.out.println(result.get().text());
+            AiMessage aiMessage = model.sendUserMessage(prompt);
+            System.out.println(aiMessage.text());
         }
     }
 
@@ -63,8 +62,8 @@ public class StructuredPromptTemplateExamples {
             prompt.dish = "salad";
             prompt.ingredients = asList("cucumber", "tomato", "feta", "onion", "olives");
 
-            Result<AiMessage> result = model.sendUserMessage(prompt);
-            System.out.println(result.get().text());
+            AiMessage aiMessage = model.sendUserMessage(prompt);
+            System.out.println(aiMessage.text());
         }
     }
 }

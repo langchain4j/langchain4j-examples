@@ -122,7 +122,7 @@ public class ChatWithDocumentsExamples {
                     .logResponses(true)
                     .build();
 
-            List<Embedding> embeddings = embeddingModel.embedAll(segments).get();
+            List<Embedding> embeddings = embeddingModel.embedAll(segments);
 
             // Store embeddings into Pinecone for further search / retrieval
             // You can also use in-memory embedding store:
@@ -140,7 +140,7 @@ public class ChatWithDocumentsExamples {
             String question = "Who is Charlie? Answer in 10 words.";
 
             // Embed the question
-            Embedding questionEmbedding = embeddingModel.embed(question).get();
+            Embedding questionEmbedding = embeddingModel.embed(question);
 
             // Find relevant embeddings in embedding store by semantic similarity
             // You can play with parameters below to find a sweet spot for your specific use case
@@ -180,7 +180,7 @@ public class ChatWithDocumentsExamples {
                     .logRequests(true)
                     .build();
 
-            AiMessage aiMessage = chatModel.sendUserMessage(prompt).get();
+            AiMessage aiMessage = chatModel.sendUserMessage(prompt);
 
             // See an answer from the model
             String answer = aiMessage.text();
