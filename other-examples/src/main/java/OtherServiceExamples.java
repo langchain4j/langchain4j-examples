@@ -4,6 +4,8 @@ import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.output.structured.Description;
 import dev.langchain4j.service.*;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -15,7 +17,6 @@ public class OtherServiceExamples {
 
     static String apiKey = System.getenv("OPENAI_API_KEY"); // https://platform.openai.com/account/api-keys
     static ChatLanguageModel chatLanguageModel = OpenAiChatModel.withApiKey(apiKey);
-
 
 
     static class Sentiment_Extracting_AI_Service_Example {
@@ -42,6 +43,57 @@ public class OtherServiceExamples {
 
             boolean positive = sentimentAnalyzer.isPositive("It is bad!");
             System.out.println(positive); // false
+        }
+    }
+
+
+    static class Number_Extracting_AI_Service_Example {
+
+        interface NumberExtractor {
+
+            @UserMessage("Extract number from {{it}}")
+            int extractInt(String text);
+
+            @UserMessage("Extract number from {{it}}")
+            long extractLong(String text);
+
+            @UserMessage("Extract number from {{it}}")
+            BigInteger extractBigInteger(String text);
+
+            @UserMessage("Extract number from {{it}}")
+            float extractFloat(String text);
+
+            @UserMessage("Extract number from {{it}}")
+            double extractDouble(String text);
+
+            @UserMessage("Extract number from {{it}}")
+            BigDecimal extractBigDecimal(String text);
+        }
+
+        public static void main(String[] args) {
+
+            NumberExtractor extractor = AiServices.create(NumberExtractor.class, chatLanguageModel);
+
+            String text = "After countless millennia of computation, the supercomputer Deep Thought finally announced " +
+                    "that the answer to the ultimate question of life, the universe, and everything was forty two.";
+
+            int intNumber = extractor.extractInt(text);
+            System.out.println(intNumber); // 42
+
+            long longNumber = extractor.extractLong(text);
+            System.out.println(longNumber); // 42
+
+            BigInteger bigIntegerNumber = extractor.extractBigInteger(text);
+            System.out.println(bigIntegerNumber); // 42
+
+            float floatNumber = extractor.extractFloat(text);
+            System.out.println(floatNumber); // 42.0
+
+            double doubleNumber = extractor.extractDouble(text);
+            System.out.println(doubleNumber); // 42.0
+
+            BigDecimal bigDecimalNumber = extractor.extractBigDecimal(text);
+            System.out.println(bigDecimalNumber); // 42.0
         }
     }
 
@@ -207,6 +259,7 @@ public class OtherServiceExamples {
         }
     }
 
+
     static class AI_Service_with_System_and_User_Messages_Example {
 
         interface TextUtils {
@@ -238,6 +291,23 @@ public class OtherServiceExamples {
             //     "- It aims to create machines that mimic human intelligence",
             //     "- It can perform simple or complex tasks"
             // ]
+        }
+    }
+
+
+    static class AI_Service_with_UserName_Example {
+
+        interface Assistant {
+
+            String chat(@UserName String name, @UserMessage String message);
+        }
+
+        public static void main(String[] args) {
+
+            Assistant assistant = AiServices.create(Assistant.class, chatLanguageModel);
+
+            String answer = assistant.chat("Klaus", "Hi, do you see my name?");
+            System.out.println(answer); // Yes, I see your name is Klaus. How can I assist you today?
         }
     }
 }

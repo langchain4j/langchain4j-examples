@@ -9,7 +9,6 @@ public class SimpleServiceExample {
         String chat(String message);
     }
 
-
     public static void main(String[] args) {
 
         String apiKey = System.getenv("OPENAI_API_KEY"); // https://platform.openai.com/account/api-keys

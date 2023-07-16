@@ -1,11 +1,8 @@
 package dev.example;
 
 import dev.langchain4j.data.document.Document;
-import dev.langchain4j.data.document.DocumentLoader;
-import dev.langchain4j.data.document.DocumentSegment;
-import dev.langchain4j.data.document.DocumentSplitter;
 import dev.langchain4j.data.document.splitter.ParagraphSplitter;
-import dev.langchain4j.data.embedding.Embedding;
+import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
@@ -13,6 +10,7 @@ import dev.langchain4j.retriever.EmbeddingStoreRetriever;
 import dev.langchain4j.retriever.Retriever;
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.store.embedding.EmbeddingStore;
+import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
 import dev.langchain4j.store.embedding.InMemoryEmbeddingStore;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,7 +19,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
 import java.io.IOException;
-import java.util.List;
+
+import static dev.langchain4j.data.document.FileSystemDocumentLoader.loadDocument;
 
 @SpringBootApplication
 public class CustomerSupportApplication {
@@ -29,7 +28,7 @@ public class CustomerSupportApplication {
     @Bean
     CustomerSupportAgent customerSupportAgent(ChatLanguageModel chatLanguageModel,
                                               BookingTools bookingTools,
-                                              Retriever<DocumentSegment> retriever) {
+                                              Retriever<TextSegment> retriever) {
         return AiServices.builder(CustomerSupportAgent.class)
                 .chatLanguageModel(chatLanguageModel)
                 .chatMemory(MessageWindowChatMemory.withCapacity(20))
@@ -39,7 +38,7 @@ public class CustomerSupportApplication {
     }
 
     @Bean
-    Retriever<DocumentSegment> retriever(EmbeddingStore<DocumentSegment> embeddingStore, EmbeddingModel embeddingModel) {
+    Retriever<TextSegment> retriever(EmbeddingStore<TextSegment> embeddingStore, EmbeddingModel embeddingModel) {
 
         // You will need to adjust these parameters to find the optimal setting, which will depend on two main factors:
         // - The nature of your data
@@ -51,34 +50,30 @@ public class CustomerSupportApplication {
     }
 
     @Bean
-    EmbeddingStore<DocumentSegment> embeddingStore(EmbeddingModel embeddingModel, ResourceLoader resourceLoader) throws IOException {
+    EmbeddingStore<TextSegment> embeddingStore(EmbeddingModel embeddingModel, ResourceLoader resourceLoader) throws IOException {
 
         // Normally, you would already have your embedding store filled with your data.
         // However, for the purpose of this demonstration, we will:
-        // 1. Load one document ("Miles of Smiles" terms of use)
-        // 2. Split it into segments
-        // 3. Embed the segments
-        // 4. Create an in-memory embedding store
-        // 5. Store all the embeddings there
 
-        Document document = loadDocument(resourceLoader);
-        List<DocumentSegment> documentSegments = splitIntoSegments(document);
-        List<Embedding> embeddings = embeddingModel.embedAll(documentSegments).get();
+        // 1. Create an in-memory embedding store
+        EmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
 
-        EmbeddingStore<DocumentSegment> embeddingStore = new InMemoryEmbeddingStore<>();
-        embeddingStore.addAll(embeddings, documentSegments);
-        return embeddingStore;
-    }
-
-    private static Document loadDocument(ResourceLoader resourceLoader) throws IOException {
+        // 2. Load an example document ("Miles of Smiles" terms of use)
         Resource resource = resourceLoader.getResource("classpath:miles-of-smiles-terms-of-use.txt");
-        DocumentLoader loader = DocumentLoader.from(resource.getURL());
-        return loader.load();
-    }
+        Document document = loadDocument(resource.getFile().toPath());
 
-    private static List<DocumentSegment> splitIntoSegments(Document document) {
-        DocumentSplitter splitter = new ParagraphSplitter();
-        return splitter.split(document);
+        // 3. Split the document into segments
+        // 4. Convert segments into embeddings
+        // 5. Store embeddings into embedding store
+        // All this can be done manually, but we will use EmbeddingStoreIngestor to automate this:
+        EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
+                .splitter(new ParagraphSplitter())
+                .embeddingModel(embeddingModel)
+                .embeddingStore(embeddingStore)
+                .build();
+        ingestor.ingest(document);
+
+        return embeddingStore;
     }
 
     public static void main(String[] args) {

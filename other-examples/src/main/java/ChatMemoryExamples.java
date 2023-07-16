@@ -13,6 +13,7 @@ import java.time.Duration;
 
 import static dev.langchain4j.data.message.UserMessage.userMessage;
 import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
+import static java.time.Duration.ofSeconds;
 
 public class ChatMemoryExamples {
 
@@ -48,6 +49,7 @@ public class ChatMemoryExamples {
 
             ConversationalChain chain = ConversationalChain.builder()
                     .chatLanguageModel(OpenAiChatModel.withApiKey(apiKey))
+                    // .chatMemory() // you can override default chat memory
                     .build();
 
             String answer = chain.execute("Hello, my name is Klaus");
@@ -66,7 +68,7 @@ public class ChatMemoryExamples {
                     .apiKey(System.getenv("OPENAI_API_KEY")) // https://platform.openai.com/account/api-keys
                     .modelName(GPT_3_5_TURBO)
                     .temperature(0.3)
-                    .timeout(Duration.ofSeconds(120))
+                    .timeout(ofSeconds(120))
                     .logRequests(true)
                     .logResponses(true)
                     .build();
