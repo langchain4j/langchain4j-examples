@@ -5,13 +5,10 @@ public class HelloWorldExample {
 
     public static void main(String[] args) {
 
-        // Import your OpenAI/HuggingFace API key
-        String apiKey = System.getenv("OPENAI_API_KEY");
-
         // Create an instance of a model
-        OpenAiChatModel model = OpenAiChatModel.withApiKey(apiKey);
+        OpenAiChatModel model = OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY);
 
-        // Start interacting!
+        // Start interacting
         AiMessage answer = model.sendUserMessage("Hello world!");
 
         System.out.println(answer.text()); // Hello! How can I assist you today?

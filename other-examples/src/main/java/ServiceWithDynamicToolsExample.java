@@ -15,15 +15,13 @@ public class ServiceWithDynamicToolsExample {
 
     public static void main(String[] args) {
 
-        String openAiApiKey = System.getenv("OPENAI_API_KEY"); // https://platform.openai.com/account/api-keys
         ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder()
-                .apiKey(openAiApiKey)
+                .apiKey(ApiKeys.OPENAI_API_KEY)
                 .temperature(0.0)
                 .timeout(ofSeconds(60))
                 .build();
 
-        String rapidApiKey = System.getenv("RAPID_API_KEY"); // https://rapidapi.com/judge0-official/api/judge0-ce
-        Judge0JavaScriptExecutionTool judge0Tool = new Judge0JavaScriptExecutionTool(rapidApiKey);
+        Judge0JavaScriptExecutionTool judge0Tool = new Judge0JavaScriptExecutionTool(ApiKeys.RAPID_API_KEY);
 
         Assistant assistant = AiServices.builder(Assistant.class)
                 .chatLanguageModel(chatLanguageModel)

@@ -13,13 +13,13 @@ import static java.util.Arrays.asList;
 
 public class StreamingExamples {
 
+    // Sorry, "demo" API key does not support streaming (yet)
+
     static class StreamableChatLanguageModel_Example {
 
         public static void main(String[] args) {
 
-            String apiKey = System.getenv("OPENAI_API_KEY"); // https://platform.openai.com/account/api-keys
-
-            StreamingChatLanguageModel model = OpenAiStreamingChatModel.withApiKey(apiKey);
+            StreamingChatLanguageModel model = OpenAiStreamingChatModel.withApiKey(ApiKeys.OPENAI_API_KEY);
 
             List<ChatMessage> messages = asList(
                     systemMessage("You are a very sarcastic assistant"),
@@ -50,9 +50,7 @@ public class StreamingExamples {
 
         public static void main(String[] args) {
 
-            String apiKey = System.getenv("OPENAI_API_KEY"); // https://platform.openai.com/account/api-keys
-
-            StreamingLanguageModel model = OpenAiStreamingLanguageModel.withApiKey(apiKey);
+            StreamingLanguageModel model = OpenAiStreamingLanguageModel.withApiKey(ApiKeys.OPENAI_API_KEY);
 
             model.process("Tell me a joke", new StreamingResultHandler() {
 

@@ -39,13 +39,11 @@ public class ChatWithDocumentsExamples {
 
     static class IfYouNeedSimplicity {
 
-        public static void main(String[] args) throws UnsupportedEncodingException, URISyntaxException, MalformedURLException {
+        public static void main(String[] args) throws Exception {
 
             Document document = loadDocument(toPath("story-about-happy-carrot.txt"));
 
-            String apiKey = System.getenv("OPENAI_API_KEY"); // https://platform.openai.com/account/api-keys
-
-            EmbeddingModel embeddingModel = OpenAiEmbeddingModel.withApiKey(apiKey);
+            EmbeddingModel embeddingModel = OpenAiEmbeddingModel.withApiKey(ApiKeys.OPENAI_API_KEY);
 
             EmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
 
@@ -57,7 +55,7 @@ public class ChatWithDocumentsExamples {
             ingestor.ingest(document);
 
             ConversationalRetrievalChain chain = ConversationalRetrievalChain.builder()
-                    .chatLanguageModel(OpenAiChatModel.withApiKey(apiKey))
+                    .chatLanguageModel(OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY))
                     .retriever(EmbeddingStoreRetriever.from(embeddingStore, embeddingModel))
                     // .chatMemory() // you can override default chat memory
                     // .promptTemplate() // you can override default prompt template
@@ -75,7 +73,7 @@ public class ChatWithDocumentsExamples {
             Document document = loadDocument(toPath("story-about-happy-carrot.txt"));
 
             EmbeddingModel embeddingModel = HuggingFaceEmbeddingModel.builder()
-                    .accessToken(System.getenv("HF_API_KEY")) // https://huggingface.co/settings/tokens
+                    .accessToken(ApiKeys.HF_API_KEY)
                     .modelId("sentence-transformers/all-MiniLM-L6-v2")
                     .build();
 
@@ -89,7 +87,7 @@ public class ChatWithDocumentsExamples {
             ingestor.ingest(document);
 
             ConversationalRetrievalChain chain = ConversationalRetrievalChain.builder()
-                    .chatLanguageModel(OpenAiChatModel.withApiKey(System.getenv("OPENAI_API_KEY")))
+                    .chatLanguageModel(OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY))
                     .retriever(EmbeddingStoreRetriever.from(embeddingStore, embeddingModel))
                     // .chatMemory() // you can override the default chat memory
                     // .promptTemplate() // you can override the default prompt template
@@ -115,7 +113,7 @@ public class ChatWithDocumentsExamples {
             // Embed segments (convert them into vectors that represent the meaning) using OpenAI embedding model
             // You can also use HuggingFaceEmbeddingModel (free)
             EmbeddingModel embeddingModel = OpenAiEmbeddingModel.builder()
-                    .apiKey(System.getenv("OPENAI_API_KEY")) // https://platform.openai.com/account/api-keys
+                    .apiKey(ApiKeys.OPENAI_API_KEY)
                     .modelName(TEXT_EMBEDDING_ADA_002)
                     .timeout(ofSeconds(15))
                     .logRequests(true)
@@ -171,7 +169,7 @@ public class ChatWithDocumentsExamples {
 
             // Send the prompt to the OpenAI chat model
             ChatLanguageModel chatModel = OpenAiChatModel.builder()
-                    .apiKey(System.getenv("OPENAI_API_KEY")) // https://platform.openai.com/account/api-keys
+                    .apiKey(ApiKeys.OPENAI_API_KEY)
                     .modelName(GPT_3_5_TURBO)
                     .temperature(0.7)
                     .timeout(ofSeconds(15))

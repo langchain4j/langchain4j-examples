@@ -20,16 +20,20 @@ class CustomerSupportApplicationTest {
         interact(agent, "123-457");
         interact(agent, "I'm sorry I'm so inattentive today. Klaus Heisler.");
         interact(agent, "My bad, it's 123-456");
-        interact(agent, "My plans have changed, can I cancel my booking?");
 
-        // Here, information about the cancellation policy is automatically retrieved and injected into the LLM prompt.
-        // Although the LLM still attempts to cancel the booking, it fails to do so and will explain the reason why
-        // the booking cannot be cancelled, based on the cancellation policy.
+        // Here, information about the cancellation policy is automatically retrieved and injected into the prompt.
+        // Although the LLM sometimes attempts to cancel the booking, it fails to do so and will explain
+        // the reason why the booking cannot be cancelled, based on the injected cancellation policy.
+        interact(agent, "My plans have changed, can I cancel my booking?");
     }
 
     private static void interact(CustomerSupportAgent agent, String userMessage) {
+        System.out.println("==========================================================================================");
         System.out.println("[User]: " + userMessage);
+        System.out.println("==========================================================================================");
         String agentAnswer = agent.chat(userMessage);
+        System.out.println("==========================================================================================");
         System.out.println("[Agent]: " + agentAnswer);
+        System.out.println("==========================================================================================");
     }
 }

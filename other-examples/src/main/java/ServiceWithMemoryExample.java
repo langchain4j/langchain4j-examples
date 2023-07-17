@@ -13,8 +13,7 @@ public class ServiceWithMemoryExample {
 
     public static void main(String[] args) {
 
-        String apiKey = System.getenv("OPENAI_API_KEY"); // https://platform.openai.com/account/api-keys
-        ChatLanguageModel chatLanguageModel = OpenAiChatModel.withApiKey(apiKey);
+        ChatLanguageModel chatLanguageModel = OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY);
 
         ChatMemory chatMemory = MessageWindowChatMemory.withCapacity(10);
 

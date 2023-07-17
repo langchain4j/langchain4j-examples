@@ -15,8 +15,7 @@ import static java.util.Arrays.asList;
 
 public class OtherServiceExamples {
 
-    static String apiKey = System.getenv("OPENAI_API_KEY"); // https://platform.openai.com/account/api-keys
-    static ChatLanguageModel chatLanguageModel = OpenAiChatModel.withApiKey(apiKey);
+    static ChatLanguageModel chatLanguageModel = OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY);
 
 
     static class Sentiment_Extracting_AI_Service_Example {
@@ -306,8 +305,8 @@ public class OtherServiceExamples {
 
             Assistant assistant = AiServices.create(Assistant.class, chatLanguageModel);
 
-            String answer = assistant.chat("Klaus", "Hi, do you see my name?");
-            System.out.println(answer); // Yes, I see your name is Klaus. How can I assist you today?
+            String answer = assistant.chat("Klaus", "Hi, tell me my name if you see it.");
+            System.out.println(answer); // Hello! Your name is Klaus. How can I assist you today?
         }
     }
 }

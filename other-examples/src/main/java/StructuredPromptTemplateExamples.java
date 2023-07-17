@@ -10,9 +10,8 @@ import static java.util.Arrays.asList;
 
 public class StructuredPromptTemplateExamples {
 
-    static String apiKey = System.getenv("OPENAI_API_KEY"); // https://platform.openai.com/account/api-keys
     static ChatLanguageModel model = OpenAiChatModel.builder()
-            .apiKey(apiKey)
+            .apiKey(ApiKeys.OPENAI_API_KEY)
             .timeout(ofSeconds(60))
             .build();
 

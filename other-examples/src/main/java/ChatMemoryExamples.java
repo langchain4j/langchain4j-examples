@@ -9,7 +9,6 @@ import dev.langchain4j.model.openai.OpenAiTokenizer;
 import dev.langchain4j.service.AiServices;
 
 import java.io.IOException;
-import java.time.Duration;
 
 import static dev.langchain4j.data.message.UserMessage.userMessage;
 import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
@@ -26,10 +25,8 @@ public class ChatMemoryExamples {
 
         public static void main(String[] args) {
 
-            String apiKey = System.getenv("OPENAI_API_KEY"); // https://platform.openai.com/account/api-keys
-
             Chat chat = AiServices.builder(Chat.class)
-                    .chatLanguageModel(OpenAiChatModel.withApiKey(apiKey))
+                    .chatLanguageModel(OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY))
                     .chatMemory(MessageWindowChatMemory.withCapacity(10))
                     .build();
 
@@ -45,10 +42,8 @@ public class ChatMemoryExamples {
 
         public static void main(String[] args) throws IOException {
 
-            String apiKey = System.getenv("OPENAI_API_KEY"); // https://platform.openai.com/account/api-keys
-
             ConversationalChain chain = ConversationalChain.builder()
-                    .chatLanguageModel(OpenAiChatModel.withApiKey(apiKey))
+                    .chatLanguageModel(OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY))
                     // .chatMemory() // you can override default chat memory
                     .build();
 
@@ -65,7 +60,7 @@ public class ChatMemoryExamples {
         public static void main(String[] args) {
 
             ChatLanguageModel model = OpenAiChatModel.builder()
-                    .apiKey(System.getenv("OPENAI_API_KEY")) // https://platform.openai.com/account/api-keys
+                    .apiKey(ApiKeys.OPENAI_API_KEY)
                     .modelName(GPT_3_5_TURBO)
                     .temperature(0.3)
                     .timeout(ofSeconds(120))
