@@ -14,6 +14,7 @@ public class InProcessEmbeddingModelExamples {
 
         String text = "This is a test";
 
+        // requires langchain4j-embeddings-all-minilm-l6-v2 Maven dependency
         EmbeddingModel inProcessModel = new InProcessEmbeddingModel(ALL_MINILM_L6_V2);
         Embedding inProcessEmbedding = inProcessModel.embed(text);
         System.out.println(inProcessEmbedding);
