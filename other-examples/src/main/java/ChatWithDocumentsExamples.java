@@ -126,7 +126,7 @@ public class ChatWithDocumentsExamples {
             EmbeddingStore<TextSegment> embeddingStore = PineconeEmbeddingStore.builder()
                     .apiKey(System.getenv("PINECONE_API_KEY")) // https://app.pinecone.io/organizations/xxx/projects/yyy:zzz/keys
                     .environment("northamerica-northeast1-gcp")
-                    .projectName("19a129b")
+                    .projectName("19a129b") // it can be found in the Pinecone url: https://app.pinecone.io/organizations/xxx/projects/yyy:{projectName}/indexes
                     .index("test-s1-1536") // make sure the dimensions of the Pinecone index match the dimensions of the embedding model (1536 for text-embedding-ada-002)
                     .build();
 
