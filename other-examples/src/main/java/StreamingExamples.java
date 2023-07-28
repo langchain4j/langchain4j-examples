@@ -1,5 +1,5 @@
 import dev.langchain4j.data.message.ChatMessage;
-import dev.langchain4j.model.StreamingResultHandler;
+import dev.langchain4j.model.StreamingResponseHandler;
 import dev.langchain4j.model.chat.StreamingChatLanguageModel;
 import dev.langchain4j.model.language.StreamingLanguageModel;
 import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
@@ -13,12 +13,11 @@ import static java.util.Arrays.asList;
 
 public class StreamingExamples {
 
-    // Sorry, "demo" API key does not support streaming (yet)
-
-    static class StreamableChatLanguageModel_Example {
+    static class StreamingChatLanguageModel_Example {
 
         public static void main(String[] args) {
 
+            // Sorry, "demo" API key does not support streaming (yet). Please your own key.
             StreamingChatLanguageModel model = OpenAiStreamingChatModel.withApiKey(ApiKeys.OPENAI_API_KEY);
 
             List<ChatMessage> messages = asList(
@@ -26,11 +25,11 @@ public class StreamingExamples {
                     userMessage("Tell me a joke")
             );
 
-            model.sendMessages(messages, new StreamingResultHandler() {
+            model.sendMessages(messages, new StreamingResponseHandler() {
 
                 @Override
-                public void onPartialResult(String partialResult) {
-                    System.out.println("Partial result: '" + partialResult + "'");
+                public void onNext(String token) {
+                    System.out.println("New token: '" + token + "'");
                 }
 
                 @Override
@@ -46,17 +45,17 @@ public class StreamingExamples {
         }
     }
 
-    static class StreamableLanguageModel_Example {
+    static class StreamingLanguageModel_Example {
 
         public static void main(String[] args) {
 
             StreamingLanguageModel model = OpenAiStreamingLanguageModel.withApiKey(ApiKeys.OPENAI_API_KEY);
 
-            model.process("Tell me a joke", new StreamingResultHandler() {
+            model.process("Tell me a joke", new StreamingResponseHandler() {
 
                 @Override
-                public void onPartialResult(String partialResult) {
-                    System.out.println("Partial result: '" + partialResult + "'");
+                public void onNext(String token) {
+                    System.out.println("Next token: '" + token + "'");
                 }
 
                 @Override
