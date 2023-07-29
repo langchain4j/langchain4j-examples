@@ -31,7 +31,7 @@
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-weaviate</artifactId>
-            <version>0.16.0</version>
+            <version>0.18.0</version>
         </dependency>
 
         <dependency>

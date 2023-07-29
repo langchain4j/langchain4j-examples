@@ -191,11 +191,11 @@ public class ChatWithDocumentsExamples {
             // Load the document that includes the information you'd like to "chat" about with the model.
             // Currently, loading text and PDF files from file system and by URL is supported.
             Document document = loadDocument(toPath("story-about-happy-carrot.txt"), TEXT);
-//
-//            // Split document into segments (one paragraph per segment)
-//            DocumentSplitter splitter = new SentenceSplitter();
-//            List<TextSegment> segments = splitter.split(document);
-//
+
+            // Split document into segments (one paragraph per segment)
+            DocumentSplitter splitter = new SentenceSplitter();
+            List<TextSegment> segments = splitter.split(document);
+
             // Embed segments (convert them into vectors that represent the meaning) using OpenAI embedding model
             // You can also use HuggingFaceEmbeddingModel (free)
             EmbeddingModel embeddingModel = OpenAiEmbeddingModel.builder()
@@ -205,8 +205,8 @@ public class ChatWithDocumentsExamples {
 //                    .logRequests(true)
 //                    .logResponses(true)
                     .build();
-//
-//            List<Embedding> embeddings = embeddingModel.embedAll(segments);
+
+            List<Embedding> embeddings = embeddingModel.embedAll(segments);
 
             // Store embeddings into Weaviate for further search / retrieval
             EmbeddingStore<TextSegment> embeddingStore = WeaviateEmbeddingStore.builder()
@@ -219,7 +219,7 @@ public class ChatWithDocumentsExamples {
 //                    .index("test-s1-1536") // make sure the dimensions of the Pinecone index match the dimensions of the embedding model (1536 for text-embedding-ada-002)
                     .build();
 
-//            embeddingStore.addAll(embeddings, segments);
+            embeddingStore.addAll(embeddings, segments);
 
             // Specify the question you want to ask the model
             String question = "Who is Charlie? Answer in 10 words.";
@@ -234,42 +234,42 @@ public class ChatWithDocumentsExamples {
             List<EmbeddingMatch<TextSegment>> relevantEmbeddings
                     = embeddingStore.findRelevant(questionEmbedding, maxResults, minSimilarity);
 
-//            // Create a prompt for the model that includes question and relevant embeddings
-//            PromptTemplate promptTemplate = PromptTemplate.from(
-//                    "Answer the following question to the best of your ability:\n"
-//                            + "\n"
-//                            + "Question:\n"
-//                            + "{{question}}\n"
-//                            + "\n"
-//                            + "Base your answer on the following information:\n"
-//                            + "{{information}}");
-//
-//            String information = relevantEmbeddings.stream()
-//                    .map(match -> match.embedded().text())
-//                    .collect(joining("\n\n"));
-//
-//            Map<String, Object> variables = new HashMap<>();
-//            variables.put("question", question);
-//            variables.put("information", information);
-//
-//            Prompt prompt = promptTemplate.apply(variables);
-//
-//            // Send the prompt to the OpenAI chat model
-//            ChatLanguageModel chatModel = OpenAiChatModel.builder()
-//                    .apiKey(ApiKeys.OPENAI_API_KEY)
-//                    .modelName(GPT_3_5_TURBO)
-//                    .temperature(0.7)
-//                    .timeout(ofSeconds(15))
-//                    .maxRetries(3)
-//                    .logResponses(true)
-//                    .logRequests(true)
-//                    .build();
-//
-//            AiMessage aiMessage = chatModel.sendUserMessage(prompt.toUserMessage());
-//
-//            // See an answer from the model
-//            String answer = aiMessage.text();
-//            System.out.println(answer);
+            // Create a prompt for the model that includes question and relevant embeddings
+            PromptTemplate promptTemplate = PromptTemplate.from(
+                    "Answer the following question to the best of your ability:\n"
+                            + "\n"
+                            + "Question:\n"
+                            + "{{question}}\n"
+                            + "\n"
+                            + "Base your answer on the following information:\n"
+                            + "{{information}}");
+
+            String information = relevantEmbeddings.stream()
+                    .map(match -> match.embedded().text())
+                    .collect(joining("\n\n"));
+
+            Map<String, Object> variables = new HashMap<>();
+            variables.put("question", question);
+            variables.put("information", information);
+
+            Prompt prompt = promptTemplate.apply(variables);
+
+            // Send the prompt to the OpenAI chat model
+            ChatLanguageModel chatModel = OpenAiChatModel.builder()
+                    .apiKey(ApiKeys.OPENAI_API_KEY)
+                    .modelName(GPT_3_5_TURBO)
+                    .temperature(0.7)
+                    .timeout(ofSeconds(15))
+                    .maxRetries(3)
+                    .logResponses(true)
+                    .logRequests(true)
+                    .build();
+
+            AiMessage aiMessage = chatModel.sendUserMessage(prompt.toUserMessage());
+
+            // See an answer from the model
+            String answer = aiMessage.text();
+            System.out.println(answer);
         }
     }
 
