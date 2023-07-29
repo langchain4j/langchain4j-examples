@@ -196,7 +196,7 @@ public class ChatWithDocumentsExamples {
                     .apiKey(System.getenv("WEAVIATE_API_KEY"))
                     .scheme("https")
                     .host("cluster-url") // main part of your Weaviate Cluster URL e.g. langchain4j-4jw7ufd9.weaviate.network
-                    .objectClass("CharlieCarrot")
+                    .objectClass("CharlieCarrot") // Default class is used if not specified
                     .build();
 
             EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
