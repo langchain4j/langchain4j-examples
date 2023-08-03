@@ -201,12 +201,14 @@ public class ChatWithDocumentsExamples {
                     .scheme("https")
                     // the host, e.g. "langchain4j-4jw7ufd9.weaviate.network" of cluster URL.
                     // Find in under Details of your Weaviate cluster.
-                    .host("langchain4j-7kw7wfd0.weaviate.network")
+                    .host("your_host")
                     // Default class is used if not specified
                     .objectClass("CharlieCarrot")
                     // if true (default), then WeaviateEmbeddingStore will generate a hashed ID based on provided
                     // text segment, which avoids duplicated entries in DB. If false, then random ID will be generated.
                     .avoidDups(true)
+                    // Consistency level: ONE, QUORUM (default) or ALL.
+                    .consistencyLevel("ALL")
                     .build();
 
             EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor
