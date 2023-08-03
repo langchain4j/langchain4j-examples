@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static dev.langchain4j.data.document.DocumentType.TEXT;
+import static dev.langchain4j.data.document.DocumentType.TXT;
 import static dev.langchain4j.data.document.FileSystemDocumentLoader.loadDocument;
 import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
 import static dev.langchain4j.model.openai.OpenAiModelName.TEXT_EMBEDDING_ADA_002;
@@ -102,7 +102,7 @@ public class ChatWithDocumentsExamples {
 
             // Load the document that includes the information you'd like to "chat" about with the model.
             // Currently, loading text and PDF files from file system and by URL is supported.
-            Document document = loadDocument(toPath("story-about-happy-carrot.txt"), TEXT);
+            Document document = loadDocument(toPath("story-about-happy-carrot.txt"), TXT);
 
             // Split document into segments (one paragraph per segment)
             DocumentSplitter splitter = new SentenceSplitter();
