@@ -184,42 +184,49 @@ public class ChatWithDocumentsExamples {
         }
     }
 
-  static class Weaviate_Vector_Database_Example {
+    static class Weaviate_Vector_Database_Example {
 
-    public static void main(String[] args) throws Exception {
-      Document document = loadDocument(toPath("story-about-happy-carrot.txt"));
+        public static void main(String[] args) throws Exception {
+            Document document = loadDocument(toPath("story-about-happy-carrot.txt"));
 
-      EmbeddingModel embeddingModel = OpenAiEmbeddingModel.withApiKey(
-        ApiKeys.OPENAI_API_KEY
-      );
+            EmbeddingModel embeddingModel = OpenAiEmbeddingModel.withApiKey(
+                    ApiKeys.OPENAI_API_KEY
+            );
 
-      EmbeddingStore<TextSegment> embeddingStore = WeaviateEmbeddingStore
-        .builder()
-        .apiKey(System.getenv("WEAVIATE_API_KEY")) // find it under "Show API keys" of your Weaviate cluster.
-        .scheme("https") // the scheme, e.g. "https" of cluster URL. Find in under Details of your Weaviate cluster.
-        .host("langchain4j-7kw7wfd0.weaviate.network") // the host, e.g. "langchain4j-4jw7ufd9.weaviate.network" of cluster URL. Find in under Details of your Weaviate cluster.
-        .objectClass("CharlieCarrot") // Default class is used if not specified
-        .avoidDups(true) // if true (default), then WeaviateEmbeddingStore will generate a hashed ID based on provided text segment, which avoids duplicated entries in DB. If false, then random ID will be generated.
-        .build();
+            EmbeddingStore<TextSegment> embeddingStore = WeaviateEmbeddingStore
+                    .builder()
+                    // find it under "Show API keys" of your Weaviate cluster.
+                    .apiKey(System.getenv("WEAVIATE_API_KEY"))
+                    // the scheme, e.g. "https" of cluster URL. Find in under Details of your Weaviate cluster.
+                    .scheme("https")
+                    // the host, e.g. "langchain4j-4jw7ufd9.weaviate.network" of cluster URL.
+                    // Find in under Details of your Weaviate cluster.
+                    .host("langchain4j-7kw7wfd0.weaviate.network")
+                    // Default class is used if not specified
+                    .objectClass("CharlieCarrot")
+                    // if true (default), then WeaviateEmbeddingStore will generate a hashed ID based on provided
+                    // text segment, which avoids duplicated entries in DB. If false, then random ID will be generated.
+                    .avoidDups(true)
+                    .build();
 
-      EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor
-        .builder()
-        .splitter(new ParagraphSplitter())
-        .embeddingModel(embeddingModel)
-        .embeddingStore(embeddingStore)
-        .build();
-      ingestor.ingest(document);
+            EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor
+                    .builder()
+                    .splitter(new ParagraphSplitter())
+                    .embeddingModel(embeddingModel)
+                    .embeddingStore(embeddingStore)
+                    .build();
+            ingestor.ingest(document);
 
-      ConversationalRetrievalChain chain = ConversationalRetrievalChain
-        .builder()
-        .chatLanguageModel(OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY))
-        .retriever(EmbeddingStoreRetriever.from(embeddingStore, embeddingModel))
-        .build();
+            ConversationalRetrievalChain chain = ConversationalRetrievalChain
+                    .builder()
+                    .chatLanguageModel(OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY))
+                    .retriever(EmbeddingStoreRetriever.from(embeddingStore, embeddingModel))
+                    .build();
 
-      String answer = chain.execute("Who is Charlie? Answer in 10 words.");
-      System.out.println(answer);
+            String answer = chain.execute("Who is Charlie? Answer in 10 words.");
+            System.out.println(answer);
+        }
     }
-  }
 
     private static Path toPath(String fileName) {
         try {
