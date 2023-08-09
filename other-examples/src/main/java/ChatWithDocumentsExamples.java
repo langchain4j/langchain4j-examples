@@ -184,6 +184,39 @@ public class ChatWithDocumentsExamples {
         }
     }
 
+    // TODO better name?
+    static class Vespa_Vector_Database_Example {
+
+        public static void main(String[] args) throws Exception {
+            Document document = loadDocument(toPath("story-about-happy-carrot.txt"));
+
+            EmbeddingModel embeddingModel = OpenAiEmbeddingModel.withApiKey(
+                    ApiKeys.OPENAI_API_KEY
+            );
+
+            EmbeddingStore<TextSegment> embeddingStore = VespaEmbeddingStoreImpl
+                    .builder()
+                    .build();
+
+            EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor
+                    .builder()
+                    .splitter(new ParagraphSplitter())
+                    .embeddingModel(embeddingModel)
+                    .embeddingStore(embeddingStore)
+                    .build();
+            ingestor.ingest(document);
+
+            ConversationalRetrievalChain chain = ConversationalRetrievalChain
+                    .builder()
+                    .chatLanguageModel(OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY))
+                    .retriever(EmbeddingStoreRetriever.from(embeddingStore, embeddingModel))
+                    .build();
+
+//            String answer = chain.execute("Who is Charlie? Answer in 10 words.");
+//            System.out.println(answer);
+        }
+    }
+
     private static Path toPath(String fileName) {
         try {
             URL fileUrl = ChatWithDocumentsExamples.class.getResource(fileName);
