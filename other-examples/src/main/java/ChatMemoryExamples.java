@@ -1,12 +1,10 @@
 import dev.langchain4j.chain.ConversationalChain;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.memory.ChatMemory;
-import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.memory.chat.TokenWindowChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.openai.OpenAiTokenizer;
-import dev.langchain4j.service.AiServices;
 
 import java.io.IOException;
 
@@ -16,27 +14,7 @@ import static java.time.Duration.ofSeconds;
 
 public class ChatMemoryExamples {
 
-    static class AI_Service_with_Memory_Example {
-
-        interface Chat {
-
-            String chat(String userMessage);
-        }
-
-        public static void main(String[] args) {
-
-            Chat chat = AiServices.builder(Chat.class)
-                    .chatLanguageModel(OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY))
-                    .chatMemory(MessageWindowChatMemory.withCapacity(10))
-                    .build();
-
-            String answer = chat.chat("Hello, my name is Klaus");
-            System.out.println(answer); // Hello Klaus! How can I assist you today?
-
-            String answerWithName = chat.chat("What is my name?");
-            System.out.println(answerWithName); // Your name is Klaus.
-        }
-    }
+    // See also ServiceWithMemoryExample and ServiceWithMemoryForEachUserExample
 
     public static class ConversationalChain_Example {
 
@@ -70,8 +48,7 @@ public class ChatMemoryExamples {
 
             ChatMemory chatMemory = TokenWindowChatMemory.builder()
                     .systemMessage("You are a helpful assistant.")
-                    .capacityInTokens(300)
-                    .tokenizer(new OpenAiTokenizer(GPT_3_5_TURBO))
+                    .maxTokens(300, new OpenAiTokenizer(GPT_3_5_TURBO))
                     .build();
 
             // You have full control over the chat memory.
@@ -86,8 +63,8 @@ public class ChatMemoryExamples {
 
             chatMemory.add(userMessage("What is my name?"));
             AiMessage answerWithName = model.sendMessages(chatMemory.messages());
-            System.out.println(answerWithName.text()); // Hello Klaus! How can I assist you today?
-            chatMemory.add(answerWithName); // Your name is Klaus.
+            System.out.println(answerWithName.text()); // Your name is Klaus.
+            chatMemory.add(answerWithName);
         }
     }
 }

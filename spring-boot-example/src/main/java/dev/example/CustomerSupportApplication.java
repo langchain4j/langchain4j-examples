@@ -11,7 +11,7 @@ import dev.langchain4j.retriever.Retriever;
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
-import dev.langchain4j.store.embedding.InMemoryEmbeddingStore;
+import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -31,7 +31,7 @@ public class CustomerSupportApplication {
                                               Retriever<TextSegment> retriever) {
         return AiServices.builder(CustomerSupportAgent.class)
                 .chatLanguageModel(chatLanguageModel)
-                .chatMemory(MessageWindowChatMemory.withCapacity(20))
+                .chatMemory(MessageWindowChatMemory.withMaxMessages(20))
                 .tools(bookingTools)
                 .retriever(retriever)
                 .build();
@@ -44,9 +44,9 @@ public class CustomerSupportApplication {
         // - The nature of your data
         // - The embedding model you are using
         int maxResultsRetrieved = 1;
-        double minSimilarity = 0.8;
+        double minScore = 0.9;
 
-        return EmbeddingStoreRetriever.from(embeddingStore, embeddingModel, maxResultsRetrieved, minSimilarity);
+        return EmbeddingStoreRetriever.from(embeddingStore, embeddingModel, maxResultsRetrieved, minScore);
     }
 
     @Bean

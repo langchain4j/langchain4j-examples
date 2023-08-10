@@ -14,7 +14,11 @@ import dev.langchain4j.model.input.PromptTemplate;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.openai.OpenAiEmbeddingModel;
 import dev.langchain4j.retriever.EmbeddingStoreRetriever;
-import dev.langchain4j.store.embedding.*;
+import dev.langchain4j.store.embedding.EmbeddingMatch;
+import dev.langchain4j.store.embedding.EmbeddingStore;
+import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
+import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
+import dev.langchain4j.store.embedding.pinecone.PineconeEmbeddingStore;
 
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -39,7 +43,7 @@ public class ChatWithDocumentsExamples {
 
         public static void main(String[] args) throws Exception {
 
-            Document document = loadDocument(toPath("story-about-happy-carrot.txt"));
+            Document document = loadDocument(toPath("example-files/story-about-happy-carrot.txt"));
 
             EmbeddingModel embeddingModel = OpenAiEmbeddingModel.withApiKey(ApiKeys.OPENAI_API_KEY);
 
@@ -68,7 +72,7 @@ public class ChatWithDocumentsExamples {
 
         public static void main(String[] args) {
 
-            Document document = loadDocument(toPath("story-about-happy-carrot.txt"));
+            Document document = loadDocument(toPath("example-files/story-about-happy-carrot.txt"));
 
             EmbeddingModel embeddingModel = HuggingFaceEmbeddingModel.builder()
                     .accessToken(ApiKeys.HF_API_KEY)
@@ -102,7 +106,7 @@ public class ChatWithDocumentsExamples {
 
             // Load the document that includes the information you'd like to "chat" about with the model.
             // Currently, loading text and PDF files from file system and by URL is supported.
-            Document document = loadDocument(toPath("story-about-happy-carrot.txt"), TXT);
+            Document document = loadDocument(toPath("example-files/story-about-happy-carrot.txt"), TXT);
 
             // Split document into segments (one paragraph per segment)
             DocumentSplitter splitter = new SentenceSplitter();
@@ -123,10 +127,11 @@ public class ChatWithDocumentsExamples {
             // Store embeddings into Pinecone for further search / retrieval
             // You can also use in-memory embedding store:
             // EmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
+            // PineconeEmbeddingStore requires "langchain4j-pinecone" Maven/Gradle dependency, see pom.xml
             EmbeddingStore<TextSegment> embeddingStore = PineconeEmbeddingStore.builder()
                     .apiKey(System.getenv("PINECONE_API_KEY")) // https://app.pinecone.io/organizations/xxx/projects/yyy:zzz/keys
                     .environment("northamerica-northeast1-gcp")
-                    .projectName("19a129b") // it can be found in the Pinecone url: https://app.pinecone.io/organizations/xxx/projects/yyy:{projectName}/indexes
+                    .projectId("19a129b") // it can be found in the Pinecone url: https://app.pinecone.io/organizations/xxx/projects/yyy:{projectId}/indexes
                     .index("test-s1-1536") // make sure the dimensions of the Pinecone index match the dimensions of the embedding model (1536 for text-embedding-ada-002)
                     .build();
 
@@ -141,9 +146,9 @@ public class ChatWithDocumentsExamples {
             // Find relevant embeddings in embedding store by semantic similarity
             // You can play with parameters below to find a sweet spot for your specific use case
             int maxResults = 3;
-            double minSimilarity = 0.8;
+            double minScore = 0.8;
             List<EmbeddingMatch<TextSegment>> relevantEmbeddings
-                    = embeddingStore.findRelevant(questionEmbedding, maxResults, minSimilarity);
+                    = embeddingStore.findRelevant(questionEmbedding, maxResults, minScore);
 
             // Create a prompt for the model that includes question and relevant embeddings
             PromptTemplate promptTemplate = PromptTemplate.from(

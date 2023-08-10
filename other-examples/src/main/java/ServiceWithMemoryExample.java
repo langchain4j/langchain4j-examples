@@ -15,7 +15,7 @@ public class ServiceWithMemoryExample {
 
         ChatLanguageModel chatLanguageModel = OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY);
 
-        ChatMemory chatMemory = MessageWindowChatMemory.withCapacity(10);
+        ChatMemory chatMemory = MessageWindowChatMemory.withMaxMessages(10);
 
         Assistant assistant = AiServices.builder(Assistant.class)
                 .chatLanguageModel(chatLanguageModel)
