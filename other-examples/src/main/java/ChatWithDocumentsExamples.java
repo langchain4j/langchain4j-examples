@@ -8,7 +8,6 @@ import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
-import dev.langchain4j.model.huggingface.HuggingFaceEmbeddingModel;
 import dev.langchain4j.model.input.Prompt;
 import dev.langchain4j.model.input.PromptTemplate;
 import dev.langchain4j.model.openai.OpenAiChatModel;
@@ -18,7 +17,6 @@ import dev.langchain4j.store.embedding.EmbeddingMatch;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
 import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
-import dev.langchain4j.store.embedding.pinecone.PineconeEmbeddingStore;
 
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -63,40 +61,8 @@ public class ChatWithDocumentsExamples {
                     // .promptTemplate() // you can override default prompt template
                     .build();
 
-            String answer = chain.execute("Who is Charlie? Answer in 10 words.");
-            System.out.println(answer);
-        }
-    }
-
-    static class HuggingFace_Embeddings_Example {
-
-        public static void main(String[] args) {
-
-            Document document = loadDocument(toPath("example-files/story-about-happy-carrot.txt"));
-
-            EmbeddingModel embeddingModel = HuggingFaceEmbeddingModel.builder()
-                    .accessToken(ApiKeys.HF_API_KEY)
-                    .modelId("sentence-transformers/all-MiniLM-L6-v2")
-                    .build();
-
-            EmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
-
-            EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
-                    .splitter(new ParagraphSplitter())
-                    .embeddingModel(embeddingModel)
-                    .embeddingStore(embeddingStore)
-                    .build();
-            ingestor.ingest(document);
-
-            ConversationalRetrievalChain chain = ConversationalRetrievalChain.builder()
-                    .chatLanguageModel(OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY))
-                    .retriever(EmbeddingStoreRetriever.from(embeddingStore, embeddingModel))
-                    // .chatMemory() // you can override the default chat memory
-                    // .promptTemplate() // you can override the default prompt template
-                    .build();
-
-            String answer = chain.execute("Who is Charlie? Answer in 10 words.");
-            System.out.println(answer);
+            String answer = chain.execute("Who is Charlie?");
+            System.out.println(answer); // Charlie is a cheerful carrot living in VeggieVille...
         }
     }
 
@@ -124,21 +90,12 @@ public class ChatWithDocumentsExamples {
 
             List<Embedding> embeddings = embeddingModel.embedAll(segments);
 
-            // Store embeddings into Pinecone for further search / retrieval
-            // You can also use in-memory embedding store:
-            // EmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
-            // PineconeEmbeddingStore requires "langchain4j-pinecone" Maven/Gradle dependency, see pom.xml
-            EmbeddingStore<TextSegment> embeddingStore = PineconeEmbeddingStore.builder()
-                    .apiKey(System.getenv("PINECONE_API_KEY")) // https://app.pinecone.io/organizations/xxx/projects/yyy:zzz/keys
-                    .environment("northamerica-northeast1-gcp")
-                    .projectId("19a129b") // it can be found in the Pinecone url: https://app.pinecone.io/organizations/xxx/projects/yyy:{projectId}/indexes
-                    .index("test-s1-1536") // make sure the dimensions of the Pinecone index match the dimensions of the embedding model (1536 for text-embedding-ada-002)
-                    .build();
-
+            // Store embeddings into embedding store for further search / retrieval
+            EmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
             embeddingStore.addAll(embeddings, segments);
 
             // Specify the question you want to ask the model
-            String question = "Who is Charlie? Answer in 10 words.";
+            String question = "Who is Charlie?";
 
             // Embed the question
             Embedding questionEmbedding = embeddingModel.embed(question);
@@ -185,7 +142,7 @@ public class ChatWithDocumentsExamples {
 
             // See an answer from the model
             String answer = aiMessage.text();
-            System.out.println(answer);
+            System.out.println(answer); // Charlie is a cheerful carrot living in VeggieVille...
         }
     }
 
