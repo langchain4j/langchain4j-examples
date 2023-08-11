@@ -17,8 +17,8 @@ public class StreamingExamples {
 
         public static void main(String[] args) {
 
-            // Sorry, "demo" API key does not support streaming (yet). Please your own key.
-            StreamingChatLanguageModel model = OpenAiStreamingChatModel.withApiKey(ApiKeys.OPENAI_API_KEY);
+            // Sorry, "demo" API key does not support streaming (yet). Please use your own key.
+            StreamingChatLanguageModel model = OpenAiStreamingChatModel.withApiKey(System.getenv("OPENAI_API_KEY"));
 
             List<ChatMessage> messages = asList(
                     systemMessage("You are a very sarcastic assistant"),
@@ -49,7 +49,8 @@ public class StreamingExamples {
 
         public static void main(String[] args) {
 
-            StreamingLanguageModel model = OpenAiStreamingLanguageModel.withApiKey(ApiKeys.OPENAI_API_KEY);
+            // Sorry, "demo" API key does not support streaming (yet). Please use your own key.
+            StreamingLanguageModel model = OpenAiStreamingLanguageModel.withApiKey(System.getenv("OPENAI_API_KEY"));
 
             model.process("Tell me a joke", new StreamingResponseHandler() {
 

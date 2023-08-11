@@ -25,7 +25,7 @@ public class ServiceWithDynamicToolsExample {
 
         Assistant assistant = AiServices.builder(Assistant.class)
                 .chatLanguageModel(chatLanguageModel)
-                .chatMemory(MessageWindowChatMemory.withCapacity(10))
+                .chatMemory(MessageWindowChatMemory.withMaxMessages(20))
                 .tools(judge0Tool)
                 .build();
 
@@ -38,5 +38,7 @@ public class ServiceWithDynamicToolsExample {
         System.out.println("[User]: " + userMessage);
         String answer = assistant.chat(userMessage);
         System.out.println("[Assistant]: " + answer);
+        System.out.println();
+        System.out.println();
     }
 }
