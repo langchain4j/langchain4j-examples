@@ -15,13 +15,13 @@ public class ServiceWithDynamicToolsExample {
 
     public static void main(String[] args) {
 
+        Judge0JavaScriptExecutionTool judge0Tool = new Judge0JavaScriptExecutionTool(ApiKeys.RAPID_API_KEY);
+
         ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder()
                 .apiKey(ApiKeys.OPENAI_API_KEY)
                 .temperature(0.0)
                 .timeout(ofSeconds(60))
                 .build();
-
-        Judge0JavaScriptExecutionTool judge0Tool = new Judge0JavaScriptExecutionTool(ApiKeys.RAPID_API_KEY);
 
         Assistant assistant = AiServices.builder(Assistant.class)
                 .chatLanguageModel(chatLanguageModel)
