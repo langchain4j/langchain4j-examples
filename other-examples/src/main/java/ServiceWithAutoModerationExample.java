@@ -1,4 +1,3 @@
-import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.openai.OpenAiModerationModel;
 import dev.langchain4j.service.AiServices;
@@ -15,12 +14,10 @@ public class ServiceWithAutoModerationExample {
 
     public static void main(String[] args) {
 
-        ChatLanguageModel chatLanguageModel = OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY);
-
         OpenAiModerationModel moderationModel = OpenAiModerationModel.withApiKey(ApiKeys.OPENAI_API_KEY);
 
         Chat chat = AiServices.builder(Chat.class)
-                .chatLanguageModel(chatLanguageModel)
+                .chatLanguageModel(OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY))
                 .moderationModel(moderationModel)
                 .build();
 
