@@ -16,6 +16,7 @@ import dev.langchain4j.retriever.EmbeddingStoreRetriever;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
+import dev.langchain4j.store.embedding.VespaEmbeddingStoreImpl;
 import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
 
 import java.net.URISyntaxException;
@@ -150,7 +151,7 @@ public class ChatWithDocumentsExamples {
     static class Vespa_Vector_Database_Example {
 
         public static void main(String[] args) throws Exception {
-            Document document = loadDocument(toPath("story-about-happy-carrot.txt"));
+            Document document = loadDocument(toPath("example-files/story-about-happy-carrot.txt"));
 
             EmbeddingModel embeddingModel = OpenAiEmbeddingModel.withApiKey(
                     ApiKeys.OPENAI_API_KEY
@@ -160,13 +161,13 @@ public class ChatWithDocumentsExamples {
                     .builder()
                     .build();
 
-            EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor
-                    .builder()
-                    .splitter(new ParagraphSplitter())
-                    .embeddingModel(embeddingModel)
-                    .embeddingStore(embeddingStore)
-                    .build();
-            ingestor.ingest(document);
+//            EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor
+//                    .builder()
+//                    .splitter(new ParagraphSplitter())
+//                    .embeddingModel(embeddingModel)
+//                    .embeddingStore(embeddingStore)
+//                    .build();
+//            ingestor.ingest(document);
 
             ConversationalRetrievalChain chain = ConversationalRetrievalChain
                     .builder()
@@ -174,8 +175,8 @@ public class ChatWithDocumentsExamples {
                     .retriever(EmbeddingStoreRetriever.from(embeddingStore, embeddingModel))
                     .build();
 
-//            String answer = chain.execute("Who is Charlie? Answer in 10 words.");
-//            System.out.println(answer);
+            String answer = chain.execute("Who is Charlie? Answer in 10 words.");
+            System.out.println(answer);
         }
     }
 
