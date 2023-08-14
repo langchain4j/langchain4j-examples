@@ -17,6 +17,7 @@ import dev.langchain4j.store.embedding.EmbeddingMatch;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
 import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
+import dev.langchain4j.store.embedding.weaviate.WeaviateEmbeddingStore;
 
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -143,6 +144,52 @@ public class ChatWithDocumentsExamples {
             // See an answer from the model
             String answer = aiMessage.text();
             System.out.println(answer); // Charlie is a cheerful carrot living in VeggieVille...
+        }
+    }
+
+    static class Weaviate_Vector_Database_Example {
+
+        public static void main(String[] args) throws Exception {
+            Document document = loadDocument(toPath("example-files/story-about-happy-carrot.txt"));
+
+            EmbeddingModel embeddingModel = OpenAiEmbeddingModel.withApiKey(
+                    ApiKeys.OPENAI_API_KEY
+            );
+
+            EmbeddingStore<TextSegment> embeddingStore = WeaviateEmbeddingStore
+                    .builder()
+                    // find it under "Show API keys" of your Weaviate cluster.
+                    .apiKey(System.getenv("WEAVIATE_API_KEY"))
+                    // the scheme, e.g. "https" of cluster URL. Find in under Details of your Weaviate cluster.
+                    .scheme("https")
+                    // the host, e.g. "langchain4j-4jw7ufd9.weaviate.network" of cluster URL.
+                    // Find it under Details of your Weaviate cluster.
+                    .host("your_host")
+                    // Default class is used if not specified
+                    .objectClass("CharlieCarrot")
+                    // if true (default), then WeaviateEmbeddingStore will generate a hashed ID based on provided
+                    // text segment, which avoids duplicated entries in DB. If false, then random ID will be generated.
+                    .avoidDups(true)
+                    // Consistency level: ONE, QUORUM (default) or ALL.
+                    .consistencyLevel("ALL")
+                    .build();
+
+            EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor
+                    .builder()
+                    .splitter(new ParagraphSplitter())
+                    .embeddingModel(embeddingModel)
+                    .embeddingStore(embeddingStore)
+                    .build();
+            ingestor.ingest(document);
+
+            ConversationalRetrievalChain chain = ConversationalRetrievalChain
+                    .builder()
+                    .chatLanguageModel(OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY))
+                    .retriever(EmbeddingStoreRetriever.from(embeddingStore, embeddingModel))
+                    .build();
+
+            String answer = chain.execute("Who is Charlie? Answer in 10 words.");
+            System.out.println(answer);
         }
     }
 
