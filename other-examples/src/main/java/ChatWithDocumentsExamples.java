@@ -16,7 +16,6 @@ import dev.langchain4j.retriever.EmbeddingStoreRetriever;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
-import dev.langchain4j.store.embedding.VespaEmbeddingStoreImpl;
 import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
 
 import java.net.URISyntaxException;
@@ -144,39 +143,6 @@ public class ChatWithDocumentsExamples {
             // See an answer from the model
             String answer = aiMessage.text();
             System.out.println(answer); // Charlie is a cheerful carrot living in VeggieVille...
-        }
-    }
-
-    // TODO better name?
-    static class Vespa_Vector_Database_Example {
-
-        public static void main(String[] args) throws Exception {
-            Document document = loadDocument(toPath("example-files/story-about-happy-carrot.txt"));
-
-            EmbeddingModel embeddingModel = OpenAiEmbeddingModel.withApiKey(
-                    ApiKeys.OPENAI_API_KEY
-            );
-
-            EmbeddingStore<TextSegment> embeddingStore = VespaEmbeddingStoreImpl
-                    .builder()
-                    .build();
-
-//            EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor
-//                    .builder()
-//                    .splitter(new ParagraphSplitter())
-//                    .embeddingModel(embeddingModel)
-//                    .embeddingStore(embeddingStore)
-//                    .build();
-//            ingestor.ingest(document);
-
-            ConversationalRetrievalChain chain = ConversationalRetrievalChain
-                    .builder()
-                    .chatLanguageModel(OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY))
-                    .retriever(EmbeddingStoreRetriever.from(embeddingStore, embeddingModel))
-                    .build();
-
-            String answer = chain.execute("Who is Charlie? Answer in 10 words.");
-            System.out.println(answer);
         }
     }
 
