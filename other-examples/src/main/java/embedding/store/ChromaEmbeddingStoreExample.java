@@ -39,7 +39,7 @@ public class ChromaEmbeddingStoreExample {
         List<EmbeddingMatch<TextSegment>> relevant = embeddingStore.findRelevant(queryEmbedding, 1);
         EmbeddingMatch<TextSegment> embeddingMatch = relevant.get(0);
 
-        System.out.println(embeddingMatch.score()); // 0.8144288493114709
+        System.out.println(embeddingMatch.score()); // 0.8144288495729757
         System.out.println(embeddingMatch.embedded().text()); // I like football.
     }
 }
