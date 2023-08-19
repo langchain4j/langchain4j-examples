@@ -2,6 +2,7 @@ import dev.langchain4j.chain.ConversationalChain;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.memory.ChatMemory;
 import dev.langchain4j.memory.chat.TokenWindowChatMemory;
+import dev.langchain4j.model.Tokenizer;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.openai.OpenAiTokenizer;
@@ -46,10 +47,8 @@ public class ChatMemoryExamples {
                     .logResponses(true)
                     .build();
 
-            ChatMemory chatMemory = TokenWindowChatMemory.builder()
-                    .systemMessage("You are a helpful assistant.")
-                    .maxTokens(300, new OpenAiTokenizer(GPT_3_5_TURBO))
-                    .build();
+            Tokenizer tokenizer = new OpenAiTokenizer(GPT_3_5_TURBO);
+            ChatMemory chatMemory = TokenWindowChatMemory.withMaxTokens(300, tokenizer);
 
             // You have full control over the chat memory.
             // You can decide if you want to add a particular message to the memory
