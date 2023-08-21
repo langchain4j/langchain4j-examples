@@ -40,7 +40,7 @@ public class VespaEmbeddingStoreExample {
     TextSegment segment2 = TextSegment.from("I've never been to New York.");
     Embedding embedding2 = embeddingModel.embed(segment2);
     embeddingStore.add(embedding2, segment2);
-    //
+
     TextSegment segment3 = TextSegment.from(
       "But actually we tried our new swimming pool yesterday and it was awesome!"
     );
@@ -54,7 +54,9 @@ public class VespaEmbeddingStoreExample {
 
     System.out.println("added/updated records count: " + ids.size()); // 3
 
-    TextSegment segment4 = TextSegment.from("John Lennon was a very cool person.");
+    TextSegment segment4 = TextSegment.from(
+      "John Lennon was a very cool person."
+    );
     Embedding embedding4 = embeddingModel.embed(segment4);
     String s4id = embeddingStore.add(embedding4, segment4);
 
@@ -68,20 +70,23 @@ public class VespaEmbeddingStoreExample {
       2
     );
 
-    System.out.println(relevant.get(0).score()); // 0.734...
+    System.out.println(
+      "relevant results count for sport question: " + relevant.size()
+    ); // 2
+
+    System.out.println(relevant.get(0).score()); // 0.639...
     System.out.println(relevant.get(0).embedded().text()); // football
-    System.out.println(relevant.get(1).score()); // 0.567...
+    System.out.println(relevant.get(1).score()); // 0.232...
     System.out.println(relevant.get(1).embedded().text()); // swimming pool
 
-    queryEmbedding = embeddingModel.embed(
-      "What's about musicians?"
-    );
-    relevant = embeddingStore.findRelevant(
-      queryEmbedding,
-      1
-    );
+    queryEmbedding = embeddingModel.embed("And what about musicians?");
+    relevant = embeddingStore.findRelevant(queryEmbedding, 5, 0.3);
 
-    System.out.println(relevant.get(0).score()); // 0.592...
+    System.out.println(
+      "relevant results count for music question: " + relevant.size()
+    ); // 1
+
+    System.out.println(relevant.get(0).score()); // 0.359...
     System.out.println(relevant.get(0).embedded().text()); // John Lennon
   }
 }
