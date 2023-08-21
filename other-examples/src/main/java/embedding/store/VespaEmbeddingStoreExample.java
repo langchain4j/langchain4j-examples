@@ -19,7 +19,7 @@ public class VespaEmbeddingStoreExample {
     EmbeddingStore<TextSegment> embeddingStore = VespaEmbeddingStoreImpl
       .builder()
       .url(
-        "https://alexey-heezer.carrot.mytenant346.aws-us-east-1c.dev.z.vespa-app.cloud"
+        "https://alexey-heezer.langchain4j.mytenant346.aws-us-east-1c.dev.z.vespa-app.cloud"
       )
       .keyPath(
         "/Users/alexey.titov/.vespa/mytenant346.carrot.alexey-heezer/data-plane-private-key.pem"
@@ -51,6 +51,8 @@ public class VespaEmbeddingStoreExample {
       asList(embedding1, embedding2, embedding3),
       asList(segment1, segment2, segment3)
     );
+
+    System.out.println("added/updated records count: " + ids.size()); // 3
 
     Embedding queryEmbedding = embeddingModel.embed(
       "What is your favorite sport?"
