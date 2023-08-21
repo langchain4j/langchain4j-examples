@@ -54,6 +54,12 @@ public class VespaEmbeddingStoreExample {
 
     System.out.println("added/updated records count: " + ids.size()); // 3
 
+    TextSegment segment4 = TextSegment.from("John Lennon was a very cool person.");
+    Embedding embedding4 = embeddingModel.embed(segment4);
+    String s4id = embeddingStore.add(embedding4, segment4);
+
+    System.out.println("segment 4 id: " + s4id);
+
     Embedding queryEmbedding = embeddingModel.embed(
       "What is your favorite sport?"
     );
@@ -66,5 +72,16 @@ public class VespaEmbeddingStoreExample {
     System.out.println(relevant.get(0).embedded().text()); // football
     System.out.println(relevant.get(1).score()); // 0.567...
     System.out.println(relevant.get(1).embedded().text()); // swimming pool
+
+    queryEmbedding = embeddingModel.embed(
+      "What's about musicians?"
+    );
+    relevant = embeddingStore.findRelevant(
+      queryEmbedding,
+      1
+    );
+
+    System.out.println(relevant.get(0).score()); // 0.592...
+    System.out.println(relevant.get(0).embedded().text()); // John Lennon
   }
 }
