@@ -14,12 +14,11 @@ import java.util.List;
 /**
  * Example of integration with Vespa. You need to configure Vespa server side first, instructions are
  * inside of README.md file.
+ * Requires "langchain4j-vespa" Maven/Gradle dependency
  */
 public class VespaEmbeddingStoreExample {
 
   public static void main(String[] args) {
-    // Requires "langchain4j-vespa" Maven/Gradle dependency
-
     EmbeddingStore<TextSegment> embeddingStore = VespaEmbeddingStoreImpl
       .builder()
       // server url, e.g. https://alexey-heezer.langchain4j.mytenant346.aws-us-east-1c.dev.z.vespa-app.cloud
