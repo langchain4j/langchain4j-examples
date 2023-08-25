@@ -1,4 +1,4 @@
-package embedding.store;
+package embedding.store.vespa;
 
 import static dev.langchain4j.model.inprocess.InProcessEmbeddingModelType.ALL_MINILM_L6_V2;
 import static java.util.Arrays.asList;
@@ -11,6 +11,10 @@ import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.vespa.VespaEmbeddingStoreImpl;
 import java.util.List;
 
+/**
+ * Example of integration with Vespa. You need to configure Vespa server side first, instructions are
+ * inside of README.md file.
+ */
 public class VespaEmbeddingStoreExample {
 
   public static void main(String[] args) {
