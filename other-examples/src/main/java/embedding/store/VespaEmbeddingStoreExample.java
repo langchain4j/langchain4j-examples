@@ -8,7 +8,7 @@ import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.inprocess.InProcessEmbeddingModel;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
 import dev.langchain4j.store.embedding.EmbeddingStore;
-import dev.langchain4j.store.embedding.VespaEmbeddingStoreImpl;
+import dev.langchain4j.store.embedding.vespa.VespaEmbeddingStoreImpl;
 import java.util.List;
 
 public class VespaEmbeddingStoreExample {
@@ -18,15 +18,14 @@ public class VespaEmbeddingStoreExample {
 
     EmbeddingStore<TextSegment> embeddingStore = VespaEmbeddingStoreImpl
       .builder()
-      .url(
-        "https://alexey-heezer.langchain4j.mytenant346.aws-us-east-1c.dev.z.vespa-app.cloud"
-      )
-      .keyPath(
-        "/Users/alexey.titov/.vespa/mytenant346.carrot.alexey-heezer/data-plane-private-key.pem"
-      )
-      .certPath(
-        "/Users/alexey.titov/.vespa/mytenant346.carrot.alexey-heezer/data-plane-public-cert.pem"
-      )
+      // server url, e.g. https://alexey-heezer.langchain4j.mytenant346.aws-us-east-1c.dev.z.vespa-app.cloud
+      .url("url")
+      // local path to the SSL private key file,
+      // e.g. /Users/user/.vespa/mytenant346.langchain4j.alexey-heezer/data-plane-private-key.pem
+      .keyPath("keyPath")
+      // local path to the SSL certificate file,
+      // e.g. /Users/user/.vespa/mytenant346.langchain4j.alexey-heezer/data-plane-public-cert.pem
+      .certPath("certPath")
       .build();
 
     InProcessEmbeddingModel embeddingModel = new InProcessEmbeddingModel(
