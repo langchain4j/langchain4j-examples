@@ -173,7 +173,7 @@ public class EmbeddingModelTextClassifierExample {
         EmbeddingModel embeddingModel = new InProcessEmbeddingModel(ALL_MINILM_L6_V2);
         TextClassifier<CustomerServiceCategory> classifier = new EmbeddingModelTextClassifier<>(embeddingModel, examples);
 
-        List<CustomerServiceCategory> categories = classifier.classify("Yo where is my order?");
+        List<CustomerServiceCategory> categories = classifier.classify("Yo where is my package?");
 
         System.out.println(categories); // [ORDER_STATUS]
     }
