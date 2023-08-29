@@ -10,15 +10,18 @@ public class ServiceWithToolsExample {
 
     static class Calculator {
 
-        @Tool
+        @Tool("Calculates the length of a string")
+        int stringLength(String s) {
+            return s.length();
+        }
+
+        @Tool("Calculates the sum of two numbers")
         int add(int a, int b) {
-            System.out.println("Called add()");
             return a + b;
         }
 
-        @Tool
+        @Tool("Calculates the square root of a number")
         double sqrt(int x) {
-            System.out.println("Called sqrt()");
             return Math.sqrt(x);
         }
     }
@@ -36,7 +39,11 @@ public class ServiceWithToolsExample {
                 .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
                 .build();
 
-        String answer = assistant.chat("What's the square root of 1758395065?");
-        System.out.println(answer); // The square root of 1758395065 is approximately 41933.22.
+        String question = "What is the square root of the sum of the numbers of letters in the words \"hello\" and \"world\"?";
+
+        String answer = assistant.chat(question);
+
+        System.out.println(answer);
+        // The square root of the sum of the number of letters in the words "hello" and "world" is approximately 3.162.
     }
 }
