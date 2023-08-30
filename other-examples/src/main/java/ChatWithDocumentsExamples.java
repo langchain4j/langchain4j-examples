@@ -1,8 +1,7 @@
 import dev.langchain4j.chain.ConversationalRetrievalChain;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.DocumentSplitter;
-import dev.langchain4j.data.document.splitter.ParagraphSplitter;
-import dev.langchain4j.data.document.splitter.SentenceSplitter;
+import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.segment.TextSegment;
@@ -12,6 +11,7 @@ import dev.langchain4j.model.input.Prompt;
 import dev.langchain4j.model.input.PromptTemplate;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.openai.OpenAiEmbeddingModel;
+import dev.langchain4j.model.openai.OpenAiTokenizer;
 import dev.langchain4j.retriever.EmbeddingStoreRetriever;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
 import dev.langchain4j.store.embedding.EmbeddingStore;
@@ -48,7 +48,7 @@ public class ChatWithDocumentsExamples {
             EmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
 
             EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
-                    .splitter(new ParagraphSplitter())
+                    .documentSplitter(DocumentSplitters.recursive(500))
                     .embeddingModel(embeddingModel)
                     .embeddingStore(embeddingStore)
                     .build();
@@ -74,8 +74,8 @@ public class ChatWithDocumentsExamples {
             // Currently, loading text and PDF files from file system and by URL is supported.
             Document document = loadDocument(toPath("example-files/story-about-happy-carrot.txt"), TXT);
 
-            // Split document into segments (one paragraph per segment)
-            DocumentSplitter splitter = new SentenceSplitter();
+            // Split document into segments 100 tokens each
+            DocumentSplitter splitter = DocumentSplitters.recursive(100, new OpenAiTokenizer(GPT_3_5_TURBO));
             List<TextSegment> segments = splitter.split(document);
 
             // Embed segments (convert them into vectors that represent the meaning) using OpenAI embedding model
