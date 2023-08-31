@@ -8,7 +8,7 @@ import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.inprocess.InProcessEmbeddingModel;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
 import dev.langchain4j.store.embedding.EmbeddingStore;
-import dev.langchain4j.store.embedding.vespa.VespaEmbeddingStoreImpl;
+import dev.langchain4j.store.embedding.vespa.VespaEmbeddingStore;
 import java.util.List;
 
 /**
@@ -19,7 +19,7 @@ import java.util.List;
 public class VespaEmbeddingStoreExample {
 
   public static void main(String[] args) {
-    EmbeddingStore<TextSegment> embeddingStore = VespaEmbeddingStoreImpl
+    EmbeddingStore<TextSegment> embeddingStore = VespaEmbeddingStore
       .builder()
       // server url, e.g. https://alexey-heezer.langchain4j.mytenant346.aws-us-east-1c.dev.z.vespa-app.cloud
       .url("url")
@@ -31,9 +31,7 @@ public class VespaEmbeddingStoreExample {
       .certPath("certPath")
       .build();
 
-    InProcessEmbeddingModel embeddingModel = new InProcessEmbeddingModel(
-      ALL_MINILM_L6_V2
-    );
+    InProcessEmbeddingModel embeddingModel = new InProcessEmbeddingModel(ALL_MINILM_L6_V2);
 
     TextSegment segment1 = TextSegment.from("I like football.");
     Embedding embedding1 = embeddingModel.embed(segment1);
@@ -56,25 +54,16 @@ public class VespaEmbeddingStoreExample {
 
     System.out.println("added/updated records count: " + ids.size()); // 3
 
-    TextSegment segment4 = TextSegment.from(
-      "John Lennon was a very cool person."
-    );
+    TextSegment segment4 = TextSegment.from("John Lennon was a very cool person.");
     Embedding embedding4 = embeddingModel.embed(segment4);
     String s4id = embeddingStore.add(embedding4, segment4);
 
     System.out.println("segment 4 id: " + s4id);
 
-    Embedding queryEmbedding = embeddingModel.embed(
-      "What is your favorite sport?"
-    );
-    List<EmbeddingMatch<TextSegment>> relevant = embeddingStore.findRelevant(
-      queryEmbedding,
-      2
-    );
+    Embedding queryEmbedding = embeddingModel.embed("What is your favorite sport?");
+    List<EmbeddingMatch<TextSegment>> relevant = embeddingStore.findRelevant(queryEmbedding, 2);
 
-    System.out.println(
-      "relevant results count for sport question: " + relevant.size()
-    ); // 2
+    System.out.println("relevant results count for sport question: " + relevant.size()); // 2
 
     System.out.println(relevant.get(0).score()); // 0.639...
     System.out.println(relevant.get(0).embedded().text()); // football
@@ -84,9 +73,7 @@ public class VespaEmbeddingStoreExample {
     queryEmbedding = embeddingModel.embed("And what about musicians?");
     relevant = embeddingStore.findRelevant(queryEmbedding, 5, 0.3);
 
-    System.out.println(
-      "relevant results count for music question: " + relevant.size()
-    ); // 1
+    System.out.println("relevant results count for music question: " + relevant.size()); // 1
 
     System.out.println(relevant.get(0).score()); // 0.359...
     System.out.println(relevant.get(0).embedded().text()); // John Lennon
