@@ -68,6 +68,7 @@ schema langchain4j {
    public certificate and store them locally. Their path will be used in client example. Certificate will be added
    to the project under `src/main/application/security/clients.pem`.
 
-7. Now you can build and deploy your application: do steps 7 & 8 from https://cloud.vespa.ai/en/getting-started.html.
+7. Now you can build (you need Java > 17 for this) and deploy your application: do steps 7 & 8 from
+   https://cloud.vespa.ai/en/getting-started.html.
    Alternatively you can deploy your build application by using [Cloud UI](https://console.vespa-cloud.com) and
    uploading `target/application.zip` there.
