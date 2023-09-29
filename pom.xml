@@ -6,12 +6,18 @@
 
     <groupId>dev.langchain4j</groupId>
     <artifactId>langchain4j-examples</artifactId>
-    <version>0.22.0</version>
+    <version>0.23.0</version>
     <packaging>pom</packaging>
 
     <modules>
-        <module>spring-boot-example</module>
+        <module>chroma-example</module>
+        <module>elasticsearch-example</module>
+        <module>milvus-example</module>
+        <module>pinecone-example</module>
         <module>other-examples</module>
+        <module>redis-example</module>
+        <module>spring-boot-example</module>
+        <module>weaviate-example</module>
     </modules>
 
 </project>

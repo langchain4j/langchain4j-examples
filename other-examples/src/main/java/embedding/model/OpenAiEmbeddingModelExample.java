@@ -1,20 +1,17 @@
 package embedding.model;
 
 import dev.langchain4j.data.embedding.Embedding;
+import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.openai.OpenAiEmbeddingModel;
-
-import static dev.langchain4j.model.openai.OpenAiModelName.TEXT_EMBEDDING_ADA_002;
+import dev.langchain4j.model.output.Response;
 
 public class OpenAiEmbeddingModelExample {
 
     public static void main(String[] args) {
 
-        OpenAiEmbeddingModel embeddingModel = OpenAiEmbeddingModel.builder()
-                .apiKey("demo")
-                .modelName(TEXT_EMBEDDING_ADA_002)
-                .build();
+        EmbeddingModel embeddingModel = OpenAiEmbeddingModel.withApiKey("demo");
 
-        Embedding embedding = embeddingModel.embed("Hello, how are you?");
-        System.out.println(embedding);
+        Response<Embedding> response = embeddingModel.embed("Hello, how are you?");
+        System.out.println(response);
     }
 }

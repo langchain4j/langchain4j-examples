@@ -1,4 +1,3 @@
-import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 
 import java.net.InetSocketAddress;
@@ -15,7 +14,7 @@ public class ProxyExample {
                 .proxy(new Proxy(HTTP, new InetSocketAddress("39.175.77.7", 30001)))
                 .build();
 
-        AiMessage answer = model.sendUserMessage("hello");
-        System.out.println(answer.text());
+        String answer = model.generate("hello");
+        System.out.println(answer);
     }
 }

@@ -1,19 +1,27 @@
-package embedding.store;
-
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.embedding.AllMiniLmL6V2EmbeddingModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
-import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
+import dev.langchain4j.store.embedding.EmbeddingStore;
+import dev.langchain4j.store.embedding.elasticsearch.ElasticsearchEmbeddingStore;
 
 import java.util.List;
 
-public class InMemoryEmbeddingStoreExample {
+public class ElasticsearchEmbeddingStoreExample {
 
-    public static void main(String[] args) {
+    /**
+     * To run this example, ensure you have Elasticsearch running locally. If not, then:
+     * - Execute "docker pull docker.elastic.co/elasticsearch/elasticsearch:8.9.0"
+     * - Execute "docker run -d -p 9200:9200 -p 9300:9300 -e discovery.type=single-node -e xpack.security.enabled=false docker.elastic.co/elasticsearch/elasticsearch:8.9.0"
+     * - Wait until Elasticsearch is ready to serve (may take a few minutes)
+     */
 
-        InMemoryEmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
+    public static void main(String[] args) throws InterruptedException {
+
+        EmbeddingStore<TextSegment> embeddingStore = ElasticsearchEmbeddingStore.builder()
+                .serverUrl("http://localhost:9200")
+                .build();
 
         EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
 
@@ -25,20 +33,13 @@ public class InMemoryEmbeddingStoreExample {
         Embedding embedding2 = embeddingModel.embed(segment2).content();
         embeddingStore.add(embedding2, segment2);
 
+        Thread.sleep(1000); // to be sure that embeddings were persisted
+
         Embedding queryEmbedding = embeddingModel.embed("What is your favourite sport?").content();
         List<EmbeddingMatch<TextSegment>> relevant = embeddingStore.findRelevant(queryEmbedding, 1);
         EmbeddingMatch<TextSegment> embeddingMatch = relevant.get(0);
 
-        System.out.println(embeddingMatch.score()); // 0.8144288515898701
+        System.out.println(embeddingMatch.score()); // 0.81442887
         System.out.println(embeddingMatch.embedded().text()); // I like football.
-
-        // In-memory embedding store can be serialized and deserialized to/from JSON
-        // String serializedStore = embeddingStore.serializeToJson();
-        // InMemoryEmbeddingStore<TextSegment> deserializedStore = InMemoryEmbeddingStore.fromJson(serializedStore);
-
-        // In-memory embedding store can be serialized and deserialized to/from file
-        // String filePath = "/home/me/embedding.store";
-        // embeddingStore.serializeToFile(filePath);
-        // InMemoryEmbeddingStore<TextSegment> deserializedStore = InMemoryEmbeddingStore.fromFile(filePath);
     }
 }

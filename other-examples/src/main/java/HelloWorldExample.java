@@ -1,4 +1,3 @@
-import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 
@@ -10,8 +9,8 @@ public class HelloWorldExample {
         ChatLanguageModel model = OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY);
 
         // Start interacting
-        AiMessage answer = model.sendUserMessage("Hello world!");
+        String answer = model.generate("Hello world!");
 
-        System.out.println(answer.text()); // Hello! How can I assist you today?
+        System.out.println(answer); // Hello! How can I assist you today?
     }
 }

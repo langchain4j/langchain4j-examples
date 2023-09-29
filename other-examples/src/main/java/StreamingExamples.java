@@ -1,9 +1,11 @@
+import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.model.StreamingResponseHandler;
 import dev.langchain4j.model.chat.StreamingChatLanguageModel;
 import dev.langchain4j.model.language.StreamingLanguageModel;
 import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
 import dev.langchain4j.model.openai.OpenAiStreamingLanguageModel;
+import dev.langchain4j.model.output.Response;
 
 import java.util.List;
 
@@ -25,7 +27,7 @@ public class StreamingExamples {
                     userMessage("Tell me a joke")
             );
 
-            model.sendMessages(messages, new StreamingResponseHandler() {
+            model.generate(messages, new StreamingResponseHandler<AiMessage>() {
 
                 @Override
                 public void onNext(String token) {
@@ -33,8 +35,8 @@ public class StreamingExamples {
                 }
 
                 @Override
-                public void onComplete() {
-                    System.out.println("Streaming completed");
+                public void onComplete(Response<AiMessage> response) {
+                    System.out.println("Streaming completed: " + response);
                 }
 
                 @Override
@@ -52,16 +54,16 @@ public class StreamingExamples {
             // Sorry, "demo" API key does not support streaming (yet). Please use your own key.
             StreamingLanguageModel model = OpenAiStreamingLanguageModel.withApiKey(System.getenv("OPENAI_API_KEY"));
 
-            model.process("Tell me a joke", new StreamingResponseHandler() {
+            model.generate("Tell me a joke", new StreamingResponseHandler<String>() {
 
                 @Override
                 public void onNext(String token) {
-                    System.out.println("Next token: '" + token + "'");
+                    System.out.println("New token: '" + token + "'");
                 }
 
                 @Override
-                public void onComplete() {
-                    System.out.println("Streaming completed");
+                public void onComplete(Response<String> response) {
+                    System.out.println("Streaming completed: " + response);
                 }
 
                 @Override

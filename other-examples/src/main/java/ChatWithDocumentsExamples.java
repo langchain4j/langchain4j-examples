@@ -6,11 +6,11 @@ import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.embedding.AllMiniLmL6V2EmbeddingModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.input.Prompt;
 import dev.langchain4j.model.input.PromptTemplate;
 import dev.langchain4j.model.openai.OpenAiChatModel;
-import dev.langchain4j.model.openai.OpenAiEmbeddingModel;
 import dev.langchain4j.model.openai.OpenAiTokenizer;
 import dev.langchain4j.retriever.EmbeddingStoreRetriever;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
@@ -26,11 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static dev.langchain4j.data.document.DocumentType.TXT;
 import static dev.langchain4j.data.document.FileSystemDocumentLoader.loadDocument;
 import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
-import static dev.langchain4j.model.openai.OpenAiModelName.TEXT_EMBEDDING_ADA_002;
-import static java.time.Duration.ofSeconds;
 import static java.util.stream.Collectors.joining;
 
 public class ChatWithDocumentsExamples {
@@ -41,17 +38,17 @@ public class ChatWithDocumentsExamples {
 
         public static void main(String[] args) throws Exception {
 
-            Document document = loadDocument(toPath("example-files/story-about-happy-carrot.txt"));
-
-            EmbeddingModel embeddingModel = OpenAiEmbeddingModel.withApiKey(ApiKeys.OPENAI_API_KEY);
+            EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
 
             EmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
 
             EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
-                    .documentSplitter(DocumentSplitters.recursive(500))
+                    .documentSplitter(DocumentSplitters.recursive(500, 0))
                     .embeddingModel(embeddingModel)
                     .embeddingStore(embeddingStore)
                     .build();
+
+            Document document = loadDocument(toPath("example-files/story-about-happy-carrot.txt"));
             ingestor.ingest(document);
 
             ConversationalRetrievalChain chain = ConversationalRetrievalChain.builder()
@@ -71,24 +68,19 @@ public class ChatWithDocumentsExamples {
         public static void main(String[] args) {
 
             // Load the document that includes the information you'd like to "chat" about with the model.
-            // Currently, loading text and PDF files from file system and by URL is supported.
-            Document document = loadDocument(toPath("example-files/story-about-happy-carrot.txt"), TXT);
+            Document document = loadDocument(toPath("example-files/story-about-happy-carrot.txt"));
 
             // Split document into segments 100 tokens each
-            DocumentSplitter splitter = DocumentSplitters.recursive(100, new OpenAiTokenizer(GPT_3_5_TURBO));
+            DocumentSplitter splitter = DocumentSplitters.recursive(
+                    100,
+                    0,
+                    new OpenAiTokenizer(GPT_3_5_TURBO)
+            );
             List<TextSegment> segments = splitter.split(document);
 
-            // Embed segments (convert them into vectors that represent the meaning) using OpenAI embedding model
-            // You can also use HuggingFaceEmbeddingModel (free)
-            EmbeddingModel embeddingModel = OpenAiEmbeddingModel.builder()
-                    .apiKey(ApiKeys.OPENAI_API_KEY)
-                    .modelName(TEXT_EMBEDDING_ADA_002)
-                    .timeout(ofSeconds(15))
-                    .logRequests(true)
-                    .logResponses(true)
-                    .build();
-
-            List<Embedding> embeddings = embeddingModel.embedAll(segments);
+            // Embed segments (convert them into vectors that represent the meaning) using embedding model
+            EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
+            List<Embedding> embeddings = embeddingModel.embedAll(segments).content();
 
             // Store embeddings into embedding store for further search / retrieval
             EmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
@@ -98,12 +90,12 @@ public class ChatWithDocumentsExamples {
             String question = "Who is Charlie?";
 
             // Embed the question
-            Embedding questionEmbedding = embeddingModel.embed(question);
+            Embedding questionEmbedding = embeddingModel.embed(question).content();
 
             // Find relevant embeddings in embedding store by semantic similarity
             // You can play with parameters below to find a sweet spot for your specific use case
             int maxResults = 3;
-            double minScore = 0.8;
+            double minScore = 0.7;
             List<EmbeddingMatch<TextSegment>> relevantEmbeddings
                     = embeddingStore.findRelevant(questionEmbedding, maxResults, minScore);
 
@@ -128,17 +120,8 @@ public class ChatWithDocumentsExamples {
             Prompt prompt = promptTemplate.apply(variables);
 
             // Send the prompt to the OpenAI chat model
-            ChatLanguageModel chatModel = OpenAiChatModel.builder()
-                    .apiKey(ApiKeys.OPENAI_API_KEY)
-                    .modelName(GPT_3_5_TURBO)
-                    .temperature(0.7)
-                    .timeout(ofSeconds(15))
-                    .maxRetries(3)
-                    .logResponses(true)
-                    .logRequests(true)
-                    .build();
-
-            AiMessage aiMessage = chatModel.sendUserMessage(prompt.toUserMessage());
+            ChatLanguageModel chatModel = OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY);
+            AiMessage aiMessage = chatModel.generate(prompt.toUserMessage()).content();
 
             // See an answer from the model
             String answer = aiMessage.text();
