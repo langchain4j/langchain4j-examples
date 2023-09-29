@@ -1,11 +1,9 @@
-package embedding.store.vespa;
-
-import static dev.langchain4j.model.inprocess.InProcessEmbeddingModelType.ALL_MINILM_L6_V2;
 import static java.util.Arrays.asList;
 
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
-import dev.langchain4j.model.inprocess.InProcessEmbeddingModel;
+import dev.langchain4j.model.embedding.AllMiniLmL6V2EmbeddingModel;
+import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.vespa.VespaEmbeddingStore;
@@ -14,7 +12,6 @@ import java.util.List;
 /**
  * Example of integration with Vespa. You need to configure Vespa server side first, instructions are
  * inside of README.md file.
- * Requires "langchain4j-vespa" Maven/Gradle dependency
  */
 public class VespaEmbeddingStoreExample {
 
@@ -31,22 +28,20 @@ public class VespaEmbeddingStoreExample {
       .certPath("certPath")
       .build();
 
-    InProcessEmbeddingModel embeddingModel = new InProcessEmbeddingModel(
-      ALL_MINILM_L6_V2
-    );
+    EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
 
     TextSegment segment1 = TextSegment.from("I like football.");
-    Embedding embedding1 = embeddingModel.embed(segment1);
+    Embedding embedding1 = embeddingModel.embed(segment1).content();
     embeddingStore.add(embedding1, segment1);
 
     TextSegment segment2 = TextSegment.from("I've never been to New York.");
-    Embedding embedding2 = embeddingModel.embed(segment2);
+    Embedding embedding2 = embeddingModel.embed(segment2).content();
     embeddingStore.add(embedding2, segment2);
 
     TextSegment segment3 = TextSegment.from(
       "But actually we tried our new swimming pool yesterday and it was awesome!"
     );
-    Embedding embedding3 = embeddingModel.embed(segment3);
+    Embedding embedding3 = embeddingModel.embed(segment3).content();
     embeddingStore.add(embedding3, segment3);
 
     List<String> ids = embeddingStore.addAll(
@@ -59,14 +54,14 @@ public class VespaEmbeddingStoreExample {
     TextSegment segment4 = TextSegment.from(
       "John Lennon was a very cool person."
     );
-    Embedding embedding4 = embeddingModel.embed(segment4);
+    Embedding embedding4 = embeddingModel.embed(segment4).content();
     String s4id = embeddingStore.add(embedding4, segment4);
 
     System.out.println("segment 4 id: " + s4id);
 
     Embedding queryEmbedding = embeddingModel.embed(
       "What is your favorite sport?"
-    );
+    ).content();
     List<EmbeddingMatch<TextSegment>> relevant = embeddingStore.findRelevant(
       queryEmbedding,
       2
@@ -81,7 +76,7 @@ public class VespaEmbeddingStoreExample {
     System.out.println(relevant.get(1).score()); // 0.232...
     System.out.println(relevant.get(1).embedded().text()); // swimming pool
 
-    queryEmbedding = embeddingModel.embed("And what about musicians?");
+    queryEmbedding = embeddingModel.embed("And what about musicians?").content();
     relevant = embeddingStore.findRelevant(queryEmbedding, 5, 0.3);
 
     System.out.println(
