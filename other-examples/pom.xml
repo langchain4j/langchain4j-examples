@@ -30,6 +30,12 @@
 
         <dependency>
             <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-weaviate</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-hugging-face</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -62,6 +68,12 @@
                     <artifactId>kotlin-stdlib</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-vespa</artifactId>
+            <version>0.22.0</version>
         </dependency>
 
         <dependency>
