@@ -3,6 +3,7 @@ package embedding.model;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.huggingface.HuggingFaceEmbeddingModel;
+import dev.langchain4j.model.output.Response;
 
 import static java.time.Duration.ofSeconds;
 
@@ -17,7 +18,7 @@ public class HuggingFaceEmbeddingModelExample {
                 .timeout(ofSeconds(60))
                 .build();
 
-        Embedding embedding = embeddingModel.embed("Hello, how are you?");
-        System.out.println(embedding);
+        Response<Embedding> response = embeddingModel.embed("Hello, how are you?");
+        System.out.println(response);
     }
 }

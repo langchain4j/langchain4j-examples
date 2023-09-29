@@ -2,14 +2,13 @@ package embedding.classification;
 
 import dev.langchain4j.classification.EmbeddingModelTextClassifier;
 import dev.langchain4j.classification.TextClassifier;
+import dev.langchain4j.model.embedding.AllMiniLmL6V2EmbeddingModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
-import dev.langchain4j.model.inprocess.InProcessEmbeddingModel;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static dev.langchain4j.model.inprocess.InProcessEmbeddingModelType.ALL_MINILM_L6_V2;
 import static embedding.classification.EmbeddingModelTextClassifierExample.CustomerServiceCategory.*;
 import static java.util.Arrays.asList;
 
@@ -170,7 +169,7 @@ public class EmbeddingModelTextClassifierExample {
                 "I wish you had more colors to choose from."
         ));
 
-        EmbeddingModel embeddingModel = new InProcessEmbeddingModel(ALL_MINILM_L6_V2);
+        EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
         TextClassifier<CustomerServiceCategory> classifier = new EmbeddingModelTextClassifier<>(embeddingModel, examples);
 
         List<CustomerServiceCategory> categories = classifier.classify("Yo where is my package?");
