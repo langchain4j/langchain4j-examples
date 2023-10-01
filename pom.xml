@@ -10,6 +10,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>devoxx</module>
         <module>chroma-example</module>
         <module>elasticsearch-example</module>
         <module>milvus-example</module>
