@@ -6,6 +6,7 @@ import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.embedding.AllMiniLmL6V2EmbeddingModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.openai.OpenAiTokenizer;
 import dev.langchain4j.retriever.EmbeddingStoreRetriever;
@@ -14,6 +15,7 @@ import dev.langchain4j.service.AiServices;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
 import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -21,12 +23,26 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
 import java.io.IOException;
+import java.util.Scanner;
 
 import static dev.langchain4j.data.document.FileSystemDocumentLoader.loadDocument;
 import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
 
 @SpringBootApplication
 public class CustomerSupportApplication {
+
+    @Bean
+    public ApplicationRunner applicationRunner(CustomerSupportAgent agent) {
+        return args -> {
+            Scanner scanner = new Scanner(System.in);
+            while (true) {
+                System.out.print("[User]: ");
+                String userMessage = scanner.nextLine();
+                String agentAnswer = agent.chat(userMessage);
+                System.out.println("[Agent]: " + agentAnswer);
+            }
+        };
+    }
 
     @Bean
     CustomerSupportAgent customerSupportAgent(ChatLanguageModel chatLanguageModel,
@@ -47,9 +63,14 @@ public class CustomerSupportApplication {
         // - The nature of your data
         // - The embedding model you are using
         int maxResultsRetrieved = 1;
-        double minScore = 0.9;
+        double minScore = 0.6;
 
         return EmbeddingStoreRetriever.from(embeddingStore, embeddingModel, maxResultsRetrieved, minScore);
+    }
+
+    @Bean
+    EmbeddingModel embeddingModel() {
+        return new AllMiniLmL6V2EmbeddingModel();
     }
 
     @Bean
