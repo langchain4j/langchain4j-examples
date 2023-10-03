@@ -40,8 +40,9 @@ public class _5__Memory {
         System.out.println("[User]: " + userMessage1.text());
         System.out.print("[LLM]: ");
 
-        CompletableFuture<AiMessage> future = new CompletableFuture<>();
-        model.generate(chatMemory.messages(), new StreamingResponseHandler<AiMessage>() {
+        CompletableFuture<AiMessage> futureAiMessage = new CompletableFuture<>();
+
+        StreamingResponseHandler<AiMessage> handler = new StreamingResponseHandler<AiMessage>() {
 
             @Override
             public void onNext(String token) {
@@ -50,14 +51,16 @@ public class _5__Memory {
 
             @Override
             public void onComplete(Response<AiMessage> response) {
-                future.complete(response.content());
+                futureAiMessage.complete(response.content());
             }
 
             @Override
             public void onError(Throwable throwable) {
             }
-        });
-        chatMemory.add(future.get());
+        };
+
+        model.generate(chatMemory.messages(), handler);
+        chatMemory.add(futureAiMessage.get());
 
         UserMessage userMessage2 = userMessage(
                 "Give a concrete example implementation of the first point? " +
@@ -67,16 +70,6 @@ public class _5__Memory {
         System.out.println("\n\n[User]: " + userMessage2.text());
         System.out.print("[LLM]: ");
 
-        model.generate(chatMemory.messages(), new StreamingResponseHandler<AiMessage>() {
-
-            @Override
-            public void onNext(String token) {
-                System.out.print(token);
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-            }
-        });
+        model.generate(chatMemory.messages(), handler);
     }
 }
