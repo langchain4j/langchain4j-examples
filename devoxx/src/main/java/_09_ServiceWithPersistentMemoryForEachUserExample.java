@@ -17,7 +17,7 @@ import static dev.langchain4j.data.message.ChatMessageSerializer.messagesToJson;
 import static org.mapdb.Serializer.INTEGER;
 import static org.mapdb.Serializer.STRING;
 
-public class _9_PersistentMemoryForEachUserExampl {
+public class _09_ServiceWithPersistentMemoryForEachUserExample {
 
     interface Assistant {
 

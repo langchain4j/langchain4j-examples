@@ -9,7 +9,7 @@ import java.util.List;
 import static java.time.Duration.ofSeconds;
 import static java.util.Arrays.asList;
 
-public class _3__StructuredPromptTemplate {
+public class _03_StructuredPromptTemplate {
 
     @StructuredPrompt({
             "Create a recipe of a {{dish}} that can be prepared using only {{ingredients}}.",

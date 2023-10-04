@@ -9,7 +9,7 @@ import java.util.List;
 
 import static java.time.Duration.ofSeconds;
 
-public class _6__FewShot {
+public class _06_FewShot {
 
     public static void main(String[] args) {
 

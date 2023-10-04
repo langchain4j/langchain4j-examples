@@ -8,7 +8,7 @@ import java.util.Map;
 
 import static java.time.Duration.ofSeconds;
 
-public class _2__PromptTemplate {
+public class _02_PromptTemplate {
 
     public static void main(String[] args) {
 

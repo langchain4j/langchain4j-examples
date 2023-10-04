@@ -15,7 +15,7 @@ import java.util.concurrent.ExecutionException;
 import static dev.langchain4j.data.message.UserMessage.userMessage;
 import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
 
-public class _5__Memory {
+public class _05_Memory {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
 
@@ -23,14 +23,6 @@ public class _5__Memory {
 
         Tokenizer tokenizer = new OpenAiTokenizer(GPT_3_5_TURBO);
         ChatMemory chatMemory = TokenWindowChatMemory.withMaxTokens(1000, tokenizer);
-
-        // TODO remove system message commented out below, bring in place
-
-        SystemMessage systemMessage = SystemMessage.from(
-                "You are a senior developer explaining, succinctly to another senior developer, "
-                        + "the project you are working on is an e-commerce platform with Java back-end, " +
-                        "Oracle database,and Spring Data JPA");
-        chatMemory.add(systemMessage);
 
         UserMessage userMessage1 = userMessage(
                 "How do I optimize database queries for a large-scale e-commerce platform? "
@@ -73,3 +65,9 @@ public class _5__Memory {
         model.generate(chatMemory.messages(), handler);
     }
 }
+
+//SystemMessage systemMessage = SystemMessage.from(
+//"You are a senior developer explaining to another senior developer, "
+//      + "the project you are working on is an e-commerce platform with Java back-end, " +
+//      "Oracle database,and Spring Data JPA");
+//chatMemory.add(systemMessage);

@@ -4,12 +4,11 @@ import dev.langchain4j.model.openai.OpenAiChatModel;
 import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
 import static java.time.Duration.ofSeconds;
 
-public class _1__ModelParameters {
+public class _01_ModelParameters {
 
     public static void main(String[] args) {
 
-        // TODO find lists of parameter possibilities (in OpenAiModelName) temperature
-        // means wath etcs
+    	// parameter meaning for openAI explained here https://platform.openai.com/docs/api-reference/chat/create
 
         ChatLanguageModel model = OpenAiChatModel.builder()
                 .apiKey(ApiKeys.OPENAI_API_KEY)

@@ -3,7 +3,7 @@ import dev.langchain4j.model.StreamingResponseHandler;
 import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
 import dev.langchain4j.model.output.Response;
 
-public class _4__Streaming {
+public class _04_Streaming {
 
     public static void main(String[] args) {
 
