@@ -22,7 +22,7 @@ import static java.util.Arrays.asList;
 
 public class _08_AIServiceExamples {
 
-    static ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder()
+    static ChatLanguageModel model = OpenAiChatModel.builder()
             .apiKey(ApiKeys.OPENAI_API_KEY)
             .timeout(ofSeconds(60))
             .build();
@@ -38,10 +38,11 @@ public class _08_AIServiceExamples {
 
         public static void main(String[] args) {
 
-            Assistant assistant = AiServices.create(Assistant.class, chatLanguageModel);
+            Assistant assistant = AiServices.create(Assistant.class, model);
 
-            String answer = assistant.chat(
-                    "Translate 'Plus-Values des cessions de valeurs mobilières, de droits sociaux et gains assimilés'");
+            String userMessage = "Translate 'Plus-Values des cessions de valeurs mobilières, de droits sociaux et gains assimilés'";
+
+            String answer = assistant.chat(userMessage);
 
             System.out.println(answer);
         }
@@ -59,11 +60,11 @@ public class _08_AIServiceExamples {
 
         public static void main(String[] args) {
 
-            Chef chef = AiServices.create(Chef.class, chatLanguageModel);
+            Chef chef = AiServices.create(Chef.class, model);
 
             String answer = chef.answer("How long should I grill chicken?");
-            System.out.println(answer); // Grilling chicken usually takes around 10-15 minutes per
-            // side, depending on ...
+
+            System.out.println(answer); // Grilling chicken usually takes around 10-15 minutes per side ...
         }
     }
 
@@ -81,7 +82,7 @@ public class _08_AIServiceExamples {
 
         public static void main(String[] args) {
 
-            TextUtils utils = AiServices.create(TextUtils.class, chatLanguageModel);
+            TextUtils utils = AiServices.create(TextUtils.class, model);
 
             String translation = utils.translate("Hello, how are you?", "italian");
             System.out.println(translation); // Ciao, come stai?
@@ -119,8 +120,7 @@ public class _08_AIServiceExamples {
 
         public static void main(String[] args) {
 
-            SentimentAnalyzer sentimentAnalyzer = AiServices.create(SentimentAnalyzer.class,
-                    chatLanguageModel);
+            SentimentAnalyzer sentimentAnalyzer = AiServices.create(SentimentAnalyzer.class, model);
 
             Sentiment sentiment = sentimentAnalyzer.analyzeSentimentOf("It is good!");
             System.out.println(sentiment); // POSITIVE
@@ -155,7 +155,7 @@ public class _08_AIServiceExamples {
 
         public static void main(String[] args) {
 
-            NumberExtractor extractor = AiServices.create(NumberExtractor.class, chatLanguageModel);
+            NumberExtractor extractor = AiServices.create(NumberExtractor.class, model);
 
             String text = "After countless millennia of computation, the supercomputer Deep Thought finally announced "
                     + "that the answer to the ultimate question of life, the universe, and everything was forty two.";
@@ -196,8 +196,7 @@ public class _08_AIServiceExamples {
 
         public static void main(String[] args) {
 
-            DateTimeExtractor extractor = AiServices.create(DateTimeExtractor.class,
-                    chatLanguageModel);
+            DateTimeExtractor extractor = AiServices.create(DateTimeExtractor.class, model);
 
             String text = "The tranquility pervaded the evening of 1968, just fifteen minutes shy of midnight,"
                     + " following the celebrations of Independence Day.";
@@ -223,8 +222,11 @@ public class _08_AIServiceExamples {
 
             @Override
             public String toString() {
-                return "Person {" + " firstName = \"" + firstName + "\"" + ", lastName = \""
-                        + lastName + "\"" + ", birthDate = " + birthDate + " }";
+                return "Person {" +
+                        " firstName = \"" + firstName + "\"" +
+                        ", lastName = \"" + lastName + "\"" +
+                        ", birthDate = " + birthDate +
+                        " }";
             }
         }
 
@@ -236,7 +238,7 @@ public class _08_AIServiceExamples {
 
         public static void main(String[] args) {
 
-            PersonExtractor extractor = AiServices.create(PersonExtractor.class, chatLanguageModel);
+            PersonExtractor extractor = AiServices.create(PersonExtractor.class, model);
 
             String text = "In 1968, amidst the fading echoes of Independence Day, "
                     + "a child named John arrived under the calm evening sky. "
@@ -244,8 +246,7 @@ public class _08_AIServiceExamples {
 
             Person person = extractor.extractPersonFrom(text);
 
-            System.out.println(person); // Person { firstName = "John", lastName = "Doe", birthDate
-            // = 1968-07-04 }
+            System.out.println(person); // Person { firstName = "John", lastName = "Doe", birthDate = 1968-07-04 }
         }
     }
 
@@ -268,9 +269,12 @@ public class _08_AIServiceExamples {
 
             @Override
             public String toString() {
-                return "Recipe {" + " title = \"" + title + "\"" + ", description = \""
-                        + description + "\"" + ", steps = " + steps + ", preparationTimeMinutes = "
-                        + preparationTimeMinutes + " }";
+                return "Recipe {" +
+                        " title = \"" + title + "\"" +
+                        ", description = \"" + description + "\"" +
+                        ", steps = " + steps +
+                        ", preparationTimeMinutes = " + preparationTimeMinutes +
+                        " }";
             }
         }
 
@@ -290,10 +294,9 @@ public class _08_AIServiceExamples {
 
         public static void main(String[] args) {
 
-            Chef chef = AiServices.create(Chef.class, chatLanguageModel);
+            Chef chef = AiServices.create(Chef.class, model);
 
-            Recipe recipe = chef.createRecipeFrom("cucumber", "tomato", "feta", "onion", "olives",
-                    "lemon");
+            Recipe recipe = chef.createRecipeFrom("cucumber", "tomato", "feta", "onion", "olives", "lemon");
 
             System.out.println(recipe);
             // Recipe {
@@ -311,8 +314,7 @@ public class _08_AIServiceExamples {
 
             CreateRecipePrompt prompt = new CreateRecipePrompt();
             prompt.dish = "oven dish";
-            prompt.ingredients = asList("cucumber", "tomato", "feta", "onion", "olives",
-                    "potatoes");
+            prompt.ingredients = asList("cucumber", "tomato", "feta", "onion", "olives", "potatoes");
 
             Recipe anotherRecipe = chef.createRecipe(prompt);
             System.out.println(anotherRecipe);
@@ -335,8 +337,9 @@ public class _08_AIServiceExamples {
             ChatMemory chatMemory = MessageWindowChatMemory.withMaxMessages(10);
 
             Assistant assistant = AiServices.builder(Assistant.class)
-                    .chatLanguageModel(OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY))
-                    .chatMemory(chatMemory).build();
+                    .chatLanguageModel(model)
+                    .chatMemory(chatMemory)
+                    .build();
 
             String answer = assistant.chat("Hello! My name is Klaus.");
             System.out.println(answer); // Hello Klaus! How can I assist you today?
@@ -356,7 +359,7 @@ public class _08_AIServiceExamples {
         public static void main(String[] args) {
 
             Assistant assistant = AiServices.builder(Assistant.class)
-                    .chatLanguageModel(OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY))
+                    .chatLanguageModel(model)
                     .chatMemoryProvider(memoryId -> MessageWindowChatMemory.withMaxMessages(10))
                     .build();
 
