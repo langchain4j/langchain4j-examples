@@ -3,7 +3,7 @@ import dev.langchain4j.model.openai.OpenAiChatModel;
 
 import static java.time.Duration.ofSeconds;
 
-public class _7__ConversationalChain {
+public class _07_ConversationalChain {
 
     public static void main(String[] args) {
 

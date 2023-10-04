@@ -1,7 +1,7 @@
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 
-public class _0__HelloDevoxx {
+public class _00_HelloDevoxx {
 
     public static void main(String[] args) {
 
