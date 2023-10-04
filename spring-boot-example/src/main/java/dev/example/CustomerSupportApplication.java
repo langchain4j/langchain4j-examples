@@ -6,6 +6,7 @@ import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.embedding.AllMiniLmL6V2EmbeddingModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.openai.OpenAiTokenizer;
 import dev.langchain4j.retriever.EmbeddingStoreRetriever;
@@ -47,9 +48,14 @@ public class CustomerSupportApplication {
         // - The nature of your data
         // - The embedding model you are using
         int maxResultsRetrieved = 1;
-        double minScore = 0.9;
+        double minScore = 0.6;
 
         return EmbeddingStoreRetriever.from(embeddingStore, embeddingModel, maxResultsRetrieved, minScore);
+    }
+
+    @Bean
+    EmbeddingModel embeddingModel() {
+        return new AllMiniLmL6V2EmbeddingModel();
     }
 
     @Bean
