@@ -20,7 +20,7 @@ public class _02_PromptTemplate {
         String template = "Create a recipe for a {{dishType}} with the following ingredients: {{ingredients}}";
         PromptTemplate promptTemplate = PromptTemplate.from(template);
 
-        Map<String, String> variables = new HashMap<>();
+        Map<String, Object> variables = new HashMap<>();
         variables.put("dishType", "oven dish");
         variables.put("ingredients", "potato, tomato, feta, olive oil");
 
