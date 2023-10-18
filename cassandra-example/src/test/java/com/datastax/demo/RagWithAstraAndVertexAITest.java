@@ -1,13 +1,18 @@
 package com.datastax.demo;
 
 import com.dtsx.astra.sdk.utils.TestUtils;
+import dev.langchain4j.agent.tool.ToolSpecification;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.DocumentSplitter;
 import dev.langchain4j.data.document.DocumentType;
 import dev.langchain4j.data.document.FileSystemDocumentLoader;
+import dev.langchain4j.data.document.splitter.DocumentBySentenceSplitter;
+import dev.langchain4j.data.document.splitter.DocumentByWordSplitter;
 import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.data.embedding.Embedding;
+import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.segment.TextSegment;
+import dev.langchain4j.model.Tokenizer;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.input.Prompt;
 import dev.langchain4j.model.input.PromptTemplate;
@@ -58,8 +63,7 @@ class RagWithAstraAndVertexAITest {
         // Parsing input file
         Path path = new File(getClass().getResource("/story-about-happy-carrot.txt").getFile()).toPath();
         Document document = FileSystemDocumentLoader.loadDocument(path, DocumentType.TXT);
-        DocumentSplitter splitter = DocumentSplitters
-                .recursive(100, 10, new OpenAiTokenizer(GPT_3_5_TURBO));
+        DocumentSplitter splitter = new DocumentByWordSplitter(100,10);
 
         // Embedding model (OpenAI)
         EmbeddingModel embeddingModel = VertexAiEmbeddingModel.builder()
