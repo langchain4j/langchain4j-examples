@@ -17,6 +17,7 @@
         <module>pinecone-example</module>
         <module>other-examples</module>
         <module>redis-example</module>
+        <module>neo4j-example</module>
         <module>spring-boot-example</module>
         <module>vespa-example</module>
         <module>weaviate-example</module>
