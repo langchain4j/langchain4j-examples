@@ -12,6 +12,7 @@ public class HelloWorldExample {
       .apiKey(System.getenv("OPENAI_API_KEY"))
       .logRequests(true)
       .logResponses(true)
+            .downloadFolder("/tmp")
       .build();
 
 //    Response<Image> image = model.generate(
@@ -38,7 +39,7 @@ public class HelloWorldExample {
 //        //        "Charlie's idea had saved the day, but he humbly attributed the success to their teamwork and friendship. " +
 //                "In Eldoria, Sir Alaric, a valiant knight, harbored silent sorrow after a dragon battle. Alone in the moonlit courtyard, he confided in loyal squire Theo. Their shared vulnerability forged a bond, lifting the knight's burden. Together, they faced the kingdom's challenges, finding solace and strength beneath the stars."
 
-            "In this marvelous work of art, a whimsical and endearing scene comes to life. At the center, a captivating macro photograph captures the heartwarming sight of a tiny, adorable fairy joyously playing with a dog."
+            "Donald Duck in New York, cartoon style"
     );
 
     System.out.println(image.content().getUrl()); // TBD
