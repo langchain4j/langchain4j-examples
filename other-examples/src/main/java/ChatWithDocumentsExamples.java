@@ -22,6 +22,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -120,7 +121,10 @@ public class ChatWithDocumentsExamples {
             Prompt prompt = promptTemplate.apply(variables);
 
             // Send the prompt to the OpenAI chat model
-            ChatLanguageModel chatModel = OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY);
+            ChatLanguageModel chatModel = OpenAiChatModel.builder()
+                    .apiKey(ApiKeys.OPENAI_API_KEY)
+                    .timeout(Duration.ofSeconds(60))
+                    .build();
             AiMessage aiMessage = chatModel.generate(prompt.toUserMessage()).content();
 
             // See an answer from the model
