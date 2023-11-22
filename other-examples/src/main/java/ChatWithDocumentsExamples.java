@@ -1,7 +1,3 @@
-import static dev.langchain4j.data.document.FileSystemDocumentLoader.loadDocument;
-import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
-import static java.util.stream.Collectors.joining;
-
 import dev.langchain4j.chain.ConversationalRetrievalChain;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.DocumentSplitter;
@@ -21,138 +17,128 @@ import dev.langchain4j.store.embedding.EmbeddingMatch;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
 import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
+
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static dev.langchain4j.data.document.FileSystemDocumentLoader.loadDocument;
+import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
+import static java.util.stream.Collectors.joining;
+
 public class ChatWithDocumentsExamples {
 
-  // Please also check ServiceWithRetrieverExample
+    // Please also check ServiceWithRetrieverExample
 
-  static class IfYouNeedSimplicity {
+    static class IfYouNeedSimplicity {
 
-    public static void main(String[] args) throws Exception {
-      EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
+        public static void main(String[] args) throws Exception {
 
-      EmbeddingStore<TextSegment> embeddingStore =
-        new InMemoryEmbeddingStore<>();
+            EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
 
-      EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor
-        .builder()
-        .documentSplitter(DocumentSplitters.recursive(500, 0))
-        .embeddingModel(embeddingModel)
-        .embeddingStore(embeddingStore)
-        .build();
+            EmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
 
-      Document document = loadDocument(
-        toPath("example-files/story-about-happy-carrot.txt")
-      );
-      ingestor.ingest(document);
+            EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
+                    .documentSplitter(DocumentSplitters.recursive(500, 0))
+                    .embeddingModel(embeddingModel)
+                    .embeddingStore(embeddingStore)
+                    .build();
 
-      ConversationalRetrievalChain chain = ConversationalRetrievalChain
-        .builder()
-        .chatLanguageModel(
-          OpenAiChatModel
-            .builder()
-            .apiKey(ApiKeys.OPENAI_API_KEY)
-            .logRequests(true)
-            .logResponses(true)
-            .build()
-        )
-        .retriever(EmbeddingStoreRetriever.from(embeddingStore, embeddingModel))
-        // .chatMemory() // you can override default chat memory
-        // .promptTemplate() // you can override default prompt template
-        .build();
+            Document document = loadDocument(toPath("example-files/story-about-happy-carrot.txt"));
+            ingestor.ingest(document);
 
-      String answer = chain.execute("Who is Charlie?");
-      System.out.println(answer); // Charlie is a cheerful carrot living in VeggieVille...
+            ConversationalRetrievalChain chain = ConversationalRetrievalChain.builder()
+                    .chatLanguageModel(OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY))
+                    .retriever(EmbeddingStoreRetriever.from(embeddingStore, embeddingModel))
+                    // .chatMemory() // you can override default chat memory
+                    // .promptTemplate() // you can override default prompt template
+                    .build();
+
+            String answer = chain.execute("Who is Charlie?");
+            System.out.println(answer); // Charlie is a cheerful carrot living in VeggieVille...
+        }
     }
-  }
 
-  static class If_You_Need_More_Control {
+    static class If_You_Need_More_Control {
 
-    public static void main(String[] args) {
-      // Load the document that includes the information you'd like to "chat" about with the model.
-      Document document = loadDocument(
-        toPath("example-files/story-about-happy-carrot.txt")
-      );
+        public static void main(String[] args) {
 
-      // Split document into segments 100 tokens each
-      DocumentSplitter splitter = DocumentSplitters.recursive(
-        100,
-        0,
-        new OpenAiTokenizer(GPT_3_5_TURBO)
-      );
-      List<TextSegment> segments = splitter.split(document);
+            // Load the document that includes the information you'd like to "chat" about with the model.
+            Document document = loadDocument(toPath("example-files/story-about-happy-carrot.txt"));
 
-      // Embed segments (convert them into vectors that represent the meaning) using embedding model
-      EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
-      List<Embedding> embeddings = embeddingModel.embedAll(segments).content();
+            // Split document into segments 100 tokens each
+            DocumentSplitter splitter = DocumentSplitters.recursive(
+                    100,
+                    0,
+                    new OpenAiTokenizer(GPT_3_5_TURBO)
+            );
+            List<TextSegment> segments = splitter.split(document);
 
-      // Store embeddings into embedding store for further search / retrieval
-      EmbeddingStore<TextSegment> embeddingStore =
-        new InMemoryEmbeddingStore<>();
-      embeddingStore.addAll(embeddings, segments);
+            // Embed segments (convert them into vectors that represent the meaning) using embedding model
+            EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
+            List<Embedding> embeddings = embeddingModel.embedAll(segments).content();
 
-      // Specify the question you want to ask the model
-      String question = "Who is Charlie?";
+            // Store embeddings into embedding store for further search / retrieval
+            EmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
+            embeddingStore.addAll(embeddings, segments);
 
-      // Embed the question
-      Embedding questionEmbedding = embeddingModel.embed(question).content();
+            // Specify the question you want to ask the model
+            String question = "Who is Charlie?";
 
-      // Find relevant embeddings in embedding store by semantic similarity
-      // You can play with parameters below to find a sweet spot for your specific use case
-      int maxResults = 3;
-      double minScore = 0.7;
-      List<EmbeddingMatch<TextSegment>> relevantEmbeddings =
-        embeddingStore.findRelevant(questionEmbedding, maxResults, minScore);
+            // Embed the question
+            Embedding questionEmbedding = embeddingModel.embed(question).content();
 
-      // Create a prompt for the model that includes question and relevant embeddings
-      PromptTemplate promptTemplate = PromptTemplate.from(
-        "Answer the following question to the best of your ability:\n" +
-        "\n" +
-        "Question:\n" +
-        "{{question}}\n" +
-        "\n" +
-        "Base your answer on the following information:\n" +
-        "{{information}}"
-      );
+            // Find relevant embeddings in embedding store by semantic similarity
+            // You can play with parameters below to find a sweet spot for your specific use case
+            int maxResults = 3;
+            double minScore = 0.7;
+            List<EmbeddingMatch<TextSegment>> relevantEmbeddings
+                    = embeddingStore.findRelevant(questionEmbedding, maxResults, minScore);
 
-      String information = relevantEmbeddings
-        .stream()
-        .map(match -> match.embedded().text())
-        .collect(joining("\n\n"));
+            // Create a prompt for the model that includes question and relevant embeddings
+            PromptTemplate promptTemplate = PromptTemplate.from(
+                    "Answer the following question to the best of your ability:\n"
+                            + "\n"
+                            + "Question:\n"
+                            + "{{question}}\n"
+                            + "\n"
+                            + "Base your answer on the following information:\n"
+                            + "{{information}}");
 
-      Map<String, Object> variables = new HashMap<>();
-      variables.put("question", question);
-      variables.put("information", information);
+            String information = relevantEmbeddings.stream()
+                    .map(match -> match.embedded().text())
+                    .collect(joining("\n\n"));
 
-      Prompt prompt = promptTemplate.apply(variables);
+            Map<String, Object> variables = new HashMap<>();
+            variables.put("question", question);
+            variables.put("information", information);
 
-      // Send the prompt to the OpenAI chat model
-      ChatLanguageModel chatModel = OpenAiChatModel.withApiKey(
-        ApiKeys.OPENAI_API_KEY
-      );
-      AiMessage aiMessage = chatModel
-        .generate(prompt.toUserMessage())
-        .content();
+            Prompt prompt = promptTemplate.apply(variables);
 
-      // See an answer from the model
-      String answer = aiMessage.text();
-      System.out.println(answer); // Charlie is a cheerful carrot living in VeggieVille...
+            // Send the prompt to the OpenAI chat model
+            ChatLanguageModel chatModel = OpenAiChatModel.builder()
+                    .apiKey(ApiKeys.OPENAI_API_KEY)
+                    .timeout(Duration.ofSeconds(60))
+                    .build();
+            AiMessage aiMessage = chatModel.generate(prompt.toUserMessage()).content();
+
+            // See an answer from the model
+            String answer = aiMessage.text();
+            System.out.println(answer); // Charlie is a cheerful carrot living in VeggieVille...
+        }
     }
-  }
 
-  private static Path toPath(String fileName) {
-    try {
-      URL fileUrl = ChatWithDocumentsExamples.class.getResource(fileName);
-      return Paths.get(fileUrl.toURI());
-    } catch (URISyntaxException e) {
-      throw new RuntimeException(e);
+    private static Path toPath(String fileName) {
+        try {
+            URL fileUrl = ChatWithDocumentsExamples.class.getResource(fileName);
+            return Paths.get(fileUrl.toURI());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
-  }
 }
