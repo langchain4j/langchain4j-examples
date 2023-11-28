@@ -1,12 +1,12 @@
 import static dev.langchain4j.data.document.FileSystemDocumentLoader.loadDocument;
-import static dev.langchain4j.image.openai.dalle.OpenAiDalleImageProcessingModel.DALL_E_QUALITY_HD;
+import static dev.langchain4j.image.openai.dalle.OpenAiDalleImageModel.DALL_E_QUALITY_HD;
 
 import dev.langchain4j.chain.ConversationalRetrievalChain;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.data.image.Image;
 import dev.langchain4j.data.segment.TextSegment;
-import dev.langchain4j.image.openai.dalle.OpenAiDalleImageProcessingModel;
+import dev.langchain4j.image.openai.dalle.OpenAiDalleImageModel;
 import dev.langchain4j.model.embedding.AllMiniLmL6V2EmbeddingModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.input.PromptTemplate;
@@ -22,15 +22,12 @@ import java.util.Map;
 import java.util.Objects;
 import lombok.SneakyThrows;
 
-public class OpenAiDalleImageProcessingExample {
+public class OpenAiDalleImageGenerationExample {
 
   static class Simple_Prompt {
 
     public static void main(String[] args) {
-      OpenAiDalleImageProcessingModel model = OpenAiDalleImageProcessingModel
-        .builder()
-        .apiKey(System.getenv("OPENAI_API_KEY"))
-        .build();
+      OpenAiDalleImageModel model = OpenAiDalleImageModel.builder().apiKey(System.getenv("OPENAI_API_KEY")).build();
 
       Response<Image> image = model.generate("Donald Duck in New York, cartoon style");
 
@@ -42,7 +39,7 @@ public class OpenAiDalleImageProcessingExample {
 
     @SneakyThrows
     public static void main(String[] args) {
-      OpenAiDalleImageProcessingModel model = OpenAiDalleImageProcessingModel
+      OpenAiDalleImageModel model = OpenAiDalleImageModel
         .builder()
         .apiKey(System.getenv("OPENAI_API_KEY"))
         .quality(DALL_E_QUALITY_HD)
@@ -65,7 +62,7 @@ public class OpenAiDalleImageProcessingExample {
         Paths.get(
           Objects
             .requireNonNull(
-              OpenAiDalleImageProcessingExample.class.getResource("example-files/story-about-happy-carrot.txt")
+              OpenAiDalleImageGenerationExample.class.getResource("example-files/story-about-happy-carrot.txt")
             )
             .toURI()
         )
