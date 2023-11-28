@@ -34,7 +34,7 @@ public class OpenAiDalleImageProcessingExample {
 
       Response<Image> image = model.generate("Donald Duck in New York, cartoon style");
 
-      System.out.println(image.content().getUrl()); // Donald Duck is here :)
+      System.out.println(image.content().url()); // Donald Duck is here :)
     }
   }
 
@@ -88,7 +88,7 @@ public class OpenAiDalleImageProcessingExample {
 
       Response<Image> image = model.generate(drawPromptTemplate.apply(variables).text());
 
-      System.out.println(image.content().getUrl()); // Enjoy your locally stored picture of Charlie on the party :)
+      System.out.println(image.content().url()); // Enjoy your locally stored picture of Charlie on the party :)
     }
   }
 }
