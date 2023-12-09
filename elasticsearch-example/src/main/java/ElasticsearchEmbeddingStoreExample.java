@@ -5,9 +5,13 @@ import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.elasticsearch.ElasticsearchEmbeddingStore;
+import org.testcontainers.elasticsearch.ElasticsearchContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
 
+@Testcontainers
 public class ElasticsearchEmbeddingStoreExample {
 
     /**
@@ -17,10 +21,14 @@ public class ElasticsearchEmbeddingStoreExample {
      * - Wait until Elasticsearch is ready to serve (may take a few minutes)
      */
 
+    @Container
+    private static final ElasticsearchContainer elasticsearch = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:8.9.0")
+            .withEnv("xpack.security.enabled", "false");
+
     public static void main(String[] args) throws InterruptedException {
 
         EmbeddingStore<TextSegment> embeddingStore = ElasticsearchEmbeddingStore.builder()
-                .serverUrl("http://localhost:9200")
+                .serverUrl(elasticsearch.getHttpHostAddress())
                 .build();
 
         EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
