@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>dev.langchain4j</groupId>
-    <artifactId>dall-e-example</artifactId>
+    <artifactId>image-example</artifactId>
     <version>0.24.0</version>
 
     <properties>
@@ -17,7 +17,7 @@
     <dependencies>
         <dependency>
             <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j-open-ai-dall-e</artifactId>
+            <artifactId>langchain4j-open-ai</artifactId>
             <version>${project.version}</version>
         </dependency>
 
