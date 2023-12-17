@@ -43,8 +43,8 @@ public class OpenAiImageGenerationExample {
                 .builder()
                 .apiKey(System.getenv("OPENAI_API_KEY"))
                 .quality(DALL_E_QUALITY_HD)
-                .logRequests(true)
-                .logResponses(true)
+                .logRequests()
+                .logResponses()
                 .withPersisting()
                 .build();
 
