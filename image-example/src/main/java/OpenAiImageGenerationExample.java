@@ -19,7 +19,6 @@ import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -30,9 +29,9 @@ public class OpenAiImageGenerationExample {
         public static void main(String[] args) {
             OpenAiImageModel model = OpenAiImageModel.builder().apiKey(System.getenv("OPENAI_API_KEY")).build();
 
-            Response<List<Image>> response = model.generate("Donald Duck in New York, cartoon style");
+            Response<Image> response = model.generate("Donald Duck in New York, cartoon style");
 
-            System.out.println(response.content().get(0).url()); // Donald Duck is here :)
+            System.out.println(response.content().url()); // Donald Duck is here :)
         }
     }
 
@@ -43,8 +42,8 @@ public class OpenAiImageGenerationExample {
                 .builder()
                 .apiKey(System.getenv("OPENAI_API_KEY"))
                 .quality(DALL_E_QUALITY_HD)
-                .logRequests()
-                .logResponses()
+                .logRequests(true)
+                .logResponses(true)
                 .withPersisting()
                 .build();
 
@@ -83,9 +82,9 @@ public class OpenAiImageGenerationExample {
             variables.put("information", chain.execute("Who is Charlie?"));
             variables.put("object", "Ultra realistic Charlie on the party, cinematic lighting");
 
-            Response<List<Image>> response = model.generate(drawPromptTemplate.apply(variables).text());
+            Response<Image> response = model.generate(drawPromptTemplate.apply(variables).text());
 
-            System.out.println(response.content().get(0).url()); // Enjoy your locally stored picture of Charlie on the party :)
+            System.out.println(response.content().url()); // Enjoy your locally stored picture of Charlie on the party :)
         }
     }
 }
