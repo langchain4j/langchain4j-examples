@@ -22,6 +22,7 @@
         <module>spring-boot-example</module>
         <module>vespa-example</module>
         <module>weaviate-example</module>
+        <module>image-example</module>
     </modules>
 
 </project>
