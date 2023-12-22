@@ -1,3 +1,4 @@
+import com.redis.testcontainers.RedisStackContainer;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.embedding.AllMiniLmL6V2EmbeddingModel;
@@ -8,13 +9,14 @@ import dev.langchain4j.store.embedding.redis.RedisEmbeddingStore;
 
 import java.util.List;
 
-import com.redis.testcontainers.RedisStackContainer;
+import static com.redis.testcontainers.RedisStackContainer.DEFAULT_IMAGE_NAME;
+import static com.redis.testcontainers.RedisStackContainer.DEFAULT_TAG;
 
 public class RedisEmbeddingStoreExample {
 
     public static void main(String[] args) {
 
-        RedisStackContainer redis = new RedisStackContainer(RedisStackContainer.DEFAULT_IMAGE_NAME.withTag(RedisStackContainer.DEFAULT_TAG));
+        RedisStackContainer redis = new RedisStackContainer(DEFAULT_IMAGE_NAME.withTag(DEFAULT_TAG));
         redis.start();
 
         EmbeddingStore<TextSegment> embeddingStore = RedisEmbeddingStore.builder()
@@ -39,7 +41,7 @@ public class RedisEmbeddingStoreExample {
 
         System.out.println(embeddingMatch.score()); // 0.8144288659095
         System.out.println(embeddingMatch.embedded().text()); // I like football.
-        
+
         redis.stop();
     }
 }
