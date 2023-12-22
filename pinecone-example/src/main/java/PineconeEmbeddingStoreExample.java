@@ -14,10 +14,10 @@ public class PineconeEmbeddingStoreExample {
 
         EmbeddingStore<TextSegment> embeddingStore = PineconeEmbeddingStore.builder()
                 .apiKey(System.getenv("PINECONE_API_KEY"))
-                .environment("asia-southeast1-gcp-free")
+                .environment("northamerica-northeast1-gcp")
                 // Project ID can be found in the Pinecone url:
                 // https://app.pinecone.io/organizations/{organization}/projects/{environment}:{projectId}/indexes
-                .projectId("75dc67a")
+                .projectId("19a129b")
                 // Make sure the dimensions of the Pinecone index match the dimensions of the embedding model
                 // (384 for all-MiniLM-L6-v2, 1536 for text-embedding-ada-002, etc.)
                 .index("test")
