@@ -10,17 +10,17 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>devoxx</module>
         <module>chroma-example</module>
+        <module>devoxx</module>
         <module>elasticsearch-example</module>
         <module>milvus-example</module>
-        <module>pinecone-example</module>
+        <module>opensearch-example</module>
         <module>other-examples</module>
+        <module>pinecone-example</module>
         <module>redis-example</module>
         <module>spring-boot-example</module>
         <module>vespa-example</module>
         <module>weaviate-example</module>
-        <module>opensearch-example</module>
     </modules>
 
 </project>
