@@ -1,3 +1,4 @@
+import com.redis.testcontainers.RedisStackContainer;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.embedding.AllMiniLmL6V2EmbeddingModel;
@@ -8,20 +9,19 @@ import dev.langchain4j.store.embedding.redis.RedisEmbeddingStore;
 
 import java.util.List;
 
-public class RedisEmbeddingStoreExample {
+import static com.redis.testcontainers.RedisStackContainer.DEFAULT_IMAGE_NAME;
+import static com.redis.testcontainers.RedisStackContainer.DEFAULT_TAG;
 
-    /**
-     * To run this example, ensure you have Redis running locally. If not, then:
-     * - Execute "docker pull redis/redis-stack:latest"
-     * - Execute "docker run -d -p 6379:6379 -p 8001:8001 redis/redis-stack:latest"
-     * - Wait until Redis is ready to serve (may take a few minutes)
-     */
+public class RedisEmbeddingStoreExample {
 
     public static void main(String[] args) {
 
+        RedisStackContainer redis = new RedisStackContainer(DEFAULT_IMAGE_NAME.withTag(DEFAULT_TAG));
+        redis.start();
+
         EmbeddingStore<TextSegment> embeddingStore = RedisEmbeddingStore.builder()
-                .host("localhost")
-                .port(6379)
+                .host(redis.getHost())
+                .port(redis.getFirstMappedPort())
                 .dimension(384)
                 .build();
 
@@ -41,5 +41,7 @@ public class RedisEmbeddingStoreExample {
 
         System.out.println(embeddingMatch.score()); // 0.8144288659095
         System.out.println(embeddingMatch.embedded().text()); // I like football.
+
+        redis.stop();
     }
 }

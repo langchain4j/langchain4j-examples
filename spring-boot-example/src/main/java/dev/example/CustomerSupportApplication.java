@@ -2,6 +2,7 @@ package dev.example;
 
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.DocumentSplitter;
+import dev.langchain4j.data.document.parser.TextDocumentParser;
 import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
@@ -23,11 +24,15 @@ import org.springframework.core.io.ResourceLoader;
 
 import java.io.IOException;
 
-import static dev.langchain4j.data.document.FileSystemDocumentLoader.loadDocument;
+import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
 import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
 
 @SpringBootApplication
 public class CustomerSupportApplication {
+
+    /**
+     * Run CustomerSupportApplicationTest to see simulated conversation with customer support agent
+     */
 
     @Bean
     CustomerSupportAgent customerSupportAgent(ChatLanguageModel chatLanguageModel,
@@ -69,7 +74,7 @@ public class CustomerSupportApplication {
 
         // 2. Load an example document ("Miles of Smiles" terms of use)
         Resource resource = resourceLoader.getResource("classpath:miles-of-smiles-terms-of-use.txt");
-        Document document = loadDocument(resource.getFile().toPath());
+        Document document = loadDocument(resource.getFile().toPath(), new TextDocumentParser());
 
         // 3. Split the document into segments 100 tokens each
         // 4. Convert segments into embeddings

@@ -6,16 +6,17 @@
 
     <groupId>dev.langchain4j</groupId>
     <artifactId>langchain4j-examples</artifactId>
-    <version>0.24.0</version>
+    <version>0.25.0</version>
     <packaging>pom</packaging>
 
     <modules>
-        <module>devoxx</module>
         <module>chroma-example</module>
+        <module>devoxx</module>
         <module>elasticsearch-example</module>
         <module>milvus-example</module>
-        <module>pinecone-example</module>
+        <module>opensearch-example</module>
         <module>other-examples</module>
+        <module>pinecone-example</module>
         <module>redis-example</module>
         <module>neo4j-example</module>
         <module>spring-boot-example</module>
