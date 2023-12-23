@@ -1,8 +1,9 @@
 import static dev.ai4j.openai4j.image.ImageModel.DALL_E_QUALITY_HD;
-import static dev.langchain4j.data.document.FileSystemDocumentLoader.loadDocument;
+import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
 
 import dev.langchain4j.chain.ConversationalRetrievalChain;
 import dev.langchain4j.data.document.Document;
+import dev.langchain4j.data.document.parser.TextDocumentParser;
 import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.data.image.Image;
 import dev.langchain4j.data.segment.TextSegment;
@@ -64,7 +65,8 @@ public class OpenAiImageGenerationExample {
                             OpenAiImageGenerationExample.class.getResource("example-files/story-about-happy-carrot.txt")
                         )
                         .toURI()
-                )
+                ),
+                    new TextDocumentParser()
             );
             ingestor.ingest(document);
 
