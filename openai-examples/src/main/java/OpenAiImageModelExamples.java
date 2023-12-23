@@ -25,7 +25,7 @@ import java.util.Objects;
 import static dev.ai4j.openai4j.image.ImageModel.DALL_E_QUALITY_HD;
 import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
 
-public class OpenAiImageModelExample {
+public class OpenAiImageModelExamples {
 
     static class Simple_Prompt {
 
@@ -65,7 +65,7 @@ public class OpenAiImageModelExample {
                     Paths.get(
                             Objects
                                     .requireNonNull(
-                                            OpenAiImageModelExample.class.getResource("example-files/story-about-happy-carrot.txt")
+                                            OpenAiImageModelExamples.class.getResource("example-files/story-about-happy-carrot.txt")
                                     )
                                     .toURI()
                     ),
