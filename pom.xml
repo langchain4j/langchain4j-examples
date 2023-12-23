@@ -15,6 +15,7 @@
         <module>elasticsearch-example</module>
         <module>milvus-example</module>
         <module>neo4j-example</module>
+        <module>openai-examples</module>
         <module>opensearch-example</module>
         <module>other-examples</module>
         <module>pinecone-example</module>
@@ -22,7 +23,6 @@
         <module>spring-boot-example</module>
         <module>vespa-example</module>
         <module>weaviate-example</module>
-        <module>image-example</module>
     </modules>
 
 </project>
