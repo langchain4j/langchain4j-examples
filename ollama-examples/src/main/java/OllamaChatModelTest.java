@@ -18,16 +18,14 @@ class OllamaChatModelTest {
      * However, you are not restricted to these images.
      * You can run any model from https://ollama.ai/library by following these steps:
      * 1. Run "docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama"
-     * 2. Run "docker exec -it ollama ollama run llama2" <- specify the desired model here
+     * 2. Run "docker exec -it ollama ollama run mistral" <- specify the desired model here
      */
 
-    static String MODEL_NAME = "orca-mini"; // try "mistral", "llama2", "codellama" or "phi"
-    static String DOCKER_IMAGE_NAME = "langchain4j/ollama-" + MODEL_NAME + ":latest";
-    static Integer PORT = 11434;
+    static String MODEL_NAME = "orca-mini"; // try "mistral", "llama2", "codellama", "phi" or "tinyllama"
 
     @Container
-    static GenericContainer<?> ollama = new GenericContainer<>(DOCKER_IMAGE_NAME)
-            .withExposedPorts(PORT);
+    static GenericContainer<?> ollama = new GenericContainer<>("langchain4j/ollama-" + MODEL_NAME + ":latest")
+            .withExposedPorts(11434);
 
     @Test
     void simple_example() {
@@ -37,9 +35,9 @@ class OllamaChatModelTest {
                 .modelName(MODEL_NAME)
                 .build();
 
-        String joke = model.generate("Tell me a joke about Java");
+        String answer = model.generate("Provide 3 short bullet points explaining why Java is awesome");
 
-        System.out.println(joke);
+        System.out.println(answer);
     }
 
     @Test
@@ -57,6 +55,6 @@ class OllamaChatModelTest {
     }
 
     static String baseUrl() {
-        return String.format("http://%s:%d", ollama.getHost(), ollama.getMappedPort(PORT));
+        return String.format("http://%s:%d", ollama.getHost(), ollama.getFirstMappedPort());
     }
 }
