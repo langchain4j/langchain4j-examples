@@ -11,7 +11,8 @@
 
     <modules>
         <module>chroma-example</module>
-        <module>devoxx</module>
+        <module>devoxx-be-2023</module>
+        <module>voxxed-ch-2024</module>
         <module>elasticsearch-example</module>
         <module>milvus-example</module>
         <module>neo4j-example</module>
