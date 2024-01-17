@@ -13,8 +13,6 @@ public class ChatApp extends Application {
 
     private static final Logger LOGGER = LogManager.getLogger(ChatApp.class);
 
-    private static final double WIDTH = 1500;
-    private static final double HEIGHT = 800;
     private static final ObservableList<SearchAction> data = FXCollections.observableArrayList();
     private static final AnswerService docsAnswerService = new AnswerService();
     private final TableView<SearchAction> table = new TableView<>();
@@ -66,7 +64,7 @@ public class ChatApp extends Application {
 
         holder.getChildren().addAll(label, inputHolder, new HBox(table, lastAnswer));
 
-        Scene scene = new Scene(holder, WIDTH, HEIGHT);
+        Scene scene = new Scene(holder);
 
         stage.setTitle("JavaFX Chat Langchain4J Demo");
         stage.setScene(scene);
