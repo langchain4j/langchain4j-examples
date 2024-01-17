@@ -14,6 +14,8 @@ answer gets visualized into the right box and inside the table while it's being 
 
 All previous application and search actions get listed in the table.
 
+The model keeps a memory with the previous chat messages, to keep track of the conversation.
+
 This illustrates how the received answer can be handled using JavaFX bindings, and can be the starting point to build
 your own JavaFX-based Langchain4J-implementation.
 
