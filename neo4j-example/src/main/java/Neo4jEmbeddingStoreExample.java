@@ -4,23 +4,29 @@ import dev.langchain4j.model.embedding.AllMiniLmL6V2EmbeddingModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
 import dev.langchain4j.store.embedding.EmbeddingStore;
-import dev.langchain4j.store.embedding.pinecone.PineconeEmbeddingStore;
+import dev.langchain4j.store.embedding.neo4j.Neo4jEmbeddingStore;
 
 import java.util.List;
 
-public class PineconeEmbeddingStoreExample {
+public class Neo4jEmbeddingStoreExample {
+
+    /**
+     * To run this example, ensure you have Neo4j running locally,
+     * and change uri, username and password strings consistently.
+     * If not, then:
+     * - Execute "docker pull neo4j:latest"
+     * - Execute "docker run -d -p 7687:7687 --env NEO4J_AUTH=neo4j/password1234 neo4j:latest"
+     * - Wait until Neo4j is ready to serve (may take a few minutes)
+     */
 
     public static void main(String[] args) {
+        String uri = "bolt://localhost:7687";
+        String username = "neo4j";
+        String password = "password1234";
 
-        EmbeddingStore<TextSegment> embeddingStore = PineconeEmbeddingStore.builder()
-                .apiKey(System.getenv("PINECONE_API_KEY"))
-                .environment("northamerica-northeast1-gcp")
-                // Project ID can be found in the Pinecone url:
-                // https://app.pinecone.io/organizations/{organization}/projects/{environment}:{projectId}/indexes
-                .projectId("19a129b")
-                // Make sure the dimensions of the Pinecone index match the dimensions of the embedding model
-                // (384 for all-MiniLM-L6-v2, 1536 for text-embedding-ada-002, etc.)
-                .index("test")
+        EmbeddingStore<TextSegment> embeddingStore = Neo4jEmbeddingStore.builder()
+                .withBasicAuth(uri, username, password)
+                .dimension(384)
                 .build();
 
         EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
@@ -37,7 +43,7 @@ public class PineconeEmbeddingStoreExample {
         List<EmbeddingMatch<TextSegment>> relevant = embeddingStore.findRelevant(queryEmbedding, 1);
         EmbeddingMatch<TextSegment> embeddingMatch = relevant.get(0);
 
-        System.out.println(embeddingMatch.score()); // 0.8144288515898701
+        System.out.println(embeddingMatch.score()); // 0.8144289255142212
         System.out.println(embeddingMatch.embedded().text()); // I like football.
     }
 }

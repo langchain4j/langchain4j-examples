@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>dev.langchain4j</groupId>
-    <artifactId>milvus-example</artifactId>
+    <artifactId>neo4j-example</artifactId>
     <version>0.25.0</version>
 
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -18,7 +18,7 @@
 
         <dependency>
             <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j-milvus</artifactId>
+            <artifactId>langchain4j-neo4j</artifactId>
             <version>${project.version}</version>
         </dependency>
 

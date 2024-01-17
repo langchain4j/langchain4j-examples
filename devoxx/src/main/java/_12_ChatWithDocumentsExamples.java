@@ -1,6 +1,7 @@
 import dev.langchain4j.chain.ConversationalRetrievalChain;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.DocumentSplitter;
+import dev.langchain4j.data.document.parser.TextDocumentParser;
 import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.message.AiMessage;
@@ -26,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static dev.langchain4j.data.document.FileSystemDocumentLoader.loadDocument;
+import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
 import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
 import static java.util.stream.Collectors.joining;
 
@@ -41,12 +42,12 @@ public class _12_ChatWithDocumentsExamples {
             EmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
 
             EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
-                    .documentSplitter(DocumentSplitters.recursive(500, 0))
+                    .documentSplitter(DocumentSplitters.recursive(300, 0))
                     .embeddingModel(embeddingModel)
                     .embeddingStore(embeddingStore)
                     .build();
 
-            Document document = loadDocument(toPath("story-about-happy-carrot.txt"));
+            Document document = loadDocument(toPath("story-about-happy-carrot.txt"), new TextDocumentParser());
             ingestor.ingest(document);
 
             ConversationalRetrievalChain chain = ConversationalRetrievalChain.builder()
@@ -66,7 +67,7 @@ public class _12_ChatWithDocumentsExamples {
         public static void main(String[] args) {
 
             // Load the document that includes the information you'd like to "chat" about with the model.
-            Document document = loadDocument(toPath("story-about-happy-carrot.txt"));
+            Document document = loadDocument(toPath("story-about-happy-carrot.txt"), new TextDocumentParser());
 
             // Split document into segments 100 tokens each
             DocumentSplitter splitter = DocumentSplitters.recursive(

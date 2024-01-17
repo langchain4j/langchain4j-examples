@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>dev.langchain4j</groupId>
-    <artifactId>milvus-example</artifactId>
+    <artifactId>vertex-ai-gemini-examples</artifactId>
     <version>0.25.0</version>
 
     <properties>
@@ -18,13 +18,7 @@
 
         <dependency>
             <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j-milvus</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j-embeddings-all-minilm-l6-v2</artifactId>
+            <artifactId>langchain4j-vertex-ai-gemini</artifactId>
             <version>${project.version}</version>
         </dependency>
 
