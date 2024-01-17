@@ -32,7 +32,7 @@ public class _02_OpenAiImageModelExamples {
 
         public static void main(String[] args) {
 
-            ImageModel model = OpenAiImageModel.builder().modelName(OpenAiModelName.DALL_E_2).apiKey(System.getenv(
+            ImageModel model = OpenAiImageModel.builder().modelName(OpenAiModelName.DALL_E_3).apiKey(System.getenv(
                     "OPENAI_API_KEY")).build();
 
             Response<Image> response = model.generate("Swiss software developers with cheese fondue, a parrot and a " +

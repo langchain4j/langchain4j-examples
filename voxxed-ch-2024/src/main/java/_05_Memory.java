@@ -23,6 +23,12 @@ public class _05_Memory {
         Tokenizer tokenizer = new OpenAiTokenizer(GPT_3_5_TURBO);
         ChatMemory chatMemory = TokenWindowChatMemory.withMaxTokens(1000, tokenizer);
 
+        //SystemMessage systemMessage = SystemMessage.from(
+        //"You are a senior developer explaining to another senior developer, "
+        //      + "the project you are working on is an e-commerce platform with Java back-end, " +
+        //      "Oracle database,and Spring Data JPA");
+        //chatMemory.add(systemMessage);
+
         UserMessage userMessage1 = userMessage(
                 "How do I optimize database queries for a large-scale e-commerce platform? "
                         + "Answer short in three to five lines maximum.");
@@ -64,9 +70,3 @@ public class _05_Memory {
         model.generate(chatMemory.messages(), handler);
     }
 }
-
-//SystemMessage systemMessage = SystemMessage.from(
-//"You are a senior developer explaining to another senior developer, "
-//      + "the project you are working on is an e-commerce platform with Java back-end, " +
-//      "Oracle database,and Spring Data JPA");
-//chatMemory.add(systemMessage);
