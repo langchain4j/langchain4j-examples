@@ -11,7 +11,7 @@
 
     <modules>
         <module>chroma-example</module>
-        <module>devoxx</module>
+        <module>tutorials</module>
         <module>elasticsearch-example</module>
         <module>milvus-example</module>
         <module>neo4j-example</module>
@@ -25,6 +25,7 @@
         <module>vertex-ai-gemini-examples</module>
         <module>vespa-example</module>
         <module>weaviate-example</module>
+        <module>quarkus-example</module>
     </modules>
 
 </project>

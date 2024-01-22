@@ -9,7 +9,7 @@ public class _04_Streaming {
 
         OpenAiStreamingChatModel model = OpenAiStreamingChatModel.withApiKey(ApiKeys.OPENAI_API_KEY);
 
-        String prompt = "Write a short 1 paragraph funny poem about developers and null-pointers";
+        String prompt = "Write a short funny poem about developers and null-pointers, 10 lines maximum";
 
         System.out.println("Nr of chars: " + prompt.length());
         System.out.println("Nr of tokens: " + model.estimateTokenCount(prompt));
@@ -31,5 +31,6 @@ public class _04_Streaming {
                 System.out.println("Something went wrong: " + error.getMessage());
             }
         });
+
     }
 }
