@@ -20,7 +20,7 @@ export class DemoReview extends LitElement {
       }
 
       vaadin-text-area {
-        width: 35em;
+        width: 30em;
         height: 10rem;
       }
 

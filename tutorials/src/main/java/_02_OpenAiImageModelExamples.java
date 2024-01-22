@@ -32,13 +32,15 @@ public class _02_OpenAiImageModelExamples {
 
         public static void main(String[] args) {
 
-            ImageModel model = OpenAiImageModel.builder().modelName(OpenAiModelName.DALL_E_3).apiKey(System.getenv(
-                    "OPENAI_API_KEY")).build();
+            ImageModel model = OpenAiImageModel.builder()
+                    .modelName(OpenAiModelName.DALL_E_3)
+                    .apiKey(System.getenv("OPENAI_API_KEY"))
+                    .build();
 
             Response<Image> response = model.generate("Swiss software developers with cheese fondue, a parrot and a " +
                     "cup of coffee");
 
-            System.out.println(response.content().url()); // Donald Duck is here :)
+            System.out.println(response.content().url());
         }
     }
 
