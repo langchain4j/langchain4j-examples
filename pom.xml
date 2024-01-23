@@ -25,6 +25,7 @@
         <module>vertex-ai-gemini-examples</module>
         <module>vespa-example</module>
         <module>weaviate-example</module>
+        <module>javafx-example</module>
         <module>quarkus-example</module>
     </modules>
 
