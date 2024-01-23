@@ -1,4 +1,4 @@
 # LangChain4j Examples
 
-This project provides several examples using the langchain4j library.
+This repository provides several examples using the LangChain4j library.
 
