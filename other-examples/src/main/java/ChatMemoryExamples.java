@@ -19,15 +19,18 @@ public class ChatMemoryExamples {
 
         public static void main(String[] args) throws IOException {
 
+            ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder().apiKey(ApiKeys.OPENAI_API_KEY)
+                    .baseUrl("https://api.baichuan-ai.com/v1").modelName("Baichuan2-Turbo").build();
+
             ConversationalChain chain = ConversationalChain.builder()
-                    .chatLanguageModel(OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY))
+                    .chatLanguageModel(chatLanguageModel)
                     // .chatMemory() // you can override default chat memory
                     .build();
 
-            String answer = chain.execute("Hello, my name is Klaus");
+            String answer = chain.execute("你好，我是李明");
             System.out.println(answer); // Hello Klaus! How can I assist you today?
 
-            String answerWithName = chain.execute("What is my name?");
+            String answerWithName = chain.execute("我的名字是什么");
             System.out.println(answerWithName); // Your name is Klaus.
         }
     }
@@ -36,7 +39,8 @@ public class ChatMemoryExamples {
 
         public static void main(String[] args) {
 
-            ChatLanguageModel model = OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY);
+            ChatLanguageModel model = OpenAiChatModel.builder().apiKey(ApiKeys.OPENAI_API_KEY)
+                    .baseUrl("https://api.baichuan-ai.com/v1").modelName("Baichuan2-Turbo").build();
 
             ChatMemory chatMemory = TokenWindowChatMemory.withMaxTokens(300, new OpenAiTokenizer(GPT_3_5_TURBO));
 
@@ -45,12 +49,12 @@ public class ChatMemoryExamples {
             // (e.g. you might not want to store few-shot examples to save on tokens).
             // You can process/modify the message before saving if required.
 
-            chatMemory.add(userMessage("Hello, my name is Klaus"));
+            chatMemory.add(userMessage("你好, 我是李明"));
             AiMessage answer = model.generate(chatMemory.messages()).content();
             System.out.println(answer.text()); // Hello Klaus! How can I assist you today?
             chatMemory.add(answer);
 
-            chatMemory.add(userMessage("What is my name?"));
+            chatMemory.add(userMessage("我的名字是什么"));
             AiMessage answerWithName = model.generate(chatMemory.messages()).content();
             System.out.println(answerWithName.text()); // Your name is Klaus.
             chatMemory.add(answerWithName);

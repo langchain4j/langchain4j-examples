@@ -53,14 +53,17 @@ public class ChatWithDocumentsExamples {
             Document document = loadDocument(toPath("example-files/story-about-happy-carrot.txt"), new TextDocumentParser());
             ingestor.ingest(document);
 
+            ChatLanguageModel model = OpenAiChatModel.builder().apiKey(ApiKeys.OPENAI_API_KEY)
+                    .baseUrl("https://api.baichuan-ai.com/v1").modelName("Baichuan2-Turbo").build();
+
             ConversationalRetrievalChain chain = ConversationalRetrievalChain.builder()
-                    .chatLanguageModel(OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY))
+                    .chatLanguageModel(model)
                     .retriever(EmbeddingStoreRetriever.from(embeddingStore, embeddingModel))
                     // .chatMemory() // you can override default chat memory
                     // .promptTemplate() // you can override default prompt template
                     .build();
 
-            String answer = chain.execute("Who is Charlie?");
+            String answer = chain.execute("谁是 Charlie?");
             System.out.println(answer); // Charlie is a cheerful carrot living in VeggieVille...
         }
     }
@@ -122,10 +125,9 @@ public class ChatWithDocumentsExamples {
             Prompt prompt = promptTemplate.apply(variables);
 
             // Send the prompt to the OpenAI chat model
-            ChatLanguageModel chatModel = OpenAiChatModel.builder()
-                    .apiKey(ApiKeys.OPENAI_API_KEY)
-                    .timeout(Duration.ofSeconds(60))
-                    .build();
+            ChatLanguageModel chatModel = OpenAiChatModel.builder().apiKey(ApiKeys.OPENAI_API_KEY)
+                    .baseUrl("https://api.baichuan-ai.com/v1").modelName("Baichuan2-Turbo")
+                    .timeout(Duration.ofSeconds(60)).build();
             AiMessage aiMessage = chatModel.generate(prompt.toUserMessage()).content();
 
             // See an answer from the model

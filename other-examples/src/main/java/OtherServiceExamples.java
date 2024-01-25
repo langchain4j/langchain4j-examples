@@ -15,9 +15,12 @@ import static java.util.Arrays.asList;
 
 public class OtherServiceExamples {
 
-    static ChatLanguageModel chatLanguageModel = OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY);
+    static ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder().apiKey(ApiKeys.OPENAI_API_KEY)
+            .baseUrl("https://api.baichuan-ai.com/v1").modelName("Baichuan2-Turbo").build();
 
-
+    /**
+     * 结构化输出、结构化提示
+     */
     static class Sentiment_Extracting_AI_Service_Example {
 
         enum Sentiment {

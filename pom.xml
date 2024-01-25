@@ -25,7 +25,19 @@
         <module>vertex-ai-gemini-examples</module>
         <module>vespa-example</module>
         <module>weaviate-example</module>
-        <module>quarkus-example</module>
     </modules>
+
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>aliyun</name>
+            <url>https://maven.aliyun.com/repository/central</url>
+        </repository>
+        <repository>
+            <id>spring</id>
+            <name>spring-milestone</name>
+            <url>https://maven.aliyun.com/repository/spring</url>
+        </repository>
+    </repositories>
 
 </project>

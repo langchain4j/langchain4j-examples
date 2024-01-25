@@ -1,5 +1,6 @@
 import dev.langchain4j.agent.tool.Tool;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
+import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.service.AiServices;
 
@@ -34,10 +35,17 @@ public class ServiceWithToolsExample {
         String chat(String userMessage);
     }
 
+    /**
+     * tools，可以实现Agent功能
+     * <p>
+     * 目前只对chatgpt、chatglm、文心一言等生效
+     */
     public static void main(String[] args) {
-
+        ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder().apiKey(ApiKeys.OPENAI_API_KEY)
+                .baseUrl("https://api.baichuan-ai.com/v1").modelName("Baichuan2-Turbo").build();
         Assistant assistant = AiServices.builder(Assistant.class)
-                .chatLanguageModel(OpenAiChatModel.withApiKey(System.getenv("OPENAI_API_KEY")))
+                .chatLanguageModel(chatLanguageModel)
+
                 .tools(new Calculator())
                 .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
                 .build();

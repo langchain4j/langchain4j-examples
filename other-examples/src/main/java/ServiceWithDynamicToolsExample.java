@@ -19,6 +19,8 @@ public class ServiceWithDynamicToolsExample {
 
         ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder()
                 .apiKey(ApiKeys.OPENAI_API_KEY)
+                .baseUrl("https://api.baichuan-ai.com/v1")
+                .modelName("Baichuan2-Turbo")
                 .temperature(0.0)
                 .timeout(ofSeconds(60))
                 .build();

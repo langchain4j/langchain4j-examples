@@ -1,6 +1,7 @@
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.memory.chat.ChatMemoryProvider;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
+import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.service.MemoryId;
@@ -34,13 +35,16 @@ public class ServiceWithPersistentMemoryForEachUserExample {
                 .chatMemoryStore(store)
                 .build();
 
+        ChatLanguageModel model = OpenAiChatModel.builder().apiKey(ApiKeys.OPENAI_API_KEY)
+                .baseUrl("https://api.baichuan-ai.com/v1").modelName("Baichuan2-Turbo").build();
+
         Assistant assistant = AiServices.builder(Assistant.class)
-                .chatLanguageModel(OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY))
+                .chatLanguageModel(model)
                 .chatMemoryProvider(chatMemoryProvider)
                 .build();
 
-        System.out.println(assistant.chat(1, "Hello, my name is Klaus"));
-        System.out.println(assistant.chat(2, "Hi, my name is Francine"));
+        System.out.println(assistant.chat(1, "你好，我叫李明"));
+        System.out.println(assistant.chat(2, "你好，我是张红"));
 
         // Now, comment out the two lines above, uncomment the two lines below, and run again.
 
