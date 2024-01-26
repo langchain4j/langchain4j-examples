@@ -10,6 +10,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>azure-open-ai-examples</module>
         <module>chroma-example</module>
         <module>tutorials</module>
         <module>elasticsearch-example</module>
