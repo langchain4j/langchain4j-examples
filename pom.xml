@@ -27,6 +27,7 @@
         <module>weaviate-example</module>
         <module>javafx-example</module>
         <module>quarkus-example</module>
+        <module>infinispan-example</module>
     </modules>
 
 </project>
