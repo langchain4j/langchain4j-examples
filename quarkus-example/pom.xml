@@ -6,6 +6,7 @@
         <groupId>io.quarkiverse.langchain4j</groupId>
         <artifactId>quarkus-langchain4j-parent</artifactId>
         <version>0.6.3</version>
+        <relativePath/>
     </parent>
 
     <artifactId>quarkus-example</artifactId>
