@@ -29,6 +29,7 @@
         <module>javafx-example</module>
         <module>quarkus-example</module>
         <module>rag-examples</module>
+        <module>mistral-ai-examples</module>
     </modules>
 
 </project>
