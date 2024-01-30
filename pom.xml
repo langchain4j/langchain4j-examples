@@ -28,6 +28,7 @@
         <module>weaviate-example</module>
         <module>javafx-example</module>
         <module>quarkus-example</module>
+        <module>rag-examples</module>
     </modules>
 
 </project>
