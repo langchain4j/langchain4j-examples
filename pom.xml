@@ -21,6 +21,7 @@
         <module>opensearch-example</module>
         <module>other-examples</module>
         <module>pinecone-example</module>
+        <module>qdrant-example</module>
         <module>redis-example</module>
         <module>spring-boot-example</module>
         <module>vertex-ai-gemini-examples</module>
