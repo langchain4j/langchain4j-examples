@@ -10,7 +10,6 @@ import dev.langchain4j.model.image.ImageModel;
 import dev.langchain4j.model.input.PromptTemplate;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.openai.OpenAiImageModel;
-import dev.langchain4j.model.openai.OpenAiModelName;
 import dev.langchain4j.model.output.Response;
 import dev.langchain4j.retriever.EmbeddingStoreRetriever;
 import dev.langchain4j.store.embedding.EmbeddingStore;
@@ -25,6 +24,7 @@ import java.util.Objects;
 
 import static dev.ai4j.openai4j.image.ImageModel.DALL_E_QUALITY_HD;
 import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
+import static dev.langchain4j.model.openai.OpenAiImageModelName.DALL_E_3;
 
 public class _02_OpenAiImageModelExamples {
 
@@ -33,12 +33,12 @@ public class _02_OpenAiImageModelExamples {
         public static void main(String[] args) {
 
             ImageModel model = OpenAiImageModel.builder()
-                    .modelName(OpenAiModelName.DALL_E_3)
+                    .modelName(DALL_E_3)
                     .apiKey(System.getenv("OPENAI_API_KEY"))
                     .build();
 
-            Response<Image> response = model.generate("Swiss software developers with cheese fondue, a parrot and a " +
-                    "cup of coffee");
+            Response<Image> response = model.generate(
+                    "Swiss software developers with cheese fondue, a parrot and a cup of coffee");
 
             System.out.println(response.content().url());
         }
