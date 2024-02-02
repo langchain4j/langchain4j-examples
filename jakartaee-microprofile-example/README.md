@@ -28,7 +28,7 @@ export HUGGING_FACE_API_KEY=<your Hugging Face read token>
 
 ## Start the application
 
-Use the Maven wrapper to start the application by [Liberty dev mode](https://openliberty.io/docs/latest/development-mode.html):
+Use the Maven wrapper to start the application by using the [Liberty dev mode](https://openliberty.io/docs/latest/development-mode.html):
 
 ```
 ./mvnw liberty:dev

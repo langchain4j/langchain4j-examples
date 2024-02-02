@@ -68,7 +68,7 @@ public class ChatService {
         String sessionId = session.getId();
         ChatAgent agent = agents.get(sessionId);
         if (agent == null) {
-            logger.info("creating an agent for session: " + sessionId);
+            logger.info("Creating an agent for session: " + sessionId);
         	agent = createAgent();
             agents.put(sessionId, agent);
             sessions.put(sessionId, session);
@@ -87,7 +87,7 @@ public class ChatService {
     
     private void sendMessageToSession(Session session, String message) {
 
-        logger.info("Send message to session: " + session.getId());
+        logger.info("Sending message to session: " + session.getId());
         try {
             sessions.get(session.getId())
                     .getBasicRemote()
