@@ -72,7 +72,7 @@ public class ModelResource {
     @Path("chat")
     @Operation(
         summary = "Use the chat model.",
-        description = "Assume you are telling with an agent that well-known about " +
+        description = "Assume you are talking with an agent that well-known about " +
                       "Large Language Models. Ask any question about it.",
         operationId = "chatModelAsk" )
     public List<String> chatModelAsk(@QueryParam("userMessage") String userMessage) {
