@@ -1,5 +1,5 @@
-# LangChain4j in Jakarta EE and MicroProfile Sample
-This sample demonstrates LangChain4J in a Jakarta EE / MicroProfile application on Open Liberty.
+# LangChain4j in Jakarta EE and MicroProfile
+This example demonstrates LangChain4J in a Jakarta EE / MicroProfile application on Open Liberty.
 
 ## Prerequisites:
 
@@ -13,7 +13,7 @@ This sample demonstrates LangChain4J in a Jakarta EE / MicroProfile application 
 
 ## Environment Set Up
 
-To run this sample, nagivate to the `jakartaee-microprofile-example` directory
+To run this example application, navigate  to the `jakartaee-microprofile-example` directory
 
 ```
 cd langchain4j-examples/jakartaee-microprofile-example
@@ -26,9 +26,9 @@ export JAVA_HOME=<your Java 17 home path>
 export HUGGING_FACE_API_KEY=<your Hugging Face read token>
 ```
 
-## Run this sample
+## Start the application
 
-Use the Maven wrapper to start the Liberty in [dev mode](https://openliberty.io/docs/latest/development-mode.html):
+Use the Maven wrapper to start the application by [Liberty dev mode](https://openliberty.io/docs/latest/development-mode.html):
 
 ```
 ./mvnw liberty:dev
