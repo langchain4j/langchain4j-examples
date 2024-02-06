@@ -59,7 +59,7 @@ Visit the http://localhost:9080/openapi/ui URL (OpenAPI UI) for the following 3 
 - [HuggingFaceLanguageMode](https://github.com/langchain4j/langchain4j/blob/main/langchain4j-hugging-face/src/main/java/dev/langchain4j/model/huggingface/HuggingFaceLanguageModel.java)
   - expand the GET `/api/model/language` API
     - click the `Try it out` button
-    - type `When was Open Liberty launched?` or any question on the question field
+    - type `When was langchain4j launched?` or any question on the question field
     - click the `Execute` button
   - or run the following `curl` command on a command-line session:
     - ```
@@ -96,12 +96,16 @@ If the tests pass, you see a similar output to the following example:
 [INFO] -------------------------------------------------------
 [INFO]  T E S T S
 [INFO] -------------------------------------------------------
-[INFO] Running it.io.openliberty.sample.huggingface.ModelResourceIT
-[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.92 s - in it.io.openliberty.sample.huggingface.ModelResourceIT
+[INFO] Running it.dev.langchan4j.example.ChatServiceIT
+[INFO] ...
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.439 s...
+[INFO] ...
+[INFO] Running it.dev.langchan4j.example.ModelResourceIT
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.733 s...
 [INFO] 
 [INFO] Results:
 [INFO] 
-[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
 ```
 
 When you are done checking out the service, exit dev mode by pressing `Ctrl+C` in the command-line session where you ran Liberty, or by typing `q` and then pressing the `enter/return` key.

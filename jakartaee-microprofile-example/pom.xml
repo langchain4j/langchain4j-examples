@@ -79,6 +79,12 @@
             <version>2.0.1</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty.websocket</groupId>
+            <artifactId>websocket-jakarta-client</artifactId>
+            <version>11.0.14</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

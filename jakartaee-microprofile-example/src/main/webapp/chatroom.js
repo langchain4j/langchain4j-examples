@@ -41,7 +41,7 @@
                                     '<td>' + getTime() + '</td>';
         messagesTableBody.appendChild(agentMessageRow);
     };
-    
+
     webSocket.onerror = function (event) {
         console.log(event);
     };
