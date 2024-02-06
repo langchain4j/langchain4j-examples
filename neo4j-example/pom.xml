@@ -12,6 +12,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <log4j.version>2.22.1</log4j.version>
     </properties>
 
     <dependencies>
@@ -28,12 +29,24 @@
             <version>0.30.0</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.testcontainers/neo4j -->
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>neo4j</artifactId>
-            <version>1.19.6</version>
+            <version>1.19.7</version>
         </dependency>
 
+        <!-- Logging -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j2-impl</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
     </dependencies>
 
 </project>
