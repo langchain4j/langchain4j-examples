@@ -32,5 +32,4 @@
         <module>rag-examples</module>
         <module>mistral-ai-examples</module>
     </modules>
-
 </project>

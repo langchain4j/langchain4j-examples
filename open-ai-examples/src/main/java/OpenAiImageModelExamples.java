@@ -11,7 +11,7 @@ import dev.langchain4j.model.input.PromptTemplate;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.openai.OpenAiImageModel;
 import dev.langchain4j.model.output.Response;
-import dev.langchain4j.retriever.EmbeddingStoreRetriever;
+import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
 import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
@@ -76,7 +76,7 @@ public class OpenAiImageModelExamples {
             ConversationalRetrievalChain chain = ConversationalRetrievalChain
                     .builder()
                     .chatLanguageModel(OpenAiChatModel.builder().apiKey(System.getenv("OPENAI_API_KEY")).build())
-                    .retriever(EmbeddingStoreRetriever.from(embeddingStore, embeddingModel))
+                    .contentRetriever(new EmbeddingStoreContentRetriever(embeddingStore, embeddingModel))
                     .build();
 
             PromptTemplate drawPromptTemplate = PromptTemplate.from(

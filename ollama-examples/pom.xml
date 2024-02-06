@@ -40,6 +40,7 @@
             <version>5.10.0</version>
         </dependency>
 
+        <!-- Logging -->
         <dependency>
             <groupId>org.tinylog</groupId>
             <artifactId>tinylog-impl</artifactId>

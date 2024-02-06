@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.tinylog.Logger;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -26,20 +27,15 @@ class OllamaStreamingChatModelTest {
      * 2. Run "docker exec -it ollama ollama run llama2" <- specify the desired model here
      */
 
-    static String MODEL_NAME = "orca-mini"; // try "mistral", "llama2", "codellama" or "phi"
-    static String DOCKER_IMAGE_NAME = "langchain4j/ollama-" + MODEL_NAME + ":latest";
-    static Integer PORT = 11434;
-
     @Container
-    static GenericContainer<?> ollama = new GenericContainer<>(DOCKER_IMAGE_NAME)
-            .withExposedPorts(PORT);
+    private static GenericContainer<?> ollama = new GenericContainer<>(OllamaContants.OLLAMA_IMAGE_NAME).withExposedPorts(OllamaContants.OLLAMA_PORT);
 
     @Test
-    void streaming_example() {
+    void streamingExample() {
 
         StreamingChatLanguageModel model = OllamaStreamingChatModel.builder()
-                .baseUrl(String.format("http://%s:%d", ollama.getHost(), ollama.getMappedPort(PORT)))
-                .modelName(MODEL_NAME)
+                .baseUrl(String.format("http://%s:%d", ollama.getHost(), ollama.getMappedPort(OllamaContants.OLLAMA_PORT)))
+                .modelName(OllamaContants.MODEL_NAME)
                 .temperature(0.0)
                 .build();
 
@@ -50,7 +46,7 @@ class OllamaStreamingChatModelTest {
 
             @Override
             public void onNext(String token) {
-                System.out.print(token);
+                Logger.info("Token: {}", token);
             }
 
             @Override
