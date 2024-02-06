@@ -63,7 +63,7 @@ Visit the http://localhost:9080/openapi/ui URL (OpenAPI UI) for the following 3 
     - click the `Execute` button
   - or run the following `curl` command on a command-line session:
     - ```
-      curl 'http://localhost:9080/api/model/language?question=When%20was%20Open%20Liberty%20launched%3F'
+      curl 'http://localhost:9080/api/model/language?question=When%20was%20langchain4j%20launched%3F'
       ```
 - [HuggingFaceChatMode](https://github.com/langchain4j/langchain4j/blob/main/langchain4j-hugging-face/src/main/java/dev/langchain4j/model/huggingface/HuggingFaceChatModel.java)
   - expand the GET `/api/model/language` API
