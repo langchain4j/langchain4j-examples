@@ -18,7 +18,7 @@
 
     function sendMessage() {
         var myMessageRow = document.createElement('tr');
-          var myMessage = document.getElementById('myMessage').value;
+        var myMessage = document.getElementById('myMessage').value;
         myMessageRow.innerHTML = '<td><p class=\"my-msg\">' + myMessage + '</p></td>' + 
                                  '<td>' + getTime() + '</td>';
         messagesTableBody.appendChild(myMessageRow);
