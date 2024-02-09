@@ -6,20 +6,25 @@
 
     <groupId>dev.langchain4j</groupId>
     <artifactId>langchain4j-examples</artifactId>
-    <version>0.25.0</version>
+    <version>0.27.0</version>
     <packaging>pom</packaging>
 
     <modules>
+        <module>azure-open-ai-examples</module>
         <module>chroma-example</module>
         <module>tutorials</module>
         <module>elasticsearch-example</module>
+        <module>infinispan-example</module>
         <module>milvus-example</module>
+        <module>mistral-ai-examples</module>
         <module>neo4j-example</module>
         <module>ollama-examples</module>
         <module>open-ai-examples</module>
         <module>opensearch-example</module>
         <module>other-examples</module>
         <module>pinecone-example</module>
+        <module>qdrant-example</module>
+        <module>rag-examples</module>  
         <module>redis-example</module>
         <module>spring-boot-example</module>
         <module>vertex-ai-gemini-examples</module>
@@ -27,7 +32,6 @@
         <module>weaviate-example</module>
         <module>javafx-example</module>
         <module>quarkus-example</module>
-        <module>infinispan-example</module>
     </modules>
 
 </project>

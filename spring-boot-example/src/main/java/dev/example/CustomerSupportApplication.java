@@ -10,8 +10,8 @@ import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.embedding.AllMiniLmL6V2EmbeddingModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.openai.OpenAiTokenizer;
-import dev.langchain4j.retriever.EmbeddingStoreRetriever;
-import dev.langchain4j.retriever.Retriever;
+import dev.langchain4j.rag.content.retriever.ContentRetriever;
+import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
@@ -60,25 +60,30 @@ public class CustomerSupportApplication {
     @Bean
     CustomerSupportAgent customerSupportAgent(ChatLanguageModel chatLanguageModel,
                                               BookingTools bookingTools,
-                                              Retriever<TextSegment> retriever) {
+                                              ContentRetriever contentRetriever) {
         return AiServices.builder(CustomerSupportAgent.class)
                 .chatLanguageModel(chatLanguageModel)
                 .chatMemory(MessageWindowChatMemory.withMaxMessages(20))
                 .tools(bookingTools)
-                .retriever(retriever)
+                .contentRetriever(contentRetriever)
                 .build();
     }
 
     @Bean
-    Retriever<TextSegment> retriever(EmbeddingStore<TextSegment> embeddingStore, EmbeddingModel embeddingModel) {
+    ContentRetriever contentRetriever(EmbeddingStore<TextSegment> embeddingStore, EmbeddingModel embeddingModel) {
 
         // You will need to adjust these parameters to find the optimal setting, which will depend on two main factors:
         // - The nature of your data
         // - The embedding model you are using
-        int maxResultsRetrieved = 1;
+        int maxResults = 1;
         double minScore = 0.6;
 
-        return EmbeddingStoreRetriever.from(embeddingStore, embeddingModel, maxResultsRetrieved, minScore);
+        return EmbeddingStoreContentRetriever.builder()
+                .embeddingStore(embeddingStore)
+                .embeddingModel(embeddingModel)
+                .maxResults(maxResults)
+                .minScore(minScore)
+                .build();
     }
 
     @Bean

@@ -6,7 +6,7 @@
 
     <groupId>dev.langchain4j</groupId>
     <artifactId>opensearch-example</artifactId>
-    <version>0.25.0</version>
+    <version>0.27.0</version>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
