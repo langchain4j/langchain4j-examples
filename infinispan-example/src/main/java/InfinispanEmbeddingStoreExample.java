@@ -9,29 +9,33 @@ import org.infinispan.client.hotrod.configuration.ClientIntelligence;
 import org.infinispan.client.hotrod.configuration.ConfigurationBuilder;
 import org.infinispan.server.test.core.InfinispanContainer;
 
+import java.util.List;
+
 import static org.infinispan.server.test.core.InfinispanContainer.DEFAULT_PASSWORD;
 import static org.infinispan.server.test.core.InfinispanContainer.DEFAULT_USERNAME;
-import java.util.List;
 
 public class InfinispanEmbeddingStoreExample {
 
     public static void main(String[] args) {
+
         InfinispanContainer infinispan = new InfinispanContainer();
         infinispan.start();
+
         ConfigurationBuilder builder = new ConfigurationBuilder();
         builder.addServer().host(infinispan.getHost())
-              .port(infinispan.getFirstMappedPort())
-              .security()
-              .authentication()
-              .username(DEFAULT_USERNAME)
-              .password(DEFAULT_PASSWORD);
+                .port(infinispan.getFirstMappedPort())
+                .security()
+                .authentication()
+                .username(DEFAULT_USERNAME)
+                .password(DEFAULT_PASSWORD);
         // just to avoid docker 4 mac issues, don't use in production!!
         builder.clientIntelligence(ClientIntelligence.BASIC);
+
         EmbeddingStore<TextSegment> embeddingStore = InfinispanEmbeddingStore.builder()
-              .cacheName("my-cache")
-              .dimension(384)
-              .infinispanConfigBuilder(builder)
-              .build();
+                .cacheName("my-cache")
+                .dimension(384)
+                .infinispanConfigBuilder(builder)
+                .build();
 
         EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
 
