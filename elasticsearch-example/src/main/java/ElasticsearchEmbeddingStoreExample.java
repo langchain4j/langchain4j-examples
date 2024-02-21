@@ -5,41 +5,41 @@ import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.elasticsearch.ElasticsearchEmbeddingStore;
+import org.testcontainers.elasticsearch.ElasticsearchContainer;
 
 import java.util.List;
 
 public class ElasticsearchEmbeddingStoreExample {
 
-    /**
-     * To run this example, ensure you have Elasticsearch running locally. If not, then:
-     * - Execute "docker pull docker.elastic.co/elasticsearch/elasticsearch:8.9.0"
-     * - Execute "docker run -d -p 9200:9200 -p 9300:9300 -e discovery.type=single-node -e xpack.security.enabled=false docker.elastic.co/elasticsearch/elasticsearch:8.9.0"
-     * - Wait until Elasticsearch is ready to serve (may take a few minutes)
-     */
-
     public static void main(String[] args) throws InterruptedException {
 
-        EmbeddingStore<TextSegment> embeddingStore = ElasticsearchEmbeddingStore.builder()
-                .serverUrl("http://localhost:9200")
-                .build();
+        try (ElasticsearchContainer elastic = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:8.9.0")
+                .withEnv("xpack.security.enabled", "false")) {
+            elastic.start();
 
-        EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
+            EmbeddingStore<TextSegment> embeddingStore = ElasticsearchEmbeddingStore.builder()
+                    .serverUrl("http://" + elastic.getHttpHostAddress())
+                    .dimension(384)
+                    .build();
 
-        TextSegment segment1 = TextSegment.from("I like football.");
-        Embedding embedding1 = embeddingModel.embed(segment1).content();
-        embeddingStore.add(embedding1, segment1);
+            EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
 
-        TextSegment segment2 = TextSegment.from("The weather is good today.");
-        Embedding embedding2 = embeddingModel.embed(segment2).content();
-        embeddingStore.add(embedding2, segment2);
+            TextSegment segment1 = TextSegment.from("I like football.");
+            Embedding embedding1 = embeddingModel.embed(segment1).content();
+            embeddingStore.add(embedding1, segment1);
 
-        Thread.sleep(1000); // to be sure that embeddings were persisted
+            TextSegment segment2 = TextSegment.from("The weather is good today.");
+            Embedding embedding2 = embeddingModel.embed(segment2).content();
+            embeddingStore.add(embedding2, segment2);
 
-        Embedding queryEmbedding = embeddingModel.embed("What is your favourite sport?").content();
-        List<EmbeddingMatch<TextSegment>> relevant = embeddingStore.findRelevant(queryEmbedding, 1);
-        EmbeddingMatch<TextSegment> embeddingMatch = relevant.get(0);
+            Thread.sleep(1000); // to be sure that embeddings were persisted
 
-        System.out.println(embeddingMatch.score()); // 0.81442887
-        System.out.println(embeddingMatch.embedded().text()); // I like football.
+            Embedding queryEmbedding = embeddingModel.embed("What is your favourite sport?").content();
+            List<EmbeddingMatch<TextSegment>> relevant = embeddingStore.findRelevant(queryEmbedding, 1);
+            EmbeddingMatch<TextSegment> embeddingMatch = relevant.get(0);
+
+            System.out.println(embeddingMatch.score()); // 0.81442887
+            System.out.println(embeddingMatch.embedded().text()); // I like football.
+        }
     }
 }
