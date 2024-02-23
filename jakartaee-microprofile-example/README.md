@@ -4,7 +4,6 @@ This example demonstrates LangChain4J in a Jakarta EE / MicroProfile application
 ## Prerequisites:
 
 - [Java 17](https://developer.ibm.com/languages/java/semeru-runtimes/downloads)
-- [Maven](https://maven.apache.org/download.cgi)
 - Hugging Face API Key
   - Sign up and login to https://huggingface.co
   - Go to Access Tokens by https://huggingface.co/settings/tokens
