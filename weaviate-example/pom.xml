@@ -28,6 +28,12 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>weaviate</artifactId>
+            <version>1.19.6</version>
+        </dependency>
+
     </dependencies>
 
 </project>
