@@ -5,24 +5,19 @@ import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.chroma.ChromaEmbeddingStore;
+import org.testcontainers.chromadb.ChromaDBContainer;
 
 import java.util.List;
 
 import static dev.langchain4j.internal.Utils.randomUUID;
 
 public class ChromaEmbeddingStoreExample {
-
-    /**
-     * To run this example, ensure you have Chroma running locally. If not, then:
-     * - Execute "docker pull ghcr.io/chroma-core/chroma:0.4.6"
-     * - Execute "docker run -d -p 8000:8000 ghcr.io/chroma-core/chroma:0.4.6"
-     * - Wait until Chroma is ready to serve (may take a few minutes)
-     */
-
     public static void main(String[] args) {
+        try(ChromaDBContainer chroma = new ChromaDBContainer("chromadb/chroma:0.4.22")) {
+        chroma.start();
 
         EmbeddingStore<TextSegment> embeddingStore = ChromaEmbeddingStore.builder()
-                .baseUrl("http://localhost:8000")
+                .baseUrl(chroma.getEndpoint())
                 .collectionName(randomUUID())
                 .build();
 
@@ -42,5 +37,6 @@ public class ChromaEmbeddingStoreExample {
 
         System.out.println(embeddingMatch.score()); // 0.8144288493114709
         System.out.println(embeddingMatch.embedded().text()); // I like football.
+            }
     }
 }
