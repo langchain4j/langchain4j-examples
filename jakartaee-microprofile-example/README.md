@@ -68,7 +68,7 @@ Navigate to the the [OpenAPI UI](http://localhost:9080/openapi/ui) URL for the f
     3. Click the **Execute** button.
   - Alternatively, run the following `curl` command from a command-line session:
     - ```
-      curl 'http://localhost:9080/api/model/chat?userMessage=Which%20are%20the%20most%20popular%3F' | jq
+      curl 'http://localhost:9080/api/model/chat?userMessage=Which%20are%20the%20most%20used%20Large%20Language%20models%3F' | jq
       ```
 - [HuggingFaceEmbeddingMode](https://github.com/langchain4j/langchain4j/blob/main/langchain4j-hugging-face/src/main/java/dev/langchain4j/model/huggingface/HuggingFaceEmbeddingModel.java)
   - expand the GET `/api/model/similarity` API
