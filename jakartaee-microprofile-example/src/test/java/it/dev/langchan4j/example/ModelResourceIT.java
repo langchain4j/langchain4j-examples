@@ -37,10 +37,10 @@ public class ModelResourceIT {
 
     @Test
     public void testChatMode() {
-        String url = baseUrl + "chat?userMessage=Which are the most popular?";
+        String url = baseUrl + "chat?userMessage=Which are the most used Large Language Models?";
         Response response = client.target(url).request().get();
         String answer = response.readEntity(String.class);
-        assertTrue(answer.contains("Google Translate"), "actual: " + answer);
+        assertTrue(answer.contains("BERT"), "actual: " + answer);
     }
     
     @Test
