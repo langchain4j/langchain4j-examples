@@ -1,5 +1,5 @@
 # LangChain4j in Jakarta EE and MicroProfile
-This example demonstrates LangChain4J in a Jakarta EE / MicroProfile application on Open Liberty.
+This example demonstrates LangChain4J in a Jakarta EE / MicroProfile application on Open Liberty. The application is a chatbot built with LangChain4J and uses Jakarta CDI, Jakarta RESTful Web Services, Jakarta WebSocket, MicroProfile Config, MicroProfile Metrics, and MicroProfile OpenAPI features.
 
 ## Prerequisites:
 
@@ -8,7 +8,7 @@ This example demonstrates LangChain4J in a Jakarta EE / MicroProfile application
 - Hugging Face API Key
   - Sign up and login to https://huggingface.co
   - Go to Access Tokens by https://huggingface.co/settings/tokens
-  - New a Read token
+  - Create a new access token with "read" role
   
 
 ## Environment Set Up
@@ -39,10 +39,7 @@ Use the Maven wrapper to start the application by using the [Liberty dev mode](h
 - visit http://localhost:9080
 - suggested messages to try:
   - ```
-    What is large language models?
-    ```
-  - ```
-    tell me more
+    What are large language models?
     ```
   - ```
     which are the top used models?
@@ -77,7 +74,7 @@ Visit the http://localhost:9080/openapi/ui URL (OpenAPI UI) for the following 3 
 - [HuggingFaceEmbeddingMode](https://github.com/langchain4j/langchain4j/blob/main/langchain4j-hugging-face/src/main/java/dev/langchain4j/model/huggingface/HuggingFaceEmbeddingModel.java)
   - expand the GET `/api/model/similarity` API
     - click the `Try it out` button
-    - type `I like Jarkata EE and MicroProfile.` or any text on the text1 field
+    - type `I like Jakarta EE and MicroProfile.` or any text on the text1 field
     - type `I like Python language.` or any text on the text2 field
     - click the `Execute` button
   - or run the following `curl` command on a command-line session

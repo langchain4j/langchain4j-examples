@@ -87,7 +87,7 @@ public class ModelResource {
             .build();
 
         SystemMessage agentMessage =
-            systemMessage("I am well-known about Large Language Models. What can I help you?");
+            systemMessage("I am knowledgeable about Large Language Models. How can I help you?");
 
         AiMessage aiMessage = model.generate(
             agentMessage,

@@ -68,9 +68,9 @@ public class AgentManager {
     @Counted(name = "createChatAgentCount",
              absolute = true,
              description = "Number of ChatAgent are created.")
-	public ChatAgent createAgent(Session session) {
+    public ChatAgent createAgent(Session session) {
         String sessionId = session.getId();
-		logger.info("Creating an agent for session: " + sessionId );
+        logger.info("Creating an agent for session: " + sessionId );
         ChatAgent agent = createAgent();
         agents.put(sessionId, agent);
         sessions.put(sessionId, session);
