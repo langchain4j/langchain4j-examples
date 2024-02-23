@@ -79,7 +79,7 @@ Visit the http://localhost:9080/openapi/ui URL (OpenAPI UI) for the following 3 
     - click the `Execute` button
   - or run the following `curl` command on a command-line session
     - ```
-      curl 'http://localhost:9080/api/model/similarity?text1=I%20like%20Jarkata%20EE%20and%20MicroProfile.&text2=I%20like%20Python%20language.' | jq
+      curl 'http://localhost:9080/api/model/similarity?text1=I%20like%20Jakarta%20EE%20and%20MicroProfile.&text2=I%20like%20Python%20language.' | jq
       ```
 
 
