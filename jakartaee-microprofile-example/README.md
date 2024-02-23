@@ -5,20 +5,20 @@ This example demonstrates LangChain4J in a Jakarta EE / MicroProfile application
 
 - [Java 17](https://developer.ibm.com/languages/java/semeru-runtimes/downloads)
 - Hugging Face API Key
-  - Sign up and login to https://huggingface.co
-  - Go to Access Tokens by https://huggingface.co/settings/tokens
-  - Create a new access token with "read" role
+  - Sign up and log in to https://huggingface.co.
+  - Go to [Access Tokens](https://huggingface.co/settings/tokens). 
+  - Create a new access token with `read` role.
   
 
 ## Environment Set Up
 
-To run this example application, navigate  to the `jakartaee-microprofile-example` directory
+To run this example application, navigate  to the `jakartaee-microprofile-example` directory:
 
 ```
 cd langchain4j-examples/jakartaee-microprofile-example
 ```
 
-Set environment variables
+Set the following environment variables:
 
 ```
 export JAVA_HOME=<your Java 17 home path>
@@ -35,8 +35,8 @@ Use the Maven wrapper to start the application by using the [Liberty dev mode](h
 
 ## Try out the application
 
-- visit http://localhost:9080
-- suggested messages to try:
+- Navigate to http://localhost:9080
+- At the prompt, try the following message examples:
   - ```
     What are large language models?
     ```
@@ -50,33 +50,33 @@ Use the Maven wrapper to start the application by using the [Liberty dev mode](h
 
 ### Try out other models
 
-Visit the http://localhost:9080/openapi/ui URL (OpenAPI UI) for the following 3 REST APIs:
+Navigate to the the [OpenAPI UI](http://localhost:9080/openapi/ui) URL for the following 3 REST APIs:
 
 - [HuggingFaceLanguageMode](https://github.com/langchain4j/langchain4j/blob/main/langchain4j-hugging-face/src/main/java/dev/langchain4j/model/huggingface/HuggingFaceLanguageModel.java)
-  - expand the GET `/api/model/language` API
-    - click the `Try it out` button
-    - type `When was langchain4j launched?` or any question on the question field
-    - click the `Execute` button
-  - or run the following `curl` command on a command-line session:
+  - Expand the GET `/api/model/language` API.
+    1. Click the **Try it out** button.
+    2. Type `When was langchain4j launched?`, or any question, in the question field.
+    3. Click the **Execute** button.
+  - Alternatively, run the following `curl` command from a command-line session:
     - ```
       curl 'http://localhost:9080/api/model/language?question=When%20was%20langchain4j%20launched%3F'
       ```
 - [HuggingFaceChatMode](https://github.com/langchain4j/langchain4j/blob/main/langchain4j-hugging-face/src/main/java/dev/langchain4j/model/huggingface/HuggingFaceChatModel.java)
   - expand the GET `/api/model/language` API
-    - click the `Try it out` button
-    - type `Which are the most popular?` or any question on the question field
-    - click the `Execute` button
-  - or run the following `curl` command on a command-line session:
+    1. Click the **Try it out** button.
+    2. Type `Which are the most used Large Language Models?`, or any question, in the question field.
+    3. Click the **Execute** button.
+  - Alternatively, run the following `curl` command from a command-line session:
     - ```
       curl 'http://localhost:9080/api/model/chat?userMessage=Which%20are%20the%20most%20popular%3F' | jq
       ```
 - [HuggingFaceEmbeddingMode](https://github.com/langchain4j/langchain4j/blob/main/langchain4j-hugging-face/src/main/java/dev/langchain4j/model/huggingface/HuggingFaceEmbeddingModel.java)
   - expand the GET `/api/model/similarity` API
-    - click the `Try it out` button
-    - type `I like Jakarta EE and MicroProfile.` or any text on the text1 field
-    - type `I like Python language.` or any text on the text2 field
-    - click the `Execute` button
-  - or run the following `curl` command on a command-line session
+    1. Click the **Try it out** button.
+    2. Type `I like Jakarta EE and MicroProfile.`, or any text, in the the **text1** field.
+    3. Type `I like Python language.`, or any text, in the the **text2** field. 
+    3. Click the **Execute** button.
+  - Alternatively, run the following `curl` command from a command-line session:
     - ```
       curl 'http://localhost:9080/api/model/similarity?text1=I%20like%20Jakarta%20EE%20and%20MicroProfile.&text2=I%20like%20Python%20language.' | jq
       ```
