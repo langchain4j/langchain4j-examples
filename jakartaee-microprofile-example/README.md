@@ -41,7 +41,7 @@ Use the Maven wrapper to start the application by using the [Liberty dev mode](h
     What are large language models?
     ```
   - ```
-    which are the top used models?
+    Which are the most used models?
     ```
   - ```
     any documentation?
