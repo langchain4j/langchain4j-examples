@@ -156,6 +156,15 @@ public class OtherServiceExamples {
 
         public static void main(String[] args) {
 
+            ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder()
+                    .apiKey(System.getenv("OPENAI_API_KEY"))
+                    // When extracting POJOs with the LLM that supports the "json mode" feature
+                    // (e.g., OpenAI, Azure OpenAI, Ollama, etc.), it is advisable to use it to get more reliable results.
+                    // When using this feature, LLM will be forced to output a valid JSON.
+                    // Please note that this feature is not (yet) supported when using "demo" key.
+                    .responseFormat("json_object")
+                    .build();
+
             PersonExtractor extractor = AiServices.create(PersonExtractor.class, chatLanguageModel);
 
             String text = "In 1968, amidst the fading echoes of Independence Day, "
