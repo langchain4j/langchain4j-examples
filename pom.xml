@@ -23,6 +23,7 @@
         <module>opensearch-example</module>
         <module>other-examples</module>
         <module>pinecone-example</module>
+        <module>postgres-example</module>
         <module>qdrant-example</module>
         <module>rag-examples</module>  
         <module>redis-example</module>
