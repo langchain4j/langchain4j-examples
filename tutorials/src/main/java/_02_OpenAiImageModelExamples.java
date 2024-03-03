@@ -70,7 +70,7 @@ public class _02_OpenAiImageModelExamples {
                     Paths.get(
                             Objects
                                     .requireNonNull(
-                                            _02_OpenAiImageModelExamples.class.getResource("example-files/story-about" +
+                                            _02_OpenAiImageModelExamples.class.getResource("story-about" +
                                                     "-happy-carrot.txt")
                                     )
                                     .toURI()
