@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
-import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
 
 @SpringBootApplication
 public class CustomerSupportApplication {
@@ -108,7 +107,7 @@ public class CustomerSupportApplication {
         // 4. Convert segments into embeddings
         // 5. Store embeddings into embedding store
         // All this can be done manually, but we will use EmbeddingStoreIngestor to automate this:
-        DocumentSplitter documentSplitter = DocumentSplitters.recursive(100, 0, new OpenAiTokenizer(GPT_3_5_TURBO));
+        DocumentSplitter documentSplitter = DocumentSplitters.recursive(100, 0, new OpenAiTokenizer("gpt-3.5-turbo"));
         EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
                 .documentSplitter(documentSplitter)
                 .embeddingModel(embeddingModel)

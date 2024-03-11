@@ -6,8 +6,6 @@ import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.output.Response;
 
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_VISION_PREVIEW;
-
 public class OpenAiChatModelExamples {
 
     static class Simple_Prompt {
@@ -28,7 +26,7 @@ public class OpenAiChatModelExamples {
 
             ChatLanguageModel model = OpenAiChatModel.builder()
                     .apiKey(System.getenv("OPENAI_API_KEY")) // Please use your own OpenAI API key
-                    .modelName(GPT_4_VISION_PREVIEW)
+                    .modelName("gpt-4-vision-preview")
                     .maxTokens(50)
                     .build();
 

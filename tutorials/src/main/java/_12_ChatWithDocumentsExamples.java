@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 
 import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
-import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
 import static java.util.stream.Collectors.joining;
 
 public class _12_ChatWithDocumentsExamples {
@@ -73,7 +72,7 @@ public class _12_ChatWithDocumentsExamples {
             DocumentSplitter splitter = DocumentSplitters.recursive(
                     100,
                     0,
-                    new OpenAiTokenizer(GPT_3_5_TURBO)
+                    new OpenAiTokenizer("gpt-3.5-turbo")
             );
             List<TextSegment> segments = splitter.split(document);
 

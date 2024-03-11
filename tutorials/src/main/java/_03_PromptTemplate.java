@@ -15,6 +15,7 @@ import static java.util.Arrays.asList;
 public class _03_PromptTemplate {
 
     static class Simple_Prompt_Template_Example {
+
         public static void main(String[] args) {
 
             ChatLanguageModel model = OpenAiChatModel.builder()
