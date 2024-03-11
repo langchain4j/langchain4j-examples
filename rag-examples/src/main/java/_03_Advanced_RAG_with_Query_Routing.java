@@ -31,8 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_3_5_TURBO;
-
 public class _03_Advanced_RAG_with_Query_Routing {
 
     /**
@@ -97,7 +95,6 @@ public class _03_Advanced_RAG_with_Query_Routing {
 
         ChatLanguageModel chatModel = OpenAiChatModel.builder()
                 .apiKey("demo")
-                .modelName(GPT_3_5_TURBO)
                 .build();
 
         EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();

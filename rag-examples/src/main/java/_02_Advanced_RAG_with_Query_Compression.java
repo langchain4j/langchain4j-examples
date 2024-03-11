@@ -29,8 +29,6 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
 
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_3_5_TURBO;
-
 public class _02_Advanced_RAG_with_Query_Compression {
 
     /**
@@ -94,7 +92,6 @@ public class _02_Advanced_RAG_with_Query_Compression {
 
         ChatLanguageModel chatModel = OpenAiChatModel.builder()
                 .apiKey("demo")
-                .modelName(GPT_3_5_TURBO)
                 .build();
 
         EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
