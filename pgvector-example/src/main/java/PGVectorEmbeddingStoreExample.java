@@ -16,9 +16,7 @@ public class PGVectorEmbeddingStoreExample {
     public static void main(String[] args) {
 
         PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>(
-                DockerImageName.parse("ankane/pgvector:v0.5.1").asCompatibleSubstituteFor("postgres"));
-                // or
-                // DockerImageName.parse("pgvector/pgvector:pg16").asCompatibleSubstituteFor("postgres"));
+                DockerImageName.parse("pgvector/pgvector:latest");
         postgreSQLContainer.start();
 
         EmbeddingStore<TextSegment> embeddingStore = PgVectorEmbeddingStore.builder()
