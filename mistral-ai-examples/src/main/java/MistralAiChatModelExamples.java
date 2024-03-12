@@ -1,6 +1,5 @@
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.mistralai.MistralAiChatModel;
-import dev.langchain4j.model.mistralai.MistralAiChatModelName;
 
 public class MistralAiChatModelExamples {
 
@@ -10,7 +9,7 @@ public class MistralAiChatModelExamples {
 
             ChatLanguageModel model = MistralAiChatModel.builder()
                     .apiKey(System.getenv("MISTRAL_AI_API_KEY")) // Please use your own Mistral AI API key
-                    .modelName(MistralAiChatModelName.MISTRAL_SMALL.toString())
+                    .modelName("mistral-small")
                     .logRequests(true)
                     .logResponses(true)
                     .build();

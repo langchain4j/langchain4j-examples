@@ -4,11 +4,7 @@ import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.input.structured.StructuredPrompt;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.output.structured.Description;
-import dev.langchain4j.service.AiServices;
-import dev.langchain4j.service.MemoryId;
-import dev.langchain4j.service.SystemMessage;
-import dev.langchain4j.service.UserMessage;
-import dev.langchain4j.service.V;
+import dev.langchain4j.service.*;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -92,7 +88,7 @@ public class _08_AIServiceExamples {
                     + "patterns or speech to more complex tasks like making decisions or predictions.";
 
             List<String> bulletPoints = utils.summarize(text, 3);
-            System.out.println(bulletPoints);
+            bulletPoints.forEach(System.out::println);
             // [
             // "- AI is a branch of computer science",
             // "- It aims to create machines that mimic human intelligence",
