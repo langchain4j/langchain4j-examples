@@ -3,6 +3,7 @@ package dev.langchain4j.example.rest;
 import static dev.langchain4j.data.message.SystemMessage.systemMessage;
 import static dev.langchain4j.data.message.UserMessage.userMessage;
 import static dev.langchain4j.data.segment.TextSegment.textSegment;
+import static dev.langchain4j.model.huggingface.HuggingFaceModelName.SENTENCE_TRANSFORMERS_ALL_MINI_LM_L6_V2;
 import static dev.langchain4j.model.huggingface.HuggingFaceModelName.TII_UAE_FALCON_7B_INSTRUCT;
 import static dev.langchain4j.store.embedding.CosineSimilarity.between;
 import static dev.langchain4j.store.embedding.RelevanceScore.fromCosineSimilarity;
@@ -18,9 +19,8 @@ import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.SystemMessage;
 import dev.langchain4j.data.segment.TextSegment;
-import dev.langchain4j.model.embedding.AllMiniLmL6V2EmbeddingModel;
-import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.huggingface.HuggingFaceChatModel;
+import dev.langchain4j.model.huggingface.HuggingFaceEmbeddingModel;
 import dev.langchain4j.model.huggingface.HuggingFaceLanguageModel;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -128,7 +128,12 @@ public class ModelResource {
                @QueryParam("text1") String text1,
                @QueryParam("text2") String text2) {
 
-        EmbeddingModel model = new AllMiniLmL6V2EmbeddingModel();
+        HuggingFaceEmbeddingModel model = HuggingFaceEmbeddingModel.builder()
+                .accessToken(HUGGING_FACE_API_KEY)
+                .modelId(SENTENCE_TRANSFORMERS_ALL_MINI_LM_L6_V2)
+                .timeout(ofSeconds(120))
+                .waitForModel(true)
+                .build();
 
         List<TextSegment> textSegments = List.of(textSegment(text1), textSegment(text2));
         List<Embedding> embeddings = model.embedAll(textSegments).content();
