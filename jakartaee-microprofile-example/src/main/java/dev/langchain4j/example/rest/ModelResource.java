@@ -39,19 +39,32 @@ public class ModelResource {
     private String HUGGING_FACE_API_KEY;
 
     private HuggingFaceLanguageModel languageModel = null;
+    private HuggingFaceEmbeddingModel embeddingModel = null;
 
     private HuggingFaceLanguageModel getLanguageModel() {
         if (languageModel == null) {
             languageModel = HuggingFaceLanguageModel.builder()
-                    .accessToken(HUGGING_FACE_API_KEY)
-                    .modelId(TII_UAE_FALCON_7B_INSTRUCT)
-                    .timeout(ofSeconds(120))
-                    .temperature(1.0)
-                    .maxNewTokens(30)
-                    .waitForModel(true)
-                    .build();
+                            .accessToken(HUGGING_FACE_API_KEY)
+                            .modelId(TII_UAE_FALCON_7B_INSTRUCT)
+                            .timeout(ofSeconds(120))
+                            .temperature(1.0)
+                            .maxNewTokens(30)
+                            .waitForModel(true)
+                            .build();
         }
         return languageModel;
+    }
+    
+    private HuggingFaceEmbeddingModel getEmbeddingModel() {
+        if (embeddingModel == null) {
+            embeddingModel = HuggingFaceEmbeddingModel.builder()
+                             .accessToken(HUGGING_FACE_API_KEY)
+                             .modelId(SENTENCE_TRANSFORMERS_ALL_MINI_LM_L6_V2)
+                             .timeout(ofSeconds(120))
+                             .waitForModel(true)
+                             .build();
+        }
+        return embeddingModel;
     }
 
     @GET
@@ -128,12 +141,7 @@ public class ModelResource {
                @QueryParam("text1") String text1,
                @QueryParam("text2") String text2) {
 
-        HuggingFaceEmbeddingModel model = HuggingFaceEmbeddingModel.builder()
-                .accessToken(HUGGING_FACE_API_KEY)
-                .modelId(SENTENCE_TRANSFORMERS_ALL_MINI_LM_L6_V2)
-                .timeout(ofSeconds(120))
-                .waitForModel(true)
-                .build();
+        HuggingFaceEmbeddingModel model = getEmbeddingModel();
 
         List<TextSegment> textSegments = List.of(textSegment(text1), textSegment(text2));
         List<Embedding> embeddings = model.embedAll(textSegments).content();
