@@ -70,7 +70,7 @@ Navigate to the the [OpenAPI UI](http://localhost:9080/openapi/ui) URL for the f
     - ```
       curl 'http://localhost:9080/api/model/chat?userMessage=Which%20are%20the%20most%20used%20Large%20Language%20models%3F' | jq
       ```
-- [HuggingFaceEmbeddingModel](https://github.com/langchain4j/langchain4j/blob/main/langchain4j-hugging-face/src/main/java/dev/langchain4j/model/huggingface/HuggingFaceEmbeddingModel.java)
+- [InProcessEmbeddingModel](https://github.com/langchain4j/langchain4j-embeddings)
   - expand the GET `/api/model/similarity` API
     1. Click the **Try it out** button.
     2. Type `I like Jakarta EE and MicroProfile.`, or any text, in the the **text1** field.

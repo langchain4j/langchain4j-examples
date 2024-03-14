@@ -3,7 +3,6 @@ package dev.langchain4j.example.rest;
 import static dev.langchain4j.data.message.SystemMessage.systemMessage;
 import static dev.langchain4j.data.message.UserMessage.userMessage;
 import static dev.langchain4j.data.segment.TextSegment.textSegment;
-import static dev.langchain4j.model.huggingface.HuggingFaceModelName.SENTENCE_TRANSFORMERS_ALL_MINI_LM_L6_V2;
 import static dev.langchain4j.model.huggingface.HuggingFaceModelName.TII_UAE_FALCON_7B_INSTRUCT;
 import static dev.langchain4j.store.embedding.CosineSimilarity.between;
 import static dev.langchain4j.store.embedding.RelevanceScore.fromCosineSimilarity;
@@ -19,8 +18,9 @@ import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.SystemMessage;
 import dev.langchain4j.data.segment.TextSegment;
+import dev.langchain4j.model.embedding.AllMiniLmL6V2EmbeddingModel;
+import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.huggingface.HuggingFaceChatModel;
-import dev.langchain4j.model.huggingface.HuggingFaceEmbeddingModel;
 import dev.langchain4j.model.huggingface.HuggingFaceLanguageModel;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -38,6 +38,22 @@ public class ModelResource {
     @ConfigProperty(name = "hugging.face.api.key")
     private String HUGGING_FACE_API_KEY;
 
+    private HuggingFaceLanguageModel languageModel = null;
+
+    private HuggingFaceLanguageModel getLanguageModel() {
+        if (languageModel == null) {
+            languageModel = HuggingFaceLanguageModel.builder()
+                    .accessToken(HUGGING_FACE_API_KEY)
+                    .modelId(TII_UAE_FALCON_7B_INSTRUCT)
+                    .timeout(ofSeconds(120))
+                    .temperature(1.0)
+                    .maxNewTokens(30)
+                    .waitForModel(true)
+                    .build();
+        }
+        return languageModel;
+    }
+
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("language")
@@ -47,14 +63,7 @@ public class ModelResource {
         operationId = "languageModelAsk" )
     public String languageModelAsk(@QueryParam("question") String question) {
 
-        HuggingFaceLanguageModel model = HuggingFaceLanguageModel.builder()
-                .accessToken(HUGGING_FACE_API_KEY)
-                .modelId(TII_UAE_FALCON_7B_INSTRUCT)
-                .timeout(ofSeconds(120))
-                .temperature(1.0)
-                .maxNewTokens(30)
-                .waitForModel(true)
-                .build();
+        HuggingFaceLanguageModel model = getLanguageModel();
 
         String answer;
         try {
@@ -86,18 +95,18 @@ public class ModelResource {
             .waitForModel(true)
             .build();
 
-        SystemMessage agentMessage =
-            systemMessage("I am knowledgeable about Large Language Models. How can I help you?");
+        SystemMessage systemMessage =
+            systemMessage("You are very knowledgeble about Large Language Models. Be friendly. Give concise answers.");
 
         AiMessage aiMessage = model.generate(
-            agentMessage,
+            systemMessage,
             userMessage(userMessage)
         ).content();
 
         return List.of(
-            "System: " + agentMessage.text(),
-            "Me:    " + userMessage,
-            "Agent: " + aiMessage.text().trim());
+            "System: " + systemMessage.text(),
+            "Me:     " + userMessage,
+            "Agent:  " + aiMessage.text().trim());
 
     }
 
@@ -119,12 +128,7 @@ public class ModelResource {
                @QueryParam("text1") String text1,
                @QueryParam("text2") String text2) {
 
-        HuggingFaceEmbeddingModel model = HuggingFaceEmbeddingModel.builder()
-                .accessToken(HUGGING_FACE_API_KEY)
-                .modelId(SENTENCE_TRANSFORMERS_ALL_MINI_LM_L6_V2)
-                .timeout(ofSeconds(120))
-                .waitForModel(true)
-                .build();
+        EmbeddingModel model = new AllMiniLmL6V2EmbeddingModel();
 
         List<TextSegment> textSegments = List.of(textSegment(text1), textSegment(text2));
         List<Embedding> embeddings = model.embedAll(textSegments).content();
