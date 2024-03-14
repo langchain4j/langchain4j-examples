@@ -52,7 +52,7 @@ Use the Maven wrapper to start the application by using the [Liberty dev mode](h
 
 Navigate to the the [OpenAPI UI](http://localhost:9080/openapi/ui) URL for the following 3 REST APIs:
 
-- [HuggingFaceLanguageMode](https://github.com/langchain4j/langchain4j/blob/main/langchain4j-hugging-face/src/main/java/dev/langchain4j/model/huggingface/HuggingFaceLanguageModel.java)
+- [HuggingFaceLanguageModel](https://github.com/langchain4j/langchain4j/blob/main/langchain4j-hugging-face/src/main/java/dev/langchain4j/model/huggingface/HuggingFaceLanguageModel.java)
   - Expand the GET `/api/model/language` API.
     1. Click the **Try it out** button.
     2. Type `When was langchain4j launched?`, or any question, in the question field.
