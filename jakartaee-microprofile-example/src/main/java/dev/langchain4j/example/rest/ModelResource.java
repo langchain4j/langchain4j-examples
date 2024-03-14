@@ -95,7 +95,7 @@ public class ModelResource {
         ).content();
 
         return List.of(
-            "Agent: " + agentMessage.text(),
+            "System: " + agentMessage.text(),
             "Me:    " + userMessage,
             "Agent: " + aiMessage.text().trim());
 
