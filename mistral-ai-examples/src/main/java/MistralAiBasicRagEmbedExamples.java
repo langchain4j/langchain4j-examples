@@ -10,7 +10,6 @@ import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.input.Prompt;
 import dev.langchain4j.model.input.PromptTemplate;
 import dev.langchain4j.model.mistralai.MistralAiChatModel;
-import dev.langchain4j.model.mistralai.MistralAiChatModelName;
 import dev.langchain4j.model.mistralai.MistralAiEmbeddingModel;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
 import dev.langchain4j.store.embedding.EmbeddingStore;
@@ -85,7 +84,7 @@ public class MistralAiBasicRagEmbedExamples {
             // Now we can use the Mistral AI chat model to generate the answer to the user question based on the context information.
             ChatLanguageModel chatModel = MistralAiChatModel.builder()
                     .apiKey(System.getenv("MISTRAL_AI_API_KEY"))
-                    .modelName(MistralAiChatModelName.MISTRAL_MEDIUM.toString())
+                    .modelName("mistral-medium")
                     .temperature(0.2) // expect a more focused and deterministic answer
                     .logRequests(true)
                     .logResponses(true)

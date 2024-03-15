@@ -16,6 +16,7 @@ import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
 import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
 
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -24,7 +25,6 @@ import java.util.Objects;
 
 import static dev.ai4j.openai4j.image.ImageModel.DALL_E_QUALITY_HD;
 import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
-import static dev.langchain4j.model.openai.OpenAiImageModelName.DALL_E_3;
 
 public class _02_OpenAiImageModelExamples {
 
@@ -33,7 +33,7 @@ public class _02_OpenAiImageModelExamples {
         public static void main(String[] args) {
 
             ImageModel model = OpenAiImageModel.builder()
-                    .modelName(DALL_E_3)
+                    .modelName("dall-e-3")
                     .apiKey(System.getenv("OPENAI_API_KEY"))
                     .build();
 
@@ -66,17 +66,10 @@ public class _02_OpenAiImageModelExamples {
                     .embeddingStore(embeddingStore)
                     .build();
 
-            Document document = loadDocument(
-                    Paths.get(
-                            Objects
-                                    .requireNonNull(
-                                            _02_OpenAiImageModelExamples.class.getResource("example-files/story-about" +
-                                                    "-happy-carrot.txt")
-                                    )
-                                    .toURI()
-                    ),
-                    new TextDocumentParser()
-            );
+            String fileName = "story-about-happy-carrot.txt";
+            URI fileUri = Objects.requireNonNull(_02_OpenAiImageModelExamples.class.getResource(fileName)).toURI();
+            Document document = loadDocument(Paths.get(fileUri), new TextDocumentParser());
+
             ingestor.ingest(document);
 
             ConversationalRetrievalChain chain = ConversationalRetrievalChain

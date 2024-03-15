@@ -28,9 +28,6 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
 
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_3_5_TURBO;
-
-
 public class _01_Naive_RAG {
 
     /**
@@ -95,7 +92,7 @@ public class _01_Naive_RAG {
         // Langchain4j currently supports more than 10 popular LLM providers.
         ChatLanguageModel chatModel = OpenAiChatModel.builder()
                 .apiKey("demo") // You can use the "demo" key or import your own.
-                .modelName(GPT_3_5_TURBO)
+                .modelName("gpt-3.5-turbo")
                 .build();
 
 

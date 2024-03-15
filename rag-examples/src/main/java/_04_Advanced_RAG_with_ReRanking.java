@@ -31,8 +31,6 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
 
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_3_5_TURBO;
-
 public class _04_Advanced_RAG_with_ReRanking {
 
     /**
@@ -86,7 +84,7 @@ public class _04_Advanced_RAG_with_ReRanking {
 
         ChatLanguageModel chatModel = OpenAiChatModel.builder()
                 .apiKey("demo")
-                .modelName(GPT_3_5_TURBO)
+                .modelName("gpt-3.5-turbo")
                 .build();
 
         EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();

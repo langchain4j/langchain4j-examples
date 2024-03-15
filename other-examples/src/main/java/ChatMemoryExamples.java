@@ -9,7 +9,6 @@ import dev.langchain4j.model.openai.OpenAiTokenizer;
 import java.io.IOException;
 
 import static dev.langchain4j.data.message.UserMessage.userMessage;
-import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
 
 public class ChatMemoryExamples {
 
@@ -38,7 +37,7 @@ public class ChatMemoryExamples {
 
             ChatLanguageModel model = OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY);
 
-            ChatMemory chatMemory = TokenWindowChatMemory.withMaxTokens(300, new OpenAiTokenizer(GPT_3_5_TURBO));
+            ChatMemory chatMemory = TokenWindowChatMemory.withMaxTokens(300, new OpenAiTokenizer("gpt-3.5-turbo"));
 
             // You have full control over the chat memory.
             // You can decide if you want to add a particular message to the memory
