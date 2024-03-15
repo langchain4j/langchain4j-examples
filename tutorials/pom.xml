@@ -73,8 +73,6 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>${main.class}</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
