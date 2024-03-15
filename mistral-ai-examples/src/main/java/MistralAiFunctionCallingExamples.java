@@ -124,29 +124,13 @@ public class MistralAiFunctionCallingExamples {
         // Tool to be executed by mistral model to get payment status
         @Tool("Get payment status of a transaction") // function description
         static String retrievePaymentStatus(@P("Transaction id to search payment data") String transactionId) {
-            List<String> transactionIds = getPaymentData().get("transaction_id");
-            List<String> paymentStatuses = getPaymentData().get("payment_status");
-
-            int index = transactionIds.indexOf(transactionId);
-            if (index != -1) {
-                return paymentStatuses.get(index);
-            } else {
-                return "Transaction ID not found";
-            }
+           return getPaymentDataField(transactionId, "payment_status");
         }
 
         // Tool to be executed by mistral model to get payment date
         @Tool("Get payment date of a transaction") // function description
         static String retrievePaymentDate(@P("Transaction id to search payment data") String transactionId) {
-            List<String> transactionIds = getPaymentData().get("transaction_id");
-            List<String> paymentDates = getPaymentData().get("payment_date");
-
-            int index = transactionIds.indexOf(transactionId);
-            if (index != -1) {
-                return paymentDates.get(index);
-            } else {
-                return "Transaction ID not found";
-            }
+            return getPaymentDataField(transactionId, "payment_date");
         }
 
         private static Map<String, List<String>> getPaymentData() {
@@ -157,6 +141,18 @@ public class MistralAiFunctionCallingExamples {
             data.put("payment_date", Arrays.asList("2021-10-05", "2021-10-06", "2021-10-07", "2021-10-05", "2021-10-08"));
             data.put("payment_status", Arrays.asList("Paid", "Unpaid", "Paid", "Paid", "Pending"));
             return data;
+        }
+
+        private static String getPaymentDataField(String transactionId, String data) {
+            List<String> transactionIds = getPaymentData().get("transaction_id");
+            List<String> paymentData = getPaymentData().get(data);
+
+            int index = transactionIds.indexOf(transactionId);
+            if (index != -1) {
+                return paymentData.get(index);
+            } else {
+                return "Transaction ID not found";
+            }
         }
     }
 }
