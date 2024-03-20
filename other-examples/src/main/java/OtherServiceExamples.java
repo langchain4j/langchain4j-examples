@@ -303,6 +303,25 @@ public class OtherServiceExamples {
     }
 
 
+    static class AI_Service_with_System_and_User_Messages_loaded_from_resources_Example {
+
+        interface TextUtils {
+
+            @SystemMessage(fromResource = "/translator-system-prompt-template.txt")
+            @UserMessage(fromResource = "/translator-user-prompt-template.txt")
+            String translate(@V("text") String text, @V("language") String language);
+        }
+
+        public static void main(String[] args) {
+
+            TextUtils utils = AiServices.create(TextUtils.class, chatLanguageModel);
+
+            String translation = utils.translate("Hello, how are you?", "italian");
+            System.out.println(translation); // Ciao, come stai?
+        }
+    }
+
+
     static class AI_Service_with_UserName_Example {
 
         interface Assistant {
