@@ -35,5 +35,4 @@
         <module>javafx-example</module>
         <module>quarkus-example</module>
     </modules>
-
 </project>

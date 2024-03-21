@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.tinylog.Logger;
 
 @Testcontainers
 class OllamaChatModelTest {
@@ -21,40 +22,30 @@ class OllamaChatModelTest {
      * 2. Run "docker exec -it ollama ollama run mistral" <- specify the desired model here
      */
 
-    static String MODEL_NAME = "orca-mini"; // try "mistral", "llama2", "codellama", "phi" or "tinyllama"
-
     @Container
-    static GenericContainer<?> ollama = new GenericContainer<>("langchain4j/ollama-" + MODEL_NAME + ":latest")
-            .withExposedPorts(11434);
+    private static GenericContainer<?> ollama = new GenericContainer<>(OllamaContants.OLLAMA_IMAGE_NAME).withExposedPorts(OllamaContants.OLLAMA_PORT);
 
     @Test
-    void simple_example() {
-
+    void example() {
         ChatLanguageModel model = OllamaChatModel.builder()
-                .baseUrl(baseUrl())
-                .modelName(MODEL_NAME)
+                .baseUrl(baseUrl(ollama))
+                .modelName(OllamaContants.MODEL_NAME)
                 .build();
+        simpleExample(model);
+        jsonOutputExample(model);
+    }
 
+    void simpleExample(ChatLanguageModel model) {
         String answer = model.generate("Provide 3 short bullet points explaining why Java is awesome");
-
-        System.out.println(answer);
+        Logger.info("Answer: {}", answer);
     }
 
-    @Test
-    void json_output_example() {
-
-        ChatLanguageModel model = OllamaChatModel.builder()
-                .baseUrl(baseUrl())
-                .modelName(MODEL_NAME)
-                .format("json")
-                .build();
-
+    void jsonOutputExample(ChatLanguageModel model) {
         String json = model.generate("Give me a JSON with 2 fields: name and age of a John Doe, 42");
-
-        System.out.println(json);
+        Logger.info("JSON: {}", json);
     }
 
-    static String baseUrl() {
+    static String baseUrl(GenericContainer<?> ollama) {
         return String.format("http://%s:%d", ollama.getHost(), ollama.getFirstMappedPort());
     }
 }
