@@ -5,37 +5,63 @@ import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.qdrant.QdrantEmbeddingStore;
+import io.qdrant.client.QdrantClient;
+import io.qdrant.client.QdrantGrpcClient;
+import io.qdrant.client.grpc.Collections;
+import org.testcontainers.containers.GenericContainer;
+
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import static dev.langchain4j.internal.Utils.randomUUID;
 
 public class QdrantEmbeddingStoreExample {
 
-  public static void main(String[] args) {
+  private static int grpcPort = 6334;
+  private static String collectionName = "langchain4j-" + randomUUID();
+  private static Collections.Distance distance = Collections.Distance.Cosine;
+  private static int dimension = 384;
 
-    EmbeddingStore<TextSegment> embeddingStore =
-        QdrantEmbeddingStore.builder()
-            // Ensure the collection is configured with the appropriate dimensions
-            // of the embedding model.
-            .collectionName("{collection_name}")
-            .host("localhost")
-            // GRPC port of the Qdrant server
-            .port(6334)
-            .build();
+  public static void main(String[] args) throws ExecutionException, InterruptedException {
 
-    EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
+    try (GenericContainer<?> qdrant = new GenericContainer<>("qdrant/qdrant:latest")
+            .withExposedPorts(grpcPort)) {
+      qdrant.start();
 
-    TextSegment segment1 = TextSegment.from("I've been to France twice.");
-    Embedding embedding1 = embeddingModel.embed(segment1).content();
-    embeddingStore.add(embedding1, segment1);
+      EmbeddingStore<TextSegment> embeddingStore =
+              QdrantEmbeddingStore.builder()
+                      .host(qdrant.getHost())
+                      .port(qdrant.getMappedPort(grpcPort))
+                      .collectionName(collectionName)
+                      .build();
 
-    TextSegment segment2 = TextSegment.from("New Delhi is the capital of India.");
-    Embedding embedding2 = embeddingModel.embed(segment2).content();
-    embeddingStore.add(embedding2, segment2);
+      QdrantClient client =
+              new QdrantClient(
+                      QdrantGrpcClient.newBuilder(qdrant.getHost(), qdrant.getMappedPort(grpcPort), false)
+                              .build());
 
-    Embedding queryEmbedding = embeddingModel.embed("Did you ever travel abroad?").content();
-    List<EmbeddingMatch<TextSegment>> relevant = embeddingStore.findRelevant(queryEmbedding, 1);
-    EmbeddingMatch<TextSegment> embeddingMatch = relevant.get(0);
+      client
+              .createCollectionAsync(
+                      collectionName,
+                      Collections.VectorParams.newBuilder().setDistance(distance).setSize(dimension).build())
+              .get();
 
-    System.out.println(embeddingMatch.score());
-    System.out.println(embeddingMatch.embedded().text());
+      EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
+
+      TextSegment segment1 = TextSegment.from("I've been to France twice.");
+      Embedding embedding1 = embeddingModel.embed(segment1).content();
+      embeddingStore.add(embedding1, segment1);
+
+      TextSegment segment2 = TextSegment.from("New Delhi is the capital of India.");
+      Embedding embedding2 = embeddingModel.embed(segment2).content();
+      embeddingStore.add(embedding2, segment2);
+
+      Embedding queryEmbedding = embeddingModel.embed("Did you ever travel abroad?").content();
+      List<EmbeddingMatch<TextSegment>> relevant = embeddingStore.findRelevant(queryEmbedding, 1);
+      EmbeddingMatch<TextSegment> embeddingMatch = relevant.get(0);
+
+      System.out.println(embeddingMatch.score());
+      System.out.println(embeddingMatch.embedded().text());
+    }
   }
 }
