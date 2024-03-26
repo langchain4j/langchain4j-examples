@@ -8,7 +8,7 @@ import dev.langchain4j.store.embedding.qdrant.QdrantEmbeddingStore;
 import io.qdrant.client.QdrantClient;
 import io.qdrant.client.QdrantGrpcClient;
 import io.qdrant.client.grpc.Collections;
-import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.qdrant.QdrantContainer;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -24,8 +24,7 @@ public class QdrantEmbeddingStoreExample {
 
   public static void main(String[] args) throws ExecutionException, InterruptedException {
 
-    try (GenericContainer<?> qdrant = new GenericContainer<>("qdrant/qdrant:latest")
-            .withExposedPorts(grpcPort)) {
+    try (QdrantContainer qdrant = new QdrantContainer("qdrant/qdrant:latest")) {
       qdrant.start();
 
       EmbeddingStore<TextSegment> embeddingStore =
