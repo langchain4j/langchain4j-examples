@@ -1,0 +1,8 @@
+<svg width="45px" height="45px" viewBox="0 0 45 45" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g transform="translate(1.000000, 1.000000)">
+            <circle stroke="#5E6B8D" fill="#5D6A8E" cx="21.5" cy="21.5" r="21.5"></circle>
+            <path d="M14.7203794,25.6367289 L12,25.6367289 L12,8 L14.7203794,8 L14.7203794,25.6367289 Z M20.1450972,12.1616703 L17.4247178,12.1616703 L17.4247178,36 L20.1450972,36 L20.1450972,12.1616703 Z M25.5752822,12.1616703 L22.8547826,12.1616703 L22.8547826,36 L25.5752822,36 L25.5752822,12.1616703 Z M31,12.1562529 L28.2795004,12.1562529 L28.2795004,25.6640594 L31,25.6640594 L31,12.1562529 Z" fill="#FFFFFF" fill-rule="nonzero"></path>
+        </g>
+    </g>
+</svg>
