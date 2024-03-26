@@ -54,13 +54,7 @@
 
         <dependency>
             <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j-document-parser-apache-pdfbox</artifactId>
-            <version>0.29.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j-document-parser-apache-poi</artifactId>
+            <artifactId>langchain4j-document-parser-apache-tika</artifactId>
             <version>0.29.0</version>
         </dependency>
 
@@ -77,14 +71,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.tinylog</groupId>
-            <artifactId>tinylog-impl</artifactId>
-            <version>2.6.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.tinylog</groupId>
-            <artifactId>slf4j-tinylog</artifactId>
-            <version>2.6.2</version>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.5.3</version>
         </dependency>
 
     </dependencies>
