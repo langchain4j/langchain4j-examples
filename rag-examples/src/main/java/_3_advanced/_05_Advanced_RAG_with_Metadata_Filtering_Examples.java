@@ -1,7 +1,10 @@
+package _3_advanced;
+
+import _2_naive.Naive_RAG_Example;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain4j.model.embedding.AllMiniLmL6V2EmbeddingModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
+import dev.langchain4j.model.embedding.bge.small.en.v15.BgeSmallEnV15QuantizedEmbeddingModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
@@ -14,6 +17,8 @@ import dev.langchain4j.store.embedding.filter.builder.sql.LanguageModelSqlFilter
 import dev.langchain4j.store.embedding.filter.builder.sql.TableDefinition;
 import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
 import org.junit.jupiter.api.Test;
+import shared.Assistant;
+import shared.Utils;
 
 import java.util.function.Function;
 
@@ -21,22 +26,18 @@ import static dev.langchain4j.data.document.Metadata.metadata;
 import static dev.langchain4j.store.embedding.filter.MetadataFilterBuilder.metadataKey;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class _06_Metadata_Filtering {
+class _05_Advanced_RAG_with_Metadata_Filtering_Examples {
 
     /**
-     * More information can be found here: https://github.com/langchain4j/langchain4j/pull/610
+     * Please refer to {@link Naive_RAG_Example} for a basic context.
+     * More information on metadata filtering can be found here: https://github.com/langchain4j/langchain4j/pull/610
      */
 
     ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder()
-            .apiKey(System.getenv("OPENAI_API_KEY"))
+            .apiKey(Utils.OPENAI_API_KEY)
             .build();
 
-    EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
-
-    interface Assistant {
-
-        String answer(String query);
-    }
+    EmbeddingModel embeddingModel = new BgeSmallEnV15QuantizedEmbeddingModel();
 
     @Test
     void Static_Metadata_Filter_Example() {

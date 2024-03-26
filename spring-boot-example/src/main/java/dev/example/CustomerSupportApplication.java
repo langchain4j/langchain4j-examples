@@ -5,14 +5,14 @@ import dev.langchain4j.data.document.DocumentSplitter;
 import dev.langchain4j.data.document.parser.TextDocumentParser;
 import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.data.segment.TextSegment;
-import dev.langchain4j.memory.chat.MessageWindowChatMemory;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.memory.ChatMemory;
+import dev.langchain4j.memory.chat.TokenWindowChatMemory;
+import dev.langchain4j.model.Tokenizer;
 import dev.langchain4j.model.embedding.AllMiniLmL6V2EmbeddingModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.openai.OpenAiTokenizer;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
-import dev.langchain4j.service.AiServices;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
 import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
@@ -57,15 +57,8 @@ public class CustomerSupportApplication {
     }
 
     @Bean
-    CustomerSupportAgent customerSupportAgent(ChatLanguageModel chatLanguageModel,
-                                              BookingTools bookingTools,
-                                              ContentRetriever contentRetriever) {
-        return AiServices.builder(CustomerSupportAgent.class)
-                .chatLanguageModel(chatLanguageModel)
-                .chatMemory(MessageWindowChatMemory.withMaxMessages(20))
-                .tools(bookingTools)
-                .contentRetriever(contentRetriever)
-                .build();
+    ChatMemory chatMemory(Tokenizer tokenizer) {
+        return TokenWindowChatMemory.withMaxTokens(1000, tokenizer);
     }
 
     @Bean

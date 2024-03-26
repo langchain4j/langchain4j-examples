@@ -1,16 +1,14 @@
-import dev.langchain4j.chain.ConversationalRetrievalChain;
+package _3_advanced;
+
+import _2_naive.Naive_RAG_Example;
 import dev.langchain4j.data.document.Document;
-import dev.langchain4j.data.document.DocumentParser;
-import dev.langchain4j.data.document.DocumentSplitter;
-import dev.langchain4j.data.document.loader.FileSystemDocumentLoader;
 import dev.langchain4j.data.document.parser.TextDocumentParser;
 import dev.langchain4j.data.document.splitter.DocumentSplitters;
-import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain4j.model.embedding.AllMiniLmL6V2EmbeddingModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
+import dev.langchain4j.model.embedding.bge.small.en.v15.BgeSmallEnV15QuantizedEmbeddingModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.rag.DefaultRetrievalAugmentor;
 import dev.langchain4j.rag.RetrievalAugmentor;
@@ -20,19 +18,17 @@ import dev.langchain4j.rag.query.transformer.CompressingQueryTransformer;
 import dev.langchain4j.rag.query.transformer.QueryTransformer;
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.store.embedding.EmbeddingStore;
+import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
 import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
+import shared.Assistant;
 
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Scanner;
+import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
+import static shared.Utils.*;
 
-public class _02_Advanced_RAG_with_Query_Compression {
+public class _01_Advanced_RAG_with_Query_Compression_Example {
 
     /**
-     * Please refer to previous examples for basic context.
+     * Please refer to {@link Naive_RAG_Example} for a basic context.
      * <p>
      * Advanced RAG in LangChain4j is described here: https://github.com/langchain4j/langchain4j/pull/538
      * <p>
@@ -53,56 +49,44 @@ public class _02_Advanced_RAG_with_Query_Compression {
      * This method adds a bit of latency and cost but significantly enhances the quality of the RAG process.
      * It's worth noting that the LLM used for compression doesn't have to be the same as the one
      * used for conversation. For instance, you might use a smaller local model trained for summarization.
-     * <p>
-     * In this example, we will continue using {@link AiServices},
-     * but the same principles apply to {@link ConversationalRetrievalChain}, or you can develop your custom RAG flow.
      */
 
     public static void main(String[] args) {
 
-        Biographer biographer = createBiographer();
+        Assistant assistant = createAssistant("documents/biography-of-john-doe.txt");
 
         // First, ask "What is the legacy of John Doe?"
         // Then, ask "When was he born?"
         // Now, review the logs:
         // The first query was not compressed as there was no preceding context to compress.
         // The second query, however, was compressed into something like "When was John Doe born?"
-
-        try (Scanner scanner = new Scanner(System.in)) {
-            while (true) {
-                System.out.println("==================================================");
-                System.out.print("User: ");
-                String userQuery = scanner.nextLine();
-                System.out.println("==================================================");
-
-                if ("exit".equalsIgnoreCase(userQuery)) {
-                    break;
-                }
-
-                String biographerAnswer = biographer.answer(userQuery);
-                System.out.println("==================================================");
-                System.out.println("Biographer: " + biographerAnswer);
-            }
-        }
+        startConversationWith(assistant);
     }
 
-    private static Biographer createBiographer() {
+    private static Assistant createAssistant(String documentPath) {
 
-        // Check _01_Naive_RAG if you need more details on what is going on here
+        Document document = loadDocument(toPath(documentPath), new TextDocumentParser());
 
-        ChatLanguageModel chatModel = OpenAiChatModel.builder()
-                .apiKey("demo")
+        EmbeddingModel embeddingModel = new BgeSmallEnV15QuantizedEmbeddingModel();
+
+        EmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
+
+        EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
+                .documentSplitter(DocumentSplitters.recursive(300, 0))
+                .embeddingModel(embeddingModel)
+                .embeddingStore(embeddingStore)
                 .build();
 
-        EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
+        ingestor.ingest(document);
 
-        Path documentPath = toPath("biography-of-john-doe.txt");
-        EmbeddingStore<TextSegment> embeddingStore = embed(documentPath, embeddingModel);
+        ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder()
+                .apiKey(OPENAI_API_KEY)
+                .build();
 
         // We will create a CompressingQueryTransformer, which is responsible for compressing
         // the user's query and the preceding conversation into a single, stand-alone query.
         // This should significantly improve the quality of the retrieval process.
-        QueryTransformer queryTransformer = new CompressingQueryTransformer(chatModel);
+        QueryTransformer queryTransformer = new CompressingQueryTransformer(chatLanguageModel);
 
         ContentRetriever contentRetriever = EmbeddingStoreContentRetriever.builder()
                 .embeddingStore(embeddingStore)
@@ -119,38 +103,10 @@ public class _02_Advanced_RAG_with_Query_Compression {
                 .contentRetriever(contentRetriever)
                 .build();
 
-        return AiServices.builder(Biographer.class)
-                .chatLanguageModel(chatModel)
+        return AiServices.builder(Assistant.class)
+                .chatLanguageModel(chatLanguageModel)
                 .retrievalAugmentor(retrievalAugmentor)
                 .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
                 .build();
-    }
-
-    private static EmbeddingStore<TextSegment> embed(Path documentPath, EmbeddingModel embeddingModel) {
-        DocumentParser documentParser = new TextDocumentParser();
-        Document document = FileSystemDocumentLoader.loadDocument(documentPath, documentParser);
-
-        DocumentSplitter splitter = DocumentSplitters.recursive(300, 0);
-        List<TextSegment> segments = splitter.split(document);
-
-        List<Embedding> embeddings = embeddingModel.embedAll(segments).content();
-
-        EmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
-        embeddingStore.addAll(embeddings, segments);
-        return embeddingStore;
-    }
-
-    interface Biographer {
-
-        String answer(String query);
-    }
-
-    private static Path toPath(String fileName) {
-        try {
-            URL fileUrl = _02_Advanced_RAG_with_Query_Compression.class.getResource(fileName);
-            return Paths.get(fileUrl.toURI());
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

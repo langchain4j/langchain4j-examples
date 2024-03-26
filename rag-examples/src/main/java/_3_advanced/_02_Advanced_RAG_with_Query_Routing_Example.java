@@ -1,16 +1,17 @@
-import dev.langchain4j.chain.ConversationalRetrievalChain;
+package _3_advanced;
+
+import _2_naive.Naive_RAG_Example;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.DocumentParser;
 import dev.langchain4j.data.document.DocumentSplitter;
-import dev.langchain4j.data.document.loader.FileSystemDocumentLoader;
 import dev.langchain4j.data.document.parser.TextDocumentParser;
 import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain4j.model.embedding.AllMiniLmL6V2EmbeddingModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
+import dev.langchain4j.model.embedding.bge.small.en.v15.BgeSmallEnV15QuantizedEmbeddingModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.rag.DefaultRetrievalAugmentor;
 import dev.langchain4j.rag.RetrievalAugmentor;
@@ -21,20 +22,20 @@ import dev.langchain4j.rag.query.router.QueryRouter;
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
+import shared.Assistant;
 
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
-public class _03_Advanced_RAG_with_Query_Routing {
+import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
+import static shared.Utils.*;
+
+public class _02_Advanced_RAG_with_Query_Routing_Example {
 
     /**
-     * Please refer to previous examples for basic context.
+     * Please refer to {@link Naive_RAG_Example} for a basic context.
      * <p>
      * Advanced RAG in LangChain4j is described here: https://github.com/langchain4j/langchain4j/pull/538
      * <p>
@@ -58,50 +59,25 @@ public class _03_Advanced_RAG_with_Query_Routing {
      * <p>
      * For scenarios 1, 2, and 3, you can implement a custom {@link QueryRouter}.
      * For scenario 4, this example will demonstrate how to use a {@link LanguageModelQueryRouter}.
-     * <p>
-     * We will continue using {@link AiServices} for this example,
-     * but the same principles apply to {@link ConversationalRetrievalChain}, or you can develop your custom RAG flow.
      */
 
     public static void main(String[] args) {
 
-        Polymath polymath = createPolymath();
+        Assistant assistant = createAssistant();
 
         // First, ask "What is the legacy of John Doe?"
         // Then, ask "Can I cancel my reservation?"
         // Now, see the logs to observe how the queries are routed to different retrievers.
-
-        try (Scanner scanner = new Scanner(System.in)) {
-            while (true) {
-                System.out.println("==================================================");
-                System.out.print("User: ");
-                String userQuery = scanner.nextLine();
-                System.out.println("==================================================");
-
-                if ("exit".equalsIgnoreCase(userQuery)) {
-                    break;
-                }
-
-                String polymathAnswer = polymath.answer(userQuery);
-                System.out.println("==================================================");
-                System.out.println("Polymath: " + polymathAnswer);
-            }
-        }
+        startConversationWith(assistant);
     }
 
-    private static Polymath createPolymath() {
+    private static Assistant createAssistant() {
 
-        // Check _01_Naive_RAG if you need more details on what is going on here
-
-        ChatLanguageModel chatModel = OpenAiChatModel.builder()
-                .apiKey("demo")
-                .build();
-
-        EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
+        EmbeddingModel embeddingModel = new BgeSmallEnV15QuantizedEmbeddingModel();
 
         // Let's create a separate embedding store specifically for biographies.
         EmbeddingStore<TextSegment> biographyEmbeddingStore =
-                embed(toPath("biography-of-john-doe.txt"), embeddingModel);
+                embed(toPath("documents/biography-of-john-doe.txt"), embeddingModel);
         ContentRetriever biographyContentRetriever = EmbeddingStoreContentRetriever.builder()
                 .embeddingStore(biographyEmbeddingStore)
                 .embeddingModel(embeddingModel)
@@ -111,7 +87,7 @@ public class _03_Advanced_RAG_with_Query_Routing {
 
         // Additionally, let's create a separate embedding store dedicated to terms of use.
         EmbeddingStore<TextSegment> termsOfUseEmbeddingStore =
-                embed(toPath("miles-of-smiles-terms-of-use.txt"), embeddingModel);
+                embed(toPath("documents/miles-of-smiles-terms-of-use.txt"), embeddingModel);
         ContentRetriever termsOfUseContentRetriever = EmbeddingStoreContentRetriever.builder()
                 .embeddingStore(termsOfUseEmbeddingStore)
                 .embeddingModel(embeddingModel)
@@ -119,18 +95,22 @@ public class _03_Advanced_RAG_with_Query_Routing {
                 .minScore(0.6)
                 .build();
 
+        ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder()
+                .apiKey(OPENAI_API_KEY)
+                .build();
+
         // Let's create a query router.
         Map<ContentRetriever, String> retrieverToDescription = new HashMap<>();
         retrieverToDescription.put(biographyContentRetriever, "biography of John Doe");
         retrieverToDescription.put(termsOfUseContentRetriever, "terms of use of car rental company");
-        QueryRouter queryRouter = new LanguageModelQueryRouter(chatModel, retrieverToDescription);
+        QueryRouter queryRouter = new LanguageModelQueryRouter(chatLanguageModel, retrieverToDescription);
 
         RetrievalAugmentor retrievalAugmentor = DefaultRetrievalAugmentor.builder()
                 .queryRouter(queryRouter)
                 .build();
 
-        return AiServices.builder(Polymath.class)
-                .chatLanguageModel(chatModel)
+        return AiServices.builder(Assistant.class)
+                .chatLanguageModel(chatLanguageModel)
                 .retrievalAugmentor(retrievalAugmentor)
                 .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
                 .build();
@@ -138,7 +118,7 @@ public class _03_Advanced_RAG_with_Query_Routing {
 
     private static EmbeddingStore<TextSegment> embed(Path documentPath, EmbeddingModel embeddingModel) {
         DocumentParser documentParser = new TextDocumentParser();
-        Document document = FileSystemDocumentLoader.loadDocument(documentPath, documentParser);
+        Document document = loadDocument(documentPath, documentParser);
 
         DocumentSplitter splitter = DocumentSplitters.recursive(300, 0);
         List<TextSegment> segments = splitter.split(document);
@@ -148,19 +128,5 @@ public class _03_Advanced_RAG_with_Query_Routing {
         EmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
         embeddingStore.addAll(embeddings, segments);
         return embeddingStore;
-    }
-
-    interface Polymath {
-
-        String answer(String query);
-    }
-
-    private static Path toPath(String fileName) {
-        try {
-            URL fileUrl = _03_Advanced_RAG_with_Query_Routing.class.getResource(fileName);
-            return Paths.get(fileUrl.toURI());
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

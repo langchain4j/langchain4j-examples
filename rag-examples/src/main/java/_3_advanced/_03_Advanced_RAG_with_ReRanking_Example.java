@@ -1,17 +1,14 @@
-import dev.langchain4j.chain.ConversationalRetrievalChain;
+package _3_advanced;
+
+import _2_naive.Naive_RAG_Example;
 import dev.langchain4j.data.document.Document;
-import dev.langchain4j.data.document.DocumentParser;
-import dev.langchain4j.data.document.DocumentSplitter;
-import dev.langchain4j.data.document.loader.FileSystemDocumentLoader;
 import dev.langchain4j.data.document.parser.TextDocumentParser;
 import dev.langchain4j.data.document.splitter.DocumentSplitters;
-import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
-import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.cohere.CohereScoringModel;
-import dev.langchain4j.model.embedding.AllMiniLmL6V2EmbeddingModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
+import dev.langchain4j.model.embedding.bge.small.en.v15.BgeSmallEnV15QuantizedEmbeddingModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.scoring.ScoringModel;
 import dev.langchain4j.rag.DefaultRetrievalAugmentor;
@@ -22,19 +19,17 @@ import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.store.embedding.EmbeddingStore;
+import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
 import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
+import shared.Assistant;
 
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Scanner;
+import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
+import static shared.Utils.*;
 
-public class _04_Advanced_RAG_with_ReRanking {
+public class _03_Advanced_RAG_with_ReRanking_Example {
 
     /**
-     * Please refer to previous examples for basic context.
+     * Please refer to {@link Naive_RAG_Example} for a basic context.
      * <p>
      * Advanced RAG in LangChain4j is described here: https://github.com/langchain4j/langchain4j/pull/538
      * <p>
@@ -48,49 +43,32 @@ public class _04_Advanced_RAG_with_ReRanking {
      * Providing irrelevant information to the LLM can be costly and, in the worst case, lead to hallucinations.
      * Therefore, in the second stage, we can perform re-ranking of the results obtained in the first stage
      * and eliminate irrelevant results using a more advanced model (e.g., Cohere Rerank).
-     * <p>
-     * We will continue using {@link AiServices} for this example,
-     * but the same principles apply to {@link ConversationalRetrievalChain}, or you can develop your custom RAG flow.
      */
 
     public static void main(String[] args) {
 
-        CustomerSupportAgent agent = createCustomerSupportAgent();
+        Assistant assistant = createAssistant("documents/miles-of-smiles-terms-of-use.txt");
 
         // First, say "Hi". Observe how all segments retrieved in the first stage were filtered out.
         // Then, ask "Can I cancel my reservation?" and observe how all but one segment were filtered out.
-
-        try (Scanner scanner = new Scanner(System.in)) {
-            while (true) {
-                System.out.println("==================================================");
-                System.out.print("User: ");
-                String userQuery = scanner.nextLine();
-                System.out.println("==================================================");
-
-                if ("exit".equalsIgnoreCase(userQuery)) {
-                    break;
-                }
-
-                String agentAnswer = agent.answer(userQuery);
-                System.out.println("==================================================");
-                System.out.println("Agent: " + agentAnswer);
-            }
-        }
+        startConversationWith(assistant);
     }
 
-    private static CustomerSupportAgent createCustomerSupportAgent() {
+    private static Assistant createAssistant(String documentPath) {
 
-        // Check _01_Naive_RAG if you need more details on what is going on here
+        Document document = loadDocument(toPath(documentPath), new TextDocumentParser());
 
-        ChatLanguageModel chatModel = OpenAiChatModel.builder()
-                .apiKey("demo")
-                .modelName("gpt-3.5-turbo")
+        EmbeddingModel embeddingModel = new BgeSmallEnV15QuantizedEmbeddingModel();
+
+        EmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
+
+        EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
+                .documentSplitter(DocumentSplitters.recursive(300, 0))
+                .embeddingModel(embeddingModel)
+                .embeddingStore(embeddingStore)
                 .build();
 
-        EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
-
-        Path documentPath = toPath("miles-of-smiles-terms-of-use.txt");
-        EmbeddingStore<TextSegment> embeddingStore = embed(documentPath, embeddingModel);
+        ingestor.ingest(document);
 
         ContentRetriever contentRetriever = EmbeddingStoreContentRetriever.builder()
                 .embeddingStore(embeddingStore)
@@ -105,7 +83,6 @@ public class _04_Advanced_RAG_with_ReRanking {
         ContentAggregator contentAggregator = ReRankingContentAggregator.builder()
                 .scoringModel(scoringModel)
                 .minScore(0.8) // we want to present the LLM with only the truly relevant segments for the user's query
-
                 .build();
 
         RetrievalAugmentor retrievalAugmentor = DefaultRetrievalAugmentor.builder()
@@ -113,38 +90,10 @@ public class _04_Advanced_RAG_with_ReRanking {
                 .contentAggregator(contentAggregator)
                 .build();
 
-        return AiServices.builder(CustomerSupportAgent.class)
-                .chatLanguageModel(chatModel)
+        return AiServices.builder(Assistant.class)
+                .chatLanguageModel(OpenAiChatModel.withApiKey(OPENAI_API_KEY))
                 .retrievalAugmentor(retrievalAugmentor)
                 .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
                 .build();
-    }
-
-    private static EmbeddingStore<TextSegment> embed(Path documentPath, EmbeddingModel embeddingModel) {
-        DocumentParser documentParser = new TextDocumentParser();
-        Document document = FileSystemDocumentLoader.loadDocument(documentPath, documentParser);
-
-        DocumentSplitter splitter = DocumentSplitters.recursive(300, 0);
-        List<TextSegment> segments = splitter.split(document);
-
-        List<Embedding> embeddings = embeddingModel.embedAll(segments).content();
-
-        EmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
-        embeddingStore.addAll(embeddings, segments);
-        return embeddingStore;
-    }
-
-    interface CustomerSupportAgent {
-
-        String answer(String query);
-    }
-
-    private static Path toPath(String fileName) {
-        try {
-            URL fileUrl = _04_Advanced_RAG_with_ReRanking.class.getResource(fileName);
-            return Paths.get(fileUrl.toURI());
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

@@ -1,7 +1,9 @@
 package dev.example;
 
 import dev.langchain4j.service.SystemMessage;
+import dev.langchain4j.service.spring.AiService;
 
+@AiService
 interface CustomerSupportAgent {
 
     @SystemMessage({

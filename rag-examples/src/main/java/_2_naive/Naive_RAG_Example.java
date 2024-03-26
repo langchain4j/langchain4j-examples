@@ -1,8 +1,8 @@
-import dev.langchain4j.chain.ConversationalRetrievalChain;
+package _2_naive;
+
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.DocumentParser;
 import dev.langchain4j.data.document.DocumentSplitter;
-import dev.langchain4j.data.document.loader.FileSystemDocumentLoader;
 import dev.langchain4j.data.document.parser.TextDocumentParser;
 import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.data.embedding.Embedding;
@@ -10,29 +10,26 @@ import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.memory.ChatMemory;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain4j.model.embedding.AllMiniLmL6V2EmbeddingModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
+import dev.langchain4j.model.embedding.bge.small.en.v15.BgeSmallEnV15QuantizedEmbeddingModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
-import dev.langchain4j.rag.DefaultRetrievalAugmentor;
-import dev.langchain4j.rag.RetrievalAugmentor;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
+import shared.Assistant;
 
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.Scanner;
 
-public class _01_Naive_RAG {
+import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
+import static shared.Utils.*;
+
+public class Naive_RAG_Example {
 
     /**
-     * This example demonstrates how to implement a simple Retrieval-Augmented Generation (RAG) application.
-     * By "simple," we mean that we won't use any advanced RAG techniques.
+     * This example demonstrates how to implement a naive Retrieval-Augmented Generation (RAG) application.
+     * By "naive", we mean that we won't use any advanced RAG techniques.
      * In each interaction with the Large Language Model (LLM), we will:
      * 1. Take the user's query as-is.
      * 2. Embed it using an embedding model.
@@ -43,55 +40,26 @@ public class _01_Naive_RAG {
      * 6. Hope that:
      * - The user's query is well-formulated and contains all necessary details for retrieval.
      * - The found segments are relevant to the user's query.
-     * <p>
-     * RAG can be implemented in LangChain4j in two ways:
-     * <p>
-     * 1. Using high-level components, such as:
-     * 1.1 {@link AiServices} (supports RAG and other features like memory, tools, output parsers, etc.)
-     * 1.2 {@link ConversationalRetrievalChain} (supports only RAG and memory).
-     * <p>
-     * 2. Using (or reusing) low-level components, such as:
-     * - {@link RetrievalAugmentor} (e.g., {@link DefaultRetrievalAugmentor})
-     * - {@link ContentRetriever} (e.g., {@link EmbeddingStoreContentRetriever})
-     * - and others.
-     * <p>
-     * In this example, we will demonstrate how to use RAG with {@link AiServices}.
      */
 
     public static void main(String[] args) {
 
-        // Let's create a customer support agent to chat about terms of use.
-        CustomerSupportAgent agent = createCustomerSupportAgent();
+        // Let's create an assistant that will know about our document
+        Assistant assistant = createAssistant("documents/miles-of-smiles-terms-of-use.txt");
 
-        // Now, you can ask questions such as
-        // - "Can I cancel my reservation?"
-        // - "I had an accident, should I pay extra?"
-
-        try (Scanner scanner = new Scanner(System.in)) {
-            while (true) {
-                System.out.println("==================================================");
-                System.out.print("User: ");
-                String userQuery = scanner.nextLine();
-                System.out.println("==================================================");
-
-                if ("exit".equalsIgnoreCase(userQuery)) {
-                    break;
-                }
-
-                String agentAnswer = agent.answer(userQuery);
-                System.out.println("==================================================");
-                System.out.println("Agent: " + agentAnswer);
-            }
-        }
+        // Now, let's start the conversation with the assistant. We can ask questions like:
+        // - Can I cancel my reservation?
+        // - I had an accident, should I pay extra?
+        startConversationWith(assistant);
     }
 
-    private static CustomerSupportAgent createCustomerSupportAgent() {
+    private static Assistant createAssistant(String documentPath) {
 
         // First, let's create a chat model, also known as a LLM, which will answer our queries.
         // In this example, we will use OpenAI's gpt-3.5-turbo, but you can choose any supported model.
         // Langchain4j currently supports more than 10 popular LLM providers.
-        ChatLanguageModel chatModel = OpenAiChatModel.builder()
-                .apiKey("demo") // You can use the "demo" key or import your own.
+        ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder()
+                .apiKey(OPENAI_API_KEY)
                 .modelName("gpt-3.5-turbo")
                 .build();
 
@@ -104,9 +72,8 @@ public class _01_Naive_RAG {
         // Additionally, LangChain4j supports parsing multiple document types:
         // text, pdf, doc, xls, ppt.
         // However, you can also manually import your data from other sources.
-        Path documentPath = toPath("miles-of-smiles-terms-of-use.txt");
         DocumentParser documentParser = new TextDocumentParser();
-        Document document = FileSystemDocumentLoader.loadDocument(documentPath, documentParser);
+        Document document = loadDocument(toPath(documentPath), documentParser);
 
 
         // Now, we need to split this document into smaller segments, also known as "chunks."
@@ -125,7 +92,7 @@ public class _01_Naive_RAG {
         // Embedding is needed for performing similarity searches.
         // For this example, we'll use a local in-process embedding model, but you can choose any supported model.
         // Langchain4j currently supports more than 10 popular embedding model providers.
-        EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
+        EmbeddingModel embeddingModel = new BgeSmallEnV15QuantizedEmbeddingModel();
         List<Embedding> embeddings = embeddingModel.embedAll(segments).content();
 
 
@@ -135,6 +102,9 @@ public class _01_Naive_RAG {
         // Langchain4j currently supports more than 15 popular embedding stores.
         EmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
         embeddingStore.addAll(embeddings, segments);
+
+        // We could also use EmbeddingStoreIngestor to hide manual steps above behind a simpler API.
+        // See an example of using EmbeddingStoreIngestor in _01_Advanced_RAG_with_Query_Compression_Example.
 
 
         // The content retriever is responsible for retrieving relevant content based on a user query.
@@ -157,36 +127,10 @@ public class _01_Naive_RAG {
 
         // The final step is to build our AI Service,
         // configuring it to use the components we've created above.
-        return AiServices.builder(CustomerSupportAgent.class)
-                .chatLanguageModel(chatModel)
+        return AiServices.builder(Assistant.class)
+                .chatLanguageModel(chatLanguageModel)
                 .contentRetriever(contentRetriever)
                 .chatMemory(chatMemory)
                 .build();
-    }
-
-    /**
-     * This is an "AI Service". It is a Java service with AI capabilities/features.
-     * It can be integrated into your code like any other service, acting as a bean, and is even mockable.
-     * The goal is to seamlessly integrate AI functionality into your (existing) codebase with minimal friction.
-     * It's conceptually similar to Spring Data JPA or Retrofit.
-     * You define an interface and optionally customize it with annotations.
-     * LangChain4j then provides an implementation for this interface using proxy and reflection.
-     * This approach abstracts away all the complexity and boilerplate.
-     * So you won't need to juggle the model, messages, memory, RAG components, tools, output parsers, etc.
-     * However, don't worry. It's quite flexible and configurable, so you'll be able to tailor it
-     * to your specific use case.
-     */
-    interface CustomerSupportAgent {
-
-        String answer(String query);
-    }
-
-    static Path toPath(String fileName) {
-        try {
-            URL fileUrl = _01_Naive_RAG.class.getResource(fileName);
-            return Paths.get(fileUrl.toURI());
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
     }
 }
