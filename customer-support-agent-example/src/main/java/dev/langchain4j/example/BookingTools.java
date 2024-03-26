@@ -1,5 +1,7 @@
-package dev.example;
+package dev.langchain4j.example;
 
+import dev.langchain4j.example.booking.Booking;
+import dev.langchain4j.example.booking.BookingService;
 import dev.langchain4j.agent.tool.Tool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

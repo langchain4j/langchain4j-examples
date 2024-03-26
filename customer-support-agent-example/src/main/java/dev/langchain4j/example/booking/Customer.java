@@ -1,4 +1,4 @@
-package dev.example;
+package dev.langchain4j.example.booking;
 
 public class Customer {
 

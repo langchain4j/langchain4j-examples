@@ -11,7 +11,7 @@
     </parent>
 
     <groupId>dev.langchain4j</groupId>
-    <artifactId>spring-boot-example</artifactId>
+    <artifactId>customer-support-agent-example</artifactId>
     <version>0.29.0</version>
 
     <properties>
@@ -33,8 +33,15 @@
         </dependency>
 
         <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-embeddings-all-minilm-l6-v2</artifactId>
+            <version>0.29.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>

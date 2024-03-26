@@ -1,4 +1,4 @@
-package dev.example;
+package dev.langchain4j.example;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 @SpringBootTest
-class CustomerSupportApplicationTest {
+class CustomerSupportAgentApplicationTest {
 
     @Autowired
     CustomerSupportAgent agent;
@@ -33,7 +33,7 @@ class CustomerSupportApplicationTest {
         System.out.println("==========================================================================================");
         System.out.println("[User]: " + userMessage);
         System.out.println("==========================================================================================");
-        String agentAnswer = agent.chat(userMessage);
+        String agentAnswer = agent.answer(userMessage);
         System.out.println("==========================================================================================");
         System.out.println("[Agent]: " + agentAnswer);
         System.out.println("==========================================================================================");

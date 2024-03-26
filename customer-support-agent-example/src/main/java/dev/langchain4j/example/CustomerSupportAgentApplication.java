@@ -1,4 +1,4 @@
-package dev.example;
+package dev.langchain4j.example;
 
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.DocumentSplitter;
@@ -16,6 +16,8 @@ import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
 import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -29,30 +31,34 @@ import java.util.Scanner;
 import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
 
 @SpringBootApplication
-public class CustomerSupportApplication {
+public class CustomerSupportAgentApplication {
+
+    private static final Logger log = LoggerFactory.getLogger(CustomerSupportAgentApplication.class);
 
     /**
-     * Run CustomerSupportApplicationTest to see simulated conversation with customer support agent
+     * Either run this class (CustomerSupportAgentApplication) and have an interactive conversation
+     * or run a CustomerSupportAgentApplicationTest and see a simulated conversation
      */
 
     @Bean
-    ApplicationRunner interactiveChatRunner(CustomerSupportAgent agent) {
+    ApplicationRunner interactiveRunner(CustomerSupportAgent agent) {
         return args -> {
-            Scanner scanner = new Scanner(System.in);
+            try (Scanner scanner = new Scanner(System.in)) {
+                while (true) {
+                    log.info("==================================================");
+                    log.info("User: ");
+                    String userQuery = scanner.nextLine();
+                    log.info("==================================================");
 
-            while (true) {
-                System.out.print("User: ");
-                String userMessage = scanner.nextLine();
+                    if ("exit".equalsIgnoreCase(userQuery)) {
+                        break;
+                    }
 
-                if ("exit".equalsIgnoreCase(userMessage)) {
-                    break;
+                    String agentAnswer = agent.answer(userQuery);
+                    log.info("==================================================");
+                    log.info("Agent: " + agentAnswer);
                 }
-
-                String agentMessage = agent.chat(userMessage);
-                System.out.println("Agent: " + agentMessage);
             }
-
-            scanner.close();
         };
     }
 
@@ -112,6 +118,6 @@ public class CustomerSupportApplication {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(CustomerSupportApplication.class, args);
+        SpringApplication.run(CustomerSupportAgentApplication.class, args);
     }
 }

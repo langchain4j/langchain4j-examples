@@ -13,6 +13,7 @@
         <module>anthropic-examples</module>
         <module>azure-open-ai-examples</module>
         <module>chroma-example</module>
+        <module>customer-support-agent-example</module>
         <module>tutorials</module>
         <module>elasticsearch-example</module>
         <module>infinispan-example</module>
