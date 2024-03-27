@@ -30,7 +30,7 @@
 
         <dependency>
             <groupId>org.testcontainers</groupId>
-            <artifactId>testcontainers</artifactId>
+            <artifactId>qdrant</artifactId>
             <version>1.19.6</version>
         </dependency>
 
