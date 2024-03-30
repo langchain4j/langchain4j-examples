@@ -3,6 +3,7 @@ import dev.langchain4j.data.message.ImageContent;
 import dev.langchain4j.data.message.TextContent;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.model.anthropic.AnthropicChatModel;
+import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.output.Response;
 import org.junit.jupiter.api.Test;
 
@@ -13,10 +14,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class AnthropicChatModelTest {
 
-    AnthropicChatModel model = AnthropicChatModel.builder()
+    ChatLanguageModel model = AnthropicChatModel.builder()
             // API key can be created here: https://console.anthropic.com/settings/keys
             .apiKey(System.getenv("ANTHROPIC_API_KEY"))
-            .modelName("claude-3-sonnet-20240229")
+            .modelName("claude-3-haiku-20240307")
             .logRequests(true)
             .logResponses(true)
             // Other parameters can be set as well

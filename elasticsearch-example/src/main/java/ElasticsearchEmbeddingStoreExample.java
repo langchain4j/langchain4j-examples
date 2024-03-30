@@ -9,7 +9,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testcontainers.elasticsearch.ElasticsearchContainer;
 import org.testcontainers.utility.DockerImageName;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +24,7 @@ public class ElasticsearchEmbeddingStoreExample {
      * - Execute "docker run -d -p 9200:9200 -p 9300:9300 -e discovery.type=single-node -e xpack.security.enabled=false docker.elastic.co/elasticsearch/elasticsearch:8.9.0"
      * - Wait until Elasticsearch is ready to serve (may take a few minutes)
      */
+
     public static void main(String[] args) throws InterruptedException {
         DockerImageName imageName = DockerImageName.parse("docker.elastic.co/elasticsearch/elasticsearch:8.9.0");
         Map<String, String> env = new HashMap<>();

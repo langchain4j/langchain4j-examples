@@ -11,7 +11,6 @@ import org.neo4j.driver.AuthTokens;
 import org.neo4j.driver.GraphDatabase;
 import org.testcontainers.containers.Neo4jContainer;
 import org.testcontainers.utility.DockerImageName;
-
 import java.util.List;
 
 public class Neo4jEmbeddingStoreExample {
@@ -52,7 +51,6 @@ public class Neo4jEmbeddingStoreExample {
             List<EmbeddingMatch<TextSegment>> relevant = embeddingStore.findRelevant(queryEmbedding, 1);
             EmbeddingMatch<TextSegment> embeddingMatch = relevant.get(0);
 
-            // expected 0.8144288659095
             LOGGER.info("Score: {}", embeddingMatch.score());
             // expected "I like football."
             LOGGER.info("Embedded: {}", embeddingMatch.embedded().text());
