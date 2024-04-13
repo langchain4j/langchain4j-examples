@@ -27,7 +27,17 @@
         document.getElementById('myMessage').value = "";
     }
 
-    const webSocket = new WebSocket('ws://localhost:9080/chat');
+    // Getting the used url from browser
+    var loc = window.location, uri;
+    if (loc.protocol === "https:") {
+        uri = "wss:";
+    } else {
+        uri = "ws:";
+    }
+    uri += "//" + loc.host;
+    uri += loc.pathname + "chat";
+    // buildign websocket
+    const webSocket = new WebSocket(uri);
 
     webSocket.onopen = function (event) {
         console.log(event);

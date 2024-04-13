@@ -11,7 +11,7 @@
         <feature>websocket-2.1</feature>
     </featureManager>
 
-    <httpEndpoint httpPort="9080" httpsPort="9443" id="defaultHttpEndpoint"/>
+    <httpEndpoint host="*" httpPort="9080" httpsPort="9443" id="defaultHttpEndpoint"/>
 
     <applicationManager autoExpand="true"/>
 
