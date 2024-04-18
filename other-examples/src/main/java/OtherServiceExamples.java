@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.function.Function;
 
 import static java.util.Arrays.asList;
 
@@ -335,6 +336,33 @@ public class OtherServiceExamples {
 
             String answer = assistant.chat("Klaus", "Hi, tell me my name if you see it.");
             System.out.println(answer); // Hello! Your name is Klaus. How can I assist you today?
+        }
+    }
+
+    static class AI_Service_with_Dynamic_System_Message_Example {
+
+        interface Assistant {
+
+            String chat(@MemoryId String memoryId, @UserMessage String userMessage);
+        }
+
+        public static void main(String[] args) {
+
+            Function<Object, String> systemMessageProvider = (memoryId) -> {
+                if (memoryId.equals("1")) {
+                    return "You are a helpful assistant. The user prefers to be called 'Your Majesty'.";
+                } else {
+                    return "You are a helpful assistant.";
+                }
+            };
+
+            Assistant assistant = AiServices.builder(Assistant.class)
+                    .chatLanguageModel(chatLanguageModel)
+                    .systemMessageProvider(systemMessageProvider)
+                    .build();
+
+            System.out.println(assistant.chat("1", "Hi")); // Hello, Your Majesty! How may I assist you today?
+            System.out.println(assistant.chat("2", "Hi")); // Hello! How can I assist you today?
         }
     }
 }
