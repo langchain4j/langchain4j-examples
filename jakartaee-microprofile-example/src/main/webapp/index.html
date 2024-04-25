@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Chat Room</title>
+        <link href="https://fonts.googleapis.com/css?family=Asap" rel="stylesheet">
+        <link rel="stylesheet" href="css/styles.css">
+        <link href="favicon.ico" rel="icon" />
+        <link href="favicon.ico" rel="shortcut icon" />
+    </head>
+    <body>
+        <section id="appIntro">
+            <div id="titleSection">
+                <h1 id="appTitle">Chat Room</h1>
+                <div class="line"></div>
+                <div class="headerImage"></div>
+            </div>
+            <div class="msSection" id="messages">
+                <div class="headerRow">
+                    <div class="headerIcon">
+                      <img src="img/sysProps.svg"/>
+                    </div>
+                    <div class="headerTitle" id="sysPropTitle">
+                      <h2>Conversation with an AI Agent</h2>
+                    </div>
+                </div>
+                <div class="sectionContent">
+                    <table id="chatTable">
+                        <tbody id="messagesTableBody">
+                            <tr>
+                                <th width="60%">Chat Messages</th>
+                                <th width="10%">Time</th>
+                                <th></th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        <div class="my_message_container">
+            <label id="myMsgLabel">My message:</label>
+            <input type="text" size="50" id="myMessage"/>
+            <button id="sendButton" type="button" onclick="sendMessage()">Send</button>
+        </div>
+        <footer class="bodyFooter">
+            <div class="bodyFooterLink">
+                <div id="footer_project_container">
+                    <span id="footer_open_liberty"></span>
+                    <p id="footer_project">an IBM open source project</p>
+                </div>
+                <a id="footer_twitter_link"  class="footer_round_btn"
+                   href="https://twitter.com/OpenLibertyIO" target="_blank"
+                   aria-label="Twitter"></a>
+                <a id="footer_github_link" class="footer_round_btn"
+                   href="https://github.com/OpenLiberty" target="_blank"
+                   aria-label="Github"></a>
+                <a id="footer_groupsio_link"  class="footer_round_btn"
+                   href="https://groups.io/g/openliberty" target="_blank"
+                   aria-label="Open Liberty Groups.io"></a>
+                <a id="footer_gitter_link" class="footer_round_btn"
+                   href="https://app.gitter.im/#/room/#OpenLiberty_development:gitter.im" target="_blank"
+                   aria-label="Open Liberty Gitter"></a>
+                <a id="footer_ol_io_link" class="footer_round_btn"
+                   href="https://openliberty.io" target="_blank"
+                   aria-label="Open Liberty"></a>
+                <img src="/img/footer_main.png"></img>
+            </div>
+            <p id="footer_copyright">&copy;Copyright IBM Corp. 2024</p>
+            <a class="footer_ol_io" href="https://openliberty.io" target="_blank">openliberty.io</a>
+            <a class="footer_ol_io_others" href="https://openliberty.io/support" target="_blank">Support</a>
+            <a class="footer_ol_io_others" href="https://openliberty.io/docs" target="_blank">Docs</a>
+            <a class="footer_ol_io_others" href="https://openliberty.io/guides" target="_blank">Guides</a>
+        </footer>
+        <script src="chatroom.js"></script>
+    </body>
+</html>

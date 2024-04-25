@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.function.Function;
 
 import static java.util.Arrays.asList;
 
@@ -156,6 +157,15 @@ public class OtherServiceExamples {
 
         public static void main(String[] args) {
 
+            ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder()
+                    .apiKey(System.getenv("OPENAI_API_KEY"))
+                    // When extracting POJOs with the LLM that supports the "json mode" feature
+                    // (e.g., OpenAI, Azure OpenAI, Ollama, etc.), it is advisable to use it to get more reliable results.
+                    // When using this feature, LLM will be forced to output a valid JSON.
+                    // Please note that this feature is not (yet) supported when using "demo" key.
+                    .responseFormat("json_object")
+                    .build();
+
             PersonExtractor extractor = AiServices.create(PersonExtractor.class, chatLanguageModel);
 
             String text = "In 1968, amidst the fading echoes of Independence Day, "
@@ -294,6 +304,25 @@ public class OtherServiceExamples {
     }
 
 
+    static class AI_Service_with_System_and_User_Messages_loaded_from_resources_Example {
+
+        interface TextUtils {
+
+            @SystemMessage(fromResource = "/translator-system-prompt-template.txt")
+            @UserMessage(fromResource = "/translator-user-prompt-template.txt")
+            String translate(@V("text") String text, @V("language") String language);
+        }
+
+        public static void main(String[] args) {
+
+            TextUtils utils = AiServices.create(TextUtils.class, chatLanguageModel);
+
+            String translation = utils.translate("Hello, how are you?", "italian");
+            System.out.println(translation); // Ciao, come stai?
+        }
+    }
+
+
     static class AI_Service_with_UserName_Example {
 
         interface Assistant {
@@ -307,6 +336,33 @@ public class OtherServiceExamples {
 
             String answer = assistant.chat("Klaus", "Hi, tell me my name if you see it.");
             System.out.println(answer); // Hello! Your name is Klaus. How can I assist you today?
+        }
+    }
+
+    static class AI_Service_with_Dynamic_System_Message_Example {
+
+        interface Assistant {
+
+            String chat(@MemoryId String memoryId, @UserMessage String userMessage);
+        }
+
+        public static void main(String[] args) {
+
+            Function<Object, String> systemMessageProvider = (memoryId) -> {
+                if (memoryId.equals("1")) {
+                    return "You are a helpful assistant. The user prefers to be called 'Your Majesty'.";
+                } else {
+                    return "You are a helpful assistant.";
+                }
+            };
+
+            Assistant assistant = AiServices.builder(Assistant.class)
+                    .chatLanguageModel(chatLanguageModel)
+                    .systemMessageProvider(systemMessageProvider)
+                    .build();
+
+            System.out.println(assistant.chat("1", "Hi")); // Hello, Your Majesty! How may I assist you today?
+            System.out.println(assistant.chat("2", "Hi")); // Hello! How can I assist you today?
         }
     }
 }
