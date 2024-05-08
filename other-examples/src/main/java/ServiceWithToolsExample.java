@@ -37,6 +37,7 @@ public class ServiceWithToolsExample {
     public static void main(String[] args) {
 
         Assistant assistant = AiServices.builder(Assistant.class)
+                // WARNING! "demo" key does not support tools
                 .chatLanguageModel(OpenAiChatModel.withApiKey(System.getenv("OPENAI_API_KEY")))
                 .tools(new Calculator())
                 .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
