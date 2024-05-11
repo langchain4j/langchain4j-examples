@@ -34,7 +34,7 @@ You can then access the Petclinic at <http://localhost:8080/>
 And the OpenAI chatbot at <http://localhost:8080/chat.html>.
 <img width="1042" alt="petclinic-screenshot" src="https://github.com/showpune/spring-petclinic-langchain4j/assets/1787505/11caef70-6411-4e72-9ae9-4902fb8ac96b">
 ## The sequence workflow of langchain4j
-![image](https://github.com/showpune/langchain4j-examples/assets/1787505/a4fb545f-a2c3-4c7a-a20b-ac11ce0cd9d3)
+![image](https://github.com/showpune/spring-petclinic-langchain4j/assets/1787505/543c8ff4-1018-48a6-92f2-5f3ac5bb45f6)
 
 ## Workthrough of the chat agent
 You can talk with the agent, it can help to recommend the vet according to the symptoms of the pet. The agent can also help to book an appointment with the vet.
