@@ -10,8 +10,8 @@ Spring Petclinic is a [Spring Boot](https://spring.io/guides/gs/spring-boot) app
 using [Maven](https://spring.io/guides/gs/maven/). You can build a jar
 file and run it from the command line (it should work just as well with Java 17 or newer), Before you build the application, you need to setup some openai properties in `src/main/resources/application.properties`:
 ```bash
-git clone https://github.com/showpune/spring-petclinic-langchain4j.git
-cd spring-petclinic-langchain4j
+git clone https://github.com/langchain4j/langchain4j-examples
+cd langchain4j-examples/spring-petclinic-example
 mv src/main/resources/application.properties.example src/main/resources/application.properties
 ```
 
