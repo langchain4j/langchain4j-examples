@@ -1,0 +1,30 @@
+# database init, supports mysql too
+database=h2
+spring.sql.init.schema-locations=classpath*:db/${database}/schema.sql
+spring.sql.init.data-locations=classpath*:db/${database}/data.sql
+# Web
+spring.thymeleaf.mode=HTML
+# JPA
+spring.jpa.hibernate.ddl-auto=none
+spring.jpa.open-in-view=true
+# Internationalization
+spring.messages.basename=messages/messages
+# Actuator
+management.endpoints.web.exposure.include=*
+# Logging
+logging.level.org.springframework=INFO
+# logging.level.org.springframework.web=DEBUG
+# logging.level.org.springframework.context.annotation=TRACE
+# Maximum time static resources should be cached
+spring.web.resources.cache.cachecontrol.max-age=12h
+langchain4j.azure.open-ai.chat-model.endpoint=https://*****.openai.azure.com/
+langchain4j.azure.open-ai.chat-model.deployment-name=gpt-4
+langchain4j.azure.open-ai.chat-model.api-key=**
+langchain4j.local.spring.memory.use-local=true
+langchain4j.local.spring.memory.memory-size=20
+langchain4j.local.spring.content-retriever.use-local=true
+langchain4j.local.spring.content-retriever.max-results=1
+langchain4j.local.spring.content-retriever.min-score=0.6
+langchain4j.local.spring.content-retriever.content-path=classpath:petclinic-terms-of-use.txt
+
+petclinic.agent.name=petclinic

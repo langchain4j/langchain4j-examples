@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<html th:replace="~{fragments/layout :: layout (~{::body},'vets')}"
+      xmlns:th="https://www.thymeleaf.org">
+
+<body>
+
+<h2>Veterinarians</h2>
+
+<table class="table table-striped" id="vets">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Specialties</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="vet : ${listVets}">
+        <td th:text="${vet.firstName + ' ' + vet.lastName}"></td>
+        <td><span th:each="specialty : ${vet.specialties}"
+                  th:text="${specialty.name + ' '}"/> <span
+                th:if="${vet.nrOfSpecialties == 0}">none</span></td>
+    </tr>
+    </tbody>
+</table>
+
+<div th:if="${totalPages > 1}">
+    <span>Pages:</span>
+    <span>[</span>
+    <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+      <a th:href="@{'/vets.html?page=__${i}__'}" th:if="${currentPage != i}">[[${i}]]</a>
+      <span th:unless="${currentPage != i}">[[${i}]]</span>
+    </span>
+    <span>]&nbsp;</span>
+    <span>
+      <a class="fa fa-fast-backward" th:href="@{'/vets.html?page=1'}" th:if="${currentPage > 1}"
+         title="First"></a>
+      <span class="fa fa-fast-backward" th:unless="${currentPage > 1}" title="First"></span>
+    </span>
+    <span>
+      <a class="fa fa-step-backward" th:href="@{'/vets.html?page=__${currentPage - 1}__'}" th:if="${currentPage > 1}"
+         title="Previous"></a>
+      <span class="fa fa-step-backward" th:unless="${currentPage > 1}" title="Previous"></span>
+    </span>
+    <span>
+      <a class="fa fa-step-forward" th:href="@{'/vets.html?page=__${currentPage + 1}__'}" th:if="${currentPage < totalPages}"
+         title="Next"></a>
+      <span class="fa fa-step-forward" th:unless="${currentPage < totalPages}" title="Next"></span>
+    </span>
+    <span>
+      <a class="fa fa-fast-forward" th:href="@{'/vets.html?page=__${totalPages}__'}" th:if="${currentPage < totalPages}"
+         title="Last"></a>
+      <span class="fa fa-fast-forward" th:unless="${currentPage < totalPages}" title="Last"></span>
+    </span>
+</div>
+</body>
+</html>

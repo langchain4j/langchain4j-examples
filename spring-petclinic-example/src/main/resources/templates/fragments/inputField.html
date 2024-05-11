@@ -1,0 +1,28 @@
+<html>
+<body>
+<form>
+    <th:block th:fragment="input (label, name, type)">
+        <div class="form-group"
+             th:class="${'form-group' + (valid ? '' : ' has-error')}"
+             th:with="valid=${!#fields.hasErrors(name)}">
+            <label class="col-sm-2 control-label" th:text="${label}">Label</label>
+            <div class="col-sm-10">
+                <div th:switch="${type}">
+                    <input class="form-control" th:case="'text'" th:field="*{__${name}__}" type="text"/>
+                    <input class="form-control" th:case="'date'" th:field="*{__${name}__}" type="date"/>
+                </div>
+                <span aria-hidden="true"
+                      class="fa fa-ok form-control-feedback"
+                      th:if="${valid}"></span>
+                <th:block th:if="${!valid}">
+            <span
+                    aria-hidden="true"
+                    class="fa fa-remove form-control-feedback"></span>
+                    <span class="help-inline" th:errors="*{__${name}__}">Error</span>
+                </th:block>
+            </div>
+        </div>
+    </th:block>
+</form>
+</body>
+</html>
