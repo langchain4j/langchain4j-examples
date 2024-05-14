@@ -2,6 +2,8 @@
 
 This repository provides several examples using the LangChain4j library.
 
+More examples from the community can be found [here](https://github.com/langchain4j/langchain4j-community-examples).
+
 A good place to start includes:
 - [Tutorials](https://github.com/langchain4j/langchain4j-examples/tree/main/tutorials/src/main/java)
 - [More examples](https://github.com/langchain4j/langchain4j-examples/tree/main/other-examples/src/main/java)
