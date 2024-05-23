@@ -39,37 +39,42 @@ public class PgVectorEmbeddingStoreWithMetadataExample {
             Embedding embedding1 = embeddingModel.embed(segment1).content();
             embeddingStore.add(embedding1, segment1);
 
-            segment1 = TextSegment.from("I like basket.", Metadata.metadata("userId", "2"));
-            embedding1 = embeddingModel.embed(segment1).content();
-            embeddingStore.add(embedding1, segment1);
-
-            TextSegment segment2 = TextSegment.from("The weather is good today.");
+            TextSegment segment2 = TextSegment.from("I like basketball.", Metadata.metadata("userId", "2"));
             Embedding embedding2 = embeddingModel.embed(segment2).content();
             embeddingStore.add(embedding2, segment2);
 
             Embedding queryEmbedding = embeddingModel.embed("What is your favourite sport?").content();
 
+            // search for user 1
+
             Filter onlyForUser1 = metadataKey("userId").isEqualTo("1");
-            EmbeddingSearchRequest embeddingSearchRequest = EmbeddingSearchRequest.builder()
-                    .queryEmbedding(queryEmbedding).filter(onlyForUser1).build();
 
-            EmbeddingSearchResult<TextSegment> embeddingSearchResult = embeddingStore.search(embeddingSearchRequest);
+            EmbeddingSearchRequest embeddingSearchRequest1 = EmbeddingSearchRequest.builder()
+                    .queryEmbedding(queryEmbedding)
+                    .filter(onlyForUser1)
+                    .build();
 
-            EmbeddingMatch<TextSegment> embeddingMatch = embeddingSearchResult.matches().get(0);
+            EmbeddingSearchResult<TextSegment> embeddingSearchResult1 = embeddingStore.search(embeddingSearchRequest1);
+            EmbeddingMatch<TextSegment> embeddingMatch1 = embeddingSearchResult1.matches().get(0);
 
-            System.out.println(embeddingMatch.score());
-            System.out.println(embeddingMatch.embedded().text());
+            System.out.println(embeddingMatch1.score());
+            System.out.println(embeddingMatch1.embedded().text());
+
+            // search for user 2
 
             Filter onlyForUser2 = metadataKey("userId").isEqualTo("2");
-            embeddingSearchRequest = EmbeddingSearchRequest.builder()
-                    .queryEmbedding(queryEmbedding).filter(onlyForUser2).build();
 
-            embeddingSearchResult = embeddingStore.search(embeddingSearchRequest);
+            EmbeddingSearchRequest embeddingSearchRequest2 = EmbeddingSearchRequest.builder()
+                    .queryEmbedding(queryEmbedding)
+                    .filter(onlyForUser2)
+                    .build();
 
-            embeddingMatch = embeddingSearchResult.matches().get(0);
+            EmbeddingSearchResult<TextSegment> embeddingSearchResult2 = embeddingStore.search(embeddingSearchRequest2);
+            EmbeddingMatch<TextSegment> embeddingMatch2 = embeddingSearchResult2.matches().get(0);
 
-            System.out.println(embeddingMatch.score());
-            System.out.println(embeddingMatch.embedded().text());
+            System.out.println(embeddingMatch2.score());
+            System.out.println(embeddingMatch2.embedded().text());
+
             postgreSQLContainer.stop();
         }
     }
