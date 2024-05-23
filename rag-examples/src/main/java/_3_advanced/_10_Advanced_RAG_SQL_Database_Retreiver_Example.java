@@ -36,6 +36,8 @@ public class _10_Advanced_RAG_SQL_Database_Retreiver_Example {
      * <p>
      * In this example we will use an in-memory H2 database with 3 tables: customers, products and orders.
      * See "resources/sql" directory for more details.
+     * <p>
+     * This example requires "langchain4j-experimental-sql" dependency.
      */
 
     public static void main(String[] args) {

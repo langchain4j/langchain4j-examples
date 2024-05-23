@@ -41,6 +41,8 @@ public class _08_Advanced_RAG_Web_Search_Example {
      * Advanced RAG in LangChain4j is described here: https://github.com/langchain4j/langchain4j/pull/538
      * <p>
      * This example demonstrates how to use web search engine as an additional content retriever.
+     * <p>
+     * This example requires "langchain4j-web-search-engine-tavily" dependency.
      */
 
     public static void main(String[] args) {
