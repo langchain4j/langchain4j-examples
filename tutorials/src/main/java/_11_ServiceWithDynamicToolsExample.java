@@ -1,4 +1,4 @@
-import dev.langchain4j.code.Judge0JavaScriptExecutionTool;
+import dev.langchain4j.code.judge0.Judge0JavaScriptExecutionTool;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;

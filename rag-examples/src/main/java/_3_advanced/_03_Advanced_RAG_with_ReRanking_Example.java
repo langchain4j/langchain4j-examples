@@ -43,6 +43,8 @@ public class _03_Advanced_RAG_with_ReRanking_Example {
      * Providing irrelevant information to the LLM can be costly and, in the worst case, lead to hallucinations.
      * Therefore, in the second stage, we can perform re-ranking of the results obtained in the first stage
      * and eliminate irrelevant results using a more advanced model (e.g., Cohere Rerank).
+     * <p>
+     * This example requires "langchain4j-cohere" dependency.
      */
 
     public static void main(String[] args) {

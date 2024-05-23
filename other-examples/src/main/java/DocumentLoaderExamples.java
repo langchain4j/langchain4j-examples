@@ -72,7 +72,7 @@ public class DocumentLoaderExamples {
 
     private static Path toPath(String fileName) {
         try {
-            URL fileUrl = ChatWithDocumentsExamples.class.getResource(fileName);
+            URL fileUrl = DocumentLoaderExamples.class.getResource(fileName);
             return Paths.get(fileUrl.toURI());
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
