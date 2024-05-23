@@ -1,4 +1,4 @@
-import dev.langchain4j.code.Judge0JavaScriptExecutionTool;
+import dev.langchain4j.code.judge0.Judge0JavaScriptExecutionTool;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
@@ -18,7 +18,7 @@ public class ServiceWithDynamicToolsExample {
         Judge0JavaScriptExecutionTool judge0Tool = new Judge0JavaScriptExecutionTool(ApiKeys.RAPID_API_KEY);
 
         ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder()
-                .apiKey(ApiKeys.OPENAI_API_KEY)
+                .apiKey(System.getenv("OPENAI_API_KEY"))
                 .temperature(0.0)
                 .timeout(ofSeconds(60))
                 .build();
