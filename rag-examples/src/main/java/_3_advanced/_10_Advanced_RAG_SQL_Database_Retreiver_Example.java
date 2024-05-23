@@ -28,7 +28,13 @@ public class _10_Advanced_RAG_SQL_Database_Retreiver_Example {
      * Advanced RAG in LangChain4j is described here: https://github.com/langchain4j/langchain4j/pull/538
      * <p>
      * This example demonstrates how to use SQL database content retriever.
-     * We will use an in-memory H2 database with 3 tables: customers, products and orders.
+     * <p>
+     * WARNING! Although fun and exciting, {@link SqlDatabaseContentRetriever} is dangerous to use!
+     * Do not ever use it in production! The database user must have very limited READ-ONLY permissions!
+     * Although the generated SQL is somewhat validated (to ensure that the SQL is a SELECT statement),
+     * there is no guarantee that it is harmless. Use it at your own risk!
+     * <p>
+     * In this example we will use an in-memory H2 database with 3 tables: customers, products and orders.
      * See "resources/sql" directory for more details.
      */
 
