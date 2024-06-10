@@ -5,6 +5,11 @@ import dev.langchain4j.service.AiServices;
 
 public class ServiceWithMemoryExample {
 
+    /**
+     * See also {@link ServiceWithMemoryForEachUserExample} and {@link ServiceWithPersistentMemoryExample}.
+     * For a low-level {@link ChatMemory} API usage example, see {@link ChatMemoryExamples}.
+     */
+
     interface Assistant {
 
         String chat(String message);
