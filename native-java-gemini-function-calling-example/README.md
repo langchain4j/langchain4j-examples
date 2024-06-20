@@ -17,23 +17,22 @@ export VERTEX_AI_GEMINI_MODEL=<the model in use, ex.gemini-1.5-flash-001>
 For example, let's consider a sample dataset and a function that retrieves the payment status given a transaction:
 
 ```java
-record Transaction(String id) {
-}
-
-record Status(String name) {
-}
-
-private static final Map<Transaction, Status> DATASET =
-	Map.of(
-		new Transaction("001"), new Status("pending"),
-		new Transaction("002"), new Status("approved"),
-		new Transaction("003"), new Status("rejected"));
-
-@Bean
-@Description("Get the status of a payment transaction")
-public Function<Transaction, Status> paymentStatus() {
-	return transaction -> DATASET.get(transaction);
-}
+    record Transaction(String id) {
+    }
+    
+    record Status(String name) {
+    }
+    
+    private static final Map<Transaction, Status> DATASET = Map.of(
+            new Transaction("001"), new Status("pending"),
+            new Transaction("002"), new Status("approved"),
+            new Transaction("003"), new Status("rejected"));
+    
+    @Tool("Get the status of a payment transaction")
+    public Status paymentStatus(@P("The id of the payment transaction") String transaction) {
+        System.out.println();
+        return DATASET.get(new Transaction(transaction));
+    }
 ```
 
 Function is registered as `@Tool`, which are Java methods the language model can use to call. 
@@ -56,11 +55,6 @@ Lets add the boot starters for 4 AI Models that support function calling:
 <dependency>
     <groupId>dev.langchain4j</groupId>
     <artifactId>langchain4j</artifactId>
-    <version>${langchain4j.version}</version>
-</dependency>
-<dependency>
-    <groupId>dev.langchain4j</groupId>
-    <artifactId>langchain4j-core</artifactId>
     <version>${langchain4j.version}</version>
 </dependency>
 ```

@@ -68,7 +68,6 @@ public class Langchain4JFunctionCallingApplication {
 		}
 	}
 
-	// @AiService
 	interface Assistant {
 		@SystemMessage("You are a helpful assistant that can answer questions about payment transactions.")
 		String chat(String userMessage);

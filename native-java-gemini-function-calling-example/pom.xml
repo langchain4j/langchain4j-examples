@@ -10,7 +10,7 @@
 		<!-- lookup parent from repository -->
 	</parent>
 
-	<groupId>spring.ai.demo</groupId>
+	<groupId>dev.langchain4j</groupId>
 	<artifactId>native-java-gemini-function-calling-example</artifactId>
 	<version>1.0.0</version>
 	<name>native-java-gemini-function-calling-example</name>
@@ -62,11 +62,6 @@
 		<dependency>
 			<groupId>dev.langchain4j</groupId>
 			<artifactId>langchain4j</artifactId>
-			<version>${langchain4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>dev.langchain4j</groupId>
-			<artifactId>langchain4j-core</artifactId>
 			<version>${langchain4j.version}</version>
 		</dependency>
 	</dependencies>
