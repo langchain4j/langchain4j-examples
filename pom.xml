@@ -25,6 +25,7 @@
         <module>ollama-examples</module>
         <module>open-ai-examples</module>
         <module>opensearch-example</module>
+        <module>ovh-ai-examples</module>
         <module>other-examples</module>
         <module>pinecone-example</module>
         <module>pgvector-example</module>
