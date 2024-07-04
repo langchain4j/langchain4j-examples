@@ -1,7 +1,8 @@
 import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain4j.model.chat.listener.ChatLanguageModelRequest;
-import dev.langchain4j.model.chat.listener.ChatLanguageModelResponse;
-import dev.langchain4j.model.listener.ModelListener;
+import dev.langchain4j.model.chat.listener.ChatModelErrorContext;
+import dev.langchain4j.model.chat.listener.ChatModelListener;
+import dev.langchain4j.model.chat.listener.ChatModelRequestContext;
+import dev.langchain4j.model.chat.listener.ChatModelResponseContext;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 
 import static java.util.Collections.singletonList;
@@ -12,26 +13,23 @@ public class OpenAiObservabilityExamples {
 
         public static void main(String[] args) {
 
-            ModelListener<ChatLanguageModelRequest, ChatLanguageModelResponse> modelListener =
-                    new ModelListener<ChatLanguageModelRequest, ChatLanguageModelResponse>() {
+            ChatModelListener modelListener = new ChatModelListener() {
 
-                        @Override
-                        public void onRequest(ChatLanguageModelRequest request) {
-                            System.out.println("Request: " + request.messages());
-                        }
+                @Override
+                public void onRequest(ChatModelRequestContext requestContext) {
+                    System.out.println("Request: " + requestContext.request().messages());
+                }
 
-                        @Override
-                        public void onResponse(ChatLanguageModelResponse response, ChatLanguageModelRequest request) {
-                            System.out.println("Response: " + response.aiMessage());
-                        }
+                @Override
+                public void onResponse(ChatModelResponseContext responseContext) {
+                    System.out.println("Response: " + responseContext.response().aiMessage());
+                }
 
-                        @Override
-                        public void onError(Throwable error,
-                                            ChatLanguageModelResponse response,
-                                            ChatLanguageModelRequest request) {
-                            error.printStackTrace();
-                        }
-                    };
+                @Override
+                public void onError(ChatModelErrorContext errorContext) {
+                    errorContext.error().printStackTrace();
+                }
+            };
 
             ChatLanguageModel model = OpenAiChatModel.builder()
                     .apiKey("demo")
