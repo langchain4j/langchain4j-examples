@@ -21,6 +21,14 @@ import java.util.UUID;
 
 public class AzureOpenAiFunctionCallingExamples {
 
+    /**
+     * This example demonstrates how to programmatically configure a tool.
+     * It goes through 4 different steps:
+     * 1. User specify tools (WeatherTools) and query ("What will the weather be like in London tomorrow?")
+     * 2. Model generate function arguments (model decides which tools to invoke)
+     * 3. User execute function to obtain tool results (using ToolExecutor)
+     * 4. Model generate final response based on the query and the tool results
+     */
     static class Weather_From_Manual_Configuration {
 
         static ChatLanguageModel azureOpenAiModel = AzureOpenAiChatModel.builder()
@@ -42,6 +50,7 @@ public class AzureOpenAiFunctionCallingExamples {
             UserMessage userMessage = userMessage("What will the weather be like in London tomorrow?");
             chatMessages.add(userMessage);
 
+
             // STEP 2: Model generate function arguments
             AiMessage aiMessage = azureOpenAiModel.generate(chatMessages, toolSpecifications).content();
             List<ToolExecutionRequest> toolExecutionRequests = aiMessage.toolExecutionRequests();
@@ -52,20 +61,16 @@ public class AzureOpenAiFunctionCallingExamples {
             });
             chatMessages.add(aiMessage);
 
+
             // STEP 3: User execute function to obtain tool results
-            toolExecutionRequests.forEach(toolExecutionRequest -> { // return all tools to call to answer the user query
-                ToolExecutor toolExecutor = null;
-                try {
-                    toolExecutor = new DefaultToolExecutor(weatherTools, weatherTools.getClass().getDeclaredMethod(toolExecutionRequest.name(), String.class));
-                    System.out.println("Now let's execute the function " + toolExecutionRequest.name());
-                    String result = toolExecutor.execute(toolExecutionRequest, UUID.randomUUID().toString());
-                    ToolExecutionResultMessage toolExecutionResultMessages = ToolExecutionResultMessage.from(toolExecutionRequest, result);
-                    chatMessages.add(toolExecutionResultMessages);
-                } catch (NoSuchMethodException e) {
-                    System.out.println(toolExecutionRequest.name() + " method with String as a parameter does not exist");
-                    ;
-                }
+            toolExecutionRequests.forEach(toolExecutionRequest -> {
+                ToolExecutor toolExecutor = new DefaultToolExecutor(weatherTools, toolExecutionRequest);
+                System.out.println("Now let's execute the function " + toolExecutionRequest.name());
+                String result = toolExecutor.execute(toolExecutionRequest, UUID.randomUUID().toString());
+                ToolExecutionResultMessage toolExecutionResultMessages = ToolExecutionResultMessage.from(toolExecutionRequest, result);
+                chatMessages.add(toolExecutionResultMessages);
             });
+
 
             // STEP 4: Model generate final response
             AiMessage finalResponse = azureOpenAiModel.generate(chatMessages).content();
@@ -77,13 +82,7 @@ public class AzureOpenAiFunctionCallingExamples {
 
         @Tool("Returns the weather forecast for tomorrow for a given city")
         String getWeather(@P("The city for which the weather forecast should be returned") String city) {
-            return "The weather in " + city + " is 25°C";
-        }
-
-        @Tool("Returns the weather forecast for tomorrow for a given city index")
-        String getWeather(@P("The city index for which the weather forecast should be returned") int cityIndex) {
-            String[] city = {"New York", "Los Angeles", "Chicago", "Houston", "Phoenix", "Philadelphia", "San Antonio", "San Diego", "Dallas", "San Jose"};
-            return "The weather in " + city[cityIndex] + " is 25°C";
+            return "The weather tomorrow in " + city + " is 25°C";
         }
 
         @Tool("Returns the date for tomorrow")
@@ -99,6 +98,5 @@ public class AzureOpenAiFunctionCallingExamples {
         String iAmNotATool() {
             return "I am not a method annotated with @Tool";
         }
-
     }
 }
