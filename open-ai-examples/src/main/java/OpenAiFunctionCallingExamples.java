@@ -23,14 +23,18 @@ import java.util.UUID;
 public class OpenAiFunctionCallingExamples {
 
     /**
-     * This example demonstrates how to programmatically configure a tool.
-     * It goes through 4 different steps:
-     * 1. User specify tools (WeatherTools) and query ("What will the weather be like in London tomorrow?")
+     * This example demonstrates how to programmatically configure the low-level tool APIs, such as ToolSpecification,
+     * ToolExecutionRequest, and ToolExecutor.
+     * This sample is used in the LangChain4j tutorial: https://docs.langchain4j.dev/tutorials/tools/#low-level-tool-api.
+     * But it is recommended to use higher-level APIs as demonstrated here: https://docs.langchain4j.dev/tutorials/tools/#high-level-tool-api
+     * <p>
+     * This sample goes through 4 different steps:
+     * 1. Specify the tools (WeatherTools) and the query ("What will the weather be like in London tomorrow?")
      * 2. Model generate function arguments (model decides which tools to invoke)
      * 3. User execute function to obtain tool results (using ToolExecutor)
      * 4. Model generate final response based on the query and the tool results
      */
-    static class Weather_From_Manual_Configuration {
+    static class Weather_Low_Level_Configuration {
 
         static ChatLanguageModel openAiModel = OpenAiChatModel.builder()
                 .apiKey(System.getenv("OPENAI_API_KEY"))
@@ -40,7 +44,6 @@ public class OpenAiFunctionCallingExamples {
                 .build();
 
         public static void main(String[] args) throws Exception {
-            // This sample is used in the LangChain4j tutorial: https://docs.langchain4j.dev/tutorials/tools/#low-level-tool-api
 
             // STEP 1: User specify tools and query
             // Tools
@@ -51,7 +54,7 @@ public class OpenAiFunctionCallingExamples {
             UserMessage userMessage = userMessage("What will the weather be like in London tomorrow?");
             chatMessages.add(userMessage);
 
-            
+
             // STEP 2: Model generate function arguments
             AiMessage aiMessage = openAiModel.generate(chatMessages, toolSpecifications).content();
             List<ToolExecutionRequest> toolExecutionRequests = aiMessage.toolExecutionRequests();
@@ -62,9 +65,9 @@ public class OpenAiFunctionCallingExamples {
             });
             chatMessages.add(aiMessage);
 
-            
+
             // STEP 3: User execute function to obtain tool results
-            toolExecutionRequests.forEach(toolExecutionRequest -> { 
+            toolExecutionRequests.forEach(toolExecutionRequest -> {
                 ToolExecutor toolExecutor = new DefaultToolExecutor(weatherTools, toolExecutionRequest);
                 System.out.println("Now let's execute the function " + toolExecutionRequest.name());
                 String result = toolExecutor.execute(toolExecutionRequest, UUID.randomUUID().toString());
@@ -72,7 +75,7 @@ public class OpenAiFunctionCallingExamples {
                 chatMessages.add(toolExecutionResultMessages);
             });
 
-            
+
             // STEP 4: Model generate final response
             AiMessage finalResponse = openAiModel.generate(chatMessages).content();
             System.out.println(finalResponse.text()); //According to the payment data, the payment status of transaction T1005 is Pending.
