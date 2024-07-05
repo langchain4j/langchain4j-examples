@@ -22,9 +22,13 @@ import java.util.UUID;
 public class AzureOpenAiFunctionCallingExamples {
 
     /**
-     * This example demonstrates how to programmatically configure a tool.
-     * It goes through 4 different steps:
-     * 1. User specify tools (WeatherTools) and query ("What will the weather be like in London tomorrow?")
+     * This example demonstrates how to programmatically configure the low-level tool APIs, such as ToolSpecification,
+     * ToolExecutionRequest, and ToolExecutor.
+     * This sample is used in the LangChain4j tutorial: https://docs.langchain4j.dev/tutorials/tools/#low-level-tool-api.
+     * But it is recommended to use higher-level APIs as demonstrated here: https://docs.langchain4j.dev/tutorials/tools/#high-level-tool-api
+     * <p>
+     * This sample goes through 4 different steps:
+     * 1. Specify the tools (WeatherTools) and the query ("What will the weather be like in London tomorrow?")
      * 2. Model generate function arguments (model decides which tools to invoke)
      * 3. User execute function to obtain tool results (using ToolExecutor)
      * 4. Model generate final response based on the query and the tool results
