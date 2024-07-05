@@ -23,6 +23,7 @@ TAG="$PROJECT"
 AI_SERVICE="ai-$PROJECT"
 AZURE_OPENAI_DEPLOYMENT_NAME="gpt-35-turbo"
 AZURE_OPENAI_DALLE_DEPLOYMENT_NAME="dall-e-3"
+AZURE_OPENAI_EMBEDDING_DEPLOYMENT_NAME="text-embedding-ada-002"
 
 echo "Creating the resource group..."
 echo "------------------------------"
@@ -69,6 +70,18 @@ az cognitiveservices account deployment create \
   --sku-capacity 1 \
   --sku-name "Standard"
 
+echo "Deploying a text-embedding-ada-002 model..."
+echo "----------------------"
+az cognitiveservices account deployment create \
+  --name "$AI_SERVICE" \
+  --resource-group "$RESOURCE_GROUP" \
+  --deployment-name "$AZURE_OPENAI_EMBEDDING_DEPLOYMENT_NAME" \
+  --model-name "text-embedding-ada-002" \
+  --model-version "2"  \
+  --model-format "OpenAI" \
+  --sku-capacity 1 \
+  --sku-name "Standard"
+
 echo "Storing the key and endpoint in environment variables..."
 echo "--------------------------------------------------------"
 AZURE_OPENAI_KEY=$(
@@ -88,3 +101,4 @@ echo "AZURE_OPENAI_KEY=$AZURE_OPENAI_KEY"
 echo "AZURE_OPENAI_ENDPOINT=$AZURE_OPENAI_ENDPOINT"
 echo "AZURE_OPENAI_DEPLOYMENT_NAME=$AZURE_OPENAI_DEPLOYMENT_NAME"
 echo "AZURE_OPENAI_DALLE_DEPLOYMENT_NAME=$AZURE_OPENAI_DALLE_DEPLOYMENT_NAME"
+echo "AZURE_OPENAI_EMBEDDING_DEPLOYMENT_NAME=$AZURE_OPENAI_EMBEDDING_DEPLOYMENT_NAME"
