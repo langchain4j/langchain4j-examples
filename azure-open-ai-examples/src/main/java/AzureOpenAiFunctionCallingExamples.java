@@ -24,7 +24,6 @@ public class AzureOpenAiFunctionCallingExamples {
     /**
      * This example demonstrates how to programmatically configure the low-level tool APIs, such as ToolSpecification,
      * ToolExecutionRequest, and ToolExecutor.
-     * This sample is used in the LangChain4j tutorial: https://docs.langchain4j.dev/tutorials/tools/#low-level-tool-api.
      * But it is recommended to use higher-level APIs as demonstrated here: https://docs.langchain4j.dev/tutorials/tools/#high-level-tool-api
      * <p>
      * This sample goes through 4 different steps:
