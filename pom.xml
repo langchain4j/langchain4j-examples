@@ -11,6 +11,7 @@
 
     <modules>
         <module>anthropic-examples</module>
+        <module>azure-open-ai-customer-support-agent-example</module>
         <module>azure-open-ai-examples</module>
         <module>bedrock-examples</module>
         <module>chroma-example</module>
