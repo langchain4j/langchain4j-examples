@@ -15,11 +15,11 @@ import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class OvhAiEmbeddingExample {
+public class OvhAiEmbeddingRAGExample {
 
     public static void main(String[] args) throws Exception {
         Document document = loadDocument(
-            Paths.get(OvhAiEmbeddingExample.class.getResource("story-about-happy-carrot.txt").toURI()),
+            Paths.get(OvhAiEmbeddingRAGExample.class.getResource("story-about-happy-carrot.txt").toURI()),
             new TextDocumentParser()
         );
 
