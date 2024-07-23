@@ -2,7 +2,7 @@ package embedding.classification;
 
 import dev.langchain4j.classification.EmbeddingModelTextClassifier;
 import dev.langchain4j.classification.TextClassifier;
-import dev.langchain4j.model.embedding.AllMiniLmL6V2EmbeddingModel;
+import dev.langchain4j.model.embedding.onnx.allminilml6v2.AllMiniLmL6V2EmbeddingModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 
 import java.util.HashMap;
