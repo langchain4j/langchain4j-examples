@@ -40,6 +40,8 @@
         <module>weaviate-example</module>
         <module>javafx-example</module>
         <module>quarkus-example</module>
+        <module>astradb-examples</module>
+        <module>cassandra-examples</module>
     </modules>
 
 </project>
