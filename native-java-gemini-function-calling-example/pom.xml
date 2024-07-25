@@ -18,7 +18,7 @@
 
 	<properties>
 		<java.version>21</java.version>
-		<langchain4j.version>0.32.0</langchain4j.version>
+		<langchain4j.version>0.33.0</langchain4j.version>
 	</properties>
 
 	<dependencyManagement>
