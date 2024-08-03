@@ -72,7 +72,7 @@ public class ChromaEmbeddingStoreWithMetadataExample {
             System.out.println(embeddingMatch2.score());
             System.out.println(embeddingMatch2.embedded().text());
 
-            embeddingStore.removeAll();
+            chroma.stop();
         }
     }
 }

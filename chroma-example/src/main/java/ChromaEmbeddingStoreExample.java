@@ -41,7 +41,7 @@ public class ChromaEmbeddingStoreExample {
             System.out.println(embeddingMatch.score()); // 0.8144288493114709
             System.out.println(embeddingMatch.embedded().text()); // I like football.
 
-            embeddingStore.removeAll();
+            chroma.stop();
         }
     }
 }
