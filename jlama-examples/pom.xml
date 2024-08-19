@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>dev.langchain4j</groupId>
+    <artifactId>jlama-examples</artifactId>
+    <version>0.33.0</version>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-jlama</artifactId>
+            <version>0.33.0</version>
+        </dependency>
+
+        <!-- Add native jlama bindings -->
+        <dependency>
+            <groupId>com.github.tjake</groupId>
+            <artifactId>jlama-native</artifactId>
+            <classifier>${os.detected.classifier}</classifier>
+            <version>0.2.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j</artifactId>
+            <version>0.33.0</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <extensions>
+            <extension>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>1.7.0</version>
+            </extension>
+        </extensions>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <executable>${java.home}/bin/java</executable>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>rag</id>
+                        <configuration>
+                            <arguments>
+                                <argument>-classpath</argument>
+                                <classpath/>
+                                <argument>--add-modules=jdk.incubator.vector</argument>
+                                <argument>--enable-native-access=ALL-UNNAMED</argument>
+                                <argument>--enable-preview</argument>
+                                <argument>JlamaBasicRagEmbedExamples$Chat_Story_From_My_Document</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>stream</id>
+                        <configuration>
+                            <arguments>
+                                <argument>-classpath</argument>
+                                <classpath/>
+                                <argument>--add-modules=jdk.incubator.vector</argument>
+                                <argument>--enable-native-access=ALL-UNNAMED</argument>
+                                <argument>--enable-preview</argument>
+                                <argument>JlamaStreamingChatModelExamples$Simple_Streaming_Prompt</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>chat</id>
+                        <configuration>
+                            <arguments>
+                                <argument>-classpath</argument>
+                                <classpath/>
+                                <argument>--add-modules=jdk.incubator.vector</argument>
+                                <argument>--enable-native-access=ALL-UNNAMED</argument>
+                                <argument>--enable-preview</argument>
+                                <argument>JlamaChatModelExamples$Simple_Prompt</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

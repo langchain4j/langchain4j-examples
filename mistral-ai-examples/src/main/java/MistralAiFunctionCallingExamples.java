@@ -9,6 +9,8 @@ import dev.langchain4j.model.mistralai.MistralAiChatModelName;
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.data.message.UserMessage;
+import dev.langchain4j.service.tool.DefaultToolExecutor;
+import dev.langchain4j.service.tool.ToolExecutor;
 
 import java.util.*;
 

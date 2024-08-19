@@ -16,6 +16,10 @@ import static org.mapdb.Serializer.STRING;
 
 public class ServiceWithPersistentMemoryExample {
 
+    /**
+     * See also {@link ServiceWithMemoryExample} and {@link ServiceWithPersistentMemoryForEachUserExample}.
+     */
+
     interface Assistant {
 
         String chat(String message);

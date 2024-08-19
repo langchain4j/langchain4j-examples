@@ -1,6 +1,7 @@
+/**
+ * 1. See examples in "rag-examples" module.
+ * 2. See CustomerSupportAgentApplication and CustomerSupportAgentApplicationTest
+ * from "customer-support-agent-example" module.
+ */
 public class ServiceWithRetrieverExample {
-
-    // Please check:
-    // 1. examples from "rag-examples" module
-    // 2. CustomerSupportApplication and CustomerSupportApplicationTest from "spring-boot-example" module
 }

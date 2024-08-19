@@ -1,14 +1,5 @@
-import dev.langchain4j.chain.ConversationalRetrievalChain;
-import dev.langchain4j.data.document.Document;
-import dev.langchain4j.data.document.parser.TextDocumentParser;
-import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.data.image.Image;
-import dev.langchain4j.data.segment.TextSegment;
-import dev.langchain4j.model.embedding.AllMiniLmL6V2EmbeddingModel;
-import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.image.ImageModel;
-import dev.langchain4j.model.input.PromptTemplate;
-import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.openai.OpenAiImageModel;
 import dev.langchain4j.model.output.Response;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
@@ -83,13 +74,10 @@ public class OpenAiImageModelExamples {
                     "Draw {{object}}. Base the picture on following information:\n\n{{information}}"
             );
 
-            Map<String, Object> variables = new HashMap<>();
-            variables.put("information", chain.execute("Who is Charlie?"));
-            variables.put("object", "Ultra realistic Charlie on the party, cinematic lighting");
+            ImageModel model = OpenAiImageModel.withApiKey(System.getenv("OPENAI_API_KEY"));
 
-            Response<Image> response = model.generate(drawPromptTemplate.apply(variables).text());
+            Response<Image> response = model.generate("Donald Duck in New York, cartoon style");
 
-            System.out.println(response.content().url()); // Enjoy your locally stored picture of Charlie on the party :)
-        }
+            System.out.println(response.content().url()); // Donald Duck is here :)
     }
 }
