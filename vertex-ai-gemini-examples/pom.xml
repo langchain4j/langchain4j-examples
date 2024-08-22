@@ -6,7 +6,7 @@
 
     <groupId>dev.langchain4j</groupId>
     <artifactId>vertex-ai-gemini-examples</artifactId>
-    <version>0.30.0</version>
+    <version>0.33.0</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -19,13 +19,13 @@
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-vertex-ai-gemini</artifactId>
-            <version>0.30.0</version>
+            <version>0.33.0</version>
         </dependency>
 
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j</artifactId>
-            <version>0.30.0</version>
+            <version>0.33.0</version>
         </dependency>
 
         <dependency>

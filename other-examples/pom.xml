@@ -6,7 +6,7 @@
 
     <groupId>dev.langchain4j</groupId>
     <artifactId>other-examples</artifactId>
-    <version>0.30.0</version>
+    <version>0.33.0</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -19,43 +19,49 @@
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j</artifactId>
-            <version>0.30.0</version>
+            <version>0.33.0</version>
         </dependency>
 
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-open-ai</artifactId>
-            <version>0.30.0</version>
+            <version>0.33.0</version>
         </dependency>
 
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-hugging-face</artifactId>
-            <version>0.30.0</version>
+            <version>0.33.0</version>
         </dependency>
 
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-vertex-ai</artifactId>
-            <version>0.30.0</version>
+            <version>0.33.0</version>
         </dependency>
 
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-embeddings</artifactId>
-            <version>0.30.0</version>
+            <version>0.33.0</version>
         </dependency>
 
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-embeddings-all-minilm-l6-v2</artifactId>
-            <version>0.30.0</version>
+            <version>0.33.0</version>
         </dependency>
 
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-document-parser-apache-tika</artifactId>
-            <version>0.30.0</version>
+            <version>0.33.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-code-execution-engine-judge0</artifactId>
+            <version>0.33.0</version>
         </dependency>
 
         <dependency>

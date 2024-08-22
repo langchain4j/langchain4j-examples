@@ -6,6 +6,10 @@ import dev.langchain4j.service.UserMessage;
 
 public class ServiceWithMemoryForEachUserExample {
 
+    /**
+     * See also {@link ServiceWithPersistentMemoryForEachUserExample}.
+     */
+
     interface Assistant {
 
         String chat(@MemoryId int memoryId, @UserMessage String userMessage);

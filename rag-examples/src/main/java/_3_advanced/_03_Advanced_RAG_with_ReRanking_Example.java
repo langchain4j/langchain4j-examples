@@ -8,7 +8,7 @@ import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.cohere.CohereScoringModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
-import dev.langchain4j.model.embedding.bge.small.en.v15.BgeSmallEnV15QuantizedEmbeddingModel;
+import dev.langchain4j.model.embedding.onnx.bgesmallenv15q.BgeSmallEnV15QuantizedEmbeddingModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.scoring.ScoringModel;
 import dev.langchain4j.rag.DefaultRetrievalAugmentor;
@@ -43,6 +43,8 @@ public class _03_Advanced_RAG_with_ReRanking_Example {
      * Providing irrelevant information to the LLM can be costly and, in the worst case, lead to hallucinations.
      * Therefore, in the second stage, we can perform re-ranking of the results obtained in the first stage
      * and eliminate irrelevant results using a more advanced model (e.g., Cohere Rerank).
+     * <p>
+     * This example requires "langchain4j-cohere" dependency.
      */
 
     public static void main(String[] args) {

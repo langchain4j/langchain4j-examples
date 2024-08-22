@@ -62,7 +62,7 @@ Navigate to the the [OpenAPI UI](http://localhost:9080/openapi/ui) URL for the f
       curl 'http://localhost:9080/api/model/language?question=When%20was%20langchain4j%20launched%3F'
       ```
 - [HuggingFaceChatModel](https://github.com/langchain4j/langchain4j/blob/main/langchain4j-hugging-face/src/main/java/dev/langchain4j/model/huggingface/HuggingFaceChatModel.java)
-  - expand the GET `/api/model/language` API
+  - expand the GET `/api/model/chat` API
     1. Click the **Try it out** button.
     2. Type `Which are the most used Large Language Models?`, or any question, in the question field.
     3. Click the **Execute** button.

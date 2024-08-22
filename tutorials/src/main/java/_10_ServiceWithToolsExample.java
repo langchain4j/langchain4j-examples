@@ -38,7 +38,7 @@ public class _10_ServiceWithToolsExample {
     public static void main(String[] args) {
 
         ChatLanguageModel model = OpenAiChatModel.builder()
-                .apiKey(ApiKeys.OPENAI_API_KEY)
+                .apiKey(ApiKeys.OPENAI_API_KEY) // WARNING! Tools are not supported with "demo" API key
                 .logRequests(false)
                 .build();
 

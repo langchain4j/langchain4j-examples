@@ -15,7 +15,7 @@
 
         <!-- DEPENDENCIES VERSIONS -->
         <javafx.version>21.0.1</javafx.version>
-        <langchain4j.version>0.30.0</langchain4j.version>
+        <langchain4j.version>0.33.0</langchain4j.version>
         <log4j.version>2.22.1</log4j.version>
 
         <!-- BUILD PLUGIN VERSIONS -->

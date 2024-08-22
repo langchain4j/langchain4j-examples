@@ -6,23 +6,28 @@
 
     <groupId>dev.langchain4j</groupId>
     <artifactId>langchain4j-examples</artifactId>
-    <version>0.30.0</version>
+    <version>0.33.0</version>
     <packaging>pom</packaging>
 
     <modules>
         <module>anthropic-examples</module>
+        <module>azure-open-ai-customer-support-agent-example</module>
         <module>azure-open-ai-examples</module>
+        <module>bedrock-examples</module>
         <module>chroma-example</module>
         <module>customer-support-agent-example</module>
         <module>tutorials</module>
         <module>elasticsearch-example</module>
         <module>infinispan-example</module>
+        <module>jakartaee-microprofile-example</module>
+        <module>jlama-examples</module>
         <module>milvus-example</module>
         <module>mistral-ai-examples</module>
         <module>neo4j-example</module>
         <module>ollama-examples</module>
         <module>open-ai-examples</module>
         <module>opensearch-example</module>
+        <module>ovh-ai-examples</module>
         <module>other-examples</module>
         <module>pinecone-example</module>
         <module>pgvector-example</module>
