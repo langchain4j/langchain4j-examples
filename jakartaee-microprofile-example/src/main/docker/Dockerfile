@@ -2,6 +2,8 @@
 # open liberty base image
 FROM icr.io/appcafe/open-liberty:23.0.0.12-kernel-slim-java17-openj9-ubi
 
+ENV HUGGING_FACE_API_KEY=${param.hugging.face.api.key}
+
 # Add config
 COPY --chown=1001:0 liberty/wlp/usr/servers/defaultServer/server.xml /config/server.xml
 
