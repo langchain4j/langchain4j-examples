@@ -11,16 +11,16 @@ public class JlamaChatModelExamples {
 
             ChatLanguageModel model = JlamaChatModel.builder()
                     .modelName("tjake/TinyLlama-1.1B-Chat-v1.0-Jlama-Q4")
-                    .temperature(0.0f) //Force same output every run
+                    .temperature(0.3f)
                     .build();
 
-            String joke = model.generate(
-                            SystemMessage.from("You are a comedian"),
-                            UserMessage.from("Tell me a quick joke about Java"))
+            String response = model.generate(
+                            SystemMessage.from("You are helpful chatbot who is a java expert."),
+                            UserMessage.from("Write a java program to print hello world."))
                     .content()
                     .text();
 
-            System.out.println("\n" + joke + "\n");
+            System.out.println("\n" + response + "\n");
         }
     }
 }
