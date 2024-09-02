@@ -31,10 +31,10 @@ public class OracleEmbeddingStoreExample {
                     .withUsername("testuser")
                     .withPassword("testpwd");
             oracleContainer.start();
-
             dataSource.setURL(oracleContainer.getJdbcUrl());
             dataSource.setUser(oracleContainer.getUsername());
             dataSource.setPassword(oracleContainer.getPassword());
+
         } else {
             dataSource.setURL(urlFromEnv);
             dataSource.setUser(System.getenv("ORACLE_JDBC_USER"));
