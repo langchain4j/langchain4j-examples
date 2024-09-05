@@ -12,6 +12,8 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <logback.version>1.5.6</logback.version>
+        <jlama.version>0.3.1</jlama.version>
     </properties>
 
     <dependencies>
@@ -27,7 +29,7 @@
             <groupId>com.github.tjake</groupId>
             <artifactId>jlama-native</artifactId>
             <classifier>${os.detected.classifier}</classifier>
-            <version>0.2.1</version>
+            <version>${jlama.version}</version>
         </dependency>
 
         <dependency>
@@ -36,6 +38,16 @@
             <version>0.34.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -56,6 +68,18 @@
                 </configuration>
                 <executions>
                     <execution>
+                        <id>functions</id>
+                        <configuration>
+                            <arguments>
+                                <argument>-classpath</argument>
+                                <classpath/>
+                                <argument>--add-modules=jdk.incubator.vector</argument>
+                                <argument>--enable-native-access=ALL-UNNAMED</argument>
+                                <argument>JlamaAiFunctionCallingExamples$Payment_Data_From_AiServices</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>rag</id>
                         <configuration>
                             <arguments>
@@ -63,7 +87,6 @@
                                 <classpath/>
                                 <argument>--add-modules=jdk.incubator.vector</argument>
                                 <argument>--enable-native-access=ALL-UNNAMED</argument>
-                                <argument>--enable-preview</argument>
                                 <argument>JlamaBasicRagEmbedExamples$Chat_Story_From_My_Document</argument>
                             </arguments>
                         </configuration>
