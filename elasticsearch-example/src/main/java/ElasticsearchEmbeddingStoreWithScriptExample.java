@@ -1,11 +1,12 @@
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
-import dev.langchain4j.model.embedding.onnx.allminilml6v2.AllMiniLmL6V2EmbeddingModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
+import dev.langchain4j.model.embedding.onnx.allminilml6v2.AllMiniLmL6V2EmbeddingModel;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
 import dev.langchain4j.store.embedding.EmbeddingSearchRequest;
 import dev.langchain4j.store.embedding.EmbeddingSearchResult;
 import dev.langchain4j.store.embedding.EmbeddingStore;
+import dev.langchain4j.store.embedding.elasticsearch.ElasticsearchConfigurationScript;
 import dev.langchain4j.store.embedding.elasticsearch.ElasticsearchEmbeddingStore;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -18,7 +19,7 @@ import org.testcontainers.elasticsearch.ElasticsearchContainer;
 
 import java.io.IOException;
 
-public class ElasticsearchEmbeddingStoreExample {
+public class ElasticsearchEmbeddingStoreWithScriptExample {
 
     public static void main(String[] args) throws IOException {
 
@@ -41,6 +42,7 @@ public class ElasticsearchEmbeddingStoreExample {
 
             EmbeddingStore<TextSegment> embeddingStore = ElasticsearchEmbeddingStore.builder()
                     .restClient(client)
+                    .configuration(ElasticsearchConfigurationScript.builder().build())
                     .build();
 
             EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
@@ -63,7 +65,7 @@ public class ElasticsearchEmbeddingStoreExample {
                             .build());
             EmbeddingMatch<TextSegment> embeddingMatch = relevant.matches().get(0);
 
-            System.out.println(embeddingMatch.score()); // 0.8138435
+            System.out.println(embeddingMatch.score()); // 0.81442887
             System.out.println(embeddingMatch.embedded().text()); // I like football.
 
             client.close();
