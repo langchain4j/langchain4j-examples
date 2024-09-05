@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 import static java.util.stream.Collectors.joining;
 import static shared.Utils.OPENAI_API_KEY;
 import static shared.Utils.toPath;
@@ -46,7 +47,7 @@ public class _01_Low_Level_Naive_RAG_Example {
         DocumentSplitter splitter = DocumentSplitters.recursive(
                 300,
                 0,
-                new OpenAiTokenizer("gpt-3.5-turbo")
+                new OpenAiTokenizer(GPT_4_O_MINI)
         );
         List<TextSegment> segments = splitter.split(document);
 
@@ -94,6 +95,7 @@ public class _01_Low_Level_Naive_RAG_Example {
         // Send the prompt to the OpenAI chat model
         ChatLanguageModel chatModel = OpenAiChatModel.builder()
                 .apiKey(OPENAI_API_KEY)
+                .modelName(GPT_4_O_MINI)
                 .timeout(Duration.ofSeconds(60))
                 .build();
         AiMessage aiMessage = chatModel.generate(prompt.toUserMessage()).content();

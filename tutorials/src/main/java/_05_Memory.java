@@ -13,14 +13,18 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import static dev.langchain4j.data.message.UserMessage.userMessage;
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 
 public class _05_Memory {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
 
-        OpenAiStreamingChatModel model = OpenAiStreamingChatModel.withApiKey(ApiKeys.OPENAI_API_KEY);
+        OpenAiStreamingChatModel model = OpenAiStreamingChatModel.builder()
+                .apiKey(ApiKeys.OPENAI_API_KEY)
+                .modelName(GPT_4_O_MINI)
+                .build();
 
-        Tokenizer tokenizer = new OpenAiTokenizer("gpt-3.5-turbo");
+        Tokenizer tokenizer = new OpenAiTokenizer(GPT_4_O_MINI);
         ChatMemory chatMemory = TokenWindowChatMemory.withMaxTokens(1000, tokenizer);
 
         SystemMessage systemMessage = SystemMessage.from(
