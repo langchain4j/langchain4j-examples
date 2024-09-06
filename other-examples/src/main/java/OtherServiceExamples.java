@@ -12,6 +12,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.function.Function;
 
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_3_5_TURBO;
 import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 import static java.util.Arrays.asList;
 
@@ -19,7 +20,7 @@ public class OtherServiceExamples {
 
     static ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder()
             .apiKey(ApiKeys.OPENAI_API_KEY)
-            .modelName(GPT_4_O_MINI)
+            .modelName(GPT_3_5_TURBO)
             .logRequests(true)
             .logResponses(true)
             .build();

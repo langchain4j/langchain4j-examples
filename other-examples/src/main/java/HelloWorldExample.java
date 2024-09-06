@@ -1,7 +1,7 @@
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_3_5_TURBO;
 
 public class HelloWorldExample {
 
@@ -10,7 +10,7 @@ public class HelloWorldExample {
         // Create an instance of a model
         ChatLanguageModel model = OpenAiChatModel.builder()
                 .apiKey(ApiKeys.OPENAI_API_KEY)
-                .modelName(GPT_4_O_MINI)
+                .modelName(GPT_3_5_TURBO)
                 .build();
 
         // Start interacting

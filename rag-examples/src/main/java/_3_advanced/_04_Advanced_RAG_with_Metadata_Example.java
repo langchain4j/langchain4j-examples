@@ -25,7 +25,6 @@ import shared.Assistant;
 
 import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
 import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_3_5_TURBO;
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 import static java.util.Arrays.asList;
 import static shared.Utils.*;
 

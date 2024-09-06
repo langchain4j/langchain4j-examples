@@ -13,7 +13,7 @@ import java.util.Map;
 
 import static dev.langchain4j.data.message.ChatMessageDeserializer.messagesFromJson;
 import static dev.langchain4j.data.message.ChatMessageSerializer.messagesToJson;
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_3_5_TURBO;
 import static org.mapdb.Serializer.STRING;
 
 public class ServiceWithPersistentMemoryExample {
@@ -36,7 +36,7 @@ public class ServiceWithPersistentMemoryExample {
 
         ChatLanguageModel model = OpenAiChatModel.builder()
                 .apiKey(ApiKeys.OPENAI_API_KEY)
-                .modelName(GPT_4_O_MINI)
+                .modelName(GPT_3_5_TURBO)
                 .build();
 
         Assistant assistant = AiServices.builder(Assistant.class)

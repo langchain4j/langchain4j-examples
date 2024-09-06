@@ -5,7 +5,7 @@ import dev.langchain4j.service.AiServices;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_3_5_TURBO;
 
 public class AnswerService {
 
@@ -21,7 +21,7 @@ public class AnswerService {
     private void initChat(SearchAction action) {
         StreamingChatLanguageModel model = OpenAiStreamingChatModel.builder()
                 .apiKey(ApiKeys.OPENAI_API_KEY)
-                .modelName(GPT_4_O_MINI)
+                .modelName(GPT_3_5_TURBO)
                 .build();
 
         assistant = AiServices.builder(Assistant.class)

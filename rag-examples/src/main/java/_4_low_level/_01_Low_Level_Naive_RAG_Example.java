@@ -26,7 +26,6 @@ import java.util.Map;
 
 import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
 import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_3_5_TURBO;
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 import static java.util.stream.Collectors.joining;
 import static shared.Utils.OPENAI_API_KEY;
 import static shared.Utils.toPath;
@@ -48,7 +47,7 @@ public class _01_Low_Level_Naive_RAG_Example {
         DocumentSplitter splitter = DocumentSplitters.recursive(
                 300,
                 0,
-                new OpenAiTokenizer(GPT_4_O_MINI)
+                new OpenAiTokenizer()
         );
         List<TextSegment> segments = splitter.split(document);
 

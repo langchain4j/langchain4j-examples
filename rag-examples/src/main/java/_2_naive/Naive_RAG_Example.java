@@ -24,7 +24,6 @@ import java.util.List;
 
 import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
 import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_3_5_TURBO;
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 import static shared.Utils.*;
 
 public class Naive_RAG_Example {

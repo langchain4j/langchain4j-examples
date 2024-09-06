@@ -18,7 +18,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_3_5_TURBO;
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 import static shared.Utils.*;
 
 public class _10_Advanced_RAG_SQL_Database_Retreiver_Example {
