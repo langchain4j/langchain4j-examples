@@ -5,6 +5,8 @@ import dev.langchain4j.model.chat.listener.ChatModelRequestContext;
 import dev.langchain4j.model.chat.listener.ChatModelResponseContext;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_3_5_TURBO;
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 import static java.util.Collections.singletonList;
 
 public class OpenAiObservabilityExamples {
@@ -33,6 +35,7 @@ public class OpenAiObservabilityExamples {
 
             ChatLanguageModel model = OpenAiChatModel.builder()
                     .apiKey("demo")
+                    .modelName(GPT_3_5_TURBO)
                     .listeners(singletonList(modelListener))
                     .build();
 

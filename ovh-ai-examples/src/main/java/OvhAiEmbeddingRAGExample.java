@@ -26,7 +26,9 @@ public class OvhAiEmbeddingRAGExample {
         DocumentSplitter splitter = DocumentSplitters.recursive(200, 0);
         List<TextSegment> segments = splitter.split(document);
 
-        EmbeddingModel embeddingModel = OvhAiEmbeddingModel.withApiKey(System.getenv("OVH_AI_API_KEY"));
+        EmbeddingModel embeddingModel = OvhAiEmbeddingModel.builder()
+                .apiKey(System.getenv("OVH_AI_API_KEY"))
+                .build();
 
         EmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
         for (TextSegment segment : segments) {

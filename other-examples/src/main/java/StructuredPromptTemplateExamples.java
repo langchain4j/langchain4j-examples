@@ -7,6 +7,7 @@ import dev.langchain4j.model.openai.OpenAiChatModel;
 
 import java.util.List;
 
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 import static java.time.Duration.ofSeconds;
 import static java.util.Arrays.asList;
 
@@ -14,6 +15,7 @@ public class StructuredPromptTemplateExamples {
 
     static ChatLanguageModel model = OpenAiChatModel.builder()
             .apiKey(ApiKeys.OPENAI_API_KEY)
+            .modelName(GPT_4_O_MINI)
             .timeout(ofSeconds(60))
             .build();
 

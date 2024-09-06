@@ -17,8 +17,12 @@ import static java.util.Arrays.asList;
 
 public class OtherServiceExamples {
 
-    static ChatLanguageModel chatLanguageModel = OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY);
-
+    static ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder()
+            .apiKey(ApiKeys.OPENAI_API_KEY)
+            .modelName(GPT_4_O_MINI)
+            .logRequests(true)
+            .logResponses(true)
+            .build();
 
     static class Sentiment_Extracting_AI_Service_Example {
 
@@ -136,7 +140,8 @@ public class OtherServiceExamples {
 
         static class Person {
 
-            @Description("first name of a person") // you can add an optional description to help an LLM have a better understanding
+            @Description("first name of a person")
+            // you can add an optional description to help an LLM have a better understanding
             private String firstName;
             private String lastName;
             private LocalDate birthDate;

@@ -1,4 +1,5 @@
 import dev.langchain4j.model.azure.AzureOpenAiChatModel;
+import dev.langchain4j.model.chat.ChatLanguageModel;
 
 public class AzureOpenAiChatModelExamples {
 

@@ -21,6 +21,7 @@ public class _08_AIServiceExamples {
 
     static ChatLanguageModel model = OpenAiChatModel.builder()
             .apiKey(ApiKeys.OPENAI_API_KEY)
+            .modelName(GPT_4_O_MINI)
             .timeout(ofSeconds(60))
             .build();
 

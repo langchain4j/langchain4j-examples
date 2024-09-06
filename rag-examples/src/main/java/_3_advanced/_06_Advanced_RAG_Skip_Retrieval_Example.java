@@ -32,6 +32,8 @@ import java.util.Collection;
 import java.util.List;
 
 import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_3_5_TURBO;
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static shared.Utils.*;
@@ -88,6 +90,7 @@ public class _06_Advanced_RAG_Skip_Retrieval_Example {
 
         ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder()
                 .apiKey(OPENAI_API_KEY)
+                .modelName(GPT_3_5_TURBO)
                 .build();
 
         // Let's create a query router.

@@ -1,8 +1,12 @@
+import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.openai.OpenAiModerationModel;
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.service.Moderate;
 import dev.langchain4j.service.ModerationException;
+
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_3_5_TURBO;
+import static dev.langchain4j.model.openai.OpenAiModerationModelName.TEXT_MODERATION_LATEST;
 
 public class ServiceWithAutoModerationExample {
 
@@ -14,10 +18,18 @@ public class ServiceWithAutoModerationExample {
 
     public static void main(String[] args) {
 
-        OpenAiModerationModel moderationModel = OpenAiModerationModel.withApiKey(ApiKeys.OPENAI_API_KEY);
+        OpenAiModerationModel moderationModel = OpenAiModerationModel.builder()
+                .apiKey(ApiKeys.OPENAI_API_KEY)
+                .modelName(TEXT_MODERATION_LATEST)
+                .build();
+
+        ChatLanguageModel chatModel = OpenAiChatModel.builder()
+                .apiKey(ApiKeys.OPENAI_API_KEY)
+                .modelName(GPT_3_5_TURBO)
+                .build();
 
         Chat chat = AiServices.builder(Chat.class)
-                .chatLanguageModel(OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY))
+                .chatLanguageModel(chatModel)
                 .moderationModel(moderationModel)
                 .build();
 

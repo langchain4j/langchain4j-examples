@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 import static java.time.Duration.ofSeconds;
 import static java.util.Arrays.asList;
 
@@ -20,6 +21,7 @@ public class _03_PromptTemplate {
 
             ChatLanguageModel model = OpenAiChatModel.builder()
                     .apiKey(ApiKeys.OPENAI_API_KEY)
+                    .modelName(GPT_4_O_MINI)
                     .timeout(ofSeconds(60))
                     .build();
 
@@ -71,6 +73,7 @@ public class _03_PromptTemplate {
 
             ChatLanguageModel model = OpenAiChatModel.builder()
                     .apiKey(ApiKeys.OPENAI_API_KEY)
+                    .modelName(GPT_4_O_MINI)
                     .timeout(ofSeconds(60))
                     .build();
 

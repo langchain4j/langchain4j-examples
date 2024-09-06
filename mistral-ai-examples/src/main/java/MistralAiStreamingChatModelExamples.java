@@ -5,6 +5,8 @@ import dev.langchain4j.model.output.Response;
 
 import java.util.concurrent.CompletableFuture;
 
+import static dev.langchain4j.model.mistralai.MistralAiChatModelName.MISTRAL_SMALL_LATEST;
+
 public class MistralAiStreamingChatModelExamples {
 
     static class Simple_Streaming_Prompt {
@@ -13,6 +15,7 @@ public class MistralAiStreamingChatModelExamples {
 
             MistralAiStreamingChatModel model = MistralAiStreamingChatModel.builder()
                     .apiKey(System.getenv("MISTRAL_AI_API_KEY")) // Please use your own Mistral AI API key
+                    .modelName(MISTRAL_SMALL_LATEST)
                     .logRequests(true)
                     .logResponses(true)
                     .build();

@@ -23,6 +23,7 @@ import shared.Utils;
 import java.util.function.Function;
 
 import static dev.langchain4j.data.document.Metadata.metadata;
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 import static dev.langchain4j.store.embedding.filter.MetadataFilterBuilder.metadataKey;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -35,6 +36,7 @@ class _05_Advanced_RAG_with_Metadata_Filtering_Examples {
 
     ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder()
             .apiKey(Utils.OPENAI_API_KEY)
+            .modelName(GPT_4_O_MINI)
             .build();
 
     EmbeddingModel embeddingModel = new BgeSmallEnV15QuantizedEmbeddingModel();
