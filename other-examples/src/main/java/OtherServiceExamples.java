@@ -136,6 +136,7 @@ public class OtherServiceExamples {
 
         static class Person {
 
+            @Description("first name of a person") // you can add an optional description to help an LLM have a better understanding
             private String firstName;
             private String lastName;
             private LocalDate birthDate;
@@ -166,8 +167,8 @@ public class OtherServiceExamples {
                     // it is advisable to enable it (json mode) to get more reliable results.
                     // When using this feature, LLM will be forced to output a valid JSON.
                     // Please note that this feature is not (yet) supported when using "demo" key.
-                    .responseFormat("json_schema")
-                    .strictJsonSchema(true) // https://docs.langchain4j.dev/integrations/language-models/open-ai#structured-outputs-for-json-mode
+//                    .responseFormat("json_schema")
+//                    .strictJsonSchema(true) // https://docs.langchain4j.dev/integrations/language-models/open-ai#structured-outputs-for-json-mode
                     .logRequests(true)
                     .logResponses(true)
                     .build();

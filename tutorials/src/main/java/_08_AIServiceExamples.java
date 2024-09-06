@@ -266,6 +266,7 @@ public class _08_AIServiceExamples {
 
         static class Person {
 
+            @Description("first name of a person") // you can add an optional description to help an LLM have a better understanding
             private String firstName;
             private String lastName;
             private LocalDate birthDate;
