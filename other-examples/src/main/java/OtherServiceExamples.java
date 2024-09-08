@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
-/import static java.util.Arrays.asList;
+import static java.util.Arrays.asList;
 
 public class OtherServiceExamples {
 
