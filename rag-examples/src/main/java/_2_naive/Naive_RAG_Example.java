@@ -23,7 +23,7 @@ import shared.Assistant;
 import java.util.List;
 
 import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_3_5_TURBO;
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 import static shared.Utils.*;
 
 public class Naive_RAG_Example {
@@ -61,7 +61,7 @@ public class Naive_RAG_Example {
         // Langchain4j currently supports more than 10 popular LLM providers.
         ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder()
                 .apiKey(OPENAI_API_KEY)
-                .modelName(GPT_3_5_TURBO)
+                .modelName(GPT_4_O_MINI)
                 .build();
 
 

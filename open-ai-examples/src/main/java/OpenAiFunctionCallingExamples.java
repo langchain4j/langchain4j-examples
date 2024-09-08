@@ -34,7 +34,7 @@ public class OpenAiFunctionCallingExamples {
     static class Weather_Low_Level_Configuration {
 
         static ChatLanguageModel openAiModel = OpenAiChatModel.builder()
-                .apiKey(System.getenv("OPENAI_API_KEY"))
+                .apiKey(ApiKeys.OPENAI_API_KEY)
                 .modelName(GPT_4_O)
                 .strictTools(true) // https://docs.langchain4j.dev/integrations/language-models/open-ai#structured-outputs-for-tools
                 .logRequests(true)

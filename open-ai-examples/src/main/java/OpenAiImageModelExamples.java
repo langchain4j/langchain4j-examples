@@ -10,7 +10,7 @@ public class OpenAiImageModelExamples {
     public static void main(String[] args) {
 
         ImageModel model = OpenAiImageModel.builder()
-                .apiKey(System.getenv("OPENAI_API_KEY"))
+                .apiKey(ApiKeys.OPENAI_API_KEY)
                 .modelName(DALL_E_3)
                 .build();
 

@@ -28,7 +28,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_3_5_TURBO;
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 import static shared.Utils.*;
 
 public class _07_Advanced_RAG_Multiple_Retrievers_Example {
@@ -82,7 +82,7 @@ public class _07_Advanced_RAG_Multiple_Retrievers_Example {
 
         ChatLanguageModel model = OpenAiChatModel.builder()
                 .apiKey(OPENAI_API_KEY)
-                .modelName(GPT_3_5_TURBO)
+                .modelName(GPT_4_O_MINI)
                 .build();
 
         return AiServices.builder(Assistant.class)

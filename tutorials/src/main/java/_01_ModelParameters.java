@@ -1,7 +1,7 @@
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_3_5_TURBO;
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 import static java.time.Duration.ofSeconds;
 
 public class _01_ModelParameters {
@@ -12,7 +12,7 @@ public class _01_ModelParameters {
 
         ChatLanguageModel model = OpenAiChatModel.builder()
                 .apiKey(ApiKeys.OPENAI_API_KEY)
-                .modelName(GPT_3_5_TURBO)
+                .modelName(GPT_4_O_MINI)
                 .temperature(0.3)
                 .timeout(ofSeconds(60))
                 .logRequests(true)

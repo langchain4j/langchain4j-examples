@@ -297,12 +297,9 @@ public class _08_AIServiceExamples {
                     // (e.g., OpenAI, Azure OpenAI, Vertex AI Gemini, Ollama, etc.),
                     // it is advisable to enable it (json mode) to get more reliable results.
                     // When using this feature, LLM will be forced to output a valid JSON.
-                    // Please note that this feature is not (yet) supported when using "demo" key.
                     .responseFormat("json_schema")
                     .strictJsonSchema(true) // https://docs.langchain4j.dev/integrations/language-models/open-ai#structured-outputs-for-json-mode
                     .timeout(ofSeconds(60))
-                    .logResponses(true)
-                    .logResponses(true)
                     .build();
 
             PersonExtractor extractor = AiServices.create(PersonExtractor.class, model);
@@ -368,12 +365,9 @@ public class _08_AIServiceExamples {
                     // (e.g., OpenAI, Azure OpenAI, Vertex AI Gemini, Ollama, etc.),
                     // it is advisable to enable it (json mode) to get more reliable results.
                     // When using this feature, LLM will be forced to output a valid JSON.
-                    // Please note that this feature is not (yet) supported when using "demo" key.
                     .responseFormat("json_schema")
                     .strictJsonSchema(true) // https://docs.langchain4j.dev/integrations/language-models/open-ai#structured-outputs-for-json-mode
                     .timeout(ofSeconds(60))
-                    .logResponses(true)
-                    .logResponses(true)
                     .build();
 
             Chef chef = AiServices.create(Chef.class, model);

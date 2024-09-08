@@ -5,7 +5,7 @@ import dev.langchain4j.service.AiServices;
 import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.UserMessage;
 
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_3_5_TURBO;
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 
 public class ServiceWithMemoryForEachUserExample {
 
@@ -22,7 +22,7 @@ public class ServiceWithMemoryForEachUserExample {
 
         ChatLanguageModel model = OpenAiChatModel.builder()
                 .apiKey(ApiKeys.OPENAI_API_KEY)
-                .modelName(GPT_3_5_TURBO)
+                .modelName(GPT_4_O_MINI)
                 .build();
 
         Assistant assistant = AiServices.builder(Assistant.class)

@@ -6,7 +6,7 @@ import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.output.Response;
 
-import static dev.langchain4j.model.openai.OpenAiChatModelName.*;
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 
 public class OpenAiChatModelExamples {
 
@@ -15,8 +15,8 @@ public class OpenAiChatModelExamples {
         public static void main(String[] args) {
 
             ChatLanguageModel model = OpenAiChatModel.builder()
-                    .apiKey("demo")
-                    .modelName(GPT_3_5_TURBO)
+                    .apiKey(ApiKeys.OPENAI_API_KEY)
+                    .modelName(GPT_4_O_MINI)
                     .build();
 
             String joke = model.generate("Tell me a joke about Java");
@@ -30,8 +30,8 @@ public class OpenAiChatModelExamples {
         public static void main(String[] args) {
 
             ChatLanguageModel model = OpenAiChatModel.builder()
-                    .apiKey(System.getenv("OPENAI_API_KEY")) // Please use your own OpenAI API key
-                    .modelName(GPT_4_O)
+                    .apiKey(ApiKeys.OPENAI_API_KEY) // Please use your own OpenAI API key
+                    .modelName(GPT_4_O_MINI)
                     .maxTokens(50)
                     .build();
 

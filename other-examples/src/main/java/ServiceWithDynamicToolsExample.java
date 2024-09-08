@@ -18,7 +18,7 @@ public class ServiceWithDynamicToolsExample {
         Judge0JavaScriptExecutionTool judge0Tool = new Judge0JavaScriptExecutionTool(ApiKeys.RAPID_API_KEY);
 
         ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder()
-                .apiKey(System.getenv("OPENAI_API_KEY"))
+                .apiKey(ApiKeys.OPENAI_API_KEY)
                 .temperature(0.0)
                 .timeout(ofSeconds(60))
                 .build();

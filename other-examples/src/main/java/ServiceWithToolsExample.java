@@ -40,7 +40,7 @@ public class ServiceWithToolsExample {
     public static void main(String[] args) {
 
         ChatLanguageModel model = OpenAiChatModel.builder()
-                .apiKey(System.getenv("OPENAI_API_KEY")) // WARNING! "demo" key does not support tools
+                .apiKey(ApiKeys.OPENAI_API_KEY)
                 .modelName(GPT_4_O_MINI)
                 .strictTools(true) // https://docs.langchain4j.dev/integrations/language-models/open-ai#structured-outputs-for-tools
                 .build();

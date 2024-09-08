@@ -2,7 +2,7 @@ import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.service.AiServices;
 
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_3_5_TURBO;
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 
 public class SimpleServiceExample {
 
@@ -15,7 +15,7 @@ public class SimpleServiceExample {
 
         ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder()
                 .apiKey(ApiKeys.OPENAI_API_KEY)
-                .modelName(GPT_3_5_TURBO)
+                .modelName(GPT_4_O_MINI)
                 .build();
 
         Assistant assistant = AiServices.create(Assistant.class, chatLanguageModel);

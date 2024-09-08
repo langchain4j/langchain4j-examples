@@ -16,7 +16,7 @@ public class ServiceWithStreamingExample {
 
         // Sorry, "demo" API key does not support streaming (yet). Please use your own key.
         StreamingChatLanguageModel model = OpenAiStreamingChatModel.builder()
-                .apiKey(System.getenv("OPENAI_API_KEY"))
+                .apiKey(ApiKeys.OPENAI_API_KEY)
                 .modelName(GPT_4_O_MINI)
                 .build();
 

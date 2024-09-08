@@ -21,9 +21,9 @@ public class StreamingExamples {
 
         public static void main(String[] args) {
 
-            // Sorry, "demo" API key does not support streaming (yet). Please use your own key.
+            // Sorry, "demo" API key does not support streaming. Please use your own key.
             StreamingChatLanguageModel model = OpenAiStreamingChatModel.builder()
-                    .apiKey(System.getenv("OPENAI_API_KEY"))
+                    .apiKey(ApiKeys.OPENAI_API_KEY)
                     .modelName(GPT_4_O_MINI)
                     .build();
 
@@ -56,9 +56,9 @@ public class StreamingExamples {
 
         public static void main(String[] args) {
 
-            // Sorry, "demo" API key does not support streaming (yet). Please use your own key.
+            // Sorry, "demo" API key does not support streaming. Please use your own key.
             StreamingLanguageModel model = OpenAiStreamingLanguageModel.builder()
-                    .apiKey(System.getenv("OPENAI_API_KEY"))
+                    .apiKey(ApiKeys.OPENAI_API_KEY)
                     .modelName(GPT_3_5_TURBO_INSTRUCT)
                     .build();
 

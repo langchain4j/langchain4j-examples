@@ -25,7 +25,7 @@ import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
 import shared.Assistant;
 
 import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_3_5_TURBO;
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 import static shared.Utils.*;
 
 public class _03_Advanced_RAG_with_ReRanking_Example {
@@ -99,7 +99,7 @@ public class _03_Advanced_RAG_with_ReRanking_Example {
 
         ChatLanguageModel model = OpenAiChatModel.builder()
                 .apiKey(OPENAI_API_KEY)
-                .modelName(GPT_3_5_TURBO)
+                .modelName(GPT_4_O_MINI)
                 .build();
 
         return AiServices.builder(Assistant.class)

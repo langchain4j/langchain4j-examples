@@ -13,7 +13,7 @@ public class OpenAiStreamingChatModelExamples {
         public static void main(String[] args) {
 
             StreamingChatLanguageModel model = OpenAiStreamingChatModel.builder()
-                    .apiKey(System.getenv("OPENAI_API_KEY"))
+                    .apiKey(ApiKeys.OPENAI_API_KEY)
                     .modelName(GPT_4_O_MINI)
                     .build();
 

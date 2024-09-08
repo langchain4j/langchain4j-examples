@@ -4,7 +4,7 @@ import dev.langchain4j.model.openai.OpenAiChatModelName;
 import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
 import dev.langchain4j.model.output.Response;
 
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_3_5_TURBO;
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 
 public class _04_Streaming {
 
@@ -12,7 +12,7 @@ public class _04_Streaming {
 
         OpenAiStreamingChatModel model = OpenAiStreamingChatModel.builder()
                 .apiKey(ApiKeys.OPENAI_API_KEY)
-                .modelName(GPT_3_5_TURBO)
+                .modelName(GPT_4_O_MINI)
                 .build();
 
         String prompt = "Write a short funny poem about developers and null-pointers, 10 lines maximum";
