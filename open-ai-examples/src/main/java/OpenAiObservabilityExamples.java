@@ -1,9 +1,8 @@
 import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain4j.model.chat.listener.ChatModelErrorContext;
-import dev.langchain4j.model.chat.listener.ChatModelListener;
-import dev.langchain4j.model.chat.listener.ChatModelRequestContext;
-import dev.langchain4j.model.chat.listener.ChatModelResponseContext;
+import dev.langchain4j.model.chat.listener.*;
 import dev.langchain4j.model.openai.OpenAiChatModel;
+
+import java.util.Map;
 
 import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 import static java.util.Collections.singletonList;
@@ -18,17 +17,23 @@ public class OpenAiObservabilityExamples {
 
                 @Override
                 public void onRequest(ChatModelRequestContext requestContext) {
-                    System.out.println("Request: " + requestContext.request().messages());
+                    ChatModelRequest request = requestContext.request();
+                    Map<Object, Object> attributes = requestContext.attributes();
                 }
 
                 @Override
                 public void onResponse(ChatModelResponseContext responseContext) {
-                    System.out.println("Response: " + responseContext.response().aiMessage());
+                    ChatModelResponse response = responseContext.response();
+                    ChatModelRequest request = responseContext.request();
+                    Map<Object, Object> attributes = responseContext.attributes();
                 }
 
                 @Override
                 public void onError(ChatModelErrorContext errorContext) {
-                    errorContext.error().printStackTrace();
+                    Throwable error = errorContext.error();
+                    ChatModelRequest request = errorContext.request();
+                    ChatModelResponse partialResponse = errorContext.partialResponse();
+                    Map<Object, Object> attributes = errorContext.attributes();
                 }
             };
 
