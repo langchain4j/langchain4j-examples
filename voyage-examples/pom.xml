@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>dev.langchain4j</groupId>
-    <artifactId>pgvector-example</artifactId>
+    <artifactId>voyage-examples</artifactId>
     <version>0.35.0-SNAPSHOT</version>
 
     <properties>
@@ -18,26 +18,31 @@
 
         <dependency>
             <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j-pgvector</artifactId>
+            <artifactId>langchain4j-voyage</artifactId>
             <version>0.35.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>org.testcontainers</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>1.19.7</version>
+            <artifactId>junit-jupiter</artifactId>
+            <version>1.19.6</version>
         </dependency>
 
         <dependency>
-            <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j-embeddings-all-minilm-l6-v2</artifactId>
-            <version>0.35.0-SNAPSHOT</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.10.0</version>
         </dependency>
 
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>2.0.12</version>
+            <groupId>org.tinylog</groupId>
+            <artifactId>tinylog-impl</artifactId>
+            <version>2.6.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.tinylog</groupId>
+            <artifactId>slf4j-tinylog</artifactId>
+            <version>2.6.2</version>
         </dependency>
 
     </dependencies>
