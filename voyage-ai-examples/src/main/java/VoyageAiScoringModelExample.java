@@ -1,20 +1,26 @@
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.scoring.ScoringModel;
-import dev.langchain4j.model.voyage.VoyageScoringModel;
+import dev.langchain4j.model.voyageai.VoyageAiScoringModel;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.util.List;
 
-import static dev.langchain4j.model.voyage.VoyageScoringModelName.RERANK_LITE_1;
+import static dev.langchain4j.model.voyageai.VoyageAiScoringModelName.RERANK_LITE_1;
 import static java.util.Arrays.asList;
 
-public class VoyageScoringModelExample {
+public class VoyageAiScoringModelExample {
 
     @Test
     void should_score_single_text() {
 
-        ScoringModel model = VoyageScoringModel.withApiKey(System.getenv("VOYAGE_API_KEY"));
+        ScoringModel model = VoyageAiScoringModel.builder()
+                .apiKey(System.getenv("VOYAGE_API_KEY"))
+                .modelName(RERANK_LITE_1)
+                .timeout(Duration.ofSeconds(60))
+                .logRequests(true)
+                .logResponses(true)
+                .build();
 
         String text = "labrador retriever";
         String query = "tell me about dogs";
@@ -25,7 +31,7 @@ public class VoyageScoringModelExample {
     @Test
     void should_score_multiple_segments_with_all_parameters() {
 
-        ScoringModel model = VoyageScoringModel.builder()
+        ScoringModel model = VoyageAiScoringModel.builder()
                 .apiKey(System.getenv("VOYAGE_API_KEY"))
                 .modelName(RERANK_LITE_1)
                 .timeout(Duration.ofSeconds(60))
@@ -45,7 +51,7 @@ public class VoyageScoringModelExample {
     @Test
     void should_respect_top_k() {
 
-        ScoringModel model = VoyageScoringModel.builder()
+        ScoringModel model = VoyageAiScoringModel.builder()
                 .apiKey(System.getenv("VOYAGE_API_KEY"))
                 .modelName(RERANK_LITE_1)
                 .timeout(Duration.ofSeconds(60))
