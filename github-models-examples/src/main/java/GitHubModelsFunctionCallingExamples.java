@@ -36,7 +36,7 @@ public class GitHubModelsFunctionCallingExamples {
                 .logRequestsAndResponses(true)
                 .build();
 
-        public static void main(String[] args) throws Exception {
+        public static void main(String[] args)  {
 
             // STEP 1: User specify tools and query
             // Tools
