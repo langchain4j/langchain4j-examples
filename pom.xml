@@ -18,6 +18,7 @@
         <module>customer-support-agent-example</module>
         <module>tutorials</module>
         <module>elasticsearch-example</module>
+        <module>github-models-examples</module>
         <module>infinispan-example</module>
         <module>jakartaee-microprofile-example</module>
         <module>jlama-examples</module>
