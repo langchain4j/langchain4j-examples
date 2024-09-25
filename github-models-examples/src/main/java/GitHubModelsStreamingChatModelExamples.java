@@ -15,7 +15,7 @@ public class GitHubModelsStreamingChatModelExamples {
 
             GitHubModelsStreamingChatModel model = GitHubModelsStreamingChatModel.builder()
                     .gitHubToken(System.getenv("GITHUB_TOKEN"))
-                    .modelName(GPT_4_O_MINI.modelName())
+                    .modelName(GPT_4_O_MINI)
                     .logRequestsAndResponses(true)
                     .build();
 

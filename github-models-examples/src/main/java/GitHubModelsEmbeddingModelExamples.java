@@ -12,7 +12,7 @@ public class GitHubModelsEmbeddingModelExamples {
 
             GitHubModelsEmbeddingModel model = GitHubModelsEmbeddingModel.builder()
                     .gitHubToken(System.getenv("GITHUB_TOKEN"))
-                    .modelName(TEXT_EMBEDDING_3_SMALL.modelName())
+                    .modelName(TEXT_EMBEDDING_3_SMALL)
                     .logRequestsAndResponses(true)
                     .build();
 
