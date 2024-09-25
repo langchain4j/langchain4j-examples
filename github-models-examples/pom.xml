@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>dev.langchain4j</groupId>
-    <artifactId>open-ai-examples</artifactId>
+    <artifactId>github-models-examples</artifactId>
     <version>0.35.0</version>
 
     <properties>
@@ -18,19 +18,13 @@
 
         <dependency>
             <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j-open-ai</artifactId>
+            <artifactId>langchain4j-github-models</artifactId>
             <version>0.35.0</version>
         </dependency>
 
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j</artifactId>
-            <version>0.35.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j-embeddings-all-minilm-l6-v2</artifactId>
             <version>0.35.0</version>
         </dependency>
 
