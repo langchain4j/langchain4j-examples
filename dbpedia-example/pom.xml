@@ -12,7 +12,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <langchain4j.version>0.35.0</langchain4j.version>
+        <langchain4j.version>0.36.0</langchain4j.version>
         <jena.version>3.17.0</jena.version>
     </properties>
 
