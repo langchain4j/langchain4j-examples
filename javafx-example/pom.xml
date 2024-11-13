@@ -14,7 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- DEPENDENCIES VERSIONS -->
-        <javafx.version>21.0.1</javafx.version>
+        <javafx.version>21.0.5</javafx.version>
         <langchain4j.version>0.35.0</langchain4j.version>
         <log4j.version>2.22.1</log4j.version>
 
