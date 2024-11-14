@@ -27,11 +27,21 @@
             <artifactId>langchain4j-easy-rag</artifactId>
             <version>0.36.0</version>
             <exclusions>
+                <!-- https://github.com/langchain4j/langchain4j/issues/2117 -->
+                <exclusion>
+                    <groupId>commons-io</groupId>
+                    <artifactId>commons-io</artifactId>
+                </exclusion>
                 <exclusion>
                     <groupId>org.apache.logging.log4j</groupId>
                     <artifactId>log4j-api</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.16.1</version>
         </dependency>
 
         <dependency>
