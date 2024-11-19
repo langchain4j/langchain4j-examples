@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
+import static org.springframework.http.MediaType.TEXT_EVENT_STREAM_VALUE;
+
 /**
  * This is an example of using an {@link AiService}, a high-level LangChain4j API.
  */
@@ -21,12 +23,13 @@ class AssistantController {
     }
 
     @GetMapping("/assistant")
-    public String assistant(@RequestParam(value = "message", defaultValue = "What is the time now?") String message) {
+    public String assistant(@RequestParam(value = "message", defaultValue = "What time is it now?") String message) {
         return assistant.chat(message);
     }
 
-    @GetMapping("/streamingAssistant")
-    public Flux<String> streamingAssistant(@RequestParam(value = "message", defaultValue = "What is the time now?") String message) {
+    @GetMapping(value = "/streamingAssistant", produces = TEXT_EVENT_STREAM_VALUE)
+    public Flux<String> streamingAssistant(
+            @RequestParam(value = "message", defaultValue = "Tell me an interesting story in 100 words") String message) {
         return streamingAssistant.chat(message);
     }
 }
