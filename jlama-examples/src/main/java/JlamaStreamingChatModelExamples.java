@@ -18,7 +18,7 @@ public class JlamaStreamingChatModelExamples {
             CompletableFuture<Response<AiMessage>> futureResponse = new CompletableFuture<>();
 
             StreamingChatLanguageModel model = JlamaStreamingChatModel.builder()
-                    .modelName("tjake/TinyLlama-1.1B-Chat-v1.0-Jlama-Q4")
+                    .modelName("tjake/Llama-3.2-1B-Instruct-JQ4")
                     .temperature(0.3f)
                     .build();
 
