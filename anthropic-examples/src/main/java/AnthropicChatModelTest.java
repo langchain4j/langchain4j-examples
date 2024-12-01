@@ -1,8 +1,7 @@
-import dev.langchain4j.data.message.AiMessage;
-import dev.langchain4j.data.message.ImageContent;
-import dev.langchain4j.data.message.TextContent;
-import dev.langchain4j.data.message.UserMessage;
+import dev.langchain4j.data.message.*;
 import dev.langchain4j.model.anthropic.AnthropicChatModel;
+import dev.langchain4j.model.anthropic.AnthropicChatModelName;
+import dev.langchain4j.model.anthropic.AnthropicTokenUsage;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.output.Response;
 import org.junit.jupiter.api.Test;
@@ -44,5 +43,33 @@ class AnthropicChatModelTest {
         Response<AiMessage> response = model.generate(userMessage);
 
         assertThat(response.content().text()).containsIgnoringCase("RAG");
+    }
+
+    @Test
+    void AnthropicChatModel_with_cache_system_message_Example() {
+        ChatLanguageModel modelWithCache = AnthropicChatModel.builder()
+                .apiKey(System.getenv("ANTHROPIC_API_KEY"))
+                .beta("prompt-caching-2024-07-31")
+                .modelName(AnthropicChatModelName.CLAUDE_3_HAIKU_20240307)
+                .cacheSystemMessages(true)
+                .logRequests(true)
+                .logResponses(true)
+                .build();
+
+        // Now cache has in beta
+        // You can send up to 4 systemMessages/Tools
+
+        // create cache
+        SystemMessage systemMessage = SystemMessage.from("What types of messages are supported in LangChain?".repeat(187));
+        UserMessage userMessage = UserMessage.userMessage("what result it calcule 5x2 + 2x + 2 = 0?");
+        Response<AiMessage> response = modelWithCache.generate(systemMessage, userMessage);
+
+        AnthropicTokenUsage createCacheTokenUsage = (AnthropicTokenUsage) response.tokenUsage();
+        assertThat(createCacheTokenUsage.cacheCreationInputTokens()).isGreaterThan(0);
+
+        // read cache created
+        Response<AiMessage> responseToReadCache = modelWithCache.generate(systemMessage, userMessage);
+        AnthropicTokenUsage readCacheTokenUsage = (AnthropicTokenUsage) responseToReadCache.tokenUsage();
+        assertThat(readCacheTokenUsage.cacheReadInputTokens()).isGreaterThan(0);
     }
 }
