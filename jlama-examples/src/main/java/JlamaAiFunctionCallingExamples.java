@@ -22,7 +22,7 @@ public class JlamaAiFunctionCallingExamples {
     static class Payment_Data_From_AiServices {
 
         static ChatLanguageModel mistralAiModel = JlamaChatModel.builder()
-                .modelName("tjake/Mistral-7B-Instruct-v0.3-Jlama-Q4")
+                .modelName("tjake/Mistral-7B-Instruct-v0.3-JQ4")
                 .temperature(0.0f) //Force same output every run
                 .build();
 
@@ -30,7 +30,7 @@ public class JlamaAiFunctionCallingExamples {
             @SystemMessage({
                     "You are a payment transaction support agent.",
                     "You MUST use the payment transaction tool to search the payment transaction data.",
-                    "If there a date convert it in a human readable format."
+                    "If there is a date, convert it in a human readable format."
             })
             String chat(String userMessage);
         }

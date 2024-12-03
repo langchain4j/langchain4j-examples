@@ -13,7 +13,7 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <logback.version>1.5.6</logback.version>
-        <jlama.version>0.3.1</jlama.version>
+        <jlama.version>0.8.3</jlama.version>
     </properties>
 
     <dependencies>
@@ -22,6 +22,12 @@
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-jlama</artifactId>
             <version>0.36.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.github.tjake</groupId>
+                    <artifactId>jlama-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- Add native jlama bindings -->
@@ -29,6 +35,12 @@
             <groupId>com.github.tjake</groupId>
             <artifactId>jlama-native</artifactId>
             <classifier>${os.detected.classifier}</classifier>
+            <version>${jlama.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.tjake</groupId>
+            <artifactId>jlama-core</artifactId>
             <version>${jlama.version}</version>
         </dependency>
 

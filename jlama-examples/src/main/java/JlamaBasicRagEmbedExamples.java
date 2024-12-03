@@ -82,7 +82,7 @@ public class JlamaBasicRagEmbedExamples {
 
             // Now we can use the Jlama chat model to generate the answer to the user question based on the context information.
             ChatLanguageModel chatModel = JlamaChatModel.builder()
-                    .modelName("tjake/TinyLlama-1.1B-Chat-v1.0-Jlama-Q4")
+                    .modelName("tjake/Llama-3.2-1B-Instruct-JQ4")
                     .temperature(0.2f) // expect a more focused and deterministic answer
                     .build();
 
