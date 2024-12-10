@@ -22,6 +22,7 @@
         <module>infinispan-example</module>
         <module>jakartaee-microprofile-example</module>
         <module>jlama-examples</module>
+        <module>mcp-example</module>
         <module>milvus-example</module>
         <module>mistral-ai-examples</module>
         <module>neo4j-example</module>
