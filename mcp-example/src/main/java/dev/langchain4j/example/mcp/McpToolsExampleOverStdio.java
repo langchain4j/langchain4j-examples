@@ -21,15 +21,15 @@ public class McpToolsExampleOverStdio {
     /**
      * This example uses the `server-filesystem` MCP server to showcase how
      * to allow an LLM to interact with the local filesystem.
-     *
+     * <p>
      * Running this example requires npm to be installed on your machine,
      * because it spawns the `server-filesystem` as a subprocess via npm:
      * `npm exec @modelcontextprotocol/server-filesystem@0.6.2`.
-     *
+     * <p>
      * Of course, feel free to swap out the server with any other MCP server.
-     *
+     * <p>
      * The communication with the server is done directly via stdin/stdout.
-     *
+     * <p>
      * IMPORTANT: when executing this, make sure that the working directory is
      * equal to the root directory of the project
      * (`langchain4j-examples/mcp-example`), otherwise the program won't be able to find
@@ -37,30 +37,36 @@ public class McpToolsExampleOverStdio {
      * adjust the path inside the StdioMcpTransport.Builder() usage in the main method.
      */
     public static void main(String[] args) throws Exception {
+
         ChatLanguageModel model = OpenAiChatModel.builder()
-                .modelName("gpt-4o")
                 .apiKey(System.getenv("OPENAI_API_KEY"))
+                .modelName("gpt-4o-mini")
 //                .logRequests(true)
 //                .logResponses(true)
                 .build();
+
         McpTransport transport = new StdioMcpTransport.Builder()
                 .command(List.of("/usr/bin/npm", "exec",
                         "@modelcontextprotocol/server-filesystem@0.6.2",
                         // allowed directory for the server to interact with
                         new File("src/main/resources").getAbsolutePath()
-                        ))
+                ))
                 .logEvents(true)
                 .build();
+
         McpClient mcpClient = new DefaultMcpClient.Builder()
                 .transport(transport)
                 .build();
+
         ToolProvider toolProvider = McpToolProvider.builder()
                 .mcpClients(List.of(mcpClient))
                 .build();
+
         Bot bot = AiServices.builder(Bot.class)
                 .chatLanguageModel(model)
                 .toolProvider(toolProvider)
                 .build();
+
         try {
             File file = new File(FILE_TO_BE_READ);
             String response = bot.chat("Read the contents of the file " + file.getAbsolutePath());
@@ -69,6 +75,4 @@ public class McpToolsExampleOverStdio {
             mcpClient.close();
         }
     }
-
-
 }
