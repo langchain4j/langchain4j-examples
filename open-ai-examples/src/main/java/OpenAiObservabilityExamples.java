@@ -37,13 +37,13 @@ public class OpenAiObservabilityExamples {
                 }
             };
 
-            ChatLanguageModel model = OpenAiChatModel.builder()
+            ChatLanguageModel chatModel = OpenAiChatModel.builder()
                     .apiKey("demo")
                     .modelName(GPT_4_O_MINI)
                     .listeners(singletonList(modelListener))
                     .build();
 
-            model.generate("Tell me a joke about Java");
+            chatModel.chat("Tell me a joke about Java");
         }
     }
 }

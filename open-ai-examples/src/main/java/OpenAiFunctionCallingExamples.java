@@ -4,6 +4,9 @@ import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.ToolExecutionResultMessage;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.request.ChatRequest;
+import dev.langchain4j.model.chat.request.ChatRequestParameters;
+import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.service.tool.DefaultToolExecutor;
 import dev.langchain4j.service.tool.ToolExecutor;
@@ -27,8 +30,8 @@ public class OpenAiFunctionCallingExamples {
      * <p>
      * This sample goes through 4 different steps:
      * 1. Specify the tools (WeatherTools) and the query ("What will the weather be like in London tomorrow?")
-     * 2. Model generate function arguments (model decides which tools to invoke)
-     * 3. User execute function to obtain tool results (using ToolExecutor)
+     * 2. Model generates the tool execution request (model decides which tools to invoke and with which arguments)
+     * 3. User execute tool(s) to obtain tool result(s) (using ToolExecutor)
      * 4. Model generate final response based on the query and the tool results
      */
     static class Weather_Low_Level_Configuration {
@@ -51,32 +54,46 @@ public class OpenAiFunctionCallingExamples {
             List<ChatMessage> chatMessages = new ArrayList<>();
             UserMessage userMessage = userMessage("What will the weather be like in London tomorrow?");
             chatMessages.add(userMessage);
+            // Chat request
+            ChatRequest chatRequest = ChatRequest.builder()
+                    .messages(chatMessages)
+                    .parameters(ChatRequestParameters.builder()
+                            .toolSpecifications(toolSpecifications)
+                            .build())
+                    .build();
 
 
-            // STEP 2: Model generate function arguments
-            AiMessage aiMessage = openAiModel.generate(chatMessages, toolSpecifications).content();
+            // STEP 2: Model generates tool execution request
+            ChatResponse chatResponse = openAiModel.chat(chatRequest);
+            AiMessage aiMessage = chatResponse.aiMessage();
             List<ToolExecutionRequest> toolExecutionRequests = aiMessage.toolExecutionRequests();
-            System.out.println("Out of the " + toolSpecifications.size() + " functions declared in WeatherTools, " + toolExecutionRequests.size() + " will be invoked:");
+            System.out.println("Out of the " + toolSpecifications.size() + " tools declared in WeatherTools, " + toolExecutionRequests.size() + " will be invoked:");
             toolExecutionRequests.forEach(toolExecutionRequest -> {
-                System.out.println("Function name: " + toolExecutionRequest.name());
-                System.out.println("Function args:" + toolExecutionRequest.arguments());
+                System.out.println("Tool name: " + toolExecutionRequest.name());
+                System.out.println("Tool args:" + toolExecutionRequest.arguments());
             });
             chatMessages.add(aiMessage);
 
 
-            // STEP 3: User execute function to obtain tool results
+            // STEP 3: User executes tool(s) to obtain tool results
             toolExecutionRequests.forEach(toolExecutionRequest -> {
                 ToolExecutor toolExecutor = new DefaultToolExecutor(weatherTools, toolExecutionRequest);
-                System.out.println("Now let's execute the function " + toolExecutionRequest.name());
+                System.out.println("Now let's execute the tool " + toolExecutionRequest.name());
                 String result = toolExecutor.execute(toolExecutionRequest, UUID.randomUUID().toString());
                 ToolExecutionResultMessage toolExecutionResultMessages = ToolExecutionResultMessage.from(toolExecutionRequest, result);
                 chatMessages.add(toolExecutionResultMessages);
             });
 
 
-            // STEP 4: Model generate final response
-            AiMessage finalResponse = openAiModel.generate(chatMessages).content();
-            System.out.println(finalResponse.text()); //According to the payment data, the payment status of transaction T1005 is Pending.
+            // STEP 4: Model generates final response
+            ChatRequest chatRequest2 = ChatRequest.builder()
+                    .messages(chatMessages)
+                    .parameters(ChatRequestParameters.builder()
+                            .toolSpecifications(toolSpecifications)
+                            .build())
+                    .build();
+            ChatResponse finalChatResponse = openAiModel.chat(chatRequest2);
+            System.out.println(finalChatResponse.aiMessage().text()); //According to the payment data, the payment status of transaction T1005 is Pending.
         }
     }
 

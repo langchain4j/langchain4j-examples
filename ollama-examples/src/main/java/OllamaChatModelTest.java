@@ -1,60 +1,151 @@
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.request.ChatRequest;
+import dev.langchain4j.model.chat.request.ResponseFormat;
+import dev.langchain4j.model.chat.request.ResponseFormatType;
+import dev.langchain4j.model.chat.request.json.JsonObjectSchema;
+import dev.langchain4j.model.chat.request.json.JsonSchema;
+import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.model.ollama.OllamaChatModel;
+import dev.langchain4j.service.AiServices;
 import org.junit.jupiter.api.Test;
-import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
+import utils.AbstractOllamaInfrastructure;
 
-@Testcontainers
-class OllamaChatModelTest {
+import java.util.Map;
+
+import static dev.langchain4j.model.chat.Capability.RESPONSE_FORMAT_JSON_SCHEMA;
+import static org.assertj.core.api.Assertions.assertThat;
+
+class OllamaChatModelTest extends AbstractOllamaInfrastructure {
 
     /**
-     * The first time you run this test, it will download a Docker image with Ollama and a model.
+     * If you have Ollama running locally,
+     * please set the OLLAMA_BASE_URL environment variable (e.g., http://localhost:11434).
+     * If you do not set the OLLAMA_BASE_URL environment variable,
+     * Testcontainers will download and start Ollama Docker container.
      * It might take a few minutes.
-     * <p>
-     * This test uses modified Ollama Docker images, which already contain models inside them.
-     * All images with pre-packaged models are available here: https://hub.docker.com/repositories/langchain4j
-     * <p>
-     * However, you are not restricted to these images.
-     * You can run any model from https://ollama.ai/library by following these steps:
-     * 1. Run "docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama"
-     * 2. Run "docker exec -it ollama ollama run mistral" <- specify the desired model here
      */
-
-    static String MODEL_NAME = "orca-mini"; // try "mistral", "llama2", "codellama", "phi" or "tinyllama"
-
-    @Container
-    static GenericContainer<?> ollama = new GenericContainer<>("langchain4j/ollama-" + MODEL_NAME + ":latest")
-            .withExposedPorts(11434);
 
     @Test
     void simple_example() {
 
-        ChatLanguageModel model = OllamaChatModel.builder()
-                .baseUrl(baseUrl())
+        ChatLanguageModel chatModel = OllamaChatModel.builder()
+                .baseUrl(ollamaBaseUrl(ollama))
                 .modelName(MODEL_NAME)
+                .logRequests(true)
                 .build();
 
-        String answer = model.generate("Provide 3 short bullet points explaining why Java is awesome");
-
+        String answer = chatModel.chat("Provide 3 short bullet points explaining why Java is awesome");
         System.out.println(answer);
+
+        assertThat(answer).isNotBlank();
     }
 
     @Test
-    void json_output_example() {
+    void json_schema_with_AI_Service_example() {
 
-        ChatLanguageModel model = OllamaChatModel.builder()
-                .baseUrl(baseUrl())
+        record Person(String name, int age) {
+        }
+
+        interface PersonExtractor {
+
+            Person extractPersonFrom(String text);
+        }
+
+        ChatLanguageModel chatModel = OllamaChatModel.builder()
+                .baseUrl(ollamaBaseUrl(ollama))
                 .modelName(MODEL_NAME)
-                .format("json")
+                .temperature(0.0)
+                .supportedCapabilities(RESPONSE_FORMAT_JSON_SCHEMA)
+                .logRequests(true)
                 .build();
 
-        String json = model.generate("Give me a JSON with 2 fields: name and age of a John Doe, 42");
+        PersonExtractor personExtractor = AiServices.create(PersonExtractor.class, chatModel);
 
-        System.out.println(json);
+        Person person = personExtractor.extractPersonFrom("John Doe is 42 years old");
+        System.out.println(person);
+
+        assertThat(person).isEqualTo(new Person("John Doe", 42));
     }
 
-    static String baseUrl() {
-        return String.format("http://%s:%d", ollama.getHost(), ollama.getFirstMappedPort());
+    @Test
+    void json_schema_with_low_level_chat_api_example() {
+
+        ChatLanguageModel chatModel = OllamaChatModel.builder()
+                .baseUrl(ollamaBaseUrl(ollama))
+                .modelName(MODEL_NAME)
+                .temperature(0.0)
+                .logRequests(true)
+                .build();
+
+        ChatRequest chatRequest = ChatRequest.builder()
+                .messages(UserMessage.from("John Doe is 42 years old"))
+                .responseFormat(ResponseFormat.builder()
+                        .type(ResponseFormatType.JSON)
+                        .jsonSchema(JsonSchema.builder()
+                                .rootElement(JsonObjectSchema.builder()
+                                        .addStringProperty("name")
+                                        .addIntegerProperty("age")
+                                        .build())
+                                .build())
+                        .build())
+                .build();
+
+        ChatResponse chatResponse = chatModel.chat(chatRequest);
+        System.out.println(chatResponse);
+
+        assertThat(toMap(chatResponse.aiMessage().text())).isEqualTo(Map.of("name", "John Doe", "age", 42));
+    }
+
+    @Test
+    void json_schema_with_low_level_model_builder_example() {
+
+        ChatLanguageModel chatModel = OllamaChatModel.builder()
+                .baseUrl(ollamaBaseUrl(ollama))
+                .modelName(MODEL_NAME)
+                .temperature(0.0)
+                .responseFormat(ResponseFormat.builder()
+                        .type(ResponseFormatType.JSON)
+                        .jsonSchema(JsonSchema.builder()
+                                .rootElement(JsonObjectSchema.builder()
+                                        .addStringProperty("name")
+                                        .addIntegerProperty("age")
+                                        .build())
+                                .build())
+                        .build())
+                .logRequests(true)
+                .build();
+
+        String json = chatModel.chat("Extract: John Doe is 42 years old");
+        System.out.println(json);
+
+        assertThat(toMap(json)).isEqualTo(Map.of("name", "John Doe", "age", 42));
+    }
+
+    @Test
+    void json_mode_with_low_level_model_builder_example() {
+
+        ChatLanguageModel chatModel = OllamaChatModel.builder()
+                .baseUrl(ollamaBaseUrl(ollama))
+                .modelName(MODEL_NAME)
+                .temperature(0.0)
+                .responseFormat(ResponseFormat.JSON)
+                .logRequests(true)
+                .build();
+
+        String json = chatModel.chat("Give me a JSON object with 2 fields: name and age of a John Doe, 42");
+        System.out.println(json);
+
+        assertThat(toMap(json)).isEqualTo(Map.of("name", "John Doe", "age", 42));
+    }
+
+    private static Map<String, Object> toMap(String json) {
+        try {
+            return new ObjectMapper().readValue(json, Map.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
