@@ -1,10 +1,10 @@
-import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.ImageContent;
 import dev.langchain4j.data.message.TextContent;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.request.ChatRequest;
+import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.model.openai.OpenAiChatModel;
-import dev.langchain4j.model.output.Response;
 
 import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 
@@ -14,12 +14,12 @@ public class OpenAiChatModelExamples {
 
         public static void main(String[] args) {
 
-            ChatLanguageModel model = OpenAiChatModel.builder()
+            ChatLanguageModel chatModel = OpenAiChatModel.builder()
                     .apiKey(ApiKeys.OPENAI_API_KEY)
                     .modelName(GPT_4_O_MINI)
                     .build();
 
-            String joke = model.generate("Tell me a joke about Java");
+            String joke = chatModel.chat("Tell me a joke about Java");
 
             System.out.println(joke);
         }
@@ -29,7 +29,7 @@ public class OpenAiChatModelExamples {
 
         public static void main(String[] args) {
 
-            ChatLanguageModel model = OpenAiChatModel.builder()
+            ChatLanguageModel chatModel = OpenAiChatModel.builder()
                     .apiKey(ApiKeys.OPENAI_API_KEY) // Please use your own OpenAI API key
                     .modelName(GPT_4_O_MINI)
                     .maxTokens(50)
@@ -40,9 +40,13 @@ public class OpenAiChatModelExamples {
                     ImageContent.from("https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png")
             );
 
-            Response<AiMessage> response = model.generate(userMessage);
+            ChatRequest chatRequest = ChatRequest.builder()
+                    .messages(userMessage)
+                    .build();
 
-            System.out.println(response.content().text());
+            ChatResponse chatResponse = chatModel.chat(chatRequest);
+
+            System.out.println(chatResponse.aiMessage().text());
         }
     }
 }
