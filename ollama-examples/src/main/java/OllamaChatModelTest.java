@@ -1,9 +1,23 @@
+import dev.langchain4j.agent.tool.ToolSpecification;
+import dev.langchain4j.data.message.AiMessage;
+import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.request.ChatRequest;
+import dev.langchain4j.model.chat.request.ResponseFormat;
+import dev.langchain4j.model.chat.request.ResponseFormatType;
+import dev.langchain4j.model.chat.request.json.JsonObjectSchema;
+import dev.langchain4j.model.chat.request.json.JsonSchema;
+import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.model.ollama.OllamaChatModel;
+import dev.langchain4j.model.output.Response;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+
+import java.util.List;
+
+import static dev.langchain4j.model.chat.request.ResponseFormat.JSON;
 
 @Testcontainers
 class OllamaChatModelTest {
@@ -46,12 +60,90 @@ class OllamaChatModelTest {
         ChatLanguageModel model = OllamaChatModel.builder()
                 .baseUrl(baseUrl())
                 .modelName(MODEL_NAME)
-                .format("json")
+                .responseFormat(JSON)
                 .build();
 
         String json = model.generate("Give me a JSON with 2 fields: name and age of a John Doe, 42");
 
         System.out.println(json);
+    }
+
+    @Test
+    void json_schema_builder_example() {
+
+        ChatLanguageModel model = OllamaChatModel.builder()
+                .baseUrl(baseUrl())
+                .modelName(MODEL_NAME)
+                .responseFormat(ResponseFormat.builder()
+                        .type(ResponseFormatType.JSON)
+                        .jsonSchema(JsonSchema.builder()
+                                .name("Person")
+                                .rootElement(JsonObjectSchema.builder()
+                                        .addStringProperty("fullName")
+                                        .addIntegerProperty("age")
+                                        .build())
+                                .build())
+                        .build())
+                .build();
+
+        String json = model.generate("Extract data: John Doe, 42");
+
+        System.out.println(json);
+    }
+
+    @Test
+    void json_schema_chat_api_example() {
+
+        ChatLanguageModel model = OllamaChatModel.builder()
+                .baseUrl(baseUrl())
+                .modelName(MODEL_NAME)
+                .build();
+
+
+        ChatResponse chatResponse = model.chat(ChatRequest.builder()
+                .messages(UserMessage.from("Extract data: John Doe, 42"))
+                .responseFormat(ResponseFormat.builder()
+                        .type(ResponseFormatType.JSON)
+                        .jsonSchema(JsonSchema.builder()
+                                .name("Person")
+                                .rootElement(JsonObjectSchema.builder()
+                                        .addStringProperty("fullName")
+                                        .addIntegerProperty("age")
+                                        .build())
+                                .build())
+                        .build())
+                .build());
+
+        System.out.println(chatResponse.aiMessage().text());
+    }
+
+
+    @Test
+    void ollama_tools_specification_example() {
+
+        ChatLanguageModel model = OllamaChatModel.builder()
+                .baseUrl(baseUrl())
+                .modelName(MODEL_NAME)
+                .build();
+
+
+        List<ToolSpecification> toolSpecificationList = List.of(
+                ToolSpecification.builder()
+                        .name("get_fav_color")
+                        .description("Gets favorite color of user by ID")
+                        .parameters(JsonObjectSchema.builder()
+                                .addIntegerProperty("user_id")
+                                .required("user_id")
+                                .build())
+                        .build()
+        );
+
+        Response<AiMessage> aiMessageResponse = model.generate(
+                List.of(UserMessage.from("Find the favorite color of user Jim with ID 21")),
+                toolSpecificationList
+        );
+
+        System.out.println(aiMessageResponse.content().toolExecutionRequests());
     }
 
     static String baseUrl() {
