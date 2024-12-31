@@ -54,7 +54,7 @@ public class Easy_RAG_Example {
 
     private static ContentRetriever createContentRetriever(List<Document> documents) {
 
-        // Here, we create and empty in-memory store for our documents and their embeddings.
+        // Here, we create an empty in-memory store for our documents and their embeddings.
         InMemoryEmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
 
         // Here, we are ingesting our documents into the store.
