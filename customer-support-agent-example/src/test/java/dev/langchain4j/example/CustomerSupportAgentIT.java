@@ -4,6 +4,7 @@ import dev.langchain4j.example.booking.Booking;
 import dev.langchain4j.example.booking.BookingService;
 import dev.langchain4j.example.booking.Customer;
 import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.output.TokenUsage;
 import dev.langchain4j.service.Result;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -69,6 +70,10 @@ class CustomerSupportAgentIT {
         assertThat(result).onlyToolWasExecuted("getBookingDetails");
         verify(bookingService).getBookingDetails(BOOKING_NUMBER, CUSTOMER_NAME, CUSTOMER_SURNAME);
         verifyNoMoreInteractions(bookingService);
+
+        TokenUsage tokenUsage = result.tokenUsage();
+        assertThat(tokenUsage.inputTokenCount()).isLessThan(1000);
+        assertThat(tokenUsage.outputTokenCount()).isLessThan(200);
 
         with(judgeModel).assertThat(answer)
                 .satisfies("mentions that booking starts on %s".formatted(BOOKING_BEGIN_DATE));
