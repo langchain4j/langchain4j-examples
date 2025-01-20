@@ -6,7 +6,7 @@
 
     <groupId>dev.langchain4j</groupId>
     <artifactId>couchbase-example</artifactId>
-    <version>0.32.0</version>
+    <version>0.34.0</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
