@@ -64,7 +64,7 @@ public class BedrockChatModelExample {
                     .build();
 
             UserMessage userMessage = UserMessage.from(
-                    TextContent.from("Summarize this document?"),
+                    TextContent.from("Summarize attached document"),
                     PdfFileContent.from(Paths.get("https://docs.aws.amazon.com/pdfs/bedrock/latest/APIReference/bedrock-api.pdf").toUri())
             );
 
