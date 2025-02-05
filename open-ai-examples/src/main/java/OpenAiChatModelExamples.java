@@ -42,11 +42,7 @@ public class OpenAiChatModelExamples {
                     ImageContent.from("https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png")
             );
 
-            ChatRequest chatRequest = ChatRequest.builder()
-                    .messages(userMessage)
-                    .build();
-
-            ChatResponse chatResponse = chatModel.chat(chatRequest);
+            ChatResponse chatResponse = chatModel.chat(userMessage);
 
             System.out.println(chatResponse.aiMessage().text());
         }

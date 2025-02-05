@@ -1,6 +1,4 @@
-import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.model.chat.StreamingChatLanguageModel;
-import dev.langchain4j.model.chat.request.ChatRequest;
 import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
 import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
@@ -16,11 +14,7 @@ public class OpenAiStreamingChatModelExamples {
                 .modelName(GPT_4_O_MINI)
                 .build();
 
-        ChatRequest chatRequest = ChatRequest.builder()
-                .messages(UserMessage.from("Tell me a joke about Java"))
-                .build();
-
-        chatModel.chat(chatRequest, new StreamingChatResponseHandler() {
+        chatModel.chat("Tell me a joke about Java", new StreamingChatResponseHandler() {
 
             @Override
             public void onPartialResponse(String partialResponse) {

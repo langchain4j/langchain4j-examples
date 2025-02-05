@@ -5,6 +5,7 @@ import dev.langchain4j.data.message.SystemMessage;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.chat.request.ChatRequest;
+import dev.langchain4j.model.chat.request.ChatRequestParameters;
 import dev.langchain4j.model.chat.request.ResponseFormat;
 import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.service.output.JsonSchemas;
@@ -93,7 +94,9 @@ public class JudgeModelAssertions {
                             ),
                             UserMessage.from("<text>%s</text>".formatted(text))
                     )
-                    .responseFormat(RESPONSE_FORMAT)
+                    .parameters(ChatRequestParameters.builder()
+                            .responseFormat(RESPONSE_FORMAT)
+                            .build())
                     .build();
 
             ChatResponse chatResponse = judgeModel.chat(chatRequest);

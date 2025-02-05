@@ -35,7 +35,7 @@ public class StructuredPromptTemplateExamples {
             createRecipePrompt.ingredients = asList("cucumber", "tomato", "feta", "onion", "olives");
             Prompt prompt = StructuredPromptProcessor.toPrompt(createRecipePrompt);
 
-            AiMessage aiMessage = model.generate(prompt.toUserMessage()).content();
+            AiMessage aiMessage = model.chat(prompt.toUserMessage()).aiMessage();
             System.out.println(aiMessage.text());
         }
     }
@@ -71,7 +71,7 @@ public class StructuredPromptTemplateExamples {
             createRecipePrompt.ingredients = asList("cucumber", "tomato", "feta", "onion", "olives");
             Prompt prompt = StructuredPromptProcessor.toPrompt(createRecipePrompt);
 
-            AiMessage aiMessage = model.generate(prompt.toUserMessage()).content();
+            AiMessage aiMessage = model.chat(prompt.toUserMessage()).aiMessage();
             System.out.println(aiMessage.text());
         }
     }

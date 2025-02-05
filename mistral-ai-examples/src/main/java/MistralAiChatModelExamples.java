@@ -16,7 +16,7 @@ public class MistralAiChatModelExamples {
                     .logResponses(true)
                     .build();
 
-            String joke = model.generate("Tell me a joke about Java");
+            String joke = model.chat("Tell me a joke about Java");
 
             System.out.println(joke);
         }

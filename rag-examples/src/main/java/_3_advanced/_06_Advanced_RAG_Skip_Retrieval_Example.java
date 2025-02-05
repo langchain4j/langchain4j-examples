@@ -106,7 +106,7 @@ public class _06_Advanced_RAG_Skip_Retrieval_Example {
 
                 Prompt prompt = PROMPT_TEMPLATE.apply(query.text());
 
-                AiMessage aiMessage = chatLanguageModel.generate(prompt.toUserMessage()).content();
+                AiMessage aiMessage = chatLanguageModel.chat(prompt.toUserMessage()).aiMessage();
                 System.out.println("LLM decided: " + aiMessage.text());
 
                 if (aiMessage.text().toLowerCase().contains("no")) {

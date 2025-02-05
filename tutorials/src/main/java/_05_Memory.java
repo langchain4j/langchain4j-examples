@@ -3,10 +3,10 @@ import dev.langchain4j.data.message.SystemMessage;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.memory.ChatMemory;
 import dev.langchain4j.memory.chat.TokenWindowChatMemory;
-import dev.langchain4j.model.StreamingResponseHandler;
+import dev.langchain4j.model.chat.response.ChatResponse;
+import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
 import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
 import dev.langchain4j.model.openai.OpenAiTokenizer;
-import dev.langchain4j.model.output.Response;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -42,16 +42,16 @@ public class _05_Memory {
 
         CompletableFuture<AiMessage> futureAiMessage = new CompletableFuture<>();
 
-        StreamingResponseHandler<AiMessage> handler = new StreamingResponseHandler<AiMessage>() {
+        StreamingChatResponseHandler handler = new StreamingChatResponseHandler() {
 
             @Override
-            public void onNext(String token) {
-                System.out.print(token);
+            public void onPartialResponse(String partialResponse) {
+                System.out.print(partialResponse);
             }
 
             @Override
-            public void onComplete(Response<AiMessage> response) {
-                futureAiMessage.complete(response.content());
+            public void onCompleteResponse(ChatResponse completeResponse) {
+                futureAiMessage.complete(completeResponse.aiMessage());
             }
 
             @Override
@@ -59,7 +59,7 @@ public class _05_Memory {
             }
         };
 
-        model.generate(chatMemory.messages(), handler);
+        model.chat(chatMemory.messages(), handler);
         chatMemory.add(futureAiMessage.get());
 
         UserMessage userMessage2 = userMessage(
@@ -70,6 +70,6 @@ public class _05_Memory {
         System.out.println("\n\n[User]: " + userMessage2.text());
         System.out.print("[LLM]: ");
 
-        model.generate(chatMemory.messages(), handler);
+        model.chat(chatMemory.messages(), handler);
     }
 }

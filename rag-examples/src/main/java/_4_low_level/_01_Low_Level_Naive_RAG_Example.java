@@ -98,7 +98,7 @@ public class _01_Low_Level_Naive_RAG_Example {
                 .modelName(GPT_4_O_MINI)
                 .timeout(Duration.ofSeconds(60))
                 .build();
-        AiMessage aiMessage = chatModel.generate(prompt.toUserMessage()).content();
+        AiMessage aiMessage = chatModel.chat(prompt.toUserMessage()).aiMessage();
 
         // See an answer from the model
         String answer = aiMessage.text();
