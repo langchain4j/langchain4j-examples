@@ -45,11 +45,7 @@ public class BedrockChatModelExample {
                     ImageContent.from("https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png")
             );
 
-            ChatRequest chatRequest = ChatRequest.builder()
-                    .messages(userMessage)
-                    .build();
-
-            ChatResponse chatResponse = chatModel.chat(chatRequest);
+            ChatResponse chatResponse = chatModel.chat(userMessage);
 
             System.out.println(chatResponse.aiMessage().text());
         }
@@ -65,14 +61,10 @@ public class BedrockChatModelExample {
 
             UserMessage userMessage = UserMessage.from(
                     TextContent.from("Summarize attached document"),
-                    PdfFileContent.from(Paths.get("https://docs.aws.amazon.com/pdfs/bedrock/latest/APIReference/bedrock-api.pdf").toUri())
+                    PdfFileContent.from(Paths.get("bedrock-examples/src/main/resources/test-file.pdf").toUri())
             );
 
-            ChatRequest chatRequest = ChatRequest.builder()
-                    .messages(userMessage)
-                    .build();
-
-            ChatResponse chatResponse = chatModel.chat(chatRequest);
+            ChatResponse chatResponse = chatModel.chat(userMessage);
 
             System.out.println(chatResponse.aiMessage().text());
         }
@@ -95,8 +87,8 @@ public class BedrockChatModelExample {
                     .build();
 
             ChatRequestParameters parameters = ChatRequestParameters.builder()
-                    //Model choice can be overridden with request parameter
-                    .modelName("anthropic.claude-3-5-sonnet-20241022-v2:0")
+                    // Model choice can be overridden with request parameter
+                    .modelName("anthropic.claude-3-haiku-20240307-v1:0")
                     .temperature(1.0)
                     .maxOutputTokens(50)
                     .build();
@@ -111,5 +103,4 @@ public class BedrockChatModelExample {
             System.out.println(chatResponse);
         }
     }
-
 }
