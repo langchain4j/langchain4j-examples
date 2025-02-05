@@ -1,3 +1,5 @@
+package invoke;
+
 import dev.langchain4j.model.bedrock.BedrockAnthropicMessageChatModel;
 import dev.langchain4j.model.bedrock.BedrockAnthropicStreamingChatModel;
 import dev.langchain4j.model.chat.StreamingChatLanguageModel;

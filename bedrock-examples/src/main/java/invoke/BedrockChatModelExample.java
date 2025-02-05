@@ -1,3 +1,5 @@
+package invoke;
+
 import dev.langchain4j.model.bedrock.BedrockAnthropicMessageChatModel;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import software.amazon.awssdk.regions.Region;
