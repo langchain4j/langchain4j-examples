@@ -12,7 +12,7 @@ public class _00_HelloWorld {
                 .modelName(GPT_4_O_MINI)
                 .build();
 
-        String answer = model.generate("Say Hello World");
+        String answer = model.chat("Say Hello World");
 
         System.out.println(answer);
     }

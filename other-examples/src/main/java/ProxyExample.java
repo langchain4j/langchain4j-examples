@@ -17,7 +17,7 @@ public class ProxyExample {
                 .proxy(new Proxy(HTTP, new InetSocketAddress("39.175.77.7", 30001)))
                 .build();
 
-        String answer = model.generate("hello");
+        String answer = model.chat("hello");
         System.out.println(answer);
     }
 }

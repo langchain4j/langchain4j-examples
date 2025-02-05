@@ -1,7 +1,8 @@
-import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.model.StreamingResponseHandler;
 import dev.langchain4j.model.chat.StreamingChatLanguageModel;
+import dev.langchain4j.model.chat.response.ChatResponse;
+import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
 import dev.langchain4j.model.language.StreamingLanguageModel;
 import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
 import dev.langchain4j.model.openai.OpenAiStreamingLanguageModel;
@@ -32,16 +33,16 @@ public class StreamingExamples {
                     userMessage("Tell me a joke")
             );
 
-            model.generate(messages, new StreamingResponseHandler<AiMessage>() {
+            model.chat(messages, new StreamingChatResponseHandler() {
 
                 @Override
-                public void onNext(String token) {
-                    System.out.println("New token: '" + token + "'");
+                public void onPartialResponse(String partialResponse) {
+                    System.out.println("New token: '" + partialResponse + "'");
                 }
 
                 @Override
-                public void onComplete(Response<AiMessage> response) {
-                    System.out.println("Streaming completed: " + response);
+                public void onCompleteResponse(ChatResponse completeResponse) {
+                    System.out.println("Streaming completed: " + completeResponse);
                 }
 
                 @Override
@@ -62,7 +63,7 @@ public class StreamingExamples {
                     .modelName(GPT_3_5_TURBO_INSTRUCT)
                     .build();
 
-            model.generate("Tell me a joke", new StreamingResponseHandler<String>() {
+            model.generate("Tell me a joke", new StreamingResponseHandler<>() {
 
                 @Override
                 public void onNext(String token) {

@@ -1,5 +1,4 @@
-import dev.langchain4j.data.message.AiMessage;
-import dev.langchain4j.model.output.Response;
+import dev.langchain4j.model.chat.response.ChatResponse;
 import javafx.application.Platform;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,7 +17,7 @@ public class CustomStreamingResponseHandler {
         Platform.runLater(() -> action.appendAnswer(token));
     }
 
-    public void onComplete(Response<AiMessage> response) {
+    public void onComplete(ChatResponse response) {
         Platform.runLater(() -> {
             LOGGER.info("Complete response: " + response.toString());
             LOGGER.info("Answer is complete for '" + action.getQuestion() + "', size: "
