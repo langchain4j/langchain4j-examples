@@ -1,8 +1,6 @@
-import dev.langchain4j.data.message.AiMessage;
-import dev.langchain4j.model.StreamingResponseHandler;
-import dev.langchain4j.model.openai.OpenAiChatModelName;
+import dev.langchain4j.model.chat.response.ChatResponse;
+import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
 import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
-import dev.langchain4j.model.output.Response;
 
 import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 
@@ -20,15 +18,15 @@ public class _04_Streaming {
         System.out.println("Nr of chars: " + prompt.length());
         System.out.println("Nr of tokens: " + model.estimateTokenCount(prompt));
 
-        model.generate(prompt, new StreamingResponseHandler<AiMessage>() {
+        model.chat(prompt, new StreamingChatResponseHandler() {
 
             @Override
-            public void onNext(String token) {
-                System.out.print(token);
+            public void onPartialResponse(String partialResponse) {
+                System.out.print(partialResponse);
             }
 
             @Override
-            public void onComplete(Response<AiMessage> response) {
+            public void onCompleteResponse(ChatResponse completeResponse) {
                 System.out.println("\n\nDone streaming");
             }
 
@@ -37,6 +35,5 @@ public class _04_Streaming {
                 System.out.println("Something went wrong: " + error.getMessage());
             }
         });
-
     }
 }

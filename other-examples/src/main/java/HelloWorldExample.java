@@ -14,7 +14,7 @@ public class HelloWorldExample {
                 .build();
 
         // Start interacting
-        String answer = model.generate("Hello world!");
+        String answer = model.chat("Hello world!");
 
         System.out.println(answer); // Hello! How can I assist you today?
     }

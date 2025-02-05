@@ -1,7 +1,7 @@
-import dev.langchain4j.data.message.AiMessage;
-import dev.langchain4j.model.StreamingResponseHandler;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.chat.StreamingChatLanguageModel;
+import dev.langchain4j.model.chat.response.ChatResponse;
+import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
 import dev.langchain4j.model.vertexai.VertexAiGeminiChatModel;
 import dev.langchain4j.model.vertexai.VertexAiGeminiStreamingChatModel;
 
@@ -25,7 +25,7 @@ public class VertexAiGeminiChatModelExamples {
                     .modelName(MODEL_NAME)
                     .build();
 
-            String response = model.generate("Tell me a joke");
+            String response = model.chat("Tell me a joke");
 
             System.out.println(response);
         }
@@ -41,11 +41,15 @@ public class VertexAiGeminiChatModelExamples {
                     .modelName(MODEL_NAME)
                     .build();
 
-            model.generate("Tell me a long joke", new StreamingResponseHandler<AiMessage>() {
+            model.chat("Tell me a long joke", new StreamingChatResponseHandler() {
 
                 @Override
-                public void onNext(String token) {
-                    System.out.print(token);
+                public void onPartialResponse(String partialResponse) {
+                    System.out.print(partialResponse);
+                }
+
+                @Override
+                public void onCompleteResponse(ChatResponse completeResponse) {
                 }
 
                 @Override

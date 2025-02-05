@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
  * This is an example of using a {@link ChatLanguageModel}, a low-level LangChain4j API.
  */
 @RestController
-class ChatLanguageModelController {
+public class ChatLanguageModelController {
 
     ChatLanguageModel chatLanguageModel;
 
@@ -19,6 +19,6 @@ class ChatLanguageModelController {
 
     @GetMapping("/model")
     public String model(@RequestParam(value = "message", defaultValue = "Hello") String message) {
-        return chatLanguageModel.generate(message);
+        return chatLanguageModel.chat(message);
     }
 }
