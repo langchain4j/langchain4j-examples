@@ -86,7 +86,7 @@ public class JlamaBasicRagEmbedExamples {
                     .temperature(0.2f) // expect a more focused and deterministic answer
                     .build();
 
-            AiMessage aiMessage = chatModel.generate(prompt.toUserMessage()).content();
+            AiMessage aiMessage = chatModel.chat(prompt.toUserMessage()).aiMessage();
             String answer = aiMessage.text();
             System.out.println(answer); // According to Inca legend, the llamas were created by the mythical founders of the Inca Empire....
         }

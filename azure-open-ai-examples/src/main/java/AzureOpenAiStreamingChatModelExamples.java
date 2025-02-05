@@ -1,7 +1,6 @@
-import dev.langchain4j.data.message.AiMessage;
-import dev.langchain4j.model.StreamingResponseHandler;
 import dev.langchain4j.model.azure.AzureOpenAiStreamingChatModel;
-import dev.langchain4j.model.output.Response;
+import dev.langchain4j.model.chat.response.ChatResponse;
+import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -21,17 +20,18 @@ public class AzureOpenAiStreamingChatModelExamples {
 
             String userMessage = "Write a 100-word poem about Java and AI";
 
-            CompletableFuture<Response<AiMessage>> futureResponse = new CompletableFuture<>();
-            model.generate(userMessage, new StreamingResponseHandler<AiMessage>() {
+            CompletableFuture<ChatResponse> futureResponse = new CompletableFuture<>();
+
+            model.chat(userMessage, new StreamingChatResponseHandler() {
 
                 @Override
-                public void onNext(String token) {
-                    System.out.print(token);
+                public void onPartialResponse(String partialResponse) {
+                    System.out.print(partialResponse);
                 }
 
                 @Override
-                public void onComplete(Response<AiMessage> response) {
-                    futureResponse.complete(response);
+                public void onCompleteResponse(ChatResponse completeResponse) {
+                    futureResponse.complete(completeResponse);
                 }
 
                 @Override

@@ -38,8 +38,8 @@ public class AnswerService {
         var responseHandler = new CustomStreamingResponseHandler(action);
 
         assistant.chat(action.getQuestion())
-                .onNext(responseHandler::onNext)
-                .onComplete(responseHandler::onComplete)
+                .onPartialResponse(responseHandler::onNext)
+                .onCompleteResponse(responseHandler::onComplete)
                 .onError(responseHandler::onError)
                 .start();
     }

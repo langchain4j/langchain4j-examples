@@ -5,6 +5,8 @@ import dev.langchain4j.data.message.ToolExecutionResultMessage;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.request.ChatRequest;
+import dev.langchain4j.model.chat.request.ChatRequestParameters;
 import dev.langchain4j.model.mistralai.MistralAiChatModel;
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.service.SystemMessage;
@@ -80,8 +82,14 @@ public class MistralAiFunctionCallingExamples {
             chatMessages.add(userMessage);
 
             // STEP 2: Model generate function arguments
-            // Tool_choice: With multiple tools it's set to "auto" by default.
-            AiMessage aiMessage = mistralAiModel.generate(chatMessages, tools).content();
+            // Tool_choice: it's set to "auto" by default.
+            ChatRequest chatRequest = ChatRequest.builder()
+                    .messages(chatMessages)
+                    .parameters(ChatRequestParameters.builder()
+                            .toolSpecifications(tools)
+                            .build())
+                    .build();
+            AiMessage aiMessage = mistralAiModel.chat(chatRequest).aiMessage();
             aiMessage.toolExecutionRequests().forEach(toolSpec -> { // return all tools to call to answer the user query
                 System.out.println("Function name: " + toolSpec.name());
                 System.out.println("Function args:" + toolSpec.arguments());
@@ -94,7 +102,7 @@ public class MistralAiFunctionCallingExamples {
             chatMessages.addAll(toolExecutionResultMessages);
 
             // STEP 4: Model generate final response
-            AiMessage finalResponse = mistralAiModel.generate(chatMessages).content();
+            AiMessage finalResponse = mistralAiModel.chat(chatMessages).aiMessage();
             System.out.println(finalResponse.text()); //According to the payment data, the payment status of transaction T1005 is Pending.
         }
 

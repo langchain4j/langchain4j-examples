@@ -3,6 +3,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.chat.request.ChatRequest;
+import dev.langchain4j.model.chat.request.ChatRequestParameters;
 import dev.langchain4j.model.chat.request.ResponseFormat;
 import dev.langchain4j.model.chat.request.ResponseFormatType;
 import dev.langchain4j.model.chat.request.json.JsonObjectSchema;
@@ -80,17 +81,23 @@ class OllamaChatModelTest extends AbstractOllamaInfrastructure {
                 .logRequests(true)
                 .build();
 
-        ChatRequest chatRequest = ChatRequest.builder()
-                .messages(UserMessage.from("John Doe is 42 years old"))
-                .responseFormat(ResponseFormat.builder()
-                        .type(ResponseFormatType.JSON)
-                        .jsonSchema(JsonSchema.builder()
-                                .rootElement(JsonObjectSchema.builder()
-                                        .addStringProperty("name")
-                                        .addIntegerProperty("age")
-                                        .build())
+        ResponseFormat responseFormat = ResponseFormat.builder()
+                .type(ResponseFormatType.JSON)
+                .jsonSchema(JsonSchema.builder()
+                        .rootElement(JsonObjectSchema.builder()
+                                .addStringProperty("name")
+                                .addIntegerProperty("age")
                                 .build())
                         .build())
+                .build();
+
+        ChatRequestParameters parameters = ChatRequestParameters.builder()
+                .responseFormat(responseFormat)
+                .build();
+
+        ChatRequest chatRequest = ChatRequest.builder()
+                .messages(UserMessage.from("John Doe is 42 years old"))
+                .parameters(parameters)
                 .build();
 
         ChatResponse chatResponse = chatModel.chat(chatRequest);

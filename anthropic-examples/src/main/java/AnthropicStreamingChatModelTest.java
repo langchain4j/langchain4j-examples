@@ -1,8 +1,7 @@
-import dev.langchain4j.data.message.AiMessage;
-import dev.langchain4j.model.StreamingResponseHandler;
 import dev.langchain4j.model.anthropic.AnthropicStreamingChatModel;
 import dev.langchain4j.model.chat.StreamingChatLanguageModel;
-import dev.langchain4j.model.output.Response;
+import dev.langchain4j.model.chat.response.ChatResponse;
+import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.CompletableFuture;
@@ -23,19 +22,19 @@ class AnthropicStreamingChatModelTest {
     @Test
     void AnthropicChatModel_Example() throws ExecutionException, InterruptedException {
 
-        CompletableFuture<AiMessage> future = new CompletableFuture<>();
+        CompletableFuture<ChatResponse> future = new CompletableFuture<>();
 
-        model.generate("What is the capital of Germany?", new StreamingResponseHandler<AiMessage>() {
+        model.chat("What is the capital of Germany?", new StreamingChatResponseHandler() {
 
             @Override
-            public void onNext(String token) {
-                System.out.println("New token: '" + token + "'");
+            public void onPartialResponse(String partialResponse) {
+                System.out.println("New token: '" + partialResponse + "'");
             }
 
             @Override
-            public void onComplete(Response<AiMessage> response) {
-                System.out.println("Streaming completed: " + response);
-                future.complete(response.content());
+            public void onCompleteResponse(ChatResponse completeResponse) {
+                System.out.println("Streaming completed: " + completeResponse);
+                future.complete(completeResponse);
             }
 
             @Override
@@ -44,6 +43,6 @@ class AnthropicStreamingChatModelTest {
             }
         });
 
-        assertThat(future.get().text()).containsIgnoringCase("Berlin");
+        assertThat(future.get().aiMessage().text()).containsIgnoringCase("Berlin");
     }
 }
