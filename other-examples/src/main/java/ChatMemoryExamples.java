@@ -30,12 +30,12 @@ public class ChatMemoryExamples {
         // You can process/modify the message before saving if required.
 
         chatMemory.add(userMessage("Hello, my name is Klaus"));
-        AiMessage answer = model.generate(chatMemory.messages()).content();
+        AiMessage answer = model.chat(chatMemory.messages()).aiMessage();
         System.out.println(answer.text()); // Hello Klaus! How can I assist you today?
         chatMemory.add(answer);
 
         chatMemory.add(userMessage("What is my name?"));
-        AiMessage answerWithName = model.generate(chatMemory.messages()).content();
+        AiMessage answerWithName = model.chat(chatMemory.messages()).aiMessage();
         System.out.println(answerWithName.text()); // Your name is Klaus.
         chatMemory.add(answerWithName);
     }

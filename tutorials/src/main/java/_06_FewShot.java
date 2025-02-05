@@ -1,7 +1,8 @@
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.UserMessage;
-import dev.langchain4j.model.StreamingResponseHandler;
+import dev.langchain4j.model.chat.response.ChatResponse;
+import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
 import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
 
 import java.util.ArrayList;
@@ -54,15 +55,20 @@ public class _06_FewShot {
         System.out.println("[User]: " + customerComplaint.text());
         System.out.print("[LLM]: ");
 
-        model.generate(fewShotHistory, new StreamingResponseHandler<AiMessage>() {
+        model.chat(fewShotHistory, new StreamingChatResponseHandler() {
 
             @Override
-            public void onNext(String token) {
-                System.out.print(token);
+            public void onPartialResponse(String partialResponse) {
+                System.out.print(partialResponse);
+            }
+
+            @Override
+            public void onCompleteResponse(ChatResponse completeResponse) {
             }
 
             @Override
             public void onError(Throwable throwable) {
+                throwable.printStackTrace();
             }
         });
 

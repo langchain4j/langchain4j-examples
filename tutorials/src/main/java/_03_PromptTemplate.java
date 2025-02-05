@@ -34,7 +34,7 @@ public class _03_PromptTemplate {
 
             Prompt prompt = promptTemplate.apply(variables);
 
-            String response = model.generate(prompt.text());
+            String response = model.chat(prompt.text());
 
             System.out.println(response);
         }
@@ -84,7 +84,7 @@ public class _03_PromptTemplate {
 
             Prompt prompt = StructuredPromptProcessor.toPrompt(createRecipePrompt);
 
-            String recipe = model.generate(prompt.text());
+            String recipe = model.chat(prompt.text());
 
             System.out.println(recipe);
         }

@@ -21,7 +21,7 @@ public class _01_ModelParameters {
 
         String prompt = "Explain in three lines how to make a beautiful painting";
 
-        String response = model.generate(prompt);
+        String response = model.chat(prompt);
 
         System.out.println(response);
     }

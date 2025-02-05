@@ -24,8 +24,8 @@ public class ServiceWithStreamingExample {
 
         TokenStream tokenStream = assistant.chat("Tell me a joke");
 
-        tokenStream.onNext(System.out::println)
-                .onComplete(System.out::println)
+        tokenStream.onPartialResponse(System.out::println)
+                .onCompleteResponse(System.out::println)
                 .onError(Throwable::printStackTrace)
                 .start();
     }

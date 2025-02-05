@@ -15,7 +15,7 @@ public class AzureOpenAiChatModelExamples {
                     .logRequestsAndResponses(true)
                     .build();
 
-            String response = model.generate("Provide 3 short bullet points explaining why Java is awesome");
+            String response = model.chat("Provide 3 short bullet points explaining why Java is awesome");
 
             System.out.println(response);
         }
