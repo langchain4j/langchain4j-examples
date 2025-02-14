@@ -1,13 +1,21 @@
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
-import dev.langchain4j.model.embedding.AllMiniLmL6V2EmbeddingModel;
+import dev.langchain4j.model.embedding.onnx.allminilml6v2.AllMiniLmL6V2EmbeddingModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
-import dev.langchain4j.store.embedding.EmbeddingStore;
+import dev.langchain4j.store.embedding.couchbase.CouchbaseEmbeddingStore;
+import org.testcontainers.couchbase.BucketDefinition;
+import org.testcontainers.couchbase.CouchbaseContainer;
+import org.testcontainers.utility.DockerImageName;
 
+import java.time.Duration;
 import java.util.List;
 
 public class CouchbaseEmbeddingSearchExample {
+
+    private static BucketDefinition testBucketDefinition = new BucketDefinition("default")
+            .withPrimaryIndex(true)
+            .withQuota(100);
 
     public static void main(String[] args) throws InterruptedException {
 
@@ -18,9 +26,10 @@ public class CouchbaseEmbeddingSearchExample {
 
             couchbase.start();
 
-            CouchbaseEmbeddingStore embeddingStore = new CouchbaseEmbeddingStore.Builder(couchbaseContainer.getConnectionString())
-                    .username(couchbaseContainer.getUsername())
-                    .password(couchbaseContainer.getPassword())
+            CouchbaseEmbeddingStore embeddingStore = new CouchbaseEmbeddingStore.Builder()
+                    .clusterUrl(couchbase.getConnectionString())
+                    .username(couchbase.getUsername())
+                    .password(couchbase.getPassword())
                     .bucketName(testBucketDefinition.getName())
                     .scopeName("_default")
                     .collectionName("_default")
