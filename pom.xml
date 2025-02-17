@@ -15,6 +15,7 @@
         <module>azure-open-ai-examples</module>
         <module>bedrock-examples</module>
         <module>chroma-example</module>
+        <module>couchbase-example</module>
         <module>customer-support-agent-example</module>
         <module>tutorials</module>
         <module>elasticsearch-example</module>
