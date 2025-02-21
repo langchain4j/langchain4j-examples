@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ChatLanguageModelController {
 
-    ChatLanguageModel chatLanguageModel;
+    private final ChatLanguageModel chatLanguageModel;
 
-    ChatLanguageModelController(ChatLanguageModel chatLanguageModel) {
+    public ChatLanguageModelController(ChatLanguageModel chatLanguageModel) {
         this.chatLanguageModel = chatLanguageModel;
     }
 

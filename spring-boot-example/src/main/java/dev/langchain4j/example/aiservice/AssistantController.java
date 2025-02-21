@@ -12,24 +12,24 @@ import static org.springframework.http.MediaType.TEXT_EVENT_STREAM_VALUE;
  * This is an example of using an {@link AiService}, a high-level LangChain4j API.
  */
 @RestController
-class AssistantController {
+public class AssistantController {
 
-    Assistant assistant;
-    StreamingAssistant streamingAssistant;
+    private final Assistant assistant;
+    private final StreamingAssistant streamingAssistant;
 
-    AssistantController(Assistant assistant, StreamingAssistant streamingAssistant) {
+    public AssistantController(Assistant assistant, StreamingAssistant streamingAssistant) {
         this.assistant = assistant;
         this.streamingAssistant = streamingAssistant;
     }
 
     @GetMapping("/assistant")
-    public String assistant(@RequestParam(value = "message", defaultValue = "What time is it now?") String message) {
+    public String assistant(@RequestParam(value = "message", defaultValue = "What is the current time?") String message) {
         return assistant.chat(message);
     }
 
     @GetMapping(value = "/streamingAssistant", produces = TEXT_EVENT_STREAM_VALUE)
     public Flux<String> streamingAssistant(
-            @RequestParam(value = "message", defaultValue = "Tell me an interesting story in 100 words") String message) {
+            @RequestParam(value = "message", defaultValue = "What is the current time?") String message) {
         return streamingAssistant.chat(message);
     }
 }
