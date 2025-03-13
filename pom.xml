@@ -6,7 +6,7 @@
 
     <groupId>dev.langchain4j</groupId>
     <artifactId>langchain4j-examples</artifactId>
-    <version>1.0.0-beta1</version>
+    <version>1.0.0-beta2</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -15,6 +15,7 @@
         <module>azure-open-ai-examples</module>
         <module>bedrock-examples</module>
         <module>chroma-example</module>
+        <module>couchbase-example</module>
         <module>customer-support-agent-example</module>
         <module>tutorials</module>
         <module>elasticsearch-example</module>
@@ -23,6 +24,7 @@
         <module>jakartaee-microprofile-example</module>
         <module>jlama-examples</module>
         <module>mcp-example</module>
+        <module>mcp-github-example</module>
         <module>milvus-example</module>
         <module>mistral-ai-examples</module>
         <module>neo4j-example</module>

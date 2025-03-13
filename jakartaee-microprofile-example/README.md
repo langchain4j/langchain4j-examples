@@ -3,7 +3,7 @@ This example demonstrates LangChain4J in a Jakarta EE / MicroProfile application
 
 ## Prerequisites:
 
-- [Java 17](https://developer.ibm.com/languages/java/semeru-runtimes/downloads)
+- [Java 21](https://developer.ibm.com/languages/java/semeru-runtimes/downloads)
 - Hugging Face API Key
   - Sign up and log in to https://huggingface.co.
   - Go to [Access Tokens](https://huggingface.co/settings/tokens). 
@@ -21,7 +21,7 @@ cd langchain4j-examples/jakartaee-microprofile-example
 Set the following environment variables:
 
 ```
-export JAVA_HOME=<your Java 17 home path>
+export JAVA_HOME=<your Java 21 home path>
 export HUGGING_FACE_API_KEY=<your Hugging Face read token>
 ```
 
@@ -44,7 +44,7 @@ Use the Maven wrapper to start the application by using the [Liberty dev mode](h
     Which are the most used models?
     ```
   - ```
-    any documentation?
+    show me the documentation
     ```
 
 
