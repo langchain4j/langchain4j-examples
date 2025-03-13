@@ -10,7 +10,7 @@ public class OpenAiEmbeddingModelExamples {
     public static void main(String[] args) {
 
         EmbeddingModel model = OpenAiEmbeddingModel.builder()
-                .apiKey("demo")
+                .apiKey(ApiKeys.OPENAI_API_KEY)
                 .modelName(TEXT_EMBEDDING_3_SMALL)
                 .build();
 
