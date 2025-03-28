@@ -40,9 +40,9 @@ public class _05_Memory {
         System.out.println("[User]: " + userMessage1.text());
         System.out.print("[LLM]: ");
 
-        CompletableFuture<AiMessage> futureAiMessage = new CompletableFuture<>();
+        CompletableFuture<AiMessage> futureAiMessage1 = new CompletableFuture<>();
 
-        StreamingChatResponseHandler handler = new StreamingChatResponseHandler() {
+        StreamingChatResponseHandler handler1 = new StreamingChatResponseHandler() {
 
             @Override
             public void onPartialResponse(String partialResponse) {
@@ -51,7 +51,7 @@ public class _05_Memory {
 
             @Override
             public void onCompleteResponse(ChatResponse completeResponse) {
-                futureAiMessage.complete(completeResponse.aiMessage());
+                futureAiMessage1.complete(completeResponse.aiMessage());
             }
 
             @Override
@@ -59,8 +59,8 @@ public class _05_Memory {
             }
         };
 
-        model.chat(chatMemory.messages(), handler);
-        chatMemory.add(futureAiMessage.get());
+        model.chat(chatMemory.messages(), handler1);
+        chatMemory.add(futureAiMessage1.get());
 
         UserMessage userMessage2 = userMessage(
                 "Give a concrete example implementation of the first point? " +
@@ -69,7 +69,27 @@ public class _05_Memory {
 
         System.out.println("\n\n[User]: " + userMessage2.text());
         System.out.print("[LLM]: ");
+        
+        CompletableFuture<AiMessage> futureAiMessage2 = new CompletableFuture<>();
 
-        model.chat(chatMemory.messages(), handler);
+        StreamingChatResponseHandler handler2 = new StreamingChatResponseHandler() {
+
+            @Override
+            public void onPartialResponse(String partialResponse) {
+                System.out.print(partialResponse);
+            }
+
+            @Override
+            public void onCompleteResponse(ChatResponse completeResponse) {
+                futureAiMessage2.complete(completeResponse.aiMessage());
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+            }
+        };
+        
+        model.chat(chatMemory.messages(), handler2);
+        chatMemory.add(futureAiMessage2.get());
     }
 }
