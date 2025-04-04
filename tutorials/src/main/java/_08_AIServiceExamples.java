@@ -131,29 +131,13 @@ public class _08_AIServiceExamples {
     static class Hotel_Review_AI_Service_Example {
 
         public enum IssueCategory {
-
-            @Description("The feedback mentions issues with the hotel's maintenance, such as air conditioning and plumbing problems")
             MAINTENANCE_ISSUE,
-
-            @Description("The feedback mentions issues with the service provided, such as slow room service")
             SERVICE_ISSUE,
-
-            @Description("The feedback mentions issues affecting the comfort of the stay, such as uncomfortable room conditions")
             COMFORT_ISSUE,
-
-            @Description("The feedback mentions issues with hotel facilities, such as problems with the bathroom plumbing")
             FACILITY_ISSUE,
-
-            @Description("The feedback mentions issues with the cleanliness of the hotel, such as dust and stains")
             CLEANLINESS_ISSUE,
-
-            @Description("The feedback mentions issues with internet connectivity, such as unreliable Wi-Fi")
             CONNECTIVITY_ISSUE,
-
-            @Description("The feedback mentions issues with the check-in process, such as it being tedious and time-consuming")
             CHECK_IN_ISSUE,
-
-            @Description("The feedback mentions a general dissatisfaction with the overall hotel experience due to multiple issues")
             OVERALL_EXPERIENCE_ISSUE
         }
 
