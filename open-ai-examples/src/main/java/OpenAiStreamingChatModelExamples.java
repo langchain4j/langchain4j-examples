@@ -9,7 +9,7 @@ import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 
 public class OpenAiStreamingChatModelExamples {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
         StreamingChatLanguageModel chatModel = OpenAiStreamingChatModel.builder()
                 .apiKey(ApiKeys.OPENAI_API_KEY)

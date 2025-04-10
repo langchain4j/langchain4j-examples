@@ -7,6 +7,7 @@ import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 import static java.time.Duration.ofSeconds;
@@ -55,6 +56,8 @@ public class _06_FewShot {
         System.out.println("[User]: " + customerComplaint.text());
         System.out.print("[LLM]: ");
 
+        CompletableFuture<ChatResponse> futureChatResponse = new CompletableFuture<>();
+
         model.chat(fewShotHistory, new StreamingChatResponseHandler() {
 
             @Override
@@ -64,13 +67,16 @@ public class _06_FewShot {
 
             @Override
             public void onCompleteResponse(ChatResponse completeResponse) {
+                futureChatResponse.complete(completeResponse);
             }
 
             @Override
-            public void onError(Throwable throwable) {
-                throwable.printStackTrace();
+            public void onError(Throwable error) {
+                futureChatResponse.completeExceptionally(error);
             }
         });
+
+        futureChatResponse.join();
 
         // Extract reply and send to customer
         // Perform necessary action in back-end

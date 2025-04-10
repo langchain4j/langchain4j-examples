@@ -5,6 +5,8 @@ import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
 import dev.langchain4j.model.vertexai.VertexAiGeminiChatModel;
 import dev.langchain4j.model.vertexai.VertexAiGeminiStreamingChatModel;
 
+import java.util.concurrent.CompletableFuture;
+
 public class VertexAiGeminiChatModelExamples {
 
     /**
@@ -41,6 +43,8 @@ public class VertexAiGeminiChatModelExamples {
                     .modelName(MODEL_NAME)
                     .build();
 
+            CompletableFuture<ChatResponse> futureChatResponse = new CompletableFuture<>();
+
             model.chat("Tell me a long joke", new StreamingChatResponseHandler() {
 
                 @Override
@@ -50,13 +54,16 @@ public class VertexAiGeminiChatModelExamples {
 
                 @Override
                 public void onCompleteResponse(ChatResponse completeResponse) {
+                    futureChatResponse.complete(completeResponse);
                 }
 
                 @Override
                 public void onError(Throwable error) {
-                    error.printStackTrace();
+                    futureChatResponse.completeExceptionally(error);
                 }
             });
+
+            futureChatResponse.join();
         }
     }
 }
