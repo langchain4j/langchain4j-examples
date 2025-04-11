@@ -49,11 +49,11 @@ public class _06_FewShot {
                 "Action: open new ticket - data loss by new feature\nReply:We apologize for the inconvenience caused. Your feedback is crucial to us, and we have reported this issue to our technical team. They are working on it on priority. We will keep you updated on the progress and notify you once the issue is resolved. Thank you for your patience and support."));
 
         // Adding real user's message
-        ChatMessage customerComplaint = UserMessage
+        UserMessage customerComplaint = UserMessage
                 .from("How can your app be so slow? Please do something about it!");
         fewShotHistory.add(customerComplaint);
 
-        System.out.println("[User]: " + customerComplaint.text());
+        System.out.println("[User]: " + customerComplaint.singleText());
         System.out.print("[LLM]: ");
 
         CompletableFuture<ChatResponse> futureChatResponse = new CompletableFuture<>();

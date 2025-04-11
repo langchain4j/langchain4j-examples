@@ -44,7 +44,7 @@ public class CustomerSupportAgentConfiguration {
     }
 
     @Bean
-    EmbeddingStore<TextSegment> embeddingStore(EmbeddingModel embeddingModel, ResourceLoader resourceLoader) throws IOException {
+    EmbeddingStore<TextSegment> embeddingStore(EmbeddingModel embeddingModel, ResourceLoader resourceLoader, Tokenizer tokenizer) throws IOException {
 
         // Normally, you would already have your embedding store filled with your data.
         // However, for the purpose of this demonstration, we will:
@@ -60,7 +60,7 @@ public class CustomerSupportAgentConfiguration {
         // 4. Convert segments into embeddings
         // 5. Store embeddings into embedding store
         // All this can be done manually, but we will use EmbeddingStoreIngestor to automate this:
-        DocumentSplitter documentSplitter = DocumentSplitters.recursive(100, 0, new OpenAiTokenizer(GPT_4_O_MINI));
+        DocumentSplitter documentSplitter = DocumentSplitters.recursive(100, 0, tokenizer);
         EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
                 .documentSplitter(documentSplitter)
                 .embeddingModel(embeddingModel)
@@ -87,5 +87,10 @@ public class CustomerSupportAgentConfiguration {
                 .maxResults(maxResults)
                 .minScore(minScore)
                 .build();
+    }
+
+    @Bean
+    Tokenizer tokenizer() {
+        return new OpenAiTokenizer(GPT_4_O_MINI);
     }
 }

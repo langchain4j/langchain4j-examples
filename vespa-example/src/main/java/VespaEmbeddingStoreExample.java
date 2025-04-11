@@ -5,6 +5,7 @@ import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.embedding.onnx.allminilml6v2.AllMiniLmL6V2EmbeddingModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
+import dev.langchain4j.store.embedding.EmbeddingSearchRequest;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.vespa.VespaEmbeddingStore;
 import java.util.List;
@@ -62,28 +63,34 @@ public class VespaEmbeddingStoreExample {
     Embedding queryEmbedding = embeddingModel.embed(
       "What is your favorite sport?"
     ).content();
-    List<EmbeddingMatch<TextSegment>> relevant = embeddingStore.findRelevant(
-      queryEmbedding,
-      2
-    );
+    EmbeddingSearchRequest embeddingSearchRequest = EmbeddingSearchRequest.builder()
+            .queryEmbedding(queryEmbedding)
+            .maxResults(2)
+            .build();
+    List<EmbeddingMatch<TextSegment>> matches = embeddingStore.search(embeddingSearchRequest).matches();
 
     System.out.println(
-      "relevant results count for sport question: " + relevant.size()
+      "relevant results count for sport question: " + matches.size()
     ); // 2
 
-    System.out.println(relevant.get(0).score()); // 0.639...
-    System.out.println(relevant.get(0).embedded().text()); // football
-    System.out.println(relevant.get(1).score()); // 0.232...
-    System.out.println(relevant.get(1).embedded().text()); // swimming pool
+    System.out.println(matches.get(0).score()); // 0.639...
+    System.out.println(matches.get(0).embedded().text()); // football
+    System.out.println(matches.get(1).score()); // 0.232...
+    System.out.println(matches.get(1).embedded().text()); // swimming pool
 
     queryEmbedding = embeddingModel.embed("And what about musicians?").content();
-    relevant = embeddingStore.findRelevant(queryEmbedding, 5, 0.3);
+    embeddingSearchRequest = EmbeddingSearchRequest.builder()
+            .queryEmbedding(queryEmbedding)
+            .maxResults(5)
+            .minScore(0.3)
+            .build();
+    matches = embeddingStore.search(embeddingSearchRequest).matches();
 
     System.out.println(
-      "relevant results count for music question: " + relevant.size()
+      "relevant results count for music question: " + matches.size()
     ); // 1
 
-    System.out.println(relevant.get(0).score()); // 0.359...
-    System.out.println(relevant.get(0).embedded().text()); // John Lennon
+    System.out.println(matches.get(0).score()); // 0.359...
+    System.out.println(matches.get(0).embedded().text()); // John Lennon
   }
 }

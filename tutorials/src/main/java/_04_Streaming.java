@@ -1,6 +1,7 @@
 import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
 import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
+import dev.langchain4j.model.openai.OpenAiTokenizer;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -18,7 +19,7 @@ public class _04_Streaming {
         String prompt = "Write a short funny poem about developers and null-pointers, 10 lines maximum";
 
         System.out.println("Nr of chars: " + prompt.length());
-        System.out.println("Nr of tokens: " + model.estimateTokenCount(prompt));
+        System.out.println("Nr of tokens: " + new OpenAiTokenizer(GPT_4_O_MINI).estimateTokenCountInText(prompt));
 
         CompletableFuture<ChatResponse> futureChatResponse = new CompletableFuture<>();
 
