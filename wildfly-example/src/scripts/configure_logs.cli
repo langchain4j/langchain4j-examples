@@ -1,0 +1,2 @@
+#/subsystem=logging/logger=io.smallrye.llm:add(level=TRACE)
+/subsystem=logging/logger=dev.langchain4j.http.client.log:add(level=DEBUG)
