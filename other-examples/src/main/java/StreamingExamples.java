@@ -9,6 +9,7 @@ import dev.langchain4j.model.openai.OpenAiStreamingLanguageModel;
 import dev.langchain4j.model.output.Response;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import static dev.langchain4j.data.message.SystemMessage.systemMessage;
 import static dev.langchain4j.data.message.UserMessage.userMessage;
@@ -33,23 +34,27 @@ public class StreamingExamples {
                     userMessage("Tell me a joke")
             );
 
+            CompletableFuture<ChatResponse> futureChatResponse = new CompletableFuture<>();
+
             model.chat(messages, new StreamingChatResponseHandler() {
 
                 @Override
                 public void onPartialResponse(String partialResponse) {
-                    System.out.println("New token: '" + partialResponse + "'");
+                    System.out.print(partialResponse);
                 }
 
                 @Override
                 public void onCompleteResponse(ChatResponse completeResponse) {
-                    System.out.println("Streaming completed: " + completeResponse);
+                    futureChatResponse.complete(completeResponse);
                 }
 
                 @Override
                 public void onError(Throwable error) {
-                    error.printStackTrace();
+                    futureChatResponse.completeExceptionally(error);
                 }
             });
+
+            futureChatResponse.join();
         }
     }
 
@@ -63,23 +68,27 @@ public class StreamingExamples {
                     .modelName(GPT_3_5_TURBO_INSTRUCT)
                     .build();
 
+            CompletableFuture<Response<String>> futureResponse = new CompletableFuture<>();
+
             model.generate("Tell me a joke", new StreamingResponseHandler<>() {
 
                 @Override
                 public void onNext(String token) {
-                    System.out.println("New token: '" + token + "'");
+                    System.out.print(token);
                 }
 
                 @Override
                 public void onComplete(Response<String> response) {
-                    System.out.println("Streaming completed: " + response);
+                    futureResponse.complete(response);
                 }
 
                 @Override
                 public void onError(Throwable error) {
-                    error.printStackTrace();
+                    futureResponse.completeExceptionally(error);
                 }
             });
+
+            futureResponse.join();
         }
     }
 }

@@ -23,7 +23,7 @@ public class _05_Memory {
                 .modelName(GPT_4_O_MINI)
                 .build();
 
-        ChatMemory chatMemory = TokenWindowChatMemory.withMaxTokens(1000, new OpenAiTokenizer());
+        ChatMemory chatMemory = TokenWindowChatMemory.withMaxTokens(1000, new OpenAiTokenizer(GPT_4_O_MINI));
 
         SystemMessage systemMessage = SystemMessage.from(
                 "You are a senior developer explaining to another senior developer, "
@@ -37,7 +37,7 @@ public class _05_Memory {
                         + "Answer short in three to five lines maximum.");
         chatMemory.add(userMessage1);
 
-        System.out.println("[User]: " + userMessage1.text());
+        System.out.println("[User]: " + userMessage1.singleText());
         System.out.print("[LLM]: ");
 
         CompletableFuture<AiMessage> futureAiMessage = new CompletableFuture<>();
@@ -67,7 +67,7 @@ public class _05_Memory {
                         "Be short, 10 lines of code maximum.");
         chatMemory.add(userMessage2);
 
-        System.out.println("\n\n[User]: " + userMessage2.text());
+        System.out.println("\n\n[User]: " + userMessage2.singleText());
         System.out.print("[LLM]: ");
 
         model.chat(chatMemory.messages(), handler);

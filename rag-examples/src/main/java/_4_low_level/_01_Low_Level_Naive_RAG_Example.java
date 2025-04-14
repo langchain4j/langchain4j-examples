@@ -16,6 +16,7 @@ import dev.langchain4j.model.input.PromptTemplate;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.openai.OpenAiTokenizer;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
+import dev.langchain4j.store.embedding.EmbeddingSearchRequest;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
 
@@ -47,7 +48,7 @@ public class _01_Low_Level_Naive_RAG_Example {
         DocumentSplitter splitter = DocumentSplitters.recursive(
                 300,
                 0,
-                new OpenAiTokenizer()
+                new OpenAiTokenizer(GPT_4_O_MINI)
         );
         List<TextSegment> segments = splitter.split(document);
 
@@ -67,10 +68,12 @@ public class _01_Low_Level_Naive_RAG_Example {
 
         // Find relevant embeddings in embedding store by semantic similarity
         // You can play with parameters below to find a sweet spot for your specific use case
-        int maxResults = 3;
-        double minScore = 0.7;
-        List<EmbeddingMatch<TextSegment>> relevantEmbeddings
-                = embeddingStore.findRelevant(questionEmbedding, maxResults, minScore);
+        EmbeddingSearchRequest embeddingSearchRequest = EmbeddingSearchRequest.builder()
+                .queryEmbedding(questionEmbedding)
+                .maxResults(3)
+                .minScore(0.7)
+                .build();
+        List<EmbeddingMatch<TextSegment>> relevantEmbeddings = embeddingStore.search(embeddingSearchRequest).matches();
 
         // Create a prompt for the model that includes question and relevant embeddings
         PromptTemplate promptTemplate = PromptTemplate.from(
