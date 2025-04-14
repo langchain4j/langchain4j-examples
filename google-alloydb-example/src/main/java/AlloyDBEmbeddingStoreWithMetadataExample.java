@@ -1,3 +1,7 @@
+import dev.langchain4j.community.store.embedding.alloydb.AlloyDBEmbeddingStore;
+import dev.langchain4j.community.store.embedding.alloydb.AlloyDBEngine;
+import dev.langchain4j.community.store.embedding.alloydb.EmbeddingStoreConfig;
+import dev.langchain4j.community.store.embedding.alloydb.MetadataColumn;
 import dev.langchain4j.data.document.Metadata;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
@@ -6,12 +10,7 @@ import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
 import dev.langchain4j.store.embedding.EmbeddingSearchRequest;
 import dev.langchain4j.store.embedding.EmbeddingSearchResult;
-import dev.langchain4j.engine.EmbeddingStoreConfig;
-import dev.langchain4j.engine.AlloyDBEngine;
-import dev.langchain4j.engine.MetadataColumn;
-import dev.langchain4j.store.embedding.alloydb.AlloyDBEmbeddingStore;
 import dev.langchain4j.store.embedding.filter.Filter;
-import java.sql.SQLException;
 
 import static dev.langchain4j.store.embedding.filter.MetadataFilterBuilder.metadataKey;
 import java.util.ArrayList;
@@ -22,9 +21,8 @@ import java.util.stream.Collectors;
 public class AlloyDBEmbeddingStoreWithMetadataExample {
 
         private static final String TABLE_NAME = "EMBEDDING_TEST_TABLE";
-        private static final Integer VECTOR_SIZE = 384;
 
-        public static void main(String[] args) throws SQLException {
+        public static void main(String[] args) {
 
                 EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
                 // Create connection pool
@@ -42,7 +40,7 @@ public class AlloyDBEmbeddingStoreWithMetadataExample {
                 List<MetadataColumn> metadataColumns = new ArrayList<>();
                 metadataColumns.add(new MetadataColumn("userId", "uuid", true));
                 EmbeddingStoreConfig embeddingStoreConfig =
-                                new EmbeddingStoreConfig.Builder(TABLE_NAME, VECTOR_SIZE)
+                                new EmbeddingStoreConfig.Builder(TABLE_NAME, embeddingModel.dimension())
                                                 .metadataColumns(metadataColumns)
                                                 .overwriteExisting(true).storeMetadata(true)
                                                 .build();
@@ -50,7 +48,7 @@ public class AlloyDBEmbeddingStoreWithMetadataExample {
                 engine.initVectorStoreTable(embeddingStoreConfig);
 
                 // Initialize embedding store to use metadata columns
-                List<String> metaColumnNames = metadataColumns.stream().map(c -> c.getName())
+                List<String> metaColumnNames = metadataColumns.stream().map(MetadataColumn::getName)
                                 .collect(Collectors.toList());
 
                 AlloyDBEmbeddingStore embeddingStore =
