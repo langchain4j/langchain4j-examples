@@ -47,6 +47,7 @@
         <module>oracle-example</module>
         <module>voyage-ai-examples</module>
         <module>google-alloydb-example</module>
+        <module>google-cloud-sql-pg-example</module>
     </modules>
 
 </project>
