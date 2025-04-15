@@ -29,10 +29,10 @@ public class ModelResourceIT {
     
     @Test
     public void testLanguageMode() {
-        String url = baseUrl + "language?question=When was langchain4j launched?";
+        String url = baseUrl + "language?question=When was Hugging Face launched?";
         Response response = client.target(url).request().get();
         String answer = response.readEntity(String.class);
-        assertTrue(answer.contains("2017"), "actual: " + answer);
+        assertTrue(answer.contains("2018"), "actual: " + answer);
     }
 
     @Test
