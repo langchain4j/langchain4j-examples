@@ -16,6 +16,15 @@ public class OracleEmbeddingModelExample {
         pds.setPassword(System.getenv("ORACLE_JDBC_PASSWORD"));
         Connection conn = pds.getConnection();
 
+        // load an ONNX model into the database
+        // remember to create a directory alias with
+        // create or replace directory MODEL_DIR as '/path/to/model';
+        OracleEmbeddingModel.loadOnnxModel(
+                conn,
+                System.getenv("DEMO_ONNX_DIR"),
+                System.getenv("DEMO_ONNX_FILE"),
+                System.getenv("DEMO_ONNX_MODEL"));
+
         String pref = "{\"provider\": \"database\", \"model\": \"" + System.getenv("DEMO_ONNX_MODEL") + "\"}";
 
         OracleEmbeddingModel model = new OracleEmbeddingModel(conn, pref);
