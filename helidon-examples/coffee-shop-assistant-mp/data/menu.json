@@ -1,0 +1,153 @@
+[
+    {
+        "name": "Latte",
+        "description": "A rich espresso drink with steamed milk.",
+        "category": "Drink",
+        "price": 4.5,
+        "tags": [
+            "Hot",
+            "Customizable",
+            "Classic"
+        ],
+        "addOns": [
+            "Oat milk",
+            "Soy milk",
+            "Extra shot",
+            "Caramel syrup"
+        ]
+    },
+    {
+        "name": "Cappuccino",
+        "description": "Espresso topped with a thick layer of frothy milk.",
+        "category": "Drink",
+        "price": 4.0,
+        "tags": [
+            "Hot",
+            "Foamy",
+            "Classic"
+        ],
+        "addOns": [
+            "Vanilla syrup",
+            "Extra shot"
+        ]
+    },
+    {
+        "name": "Espresso",
+        "description": "A strong shot of coffee for a quick energy boost.",
+        "category": "Drink",
+        "price": 3.0,
+        "tags": [
+            "Hot",
+            "Classic",
+            "Bold"
+        ],
+        "addOns": [
+            "Extra shot"
+        ]
+    },
+    {
+        "name": "Iced Matcha Latte",
+        "description": "Chilled matcha green tea with milk.",
+        "category": "Drink",
+        "price": 5.0,
+        "tags": [
+            "Cold",
+            "Vegan",
+            "Trendy"
+        ],
+        "addOns": [
+            "Oat milk",
+            "Almond milk",
+            "Extra matcha"
+        ]
+    },
+    {
+        "name": "Avocado Toast",
+        "description": "Toasted bread topped with mashed avocado and seasonings.",
+        "category": "Food",
+        "price": 6.5,
+        "tags": [
+            "Healthy",
+            "Vegan",
+            "Breakfast"
+        ],
+        "addOns": [
+            "Egg",
+            "Feta cheese",
+            "Hot sauce"
+        ]
+    },
+    {
+        "name": "Blueberry Muffin",
+        "description": "A soft muffin bursting with blueberries.",
+        "category": "Food",
+        "price": 2.75,
+        "tags": [
+            "Breakfast",
+            "Sweet",
+            "Vegetarian"
+        ],
+        "addOns": [
+            "Warm up"
+        ]
+    },
+    {
+        "name": "Bagel with Cream Cheese",
+        "description": "A freshly baked bagel served with creamy cheese spread.",
+        "category": "Food",
+        "price": 3.5,
+        "tags": [
+            "Breakfast",
+            "Savory",
+            "Vegetarian"
+        ],
+        "addOns": [
+            "Butter",
+            "Jam"
+        ]
+    },
+    {
+        "name": "Caramel Frappuccino",
+        "description": "A blended coffee drink with caramel drizzle and whipped cream.",
+        "category": "Drink",
+        "price": 5.5,
+        "tags": [
+            "Cold",
+            "Sweet",
+            "Indulgent"
+        ],
+        "addOns": [
+            "Extra caramel",
+            "Whipped cream"
+        ]
+    },
+    {
+        "name": "Chocolate Chip Cookie",
+        "description": "A large, soft-baked cookie loaded with chocolate chips.",
+        "category": "Food",
+        "price": 2.0,
+        "tags": [
+            "Snack",
+            "Sweet",
+            "Vegetarian"
+        ],
+        "addOns": [
+            "Warm up"
+        ]
+    },
+    {
+        "name": "Hot Chocolate",
+        "description": "A creamy hot chocolate drink topped with whipped cream.",
+        "category": "Drink",
+        "price": 3.75,
+        "tags": [
+            "Hot",
+            "Sweet",
+            "Comforting"
+        ],
+        "addOns": [
+            "Extra whipped cream",
+            "Caramel drizzle"
+        ]
+    }
+]

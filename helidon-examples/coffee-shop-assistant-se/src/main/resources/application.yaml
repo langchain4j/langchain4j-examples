@@ -1,0 +1,18 @@
+server:
+  host: "0.0.0.0"
+  port: 8080
+
+langchain4j:
+  open-ai:
+    chat-model:
+      enabled: true
+      api-key: "demo"
+      model-name: "gpt-4o-mini"
+  rag:
+    embedding-store-content-retriever:
+      enabled: true
+      max-results: 10
+      min-score: 0.6
+      embedding-store: "EmbeddingStore"
+app:
+  menu-items: "data/menu.json"
