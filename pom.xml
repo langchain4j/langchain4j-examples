@@ -48,6 +48,7 @@
         <module>voyage-ai-examples</module>
         <module>google-alloydb-example</module>
         <module>wildfly-example</module>
+        <module>helidon-examples</module>
     </modules>
 
 </project>

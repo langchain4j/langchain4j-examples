@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>dev.langchain4j</groupId>
+    <artifactId>helidon-examples</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>Helidon Examples - LangChain4j Integration </name>
+
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>coffee-shop-assistant-se</module>
+        <module>coffee-shop-assistant-mp</module>
+    </modules>
+
+    <description>
+        Basic illustrations of LangChain4j integration in Helidon
+    </description>
+
+</project>
