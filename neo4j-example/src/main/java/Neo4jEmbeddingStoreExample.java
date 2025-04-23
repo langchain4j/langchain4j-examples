@@ -13,7 +13,7 @@ import java.util.List;
 public class Neo4jEmbeddingStoreExample {
 
     public static void main(String[] args) {
-        try (Neo4jContainer<?> neo4j = new Neo4jContainer<>("neo4j:5")) {
+        try (Neo4jContainer<?> neo4j = new Neo4jContainer<>("neo4j:5.26")) {
             neo4j.start();
 
             EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
