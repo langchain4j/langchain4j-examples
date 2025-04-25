@@ -9,6 +9,13 @@ import java.util.List;
 import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
 
+/**
+ * Demonstrate loading a document from the file system.
+ * The documents can be in any format supported by the Oracle Text filter
+ * including Word, PDF, HTML, and text files. If it is a rich text document
+ * like Word or PDF, it will be converted into plain text and
+ * contain any metadata associated with it.
+ */
 public class OracleDocumentLoaderExample {
 
     public static void main(String[] args) throws SQLException, IOException {

@@ -9,6 +9,11 @@ import java.util.List;
 import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
 
+/**
+ * Demonstrate summarizing a document. You can customize which provider to use
+ * such as database for extracting a summary with Oracle Text or a third-party
+ * provider via a REST call.
+ */
 public class OracleSummaryLanguageModelExample {
 
     public static void main(String[] args) throws SQLException, IOException {
