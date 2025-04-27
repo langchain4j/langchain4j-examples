@@ -65,7 +65,9 @@ public class ChatAgent {
     }
 
     public String chat(String sessionId, String message) {
-        return getAssistant().chat(sessionId, message).trim();
+        String reply = getAssistant().chat(sessionId, message).trim();
+        int i = reply.lastIndexOf(message);
+        return i > 0 ? reply.substring(i) : reply;
     }
 
 }

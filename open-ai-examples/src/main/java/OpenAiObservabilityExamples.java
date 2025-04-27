@@ -60,6 +60,8 @@ public class OpenAiObservabilityExamples {
                         System.out.println(openAiParameters.reasoningEffort());
                     }
 
+                    System.out.println(requestContext.modelProvider());
+
                     Map<Object, Object> attributes = requestContext.attributes();
                     attributes.put("my-attribute", "my-value");
                 }
@@ -94,6 +96,8 @@ public class OpenAiObservabilityExamples {
                     ChatRequest chatRequest = responseContext.chatRequest();
                     System.out.println(chatRequest);
 
+                    System.out.println(responseContext.modelProvider());
+
                     Map<Object, Object> attributes = responseContext.attributes();
                     System.out.println(attributes.get("my-attribute"));
                 }
@@ -105,6 +109,8 @@ public class OpenAiObservabilityExamples {
 
                     ChatRequest chatRequest = errorContext.chatRequest();
                     System.out.println(chatRequest);
+
+                    System.out.println(errorContext.modelProvider());
 
                     Map<Object, Object> attributes = errorContext.attributes();
                     System.out.println(attributes.get("my-attribute"));

@@ -12,6 +12,7 @@ import dev.langchain4j.model.input.PromptTemplate;
 import dev.langchain4j.model.jlama.JlamaChatModel;
 import dev.langchain4j.model.jlama.JlamaEmbeddingModel;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
+import dev.langchain4j.store.embedding.EmbeddingSearchRequest;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
 
@@ -55,10 +56,12 @@ public class JlamaBasicRagEmbedExamples {
             Embedding questionEmbedding = embeddingModel.embed(question).content();
 
             // We can perform a search on the vector database and retrieve the most relevant text chunks based on the user question.
-            int maxResults = 3;
-            double minScore = 0.7;
-            List<EmbeddingMatch<TextSegment>> relevantEmbeddings
-                    = embeddingStore.findRelevant(questionEmbedding, maxResults, minScore);
+            EmbeddingSearchRequest embeddingSearchRequest = EmbeddingSearchRequest.builder()
+                    .queryEmbedding(questionEmbedding)
+                    .maxResults(3)
+                    .minScore(0.7)
+                    .build();
+            List<EmbeddingMatch<TextSegment>> relevantEmbeddings = embeddingStore.search(embeddingSearchRequest).matches();
 
             // Now we can offer the relevant information as the context information within the prompt.
             // Here is a prompt template where we can include both the retrieved text and user question in the prompt.

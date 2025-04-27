@@ -1,0 +1,12 @@
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--  Set the level to `debug` to see more detailed logs.-->
+    <root level="info">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

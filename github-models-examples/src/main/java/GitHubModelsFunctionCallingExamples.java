@@ -3,6 +3,7 @@ import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.ToolExecutionResultMessage;
 import dev.langchain4j.data.message.UserMessage;
+import dev.langchain4j.model.chat.request.ChatRequest;
 import dev.langchain4j.model.github.GitHubModelsChatModel;
 import dev.langchain4j.service.tool.DefaultToolExecutor;
 import dev.langchain4j.service.tool.ToolExecutor;
@@ -47,9 +48,13 @@ public class GitHubModelsFunctionCallingExamples {
             UserMessage userMessage = userMessage("What will the weather be like in London tomorrow?");
             chatMessages.add(userMessage);
 
+            ChatRequest request = ChatRequest.builder()
+                    .messages(chatMessages)
+                    .toolSpecifications(toolSpecifications)
+                    .build();
 
             // STEP 2: Model generate function arguments
-            AiMessage aiMessage = model.generate(chatMessages, toolSpecifications).content();
+            AiMessage aiMessage = model.chat(request).aiMessage();
             List<ToolExecutionRequest> toolExecutionRequests = aiMessage.toolExecutionRequests();
             System.out.println("Out of the " + toolSpecifications.size() + " functions declared in WeatherTools, " + toolExecutionRequests.size() + " will be invoked:");
             toolExecutionRequests.forEach(toolExecutionRequest -> {
@@ -70,7 +75,7 @@ public class GitHubModelsFunctionCallingExamples {
 
 
             // STEP 4: Model generate final response
-            AiMessage finalResponse = model.generate(chatMessages).content();
+            AiMessage finalResponse = model.chat(chatMessages).aiMessage();
             System.out.println(finalResponse.text()); //According to the payment data, the payment status of transaction T1005 is Pending.
         }
     }

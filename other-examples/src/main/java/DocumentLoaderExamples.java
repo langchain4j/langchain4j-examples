@@ -67,7 +67,7 @@ public class DocumentLoaderExamples {
     }
 
     private static void log(Document document) {
-        log.info("{}: {} ...", document.metadata("file_name"), document.text().trim().substring(0, 50));
+        log.info("{}: {} ...", document.metadata().getString("file_name"), document.text().trim().substring(0, 50));
     }
 
     private static Path toPath(String fileName) {

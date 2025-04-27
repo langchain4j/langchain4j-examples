@@ -1,0 +1,119 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.jboss</groupId>
+        <artifactId>jboss-parent</artifactId>
+        <version>49</version>
+        <relativePath/>
+    </parent>
+    <groupId>dev.langchain4j</groupId>
+    <artifactId>wildfly-example</artifactId>
+    <version>1.0.0-beta3</version>
+    <packaging>war</packaging>
+    <name>WildFly langchain4j - Example</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <version.wildfly.maven.plugin>5.1.2.Final</version.wildfly.maven.plugin>
+        <version.wildfly.server>36.0.0.Final</version.wildfly.server>
+        <version.wildfly.ai.feature.pack>0.4.2</version.wildfly.ai.feature.pack>
+        <version.io.smallrye.llm>0.0.4</version.io.smallrye.llm>
+        <version.compiler.plugin>3.14.0</version.compiler.plugin>
+        <version.war.plugin>3.4.0</version.war.plugin>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.wildfly.bom</groupId>
+                <artifactId>wildfly-expansion</artifactId>
+                <type>pom</type>
+                <version>${version.wildfly.server}</version>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wildfly</groupId>
+                <artifactId>wildfly-ai-bom</artifactId>
+                <type>pom</type>
+                <version>${version.wildfly.ai.feature.pack}</version>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta.ws.rs-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.enterprise</groupId>
+            <artifactId>jakarta.enterprise.cdi-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${version.compiler.plugin}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${version.war.plugin}</version>
+                <configuration>
+                    <!-- Jakarta EE doesn't require web.xml, Maven needs to catch up! -->
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+
+            <!-- The WildFly plugin provisions a minimal server and deploys your war to it-->
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>${version.wildfly.maven.plugin}</version>
+                <configuration>
+                    <discoverProvisioningInfo>
+                        <spaces>
+                            <space>incubating</space>
+                        </spaces>
+                        <version>${version.wildfly.server}</version>
+                    </discoverProvisioningInfo>
+                    <name>ROOT.war</name>
+                    <packagingScripts>
+                        <packaging-script>
+                            <scripts>
+                                <script>./src/scripts/configure_logs.cli</script>
+                            </scripts>
+                        </packaging-script>
+                    </packagingScripts>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>package</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
