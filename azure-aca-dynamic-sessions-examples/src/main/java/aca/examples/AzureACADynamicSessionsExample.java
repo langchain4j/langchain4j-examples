@@ -1,21 +1,28 @@
 package aca.examples;
 import dev.langchain4j.agent.tool.Tool;
+import dev.langchain4j.http.client.HttpClient;
+import dev.langchain4j.http.client.HttpClientBuilder;
+import dev.langchain4j.http.client.HttpRequest;
+import dev.langchain4j.http.client.SuccessfulHttpResponse;
+import dev.langchain4j.http.client.sse.ServerSentEventListener;
+import dev.langchain4j.http.client.sse.ServerSentEventParser;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.azure.AzureOpenAiChatModel; 
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.azure.aca.dynamicsessions.SessionsREPLTool;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.Base64;
-
 
  /**
  * Examples for using a tool for executing code in Azure ACA dynamic sessions.
  * See the examples here for more information:
- * https://github.com/langchain4j/langchain4j/tree/main/langchain4j-azure-aca-dynamic-sessions
+ * https://github.com/langchain4j/langchain4j-examples/tree/main/azure-aca-dynamic-sessions-examples
  *
  * Overview:
  * This example demonstrates how to leverage Azure ACA dynamic sessions for remote code 
@@ -28,7 +35,7 @@ import java.util.Base64;
  *   - Assistant interface: Provides a chat method for interacting with the language model.
  *   - AzureOpenAiChatModel: Configured to use Azure OpenAI, it handles chat-based interactions.
  *   - SessionsREPLTool: Acts as a tool for executing code remotely in an ACA dynamic session 
- *     and managing files (upload/download/list).
+ *     and managing files (upload/download/list). Implements CodeExecutionEngine interface.
  *   - AiServices: Connects the language model and the tool to form a complete assistant.
  *
  * Required Environment Variables:
@@ -75,6 +82,105 @@ public class AzureACADynamicSessionsExample {
     interface Assistant {
         //Assistant doesn't need @Tool - core langchain4j method for LLM communication
         String chat(String userMessage);
+    }
+
+    /**
+     * A simple implementation of HttpClientBuilder that uses the standard Java HTTP client
+     */
+    public static class SimpleHttpClientBuilder implements HttpClientBuilder {
+        private Duration connectTimeout;
+        private Duration readTimeout;
+
+        @Override
+        public Duration connectTimeout() {
+            return this.connectTimeout;
+        }
+
+        @Override
+        public HttpClientBuilder connectTimeout(Duration timeout) {
+            this.connectTimeout = timeout;
+            return this;
+        }
+
+        @Override
+        public Duration readTimeout() {
+            return this.readTimeout;
+        }
+
+        @Override
+        public HttpClientBuilder readTimeout(Duration timeout) {
+            this.readTimeout = timeout;
+            return this;
+        }
+
+        @Override
+        public HttpClient build() {
+            return new SimpleHttpClient(this);
+        }
+
+        private static class SimpleHttpClient implements HttpClient {
+            private final java.net.http.HttpClient httpClient;
+            private final Duration readTimeout;
+
+            public SimpleHttpClient(SimpleHttpClientBuilder builder) {
+                java.net.http.HttpClient.Builder clientBuilder = java.net.http.HttpClient.newBuilder();
+                if (builder.connectTimeout() != null) {
+                    clientBuilder.connectTimeout(builder.connectTimeout());
+                }
+                this.httpClient = clientBuilder.build();
+                this.readTimeout = builder.readTimeout();
+            }
+
+            @Override
+            public SuccessfulHttpResponse execute(HttpRequest request) {
+                try {
+                    java.net.http.HttpRequest.Builder reqBuilder = java.net.http.HttpRequest.newBuilder()
+                            .uri(URI.create(request.url()));
+
+                    request.headers().forEach((name, values) -> {
+                        if (values != null) {
+                            for (String value : values) {
+                                reqBuilder.header(name, value);
+                            }
+                        }
+                    });
+
+                    if (request.body() != null) {
+                        reqBuilder.method(
+                                request.method().name(),
+                                java.net.http.HttpRequest.BodyPublishers.ofString(request.body())
+                        );
+                    } else {
+                        reqBuilder.method(
+                                request.method().name(),
+                                java.net.http.HttpRequest.BodyPublishers.noBody()
+                        );
+                    }
+
+                    if (readTimeout != null) {
+                        reqBuilder.timeout(readTimeout);
+                    }
+
+                    java.net.http.HttpResponse<String> response = httpClient.send(
+                            reqBuilder.build(),
+                            java.net.http.HttpResponse.BodyHandlers.ofString()
+                    );
+
+                    return SuccessfulHttpResponse.builder()
+                            .statusCode(response.statusCode())
+                            .headers(response.headers().map())
+                            .body(response.body())
+                            .build();
+                } catch (IOException | InterruptedException e) {
+                    throw new RuntimeException("Error executing HTTP request", e);
+                }
+            }
+
+            @Override
+            public void execute(HttpRequest request, ServerSentEventParser parser, ServerSentEventListener listener) {
+                throw new UnsupportedOperationException("SSE not supported in this simple implementation");
+            }
+        }
     }
 
 
@@ -131,31 +237,25 @@ public class AzureACADynamicSessionsExample {
         String answer = assistant.chat(question);
         System.out.println("Question: " + question);
         System.out.println("Answer: " + answer);
-                
-        // Example: Upload a local file
+                  // Example: Upload a local file
             Path localFilePath = Paths.get("helloworld.java"); // Replace with your local file path
-
-            SessionsREPLTool.FileUploader fileUploader = ReplTool.new MyFileUploader();
+            SessionsREPLTool.FileUploader fileUploader = ReplTool.new FileUploaderImpl();
             try {
                 SessionsREPLTool.RemoteFileMetadata metadata = fileUploader.uploadFileToAca(localFilePath);
                 System.out.println("File uploaded successfully from local path. Metadata: " + metadata.getFilename() + ", " + metadata.getSizeInBytes());
             } catch (Exception e) {
                 System.err.println("Error uploading file from local path: " + e.getMessage());
             }
-        
-        // Example: Download a file
-            SessionsREPLTool.MyFileDownloader fileDownloader = ReplTool.new MyFileDownloader();
+          // Example: Download a file
+            SessionsREPLTool.FileDownloader fileDownloader = ReplTool.new FileDownloaderImpl();
             String fileToDownload = "helloworld.java"; // Replace with the remote file
             try {
                 String downloadedFile = fileDownloader.downloadFile(fileToDownload);
                 System.out.println("Downloaded File (Base64): " + downloadedFile);
             } catch (Exception e) {
                 System.err.println("Error downloading file: " + e.getMessage());
-            }
-
-
-        // Example: List files
-            SessionsREPLTool.MyFileLister fileLister = ReplTool.new MyFileLister();
+            }        // Example: List files
+            SessionsREPLTool.FileLister fileLister = ReplTool.new FileListerImpl();
             try {
                 String fileList = fileLister.listFiles();
                 System.out.println("File List: " + fileList);
