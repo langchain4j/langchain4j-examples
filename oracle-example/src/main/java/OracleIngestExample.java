@@ -19,11 +19,13 @@ import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
 
 /**
- * Demonstrate using the OracleEmbeddingStore with the following
- * components to ingest the documents and perform a vector search.
+ * Demonstrate using the OracleEmbeddingStore to ingest documents into a vector
+ * store and then perform a vector search.
+ *
+ * The following components are used:
  * OracleDocumentLoader to load the documents
  * OracleDocumentSplitter to split the text
- * OracleEmbeddingModel to get the vector embeddings
+ * OracleEmbeddingModel to get the vector embeddings 
  * OracleEmbeddingStore to store the vector embeddings
  */
 public class OracleIngestExample {
@@ -36,21 +38,34 @@ public class OracleIngestExample {
         pds.setPassword(System.getenv("ORACLE_JDBC_PASSWORD"));
         Connection conn = pds.getConnection();
 
-        String embedderPref = "{\"provider\": \"database\", \"model\": \"" + System.getenv("DEMO_ONNX_MODEL") + "\"}";
+        // set the loader, splitter, and embedding preferences
+        String loaderPref = "{\"file\": \"" + System.getenv("DEMO_FILE") + "\"}";
         String splitterPref = "{\"by\": \"chars\", \"max\": 50}";
+        String embedderPref = "{\"provider\": \"database\", \"model\": \"" + System.getenv("DEMO_ONNX_MODEL") + "\"}";
 
         OracleDocumentLoader loader = new OracleDocumentLoader(conn);
-        OracleEmbeddingModel embedder = new OracleEmbeddingModel(conn, embedderPref);
         OracleDocumentSplitter splitter = new OracleDocumentSplitter(conn, splitterPref);
+        OracleEmbeddingModel embedder = new OracleEmbeddingModel(conn, embedderPref);
 
-        // column names for the output table
+        // load the ONNX model for embedding
+        OracleEmbeddingModel.loadOnnxModel(
+                conn,
+                System.getenv("DEMO_ONNX_DIR"),
+                System.getenv("DEMO_ONNX_FILE"),
+                System.getenv("DEMO_ONNX_MODEL"));
+
+        // load the document
+        List<Document> docs = loader.loadDocuments(loaderPref);
+
+        // set column names for the output table
         String tableName = "TEST";
         String idColumn = "ID";
         String embeddingColumn = "EMBEDDING";
         String textColumn = "TEXT";
         String metadataColumn = "METADATA";
 
-        // The call to build() should create a table with the configured names
+        // setup the embedding store
+        // build() should create a table with the configured names
         OracleEmbeddingStore embeddingStore = OracleEmbeddingStore.builder()
                 .dataSource(pds)
                 .embeddingTable(EmbeddingTable.builder()
@@ -63,15 +78,6 @@ public class OracleIngestExample {
                         .build())
                 .build();
 
-        OracleEmbeddingModel.loadOnnxModel(
-                conn,
-                System.getenv("DEMO_ONNX_DIR"),
-                System.getenv("DEMO_ONNX_FILE"),
-                System.getenv("DEMO_ONNX_MODEL"));
-
-        String loaderPref = "{\"file\": \"" + System.getenv("DEMO_FILE") + "\"}";
-        List<Document> docs = loader.loadDocuments(loaderPref);
-
         // ingest the documents with the following components
         EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
                 .documentSplitter(splitter)
@@ -79,8 +85,8 @@ public class OracleIngestExample {
                 .embeddingStore(embeddingStore)
                 .build();
         ingestor.ingest(docs);
-        
-        // get the question from the user
+
+        // get the question
         String question = "What is a database?";
 
         // get the vector representation
