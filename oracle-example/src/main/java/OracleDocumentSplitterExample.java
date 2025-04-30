@@ -9,9 +9,9 @@ import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
 
 /**
- * Demonstrate chunking or splitting text in a document. You can customize
- * how to split the content such as by words, characters, or vocabulary
- * (for tokens) to match a tokenizer in the preference.
+ * Demonstrate chunking or splitting text in a document. You can customize how
+ * to split the content such as by words, characters, or vocabulary (for tokens)
+ * to match a tokenizer in the preference.
  */
 public class OracleDocumentSplitterExample {
 

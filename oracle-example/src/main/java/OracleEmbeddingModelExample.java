@@ -10,7 +10,8 @@ import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
 
 /**
- * Demonstrate getting the vector embeddings with an ONNX model.
+ * Demonstrate getting the vector embeddings with an ONNX model located on the
+ * server.
  */
 public class OracleEmbeddingModelExample {
 
@@ -39,7 +40,7 @@ public class OracleEmbeddingModelExample {
         Response<Embedding> response = model.embed("I love Java");
         Embedding embedding = response.content();
         System.out.println(embedding);
-        
+
         // embed a list of text
         List<TextSegment> textSegments = new ArrayList<>();
         textSegments.add(TextSegment.from("hello world"));
