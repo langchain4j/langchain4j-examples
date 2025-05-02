@@ -4,7 +4,7 @@ import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.ToolExecutionResultMessage;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.chat.request.ChatRequest;
 import dev.langchain4j.model.chat.request.ChatRequestParameters;
 import dev.langchain4j.model.mistralai.MistralAiChatModel;
@@ -24,7 +24,7 @@ public class MistralAiFunctionCallingExamples {
 
     static class Payment_Data_From_AiServices {
 
-        static ChatLanguageModel mistralAiModel = MistralAiChatModel.builder()
+        static ChatModel mistralAiModel = MistralAiChatModel.builder()
                 .apiKey(System.getenv("MISTRAL_AI_API_KEY")) // Please use your own Mistral AI API key
                 .modelName(MISTRAL_LARGE_LATEST)
                 .build();
@@ -48,7 +48,7 @@ public class MistralAiFunctionCallingExamples {
 
             // STEP 2: User asks the agent and AiServices call to the functions
             Assistant agent = AiServices.builder(Assistant.class)
-                    .chatLanguageModel(mistralAiModel)
+                    .chatModel(mistralAiModel)
                     .tools(paymentTool)
                     .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
                     .build();
@@ -62,7 +62,7 @@ public class MistralAiFunctionCallingExamples {
 
     static class Payment_Data_From_Manual_Configuration {
 
-        static ChatLanguageModel mistralAiModel = MistralAiChatModel.builder()
+        static ChatModel mistralAiModel = MistralAiChatModel.builder()
                 .apiKey(System.getenv("MISTRAL_AI_API_KEY")) // Please use your own Mistral AI API key
                 .modelName(MISTRAL_LARGE_LATEST)
                 .logRequests(true)

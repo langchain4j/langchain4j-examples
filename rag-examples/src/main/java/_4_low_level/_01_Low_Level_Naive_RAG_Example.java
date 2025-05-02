@@ -8,13 +8,13 @@ import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.segment.TextSegment;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.embedding.onnx.bgesmallenv15q.BgeSmallEnV15QuantizedEmbeddingModel;
 import dev.langchain4j.model.input.Prompt;
 import dev.langchain4j.model.input.PromptTemplate;
 import dev.langchain4j.model.openai.OpenAiChatModel;
-import dev.langchain4j.model.openai.OpenAiTokenizer;
+import dev.langchain4j.model.openai.OpenAiTokenCountEstimator;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
 import dev.langchain4j.store.embedding.EmbeddingSearchRequest;
 import dev.langchain4j.store.embedding.EmbeddingStore;
@@ -48,7 +48,7 @@ public class _01_Low_Level_Naive_RAG_Example {
         DocumentSplitter splitter = DocumentSplitters.recursive(
                 300,
                 0,
-                new OpenAiTokenizer(GPT_4_O_MINI)
+                new OpenAiTokenCountEstimator(GPT_4_O_MINI)
         );
         List<TextSegment> segments = splitter.split(document);
 
@@ -96,7 +96,7 @@ public class _01_Low_Level_Naive_RAG_Example {
         Prompt prompt = promptTemplate.apply(variables);
 
         // Send the prompt to the OpenAI chat model
-        ChatLanguageModel chatModel = OpenAiChatModel.builder()
+        ChatModel chatModel = OpenAiChatModel.builder()
                 .apiKey(OPENAI_API_KEY)
                 .modelName(GPT_4_O_MINI)
                 .timeout(Duration.ofSeconds(60))

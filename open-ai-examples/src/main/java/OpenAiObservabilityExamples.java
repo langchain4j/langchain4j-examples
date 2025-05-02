@@ -1,6 +1,6 @@
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.ChatMessage;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.chat.listener.ChatModelErrorContext;
 import dev.langchain4j.model.chat.listener.ChatModelListener;
 import dev.langchain4j.model.chat.listener.ChatModelRequestContext;
@@ -117,7 +117,7 @@ public class OpenAiObservabilityExamples {
                 }
             };
 
-            ChatLanguageModel model = OpenAiChatModel.builder()
+            ChatModel model = OpenAiChatModel.builder()
                     .apiKey(System.getenv("OPENAI_API_KEY"))
                     .modelName(GPT_4_O_MINI)
                     .listeners(List.of(listener))

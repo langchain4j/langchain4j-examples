@@ -4,7 +4,7 @@ import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.ToolExecutionResultMessage;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.model.azure.AzureOpenAiChatModel;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.chat.request.ChatRequest;
 import dev.langchain4j.model.chat.request.ChatRequestParameters;
 import dev.langchain4j.service.tool.DefaultToolExecutor;
@@ -33,7 +33,7 @@ public class AzureOpenAiFunctionCallingExamples {
      */
     static class Weather_From_Manual_Configuration {
 
-        static ChatLanguageModel azureOpenAiModel = AzureOpenAiChatModel.builder()
+        static ChatModel azureOpenAiModel = AzureOpenAiChatModel.builder()
                 .apiKey(System.getenv("AZURE_OPENAI_KEY"))
                 .endpoint(System.getenv("AZURE_OPENAI_ENDPOINT"))
                 .deploymentName(System.getenv("AZURE_OPENAI_DEPLOYMENT_NAME"))

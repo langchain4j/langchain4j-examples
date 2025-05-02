@@ -1,4 +1,4 @@
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.openai.OpenAiModerationModel;
 import dev.langchain4j.service.AiServices;
@@ -23,13 +23,13 @@ public class ServiceWithAutoModerationExample {
                 .modelName(TEXT_MODERATION_LATEST)
                 .build();
 
-        ChatLanguageModel chatModel = OpenAiChatModel.builder()
+        ChatModel chatModel = OpenAiChatModel.builder()
                 .apiKey(ApiKeys.OPENAI_API_KEY)
                 .modelName(GPT_4_O_MINI)
                 .build();
 
         Chat chat = AiServices.builder(Chat.class)
-                .chatLanguageModel(chatModel)
+                .chatModel(chatModel)
                 .moderationModel(moderationModel)
                 .build();
 

@@ -1,4 +1,4 @@
-### Low Level API: ChatLanguageModel
+### Low Level API: ChatModel
 GET http://localhost:8082/model?message=What is the capital of Germany?
 
 ### High Level API: AI Service with tools

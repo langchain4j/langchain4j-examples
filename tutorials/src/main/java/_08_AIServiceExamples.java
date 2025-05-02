@@ -1,6 +1,6 @@
 import dev.langchain4j.memory.ChatMemory;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.input.structured.StructuredPrompt;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.output.structured.Description;
@@ -19,7 +19,7 @@ import static java.util.Arrays.asList;
 
 public class _08_AIServiceExamples {
 
-    static ChatLanguageModel model = OpenAiChatModel.builder()
+    static ChatModel model = OpenAiChatModel.builder()
             .apiKey(ApiKeys.OPENAI_API_KEY)
             .modelName(GPT_4_O_MINI)
             .timeout(ofSeconds(60))
@@ -274,7 +274,7 @@ public class _08_AIServiceExamples {
 
         public static void main(String[] args) {
 
-            ChatLanguageModel model = OpenAiChatModel.builder()
+            ChatModel model = OpenAiChatModel.builder()
                     .apiKey(ApiKeys.OPENAI_API_KEY)
                     .modelName(GPT_4_O_MINI)
                     // When extracting POJOs with the LLM that supports the "json mode" feature
@@ -342,7 +342,7 @@ public class _08_AIServiceExamples {
 
         public static void main(String[] args) {
 
-            ChatLanguageModel model = OpenAiChatModel.builder()
+            ChatModel model = OpenAiChatModel.builder()
                     .apiKey(ApiKeys.OPENAI_API_KEY)
                     .modelName(GPT_4_O_MINI)
                     // When extracting POJOs with the LLM that supports the "json mode" feature
@@ -397,7 +397,7 @@ public class _08_AIServiceExamples {
             ChatMemory chatMemory = MessageWindowChatMemory.withMaxMessages(10);
 
             Assistant assistant = AiServices.builder(Assistant.class)
-                    .chatLanguageModel(model)
+                    .chatModel(model)
                     .chatMemory(chatMemory)
                     .build();
 
@@ -419,7 +419,7 @@ public class _08_AIServiceExamples {
         public static void main(String[] args) {
 
             Assistant assistant = AiServices.builder(Assistant.class)
-                    .chatLanguageModel(model)
+                    .chatModel(model)
                     .chatMemoryProvider(memoryId -> MessageWindowChatMemory.withMaxMessages(10))
                     .build();
 

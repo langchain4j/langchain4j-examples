@@ -7,10 +7,10 @@ import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.memory.chat.ChatMemoryProvider;
 import dev.langchain4j.memory.chat.TokenWindowChatMemory;
-import dev.langchain4j.model.Tokenizer;
+import dev.langchain4j.model.TokenCountEstimator;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.embedding.onnx.allminilml6v2.AllMiniLmL6V2EmbeddingModel;
-import dev.langchain4j.model.openai.OpenAiTokenizer;
+import dev.langchain4j.model.openai.OpenAiTokenCountEstimator;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
 import dev.langchain4j.store.embedding.EmbeddingStore;
@@ -30,7 +30,7 @@ import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 public class CustomerSupportAgentConfiguration {
 
     @Bean
-    ChatMemoryProvider chatMemoryProvider(Tokenizer tokenizer) {
+    ChatMemoryProvider chatMemoryProvider(TokenCountEstimator tokenizer) {
         return memoryId -> TokenWindowChatMemory.builder()
                 .id(memoryId)
                 .maxTokens(5000, tokenizer)
@@ -44,7 +44,7 @@ public class CustomerSupportAgentConfiguration {
     }
 
     @Bean
-    EmbeddingStore<TextSegment> embeddingStore(EmbeddingModel embeddingModel, ResourceLoader resourceLoader, Tokenizer tokenizer) throws IOException {
+    EmbeddingStore<TextSegment> embeddingStore(EmbeddingModel embeddingModel, ResourceLoader resourceLoader, TokenCountEstimator tokenizer) throws IOException {
 
         // Normally, you would already have your embedding store filled with your data.
         // However, for the purpose of this demonstration, we will:
@@ -90,7 +90,7 @@ public class CustomerSupportAgentConfiguration {
     }
 
     @Bean
-    Tokenizer tokenizer() {
-        return new OpenAiTokenizer(GPT_4_O_MINI);
+    TokenCountEstimator tokenCountEstimator() {
+        return new OpenAiTokenCountEstimator(GPT_4_O_MINI);
     }
 }

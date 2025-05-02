@@ -4,7 +4,7 @@ import _2_naive.Naive_RAG_Example;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
@@ -21,7 +21,7 @@ import static shared.Utils.*;
 
 public class Easy_RAG_Example {
 
-    private static final ChatLanguageModel CHAT_MODEL = OpenAiChatModel.builder()
+    private static final ChatModel CHAT_MODEL = OpenAiChatModel.builder()
             .apiKey(OPENAI_API_KEY)
             .modelName(GPT_4_O_MINI)
             .build();
@@ -41,7 +41,7 @@ public class Easy_RAG_Example {
 
         // Second, let's create an assistant that will have access to our documents
         Assistant assistant = AiServices.builder(Assistant.class)
-                .chatLanguageModel(CHAT_MODEL) // it should use OpenAI LLM
+                .chatModel(CHAT_MODEL) // it should use OpenAI LLM
                 .chatMemory(MessageWindowChatMemory.withMaxMessages(10)) // it should remember 10 latest messages
                 .contentRetriever(createContentRetriever(documents)) // it should have access to our documents
                 .build();

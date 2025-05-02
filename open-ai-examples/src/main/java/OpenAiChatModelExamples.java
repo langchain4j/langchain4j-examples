@@ -1,7 +1,7 @@
 import dev.langchain4j.data.message.ImageContent;
 import dev.langchain4j.data.message.TextContent;
 import dev.langchain4j.data.message.UserMessage;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.chat.request.ChatRequest;
 import dev.langchain4j.model.chat.request.ChatRequestParameters;
 import dev.langchain4j.model.chat.response.ChatResponse;
@@ -16,7 +16,7 @@ public class OpenAiChatModelExamples {
 
         public static void main(String[] args) {
 
-            ChatLanguageModel chatModel = OpenAiChatModel.builder()
+            ChatModel chatModel = OpenAiChatModel.builder()
                     .apiKey(ApiKeys.OPENAI_API_KEY)
                     .modelName(GPT_4_O_MINI)
                     .build();
@@ -31,7 +31,7 @@ public class OpenAiChatModelExamples {
 
         public static void main(String[] args) {
 
-            ChatLanguageModel chatModel = OpenAiChatModel.builder()
+            ChatModel chatModel = OpenAiChatModel.builder()
                     .apiKey(ApiKeys.OPENAI_API_KEY) // Please use your own OpenAI API key
                     .modelName(GPT_4_O_MINI)
                     .maxTokens(50)
@@ -59,7 +59,7 @@ public class OpenAiChatModelExamples {
                     // there are many more common parameters, see ChatRequestParameters for more info
                     .build();
 
-            ChatLanguageModel chatModel = OpenAiChatModel.builder()
+            ChatModel chatModel = OpenAiChatModel.builder()
                     .apiKey(ApiKeys.OPENAI_API_KEY)
                     .defaultRequestParameters(defaultParameters)
                     .logRequests(true)
@@ -94,7 +94,7 @@ public class OpenAiChatModelExamples {
                     .maxOutputTokens(100) // common parameter
                     .build();
 
-            ChatLanguageModel chatModel = OpenAiChatModel.builder()
+            ChatModel chatModel = OpenAiChatModel.builder()
                     .apiKey(ApiKeys.OPENAI_API_KEY)
                     .defaultRequestParameters(defaultParameters)
                     .logRequests(true)

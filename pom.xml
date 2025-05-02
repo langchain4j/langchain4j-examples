@@ -6,7 +6,7 @@
 
     <groupId>dev.langchain4j</groupId>
     <artifactId>langchain4j-examples</artifactId>
-    <version>1.0.0-beta3</version>
+    <version>1.0.0-beta4</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -27,6 +27,7 @@
         <module>mcp-github-example</module>
         <module>milvus-example</module>
         <module>mistral-ai-examples</module>
+        <module>native-java-gemini-function-calling-example</module>
         <module>neo4j-example</module>
         <module>ollama-examples</module>
         <module>open-ai-examples</module>

@@ -1,4 +1,4 @@
-import dev.langchain4j.model.chat.StreamingChatLanguageModel;
+import dev.langchain4j.model.chat.StreamingChatModel;
 import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
 import dev.langchain4j.model.ollama.OllamaStreamingChatModel;
@@ -22,7 +22,7 @@ class OllamaStreamingChatModelTest extends AbstractOllamaInfrastructure {
     @Test
     void streaming_example() {
 
-        StreamingChatLanguageModel model = OllamaStreamingChatModel.builder()
+        StreamingChatModel model = OllamaStreamingChatModel.builder()
                 .baseUrl(ollamaBaseUrl(ollama))
                 .modelName(MODEL_NAME)
                 .build();

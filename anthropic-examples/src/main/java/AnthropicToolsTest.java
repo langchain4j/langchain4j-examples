@@ -1,6 +1,6 @@
 import dev.langchain4j.agent.tool.Tool;
 import dev.langchain4j.model.anthropic.AnthropicChatModel;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.service.AiServices;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class AnthropicToolsTest {
 
-    ChatLanguageModel model = AnthropicChatModel.builder()
+    ChatModel model = AnthropicChatModel.builder()
             // API key can be created here: https://console.anthropic.com/settings/keys
             .apiKey(System.getenv("ANTHROPIC_API_KEY"))
             .modelName(CLAUDE_3_HAIKU_20240307)
@@ -45,7 +45,7 @@ class AnthropicToolsTest {
     void AnthropicChatModel_Tools_Example() {
 
         AiService aiService = AiServices.builder(AiService.class)
-                .chatLanguageModel(model)
+                .chatModel(model)
                 .tools(new Tools())
                 .build();
 

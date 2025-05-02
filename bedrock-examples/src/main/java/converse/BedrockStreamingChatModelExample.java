@@ -1,7 +1,7 @@
 package converse;
 
 import dev.langchain4j.model.bedrock.BedrockStreamingChatModel;
-import dev.langchain4j.model.chat.StreamingChatLanguageModel;
+import dev.langchain4j.model.chat.StreamingChatModel;
 import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
 import software.amazon.awssdk.regions.Region;
@@ -17,7 +17,7 @@ public class BedrockStreamingChatModelExample {
         // AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
         // More info on creating the API keys:
         // https://docs.aws.amazon.com/bedrock/latest/userguide/api-setup.html
-        StreamingChatLanguageModel model = BedrockStreamingChatModel.builder()
+        StreamingChatModel model = BedrockStreamingChatModel.builder()
                 .modelId("anthropic.claude-3-5-sonnet-20240620-v1:0")
                 .region(Region.US_EAST_1)
                 .maxRetries(2)

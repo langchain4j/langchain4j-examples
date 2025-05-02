@@ -1,4 +1,4 @@
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.input.structured.StructuredPrompt;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.output.structured.Description;
@@ -17,7 +17,7 @@ import static java.util.Arrays.asList;
 
 public class OtherServiceExamples {
 
-    static ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder()
+    static ChatModel chatModel = OpenAiChatModel.builder()
             .apiKey(ApiKeys.OPENAI_API_KEY)
             .modelName(GPT_4_O_MINI)
             .build();
@@ -39,7 +39,7 @@ public class OtherServiceExamples {
 
         public static void main(String[] args) {
 
-            SentimentAnalyzer sentimentAnalyzer = AiServices.create(SentimentAnalyzer.class, chatLanguageModel);
+            SentimentAnalyzer sentimentAnalyzer = AiServices.create(SentimentAnalyzer.class, chatModel);
 
             Sentiment sentiment = sentimentAnalyzer.analyzeSentimentOf("It is good!");
             System.out.println(sentiment); // POSITIVE
@@ -75,7 +75,7 @@ public class OtherServiceExamples {
 
         public static void main(String[] args) {
 
-            NumberExtractor extractor = AiServices.create(NumberExtractor.class, chatLanguageModel);
+            NumberExtractor extractor = AiServices.create(NumberExtractor.class, chatModel);
 
             String text = "After countless millennia of computation, the supercomputer Deep Thought finally announced " +
                     "that the answer to the ultimate question of life, the universe, and everything was forty two.";
@@ -117,7 +117,7 @@ public class OtherServiceExamples {
 
         public static void main(String[] args) {
 
-            DateTimeExtractor extractor = AiServices.create(DateTimeExtractor.class, chatLanguageModel);
+            DateTimeExtractor extractor = AiServices.create(DateTimeExtractor.class, chatModel);
 
             String text = "The tranquility pervaded the evening of 1968, just fifteen minutes shy of midnight," +
                     " following the celebrations of Independence Day.";
@@ -162,7 +162,7 @@ public class OtherServiceExamples {
 
         public static void main(String[] args) {
 
-            ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder()
+            ChatModel chatModel = OpenAiChatModel.builder()
                     .apiKey(ApiKeys.OPENAI_API_KEY)
                     .modelName(GPT_4_O_MINI)
                     // When extracting POJOs with the LLM that supports the "json mode" feature
@@ -175,7 +175,7 @@ public class OtherServiceExamples {
                     .logResponses(true)
                     .build();
 
-            PersonExtractor extractor = AiServices.create(PersonExtractor.class, chatLanguageModel);
+            PersonExtractor extractor = AiServices.create(PersonExtractor.class, chatModel);
 
             String text = "In 1968, amidst the fading echoes of Independence Day, "
                     + "a child named John arrived under the calm evening sky. "
@@ -231,7 +231,7 @@ public class OtherServiceExamples {
 
         public static void main(String[] args) {
 
-            ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder()
+            ChatModel chatModel = OpenAiChatModel.builder()
                     .apiKey(ApiKeys.OPENAI_API_KEY)
                     .modelName(GPT_4_O_MINI)
                     // When extracting POJOs with the LLM that supports the "json mode" feature
@@ -244,7 +244,7 @@ public class OtherServiceExamples {
                     .logResponses(true)
                     .build();
 
-            Chef chef = AiServices.create(Chef.class, chatLanguageModel);
+            Chef chef = AiServices.create(Chef.class, chatModel);
 
             Recipe recipe = chef.createRecipeFrom("cucumber", "tomato", "feta", "onion", "olives");
 
@@ -283,7 +283,7 @@ public class OtherServiceExamples {
 
         public static void main(String[] args) {
 
-            Chef chef = AiServices.create(Chef.class, chatLanguageModel);
+            Chef chef = AiServices.create(Chef.class, chatModel);
 
             String answer = chef.answer("How long should I grill chicken?");
             System.out.println(answer); // Grilling chicken usually takes around 10-15 minutes per side, depending on ...
@@ -305,7 +305,7 @@ public class OtherServiceExamples {
 
         public static void main(String[] args) {
 
-            TextUtils utils = AiServices.create(TextUtils.class, chatLanguageModel);
+            TextUtils utils = AiServices.create(TextUtils.class, chatModel);
 
             String translation = utils.translate("Hello, how are you?", "italian");
             System.out.println(translation); // Ciao, come stai?
@@ -337,7 +337,7 @@ public class OtherServiceExamples {
 
         public static void main(String[] args) {
 
-            TextUtils utils = AiServices.create(TextUtils.class, chatLanguageModel);
+            TextUtils utils = AiServices.create(TextUtils.class, chatModel);
 
             String translation = utils.translate("Hello, how are you?", "italian");
             System.out.println(translation); // Ciao, come stai?
@@ -354,7 +354,7 @@ public class OtherServiceExamples {
 
         public static void main(String[] args) {
 
-            Assistant assistant = AiServices.create(Assistant.class, chatLanguageModel);
+            Assistant assistant = AiServices.create(Assistant.class, chatModel);
 
             String answer = assistant.chat("Klaus", "Hi, tell me my name if you see it.");
             System.out.println(answer); // Hello! Your name is Klaus. How can I assist you today?
@@ -379,7 +379,7 @@ public class OtherServiceExamples {
             };
 
             Assistant assistant = AiServices.builder(Assistant.class)
-                    .chatLanguageModel(chatLanguageModel)
+                    .chatModel(chatModel)
                     .systemMessageProvider(systemMessageProvider)
                     .build();
 

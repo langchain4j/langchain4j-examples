@@ -6,7 +6,7 @@ import dev.langchain4j.data.message.TextContent;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.model.bedrock.BedrockChatModel;
 import dev.langchain4j.model.bedrock.BedrockChatRequestParameters;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.chat.request.ChatRequest;
 import dev.langchain4j.model.chat.request.ChatRequestParameters;
 import dev.langchain4j.model.chat.response.ChatResponse;
@@ -23,7 +23,7 @@ public class BedrockChatModelExample {
             // AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
             // More info on creating the API keys:
             // https://docs.aws.amazon.com/bedrock/latest/userguide/api-setup.html
-            ChatLanguageModel chatModel = BedrockChatModel.builder()
+            ChatModel chatModel = BedrockChatModel.builder()
                     .modelId("us.amazon.nova-lite-v1:0")
                     .build();
 
@@ -37,7 +37,7 @@ public class BedrockChatModelExample {
 
         public static void main(String[] args) {
 
-            ChatLanguageModel chatModel = BedrockChatModel.builder()
+            ChatModel chatModel = BedrockChatModel.builder()
                     .modelId("us.amazon.nova-lite-v1:0")
                     .build();
 
@@ -56,7 +56,7 @@ public class BedrockChatModelExample {
 
         public static void main(String[] args) {
 
-            ChatLanguageModel chatModel = BedrockChatModel.builder()
+            ChatModel chatModel = BedrockChatModel.builder()
                     .modelId("us.amazon.nova-lite-v1:0")
                     .build();
 
@@ -81,7 +81,7 @@ public class BedrockChatModelExample {
                     // there are many more common parameters, see ChatRequestParameters for more info
                     .build();
 
-            ChatLanguageModel chatModel = BedrockChatModel.builder()
+            ChatModel chatModel = BedrockChatModel.builder()
                     .modelId("us.amazon.nova-lite-v1:0")
                     .defaultRequestParameters(defaultParameters)
                     .logRequests(true)
@@ -115,7 +115,7 @@ public class BedrockChatModelExample {
                     .enableReasoning(1024L)
                     .build();
 
-            ChatLanguageModel chatModel = BedrockChatModel.builder()
+            ChatModel chatModel = BedrockChatModel.builder()
                     .modelId("us.anthropic.claude-3-7-sonnet-20250219-v1:0")
                     .defaultRequestParameters(defaultParameters)
                     .logRequests(true)

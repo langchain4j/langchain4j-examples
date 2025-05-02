@@ -4,7 +4,7 @@ import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.ToolExecutionResultMessage;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.jlama.JlamaChatModel;
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.service.SystemMessage;
@@ -21,7 +21,7 @@ public class JlamaAiFunctionCallingExamples {
 
     static class Payment_Data_From_AiServices {
 
-        static ChatLanguageModel mistralAiModel = JlamaChatModel.builder()
+        static ChatModel mistralAiModel = JlamaChatModel.builder()
                 .modelName("tjake/Mistral-7B-Instruct-v0.3-JQ4")
                 .temperature(0.0f) //Force same output every run
                 .build();
@@ -45,7 +45,7 @@ public class JlamaAiFunctionCallingExamples {
 
             // STEP 2: User asks the agent and AiServices call to the functions
             Assistant agent = AiServices.builder(Assistant.class)
-                    .chatLanguageModel(mistralAiModel)
+                    .chatModel(mistralAiModel)
                     .tools(paymentTool)
                     .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
                     .build();

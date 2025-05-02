@@ -2,7 +2,7 @@ package _3_advanced;
 
 import _2_naive.Naive_RAG_Example;
 import dev.langchain4j.data.segment.TextSegment;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.embedding.onnx.bgesmallenv15q.BgeSmallEnV15QuantizedEmbeddingModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
@@ -34,7 +34,7 @@ class _05_Advanced_RAG_with_Metadata_Filtering_Examples {
      * More information on metadata filtering can be found here: https://github.com/langchain4j/langchain4j/pull/610
      */
 
-    ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder()
+    ChatModel chatModel = OpenAiChatModel.builder()
             .apiKey(Utils.OPENAI_API_KEY)
             .modelName(GPT_4_O_MINI)
             .build();
@@ -62,7 +62,7 @@ class _05_Advanced_RAG_with_Metadata_Filtering_Examples {
                 .build();
 
         Assistant assistant = AiServices.builder(Assistant.class)
-                .chatLanguageModel(chatLanguageModel)
+                .chatModel(chatModel)
                 .contentRetriever(contentRetriever)
                 .build();
 
@@ -104,7 +104,7 @@ class _05_Advanced_RAG_with_Metadata_Filtering_Examples {
                 .build();
 
         PersonalizedAssistant personalizedAssistant = AiServices.builder(PersonalizedAssistant.class)
-                .chatLanguageModel(chatLanguageModel)
+                .chatModel(chatModel)
                 .contentRetriever(contentRetriever)
                 .build();
 
@@ -140,7 +140,7 @@ class _05_Advanced_RAG_with_Metadata_Filtering_Examples {
                 .addColumn("year", "INT")
                 .build();
 
-        LanguageModelSqlFilterBuilder sqlFilterBuilder = new LanguageModelSqlFilterBuilder(chatLanguageModel, tableDefinition);
+        LanguageModelSqlFilterBuilder sqlFilterBuilder = new LanguageModelSqlFilterBuilder(chatModel, tableDefinition);
 
         EmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
         embeddingStore.add(embeddingModel.embed(forrestGump).content(), forrestGump);
@@ -154,7 +154,7 @@ class _05_Advanced_RAG_with_Metadata_Filtering_Examples {
                 .build();
 
         Assistant assistant = AiServices.builder(Assistant.class)
-                .chatLanguageModel(chatLanguageModel)
+                .chatModel(chatModel)
                 .contentRetriever(contentRetriever)
                 .build();
 

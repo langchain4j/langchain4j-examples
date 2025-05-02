@@ -1,7 +1,7 @@
 package invoke;
 
 import dev.langchain4j.model.bedrock.BedrockAnthropicMessageChatModel;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import software.amazon.awssdk.regions.Region;
 
 public class BedrockChatModelExample {
@@ -12,7 +12,7 @@ public class BedrockChatModelExample {
         // AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
         // More info on creating the API keys:
         // https://docs.aws.amazon.com/bedrock/latest/userguide/api-setup.html
-        ChatLanguageModel model = BedrockAnthropicMessageChatModel
+        ChatModel model = BedrockAnthropicMessageChatModel
                 .builder()
                 .temperature(0.50f)
                 .maxTokens(300)
