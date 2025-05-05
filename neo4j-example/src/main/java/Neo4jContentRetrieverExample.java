@@ -1,8 +1,7 @@
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.community.rag.content.retriever.neo4j.Neo4jGraph;
+import dev.langchain4j.community.rag.content.retriever.neo4j.Neo4jText2CypherRetriever;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.rag.content.Content;
-import dev.langchain4j.rag.content.retriever.neo4j.Neo4jGraph;
-import dev.langchain4j.rag.content.retriever.neo4j.Neo4jText2CypherRetriever;
 import dev.langchain4j.rag.query.Query;
 import org.neo4j.driver.AuthTokens;
 import org.neo4j.driver.Driver;
@@ -19,10 +18,12 @@ public class Neo4jContentRetrieverExample {
     // You can use "demo" api key for demonstration purposes.
     // You can get your own OpenAI API key here: https://platform.openai.com/account/api-keys
     public static final String OPENAI_API_KEY = getOrDefault(System.getenv("OPENAI_API_KEY"), "demo");
+    public static final String OPENAI_BASE_URL = getOrDefault(System.getenv("OPENAI_BASE_URL"), "http://langchain4j.dev/demo/openai/v1");
 
     public static void main(String[] args) {
         final OpenAiChatModel chatLanguageModel = OpenAiChatModel.builder()
                 .apiKey(OPENAI_API_KEY)
+                .baseUrl(OPENAI_BASE_URL)
                 .modelName(GPT_4_O_MINI)
                 .build();
 
@@ -39,7 +40,7 @@ public class Neo4jContentRetrieverExample {
 
                     Neo4jText2CypherRetriever retriever = Neo4jText2CypherRetriever.builder()
                             .graph(graph)
-                            .chatLanguageModel(chatLanguageModel)
+                            .chatModel(chatLanguageModel)
                             .build();
 
                     Query query = new Query("Who is the author of the book 'Dune'?");
