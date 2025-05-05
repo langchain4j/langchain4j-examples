@@ -13,8 +13,11 @@ import dev.langchain4j.store.embedding.oracle.EmbeddingTable;
 import dev.langchain4j.store.embedding.oracle.OracleEmbeddingStore;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Scanner;
 import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
 
@@ -25,7 +28,7 @@ import oracle.ucp.jdbc.PoolDataSourceFactory;
  * The following components are used:
  * OracleDocumentLoader to load the documents
  * OracleDocumentSplitter to split the text
- * OracleEmbeddingModel to get the vector embeddings 
+ * OracleEmbeddingModel to get the vector embeddings
  * OracleEmbeddingStore to store the vector embeddings
  */
 public class OracleIngestExample {
@@ -40,7 +43,7 @@ public class OracleIngestExample {
 
         // set the loader, splitter, and embedding preferences
         String loaderPref = "{\"file\": \"" + System.getenv("DEMO_FILE") + "\"}";
-        String splitterPref = "{\"by\": \"chars\", \"max\": 50}";
+        String splitterPref = "{\"by\": \"chars\", \"max\": 200}";
         String embedderPref = "{\"provider\": \"database\", \"model\": \"" + System.getenv("DEMO_ONNX_MODEL") + "\"}";
 
         OracleDocumentLoader loader = new OracleDocumentLoader(conn);
@@ -86,24 +89,50 @@ public class OracleIngestExample {
                 .build();
         ingestor.ingest(docs);
 
-        // get the question
-        String question = "What is a database?";
+        // check the chunks
+        System.out.println("chunks inserted:");
+        String queryEmbeddingStore = "select * from %s".formatted(tableName);
+        try (PreparedStatement stmt = conn.prepareStatement(queryEmbeddingStore)) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    String id = rs.getString(idColumn);
+                    String text = rs.getString(textColumn);
 
-        // get the vector representation
-        Embedding questionAsVector = embedder.embed(question).content();
-
-        // perform the vector search
-        EmbeddingSearchResult<TextSegment> result = embeddingStore.search(
-                EmbeddingSearchRequest.builder()
-                        .queryEmbedding(questionAsVector)
-                        .build()
-        );
-
-        // display the results
-        List<EmbeddingMatch<TextSegment>> results = result.matches();
-        for (EmbeddingMatch<TextSegment> match : results) {
-            System.out.println("Score: " + match.score());
-            System.out.println("Text Segment: " + match.embedded().text());
+                    String ending = text.length() > 50 ? "..." : "";
+                    System.out.println(id + "\t" + text.substring(0, 50) + ending);
+                }
+            }
         }
+
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("\nEnter a query or type 'exit' to quit:");
+
+            // get the query
+            String query = scanner.nextLine();
+            if (query.equalsIgnoreCase("exit")) {
+                break;
+            }
+
+            // get the vector representation
+            Embedding queryAsVector = embedder.embed(query).content();
+
+            // perform the vector search
+            EmbeddingSearchResult<TextSegment> result = embeddingStore.search(
+                    EmbeddingSearchRequest.builder()
+                            .queryEmbedding(queryAsVector)
+                            .build()
+            );
+
+            // display the results
+            List<EmbeddingMatch<TextSegment>> results = result.matches();
+            for (EmbeddingMatch<TextSegment> match : results) {
+                System.out.println("Score: " + match.score());
+                System.out.println("Text Segment: " + match.embedded().text());
+            }
+        }
+
+        scanner.close();
     }
 }
