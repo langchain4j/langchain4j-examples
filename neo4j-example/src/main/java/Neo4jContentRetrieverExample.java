@@ -36,6 +36,10 @@ public class Neo4jContentRetrieverExample {
                     try (Session session = driver.session()) {
                         session.run("CREATE (book:Book {title: 'Dune'})<-[:WROTE]-(author:Person {name: 'Frank Herbert'})");
                     }
+                    // The refreshSchema is needed only if we execute write operation after the `Neo4jGraph` instance, 
+                    // in this case `CREATE (book:Book...`
+                    // If CREATE (and in general write operations to the db) are performed externally before Neo4jGraph.builder(), 
+                    // the refreshSchema() is not needed
                     graph.refreshSchema();
 
                     Neo4jText2CypherRetriever retriever = Neo4jText2CypherRetriever.builder()

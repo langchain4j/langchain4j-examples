@@ -43,7 +43,6 @@ public class Neo4jEmbeddingStoreExample {
     }
 
     private static void searchEmbeddingsWithSingleMaxResult(EmbeddingStore<TextSegment> minimalEmbedding) {
-        System.out.println("Neo4jEmbeddingStoreExample.searchEmbeddingsWithSingleMaxResult");
         
         TextSegment segment1 = TextSegment.from("I like football.");
         Embedding embedding1 = embeddingModel.embed(segment1).content();
@@ -66,7 +65,6 @@ public class Neo4jEmbeddingStoreExample {
     }
     
     private static void searchEmbeddingsWithAddAllAndSingleMaxResult() {
-        System.out.println("Neo4jEmbeddingStoreExample.searchEmbeddingsWithAddAllAndSingleMaxResult");
         
         TextSegment segment1 = TextSegment.from("I like football.");
         Embedding embedding1 = embeddingModel.embed(segment1).content();
@@ -96,7 +94,6 @@ public class Neo4jEmbeddingStoreExample {
     }
 
     private static void searchEmbeddingsWithAddAllWithMetadataMaxResultsAndMinScore() {
-        System.out.println("Neo4jEmbeddingStoreExample.searchEmbeddingsWithAddAllWithMetadataMaxResultsAndMinScore");
         
         TextSegment segment1 = TextSegment.from("I like football.", Metadata.from("test-key-1", "test-value-1"));
         Embedding embedding1 = embeddingModel.embed(segment1).content();
