@@ -13,6 +13,12 @@ import oracle.ucp.jdbc.PoolDataSourceFactory;
  * Demonstrate summarizing a document. You can customize which provider to use
  * such as database for extracting a summary with Oracle Text or a third-party
  * provider via a REST call.
+ * 
+ * Define the following environment variables before running
+ * ORACLE_JDBC_URL
+ * ORACLE_JDBC_USER
+ * ORACLE_JDBC_PASSWORD
+ * DEMO_FILE
  */
 public class OracleSummaryLanguageModelExample {
 

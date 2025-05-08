@@ -12,6 +12,14 @@ import oracle.ucp.jdbc.PoolDataSourceFactory;
 /**
  * Demonstrate getting the vector embeddings with an ONNX model located on the
  * server.
+ * 
+ * Define the following environment variables before running
+ * ORACLE_JDBC_URL
+ * ORACLE_JDBC_USER
+ * ORACLE_JDBC_PASSWORD
+ * DEMO_ONNX_DIR
+ * DEMO_ONNX_FILE
+ * DEMO_ONNX_MODEL
  */
 public class OracleEmbeddingModelExample {
 
@@ -43,9 +51,9 @@ public class OracleEmbeddingModelExample {
 
         // embed a list of text
         List<TextSegment> textSegments = new ArrayList<>();
-        textSegments.add(TextSegment.from("hello world"));
-        textSegments.add(TextSegment.from("goodbye world"));
-        textSegments.add(TextSegment.from("1,2,3"));
+        textSegments.add(TextSegment.from("I like soccer."));
+        textSegments.add(TextSegment.from("I love Stephen King."));
+        textSegments.add(TextSegment.from("The weather is good today."));
         Response<List<Embedding>> resp = model.embedAll(textSegments);
         System.out.println(resp.content());
     }

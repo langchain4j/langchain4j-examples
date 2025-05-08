@@ -12,6 +12,12 @@ import oracle.ucp.jdbc.PoolDataSourceFactory;
  * Demonstrate chunking or splitting text in a document. You can customize how
  * to split the content such as by words, characters, or vocabulary (for tokens)
  * to match a tokenizer in the preference.
+ * 
+ * Define the following environment variables before running
+ * ORACLE_JDBC_URL
+ * ORACLE_JDBC_USER
+ * ORACLE_JDBC_PASSWORD
+ * DEMO_FILE
  */
 public class OracleDocumentSplitterExample {
 
@@ -24,7 +30,7 @@ public class OracleDocumentSplitterExample {
         Connection conn = pds.getConnection();
 
         String loadPref = "{\"file\": \"" + System.getenv("DEMO_FILE") + "\"}";
-        String splitPref = "{\"by\": \"words\", \"max\": 200}";
+        String splitPref = "{\"by\": \"words\", \"max\": 100}";
 
         OracleDocumentLoader loader = new OracleDocumentLoader(conn);
         OracleDocumentSplitter splitter = new OracleDocumentSplitter(conn, splitPref);
