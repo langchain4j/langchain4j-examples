@@ -18,7 +18,7 @@ public class Neo4jContentRetrieverExample {
     // You can use "demo" api key for demonstration purposes.
     // You can get your own OpenAI API key here: https://platform.openai.com/account/api-keys
     public static final String OPENAI_API_KEY = getOrDefault(System.getenv("OPENAI_API_KEY"), "demo");
-    public static final String OPENAI_BASE_URL = getOrDefault(System.getenv("OPENAI_BASE_URL"), "http://langchain4j.dev/demo/openai/v1");
+    public static final String OPENAI_BASE_URL = "demo".equals(OPENAI_API_KEY) ? "http://langchain4j.dev/demo/openai/v1" : null;
 
     public static void main(String[] args) {
         final OpenAiChatModel chatLanguageModel = OpenAiChatModel.builder()
