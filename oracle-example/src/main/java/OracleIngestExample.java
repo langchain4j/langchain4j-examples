@@ -21,18 +21,12 @@ import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
 
 /**
- * Demonstrate how to use low-level LangChain4j APIs to load the documents,
- * split the text, and get the vector embeddings or the OracleEmbeddingStore
- * to hide the manual steps for ingesting documents into an embedding store
- * for search/retrieval.
+ * Demonstrate how to ingest documents either by using the low-level
+ * LangChain4j APIs to load the documents, split the text, and get the vector
+ * embeddings or the OracleEmbeddingStore to hide the manual steps of ingesting
+ * into an embedding store for search/retrieval.
  *
- * The following components are used:
- * OracleDocumentLoader to load the documents
- * OracleDocumentSplitter to split the text
- * OracleEmbeddingModel to get the vector embeddings
- * OracleEmbeddingStore to store the vector embeddings
- * 
- * Define the following environment variables before running
+ * This example requires the following environment variables:
  * ORACLE_JDBC_URL
  * ORACLE_JDBC_USER
  * ORACLE_JDBC_PASSWORD

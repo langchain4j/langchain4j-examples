@@ -13,7 +13,7 @@ import oracle.ucp.jdbc.PoolDataSourceFactory;
  * to split the content such as by words, characters, or vocabulary (for tokens)
  * to match a tokenizer in the preference.
  * 
- * Define the following environment variables before running
+ * This example requires the following environment variables:
  * ORACLE_JDBC_URL
  * ORACLE_JDBC_USER
  * ORACLE_JDBC_PASSWORD

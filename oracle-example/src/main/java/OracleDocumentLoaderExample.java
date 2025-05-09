@@ -18,7 +18,7 @@ import oracle.ucp.jdbc.PoolDataSourceFactory;
  * like Word or PDF, it will be converted into plain text and contain any
  * metadata associated with it.
  * 
- * Define the following environment variables before running
+ * This example requires the following environment variables:
  * ORACLE_JDBC_URL
  * ORACLE_JDBC_USER
  * ORACLE_JDBC_PASSWORD
