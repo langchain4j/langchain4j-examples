@@ -37,9 +37,9 @@ public class OracleDocumentSplitterExample {
 
         List<Document> docs = loader.loadDocuments(loadPref);
         for (Document doc : docs) {
-            String[] chunks = splitter.split(doc.text());
-            for (String chunk : chunks) {
-                System.out.println("chunk=" + chunk);
+            String[] segments = splitter.split(doc.text());
+            for (String segment : segments) {
+                System.out.println("segment=" + segment);
             }
         }
     }
