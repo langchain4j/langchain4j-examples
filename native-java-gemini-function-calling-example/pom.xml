@@ -12,13 +12,13 @@
 
 	<groupId>dev.langchain4j</groupId>
 	<artifactId>native-java-gemini-function-calling-example</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<name>native-java-gemini-function-calling-example</name>
 	<description>Demonstrates the Langchain4J Function Calling with VertexAI integration</description>
 
 	<properties>
 		<java.version>21</java.version>
-		<langchain4j.version>1.0.0-beta5</langchain4j.version>
+		<langchain4j.version>1.0.1-beta6</langchain4j.version>
 	</properties>
 
 	<dependencyManagement>
@@ -62,7 +62,7 @@
 		<dependency>
 			<groupId>dev.langchain4j</groupId>
 			<artifactId>langchain4j</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1</version>
 		</dependency>
 	</dependencies>
 
