@@ -79,9 +79,9 @@ public class OracleIngestExample {
 
         // Split document into segments
         List<TextSegment> allSegments = new ArrayList<>();
-        for (Document doc : docs) {          
-            // For each doc, add a summary to the metadata
-            // This will get copied into each segment
+        for (Document doc : docs) {
+            // Example of modifying the metadata
+            // For each doc, add a summary that will get copied into each segment
             Response<String> resp = summaryModel.generate(doc.text());
             doc.metadata().put("summary", resp.content());
 
