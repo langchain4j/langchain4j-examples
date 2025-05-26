@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Chat Interface - Payara</title>
+    <style>
+        body {
+            background-image: linear-gradient(rgba(0,44,62), rgba(0,44,62,.8), rgba(0,44,62));
+            color: #fff;
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .logo-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .logo-container img {
+            width: 50%;
+            max-width: 400px;
+        }
+        .chat-container {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        #chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+        .message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .user-message {
+            background-color: rgba(0, 100, 150, 0.5);
+            margin-left: 20px;
+        }
+        .ai-message {
+            background-color: rgba(0, 150, 100, 0.5);
+            margin-right: 20px;
+        }
+        .input-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        select, input, button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        input {
+            flex-grow: 1;
+        }
+        button {
+            background-color: #00a6e1;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0085b3;
+        }
+        a {
+            font-weight: bold;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="logo-container">
+    <a href="https://www.payara.fish/"><img src="images/payara-fish-logo.svg" alt="Payara Logo"></a>
+</div>
+
+<h1>AI Chat Interface</h1>
+
+<div class="chat-container">
+    <div id="chat-messages"></div>
+
+    <div class="input-container">
+        <select id="ai-provider">
+            <option value="openai">OpenAI</option>
+            <option value="gemini">Gemini</option>
+            <option value="deepseek">DeepSeek</option>
+        </select>
+        <input type="text" id="user-input" placeholder="Type your message here..." />
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<script>
+    function appendMessage(message, isUser) {
+        const chatMessages = document.getElementById('chat-messages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${isUser ? 'user-message' : 'ai-message'}`;
+        messageDiv.textContent = message;
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    async function sendMessage() {
+        const input = document.getElementById('user-input');
+        const provider = document.getElementById('ai-provider').value;
+        const message = input.value.trim();
+
+        if (!message) return;
+
+        appendMessage(message, true);
+        input.value = '';
+
+        const baseUrl = 'http://localhost:8080/api';
+        const urls = {
+            'openai': `${baseUrl}/openai/chat`,
+            'gemini': `${baseUrl}/gemini/chat`,
+            'deepseek': `${baseUrl}/deepseek/chat`
+        };
+
+        try {
+            const response = await fetch(`${urls[provider]}?message=${encodeURIComponent(message)}`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'text/plain'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.text();
+            appendMessage(result, false);
+        } catch (error) {
+            appendMessage(`Error: ${error.message || 'Could not get response from the AI service.'}`, false);
+            console.error('Error:', error);
+        }
+    }
+
+    // Allow sending message with Enter key
+    document.getElementById('user-input').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+</script>
+</body>
+</html>
