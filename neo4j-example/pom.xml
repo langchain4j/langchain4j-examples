@@ -6,7 +6,7 @@
 
     <groupId>dev.langchain4j</groupId>
     <artifactId>neo4j-example</artifactId>
-    <version>1.0.0-beta4</version>
+    <version>1.0.1-beta7</version>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -45,6 +45,12 @@
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-community-neo4j-retriever</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-community-llm-graph-transformer</artifactId>
             <version>${project.version}</version>
         </dependency>
 
