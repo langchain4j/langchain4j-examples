@@ -4,11 +4,15 @@ This example demonstrates LangChain4J in a Jakarta EE / MicroProfile application
 ## Prerequisites:
 
 - [Java 21](https://developer.ibm.com/languages/java/semeru-runtimes/downloads)
-- Hugging Face API Key
-  - Sign up and log in to https://huggingface.co.
-  - Go to [Access Tokens](https://huggingface.co/settings/tokens). 
-  - Create a new access token with `read` role.
-  
+- Either of the following API Keys
+  - Hugging Face
+    - Sign up and log in to https://huggingface.co.
+    - Go to [Access Tokens](https://huggingface.co/settings/tokens).
+    - Create a new access token with `read` role.
+  - Github
+    - Sign up and sign in to https://github.com.
+    - Go to your [Settings](https://github.com/settings/profile)/[Developer Settings](https://github.com/settings/developers)/[Persional access tokens](https://github.com/settings/personal-access-tokens).
+    - Generate a new token
 
 ## Environment Set Up
 
@@ -18,11 +22,19 @@ To run this example application, navigate  to the `jakartaee-microprofile-exampl
 cd langchain4j-examples/jakartaee-microprofile-example
 ```
 
-Set the following environment variables:
-
+Set the `JAVA_HOME` environment variable:
 ```
 export JAVA_HOME=<your Java 21 home path>
+```
+
+Set the `HUGGING_FACE_API_KEY` environment variable if using Hugging Face:
+```
 export HUGGING_FACE_API_KEY=<your Hugging Face read token>
+```
+
+Set the `GITHUB_API_KEY` environment variables if using Github:
+```
+export GITHUB_API_KEY=<your Github API token>
 ```
 
 ## Start the application
