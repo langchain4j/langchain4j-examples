@@ -32,7 +32,7 @@ Set the `HUGGING_FACE_API_KEY` environment variable if using Hugging Face:
 export HUGGING_FACE_API_KEY=<your Hugging Face read token>
 ```
 
-Set the `GITHUB_API_KEY` environment variables if using Github:
+Set the `GITHUB_API_KEY` environment variable if using Github:
 ```
 export GITHUB_API_KEY=<your Github API token>
 ```
