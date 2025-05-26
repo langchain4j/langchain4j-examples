@@ -33,27 +33,65 @@ public class Neo4jContentRetrieverExample {
             neo4jContainer.start();
             try (Driver driver = GraphDatabase.driver(neo4jContainer.getBoltUrl(), AuthTokens.none())) {
                 try (Neo4jGraph graph = Neo4jGraph.builder().driver(driver).build()) {
-                    try (Session session = driver.session()) {
-                        session.run("CREATE (book:Book {title: 'Dune'})<-[:WROTE]-(author:Person {name: 'Frank Herbert'})");
-                    }
-                    // The refreshSchema is needed only if we execute write operation after the `Neo4jGraph` instance, 
-                    // in this case `CREATE (book:Book...`
-                    // If CREATE (and in general write operations to the db) are performed externally before Neo4jGraph.builder(), 
-                    // the refreshSchema() is not needed
-                    graph.refreshSchema();
+                    contentRetrieverWithMinimalConfig(driver, graph, chatLanguageModel);
 
-                    Neo4jText2CypherRetriever retriever = Neo4jText2CypherRetriever.builder()
-                            .graph(graph)
-                            .chatModel(chatLanguageModel)
-                            .build();
-
-                    Query query = new Query("Who is the author of the book 'Dune'?");
-
-                    List<Content> contents = retriever.retrieve(query);
-
-                    System.out.println(contents.get(0).textSegment().text()); // "Frank Herbert"
+                    contentRetrieverWithExamples(graph, chatLanguageModel);
                 }
             }
         }
+    }
+
+    private static void contentRetrieverWithMinimalConfig(Driver driver, Neo4jGraph graph, OpenAiChatModel chatLanguageModel) {
+        // tag::retrieve-text2cypher[]
+        try (Session session = driver.session()) {
+            session.run("CREATE (book:Book {title: 'Dune'})<-[:WROTE]-(author:Person {name: 'Frank Herbert'})");
+        }
+        // The refreshSchema is needed only if we execute write operation after the `Neo4jGraph` instance, 
+        // in this case `CREATE (book:Book...`
+        // If CREATE (and in general write operations to the db) are performed externally before Neo4jGraph.builder(), 
+        // the refreshSchema() is not needed
+        graph.refreshSchema();
+
+        Neo4jText2CypherRetriever retriever = Neo4jText2CypherRetriever.builder()
+                .graph(graph)
+                .chatModel(chatLanguageModel)
+                .build();
+
+        Query query = new Query("Who is the author of the book 'Dune'?");
+
+        List<Content> contents = retriever.retrieve(query);
+
+        System.out.println(contents.get(0).textSegment().text()); // "Frank Herbert"
+        // end::retrieve-text2cypher[]
+    }
+
+    private static void contentRetrieverWithExamples(Neo4jGraph graph, OpenAiChatModel chatLanguageModel) {
+        // tag::retrieve-text2cypher-examples[]
+        List<String> examples = List.of(
+                """
+                # Which streamer has the most followers?
+                MATCH (s:Stream)
+                RETURN s.name AS streamer
+                ORDER BY s.followers DESC LIMIT 1
+                """,
+                """
+                # How many streamers are from Norway?
+                MATCH (s:Stream)-[:HAS_LANGUAGE]->(:Language {{name: 'Norwegian'}})
+                RETURN count(s) AS streamers
+                """);
+        
+        Neo4jText2CypherRetriever neo4jContentRetriever = Neo4jText2CypherRetriever.builder()
+                .graph(graph)
+                .chatModel(chatLanguageModel)
+                // add the above examples
+                .examples(examples)
+                .build();
+        
+        final String textQuery = "Which streamer from Italy has the most followers?";
+        Query query = new Query(textQuery);
+        List<Content> contents = neo4jContentRetriever.retrieve(query);
+        System.out.println(contents.get(0).textSegment().text());
+        // output: "The most followed italian streamer"
+        // end::retrieve-text2cypher-examples[]
     }
 }
