@@ -1,5 +1,6 @@
 import dev.langchain4j.community.rag.content.retriever.neo4j.Neo4jGraph;
 import dev.langchain4j.community.rag.content.retriever.neo4j.Neo4jText2CypherRetriever;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.rag.content.Content;
 import dev.langchain4j.rag.query.Query;
@@ -36,12 +37,14 @@ public class Neo4jContentRetrieverExample {
                     contentRetrieverWithMinimalConfig(driver, graph, chatLanguageModel);
 
                     contentRetrieverWithExamples(graph, chatLanguageModel);
+
+                    contentRetrieverWithoutRetries(graph, chatLanguageModel);
                 }
             }
         }
     }
 
-    private static void contentRetrieverWithMinimalConfig(Driver driver, Neo4jGraph graph, OpenAiChatModel chatLanguageModel) {
+    private static void contentRetrieverWithMinimalConfig(Driver driver, Neo4jGraph graph, ChatModel chatLanguageModel) {
         // tag::retrieve-text2cypher[]
         try (Session session = driver.session()) {
             session.run("CREATE (book:Book {title: 'Dune'})<-[:WROTE]-(author:Person {name: 'Frank Herbert'})");
@@ -65,7 +68,7 @@ public class Neo4jContentRetrieverExample {
         // end::retrieve-text2cypher[]
     }
 
-    private static void contentRetrieverWithExamples(Neo4jGraph graph, OpenAiChatModel chatLanguageModel) {
+    private static void contentRetrieverWithExamples(Neo4jGraph graph, ChatModel chatLanguageModel) {
         // tag::retrieve-text2cypher-examples[]
         List<String> examples = List.of(
                 """
@@ -93,5 +96,38 @@ public class Neo4jContentRetrieverExample {
         System.out.println(contents.get(0).textSegment().text());
         // output: "The most followed italian streamer"
         // end::retrieve-text2cypher-examples[]
+    }
+
+    private static void contentRetrieverWithoutRetries(Neo4jGraph graph, ChatModel chatLanguageModel) {
+        Neo4jText2CypherRetriever retriever = Neo4jText2CypherRetriever.builder()
+                .graph(graph)
+                .chatModel(chatLanguageModel)
+                .maxRetries(0) // disables retry logic
+                .build();
+
+        Query query = new Query("Who is the author of the book 'Dune'?");
+
+        List<Content> contents = retriever.retrieve(query);
+
+        System.out.println(contents.get(0).textSegment().text()); // "Frank Herbert"
+    }
+
+    private static void contentRetrieverWithSamplesAndMaxRels(ChatModel chatLanguageModel, Driver driver) {
+        // Sample up to 3 example paths from the graph schema
+        // Explore a maximum of 8 relationships from the start node
+        try (Neo4jGraph graph = Neo4jGraph.builder().driver(driver).sample(3L).maxRels(8L).build()) {
+            // tag::retrieve-text2cypher-sample-max-rels[]
+            Neo4jText2CypherRetriever retriever = Neo4jText2CypherRetriever.builder()
+                    .graph(graph)
+                    .chatModel(chatLanguageModel)
+                    .build();
+            
+            Query query = new Query("Who is the author of the book 'Dune'?");
+
+            List<Content> contents = retriever.retrieve(query);
+
+            System.out.println(contents.get(0).textSegment().text()); // "Frank Herbert"
+            // end::retrieve-text2cypher-sample-max-rels[]
+        }
     }
 }
