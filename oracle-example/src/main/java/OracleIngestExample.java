@@ -94,7 +94,7 @@ public class OracleIngestExample {
         ingestor.ingest(docs);
 
         // get the question
-        String question = "What is the carrot called?";
+        String question = "Who is John Doe?";
 
         // get the vector representation
         Embedding questionAsVector = embeddingModel.embed(question).content();
@@ -113,8 +113,8 @@ public class OracleIngestExample {
         List<EmbeddingMatch<TextSegment>> results = result.matches();
         for (EmbeddingMatch<TextSegment> match : results) {
             System.out.println("Score: " + match.score());
+            System.out.println("Segment: " + match.embedded().text());
             System.out.println("Metadata: " + match.embedded().metadata());
-            System.out.println("Text: " + match.embedded().text());
         }
     }
 }

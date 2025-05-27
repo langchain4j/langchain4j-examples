@@ -106,7 +106,7 @@ public class OracleIngestManualExample {
         embeddingStore.addAll(embeddings, allSegments);
 
         // Get the question
-        String question = "What is the carrot called?";
+        String question = "Who is John Doe?";
 
         // Embed the question
         Embedding questionEmbedding = embeddingModel.embed(question).content();
@@ -123,8 +123,8 @@ public class OracleIngestManualExample {
         System.out.println(question);
         for (EmbeddingMatch<TextSegment> match : relevantEmbeddings) {
             System.out.println("Score: " + match.score());
+            System.out.println("Segment: " + match.embedded().text());
             System.out.println("Metadata: " + match.embedded().metadata());
-            System.out.println("Text: " + match.embedded().text());
         }
     }
 
