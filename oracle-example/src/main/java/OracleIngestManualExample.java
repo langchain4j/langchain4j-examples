@@ -122,9 +122,9 @@ public class OracleIngestManualExample {
         // display the results
         System.out.println(question);
         for (EmbeddingMatch<TextSegment> match : relevantEmbeddings) {
-            System.out.println("Score: " + match.score());
-            System.out.println("Segment: " + match.embedded().text());
+            System.out.println("\nScore: " + match.score());
             System.out.println("Metadata: " + match.embedded().metadata());
+            System.out.println("Text: " + match.embedded().text());
         }
     }
 
