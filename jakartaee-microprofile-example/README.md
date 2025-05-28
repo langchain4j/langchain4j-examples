@@ -1,10 +1,10 @@
 # LangChain4j in Jakarta EE and MicroProfile
-This example demonstrates LangChain4J in a Jakarta EE / MicroProfile application on Open Liberty. The application is a chatbot built with LangChain4J and uses Jakarta CDI, Jakarta RESTful Web Services, Jakarta WebSocket, MicroProfile Config, MicroProfile Metrics, and MicroProfile OpenAPI features.
+This example demonstrates LangChain4J in a Jakarta EE / MicroProfile application on Open Liberty. The application is a chatbot built with LangChain4J and uses Jakarta CDI, Jakarta RESTful Web Services, Jakarta WebSocket, MicroProfile Config, MicroProfile Metrics, and MicroProfile OpenAPI features. The application allows to use models from either Hugging Face, Github, or Ollama.
 
 ## Prerequisites:
 
 - [Java 21](https://developer.ibm.com/languages/java/semeru-runtimes/downloads)
-- Either of the following API Keys
+- Either one of the following model providers:
   - Hugging Face
     - Sign up and log in to https://huggingface.co.
     - Go to [Access Tokens](https://huggingface.co/settings/tokens).
@@ -13,6 +13,13 @@ This example demonstrates LangChain4J in a Jakarta EE / MicroProfile application
     - Sign up and sign in to https://github.com.
     - Go to your [Settings](https://github.com/settings/profile)/[Developer Settings](https://github.com/settings/developers)/[Persional access tokens](https://github.com/settings/personal-access-tokens).
     - Generate a new token
+  - Ollama
+    - Download and install [Ollama](https://ollama.com/download)
+      - see the [README.md](https://github.com/ollama/ollama/blob/main/README.md#ollama)
+    - Pull the following models
+      - `ollama pull llama3.2`
+      - `ollama pull all-minilm`
+      - `ollama pull tinydolphin`
 
 ## Environment Set Up
 
@@ -27,14 +34,25 @@ Set the `JAVA_HOME` environment variable:
 export JAVA_HOME=<your Java 21 home path>
 ```
 
-Set the `HUGGING_FACE_API_KEY` environment variable if using Hugging Face:
+Set the `HUGGING_FACE_API_KEY` environment variable if using Hugging Face.
 ```
+unset GITHUB_API_KEY
+unset OLLAMA_BASE_URL
 export HUGGING_FACE_API_KEY=<your Hugging Face read token>
 ```
 
-Set the `GITHUB_API_KEY` environment variable if using Github:
+Set the `GITHUB_API_KEY` environment variable if using Github.
 ```
+unset HUGGING_FACE_API_KEY
+unset OLLAMA_BASE_URL
 export GITHUB_API_KEY=<your Github API token>
+```
+
+Set the `OLLAMA_BASE_URL` environment variable if using Ollama. Use your Ollama URL if not using the default.
+```
+unset HUGGING_FACE_API_KEY
+unset GITHUB_API_KEY
+export OLLAMA_BASE_URL=http://localhost:11434
 ```
 
 ## Start the application
@@ -72,7 +90,6 @@ Navigate to the the [OpenAPI UI](http://localhost:9080/openapi/ui) URL for the f
   - Alternatively, run the following `curl` command from a command-line session:
     - ```
       curl 'http://localhost:9080/api/model/language?question=When%20was%20Hugging%20Face%20launched%3F'
-
       ```
 - [HuggingFaceChatModel](https://github.com/langchain4j/langchain4j/blob/main/langchain4j-hugging-face/src/main/java/dev/langchain4j/model/huggingface/HuggingFaceChatModel.java)
   - expand the GET `/api/model/chat` API

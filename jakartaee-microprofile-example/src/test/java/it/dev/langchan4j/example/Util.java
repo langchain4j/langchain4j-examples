@@ -4,6 +4,7 @@ public class Util {
 
 	private static String hfApiKey = System.getenv("HUGGING_FACE_API_KEY");
 	private static String githubApiKey = System.getenv("GITHUB_API_KEY");
+	private static String ollamaBaseUrl = System.getenv("OLLAMA_BASE_URL");
 
 	public static boolean usingHuggingFace() {
 		return hfApiKey != null && hfApiKey.startsWith("hf_");
@@ -11,6 +12,10 @@ public class Util {
 
 	public static boolean usingGithub() {
 		return githubApiKey != null && githubApiKey.startsWith("ghp_");
+	}
+
+	public static boolean usingOllama() {
+		return ollamaBaseUrl != null && ollamaBaseUrl.startsWith("http");
 	}
 
 }

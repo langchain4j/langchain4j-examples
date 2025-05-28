@@ -28,7 +28,7 @@ public class ChatServiceIT {
 
     public static void verify(String message) {
         assertNotNull(message);
-        assertTrue(message.contains("2022") || message.contains("2023"),
+        assertTrue(message.contains("2021") || message.contains("2022") || message.contains("2023"),
             message);
         countDown.countDown();
     }

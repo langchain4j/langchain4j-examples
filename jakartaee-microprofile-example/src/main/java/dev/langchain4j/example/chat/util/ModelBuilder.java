@@ -1,10 +1,11 @@
 package dev.langchain4j.example.chat.util;
 
-import static dev.langchain4j.model.github.GitHubModelsChatModelName.GPT_4_O_MINI;
 import static dev.langchain4j.model.github.GitHubModelsChatModelName.PHI_3_MINI_INSTRUCT_4K;
 import static dev.langchain4j.model.github.GitHubModelsEmbeddingModelName.TEXT_EMBEDDING_3_SMALL;
 import static dev.langchain4j.model.huggingface.HuggingFaceModelName.SENTENCE_TRANSFORMERS_ALL_MINI_LM_L6_V2;
 import static java.time.Duration.ofSeconds;
+
+import java.util.logging.Logger;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
@@ -16,19 +17,20 @@ import dev.langchain4j.model.huggingface.HuggingFaceChatModel;
 import dev.langchain4j.model.huggingface.HuggingFaceEmbeddingModel;
 import dev.langchain4j.model.huggingface.HuggingFaceLanguageModel;
 import dev.langchain4j.model.language.LanguageModel;
+import dev.langchain4j.model.ollama.OllamaChatModel;
+import dev.langchain4j.model.ollama.OllamaEmbeddingModel;
+import dev.langchain4j.model.ollama.OllamaLanguageModel;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class ModelBuilder {
 
+	private static Logger logger = Logger.getLogger(ModelBuilder.class.getName());
+
     @Inject
     @ConfigProperty(name = "hugging.face.api.key")
     private String HUGGING_FACE_API_KEY;
-
-    @Inject
-    @ConfigProperty(name = "github.api.key")
-    private String GITHUB_API_KEY;
 
     @Inject
     @ConfigProperty(name = "hugging.language.model.id")
@@ -37,6 +39,22 @@ public class ModelBuilder {
     @Inject
     @ConfigProperty(name = "hugging.chat.model.id")
     private String HUGGING_FACE_CHAT_MODEL_ID;
+
+    @Inject
+    @ConfigProperty(name = "github.api.key")
+    private String GITHUB_API_KEY;
+
+    @Inject
+    @ConfigProperty(name = "github.chat.model.id")
+    private String GITHUB_CHAT_MODEL_ID;
+
+    @Inject
+    @ConfigProperty(name = "ollama.base.url")
+    private String OLLAMA_BASE_URL;
+
+    @Inject
+    @ConfigProperty(name = "ollama.chat.model.id")
+    private String OLLAMA_CHAT_MODEL_ID;
 
     @Inject
     @ConfigProperty(name = "chat.model.timeout")
@@ -56,16 +74,20 @@ public class ModelBuilder {
     private ChatModel chatModelForWeb = null;
 
     public boolean usingHuggingFace() {
-    	return HUGGING_FACE_API_KEY.startsWith("hf_");
+        return HUGGING_FACE_API_KEY.startsWith("hf_");
     }
 
     public boolean usingGithub() {
-    	return GITHUB_API_KEY.startsWith("ghp_");
+        return GITHUB_API_KEY.startsWith("ghp_");
+    }
+
+    public boolean usingOllama() {
+        return OLLAMA_BASE_URL.startsWith("http");
     }
 
     public LanguageModel getLanguageModel() throws Exception {
         if (languageModel == null) {
-        	if (usingHuggingFace()) {
+            if (usingHuggingFace()) {
                 languageModel = HuggingFaceLanguageModel.builder()
                     .accessToken(HUGGING_FACE_API_KEY)
                     .modelId(HUGGING_FACE_LANGUAGE_MODEL_ID)
@@ -74,10 +96,18 @@ public class ModelBuilder {
                     .maxNewTokens(30)
                     .waitForModel(true)
                     .build();
-        	} else if (usingGithub()) {
-           		throw new Exception("LangChain4J Github APIs do not support language model");
-        	} else {
-        		throw new Exception("No available platform to access model");
+                logger.info("using Hugging Face " + HUGGING_FACE_LANGUAGE_MODEL_ID + " language model");
+            } else if (usingGithub()) {
+                throw new Exception("LangChain4J Github APIs do not support language model");
+            } else if (usingOllama()) {
+            	languageModel = OllamaLanguageModel.builder()
+                        .baseUrl(OLLAMA_BASE_URL)
+                        .modelName("tinydolphin")
+                        .temperature(1.0)
+                        .build();
+                logger.info("using Ollama tinydolphin language model");
+            } else {
+                throw new Exception("No available platform to access model");
             }
         }
         return languageModel;
@@ -85,21 +115,30 @@ public class ModelBuilder {
 
     public EmbeddingModel getEmbeddingModel() throws Exception {
         if (embeddingModel == null) {
-        	if (usingHuggingFace()) {
-        		embeddingModel = HuggingFaceEmbeddingModel.builder()
+            if (usingHuggingFace()) {
+                embeddingModel = HuggingFaceEmbeddingModel.builder()
                     .accessToken(HUGGING_FACE_API_KEY)
                     .modelId(SENTENCE_TRANSFORMERS_ALL_MINI_LM_L6_V2)
                     .timeout(ofSeconds(120))
                     .waitForModel(true)
                     .build();
-        	} else if (usingGithub()) {
-        		embeddingModel = GitHubModelsEmbeddingModel.builder()
-                        .gitHubToken(GITHUB_API_KEY)
-                        .modelName(TEXT_EMBEDDING_3_SMALL)
+                logger.info("using Hugging Face " + SENTENCE_TRANSFORMERS_ALL_MINI_LM_L6_V2 + " embedding model");
+            } else if (usingGithub()) {
+                embeddingModel = GitHubModelsEmbeddingModel.builder()
+                    .gitHubToken(GITHUB_API_KEY)
+                    .modelName(TEXT_EMBEDDING_3_SMALL)
+                    .timeout(ofSeconds(120))
+                    .build();
+                logger.info("using Github " + TEXT_EMBEDDING_3_SMALL + " embedding model");
+            } else if (usingOllama()) {
+            	embeddingModel = OllamaEmbeddingModel.builder()
+                        .baseUrl(OLLAMA_BASE_URL)
+                        .modelName("all-minilm")
                         .timeout(ofSeconds(120))
                         .build();
-        	} else {
-        		throw new Exception("No available platform to access model");
+                logger.info("using Ollama all-minilm embedding model");
+            } else {
+                throw new Exception("No available platform to access model");
             }
         }
         return embeddingModel;
@@ -107,8 +146,8 @@ public class ModelBuilder {
 
     public ChatModel getChatModelForResource() throws Exception {
         if (chatModelForResource == null) {
-        	if (usingHuggingFace()) {
-        	    chatModelForResource = HuggingFaceChatModel.builder()
+            if (usingHuggingFace()) {
+                chatModelForResource = HuggingFaceChatModel.builder()
                     .accessToken(HUGGING_FACE_API_KEY)
                     .modelId(HUGGING_FACE_LANGUAGE_MODEL_ID)
                     .timeout(ofSeconds(120))
@@ -116,25 +155,35 @@ public class ModelBuilder {
                     .maxNewTokens(200)
                     .waitForModel(true)
                     .build();
-        	} else if (usingGithub()) {
-        	    chatModelForResource = GitHubModelsChatModel.builder()
-            		    .gitHubToken(GITHUB_API_KEY)
-            		    .modelName(PHI_3_MINI_INSTRUCT_4K)
-                        .timeout(ofSeconds(120))
-                        .temperature(1.0)
-                        .maxTokens(200)
-                        .build();
-        	} else {
-        		throw new Exception("No available platform to access model");
-        	}
+                logger.info("using Hugging Face " + HUGGING_FACE_LANGUAGE_MODEL_ID + " chat model");
+            } else if (usingGithub()) {
+                chatModelForResource = GitHubModelsChatModel.builder()
+                    .gitHubToken(GITHUB_API_KEY)
+                    .modelName(PHI_3_MINI_INSTRUCT_4K)
+                    .timeout(ofSeconds(120))
+                    .temperature(1.0)
+                    .maxTokens(200)
+                    .build();
+                logger.info("using Github " + PHI_3_MINI_INSTRUCT_4K + " chat model");
+            } else if (usingOllama()) {
+            	chatModelForResource = OllamaChatModel.builder()
+                    .baseUrl(OLLAMA_BASE_URL)
+                    .modelName(OLLAMA_CHAT_MODEL_ID)
+                    .timeout(ofSeconds(TIMEOUT))
+                    .temperature(TEMPERATURE)
+                    .build();
+                logger.info("using Ollama " + OLLAMA_CHAT_MODEL_ID + " chat model");
+            } else {
+                throw new Exception("No available platform to access model");
+            }
         }
         return chatModelForResource;
     }
 
     public ChatModel getChatModelForWeb() throws Exception {
         if (chatModelForWeb == null) {
-        	if (usingHuggingFace()) {
-        	    chatModelForWeb = HuggingFaceChatModel.builder()
+            if (usingHuggingFace()) {
+                chatModelForWeb = HuggingFaceChatModel.builder()
                     .accessToken(HUGGING_FACE_API_KEY)
                     .modelId(HUGGING_FACE_CHAT_MODEL_ID)
                     .timeout(ofSeconds(TIMEOUT))
@@ -142,17 +191,27 @@ public class ModelBuilder {
                     .maxNewTokens(MAX_NEW_TOKEN)
                     .waitForModel(true)
                     .build();
-        	} else if (usingGithub()) {
-        		chatModelForWeb = GitHubModelsChatModel.builder()
-            		    .gitHubToken(GITHUB_API_KEY)
-            		    .modelName(GPT_4_O_MINI)
-            		    .timeout(ofSeconds(TIMEOUT))
-                        .temperature(TEMPERATURE)
-                        .maxTokens(MAX_NEW_TOKEN)
-            		    .build();
-        	} else {
-        		throw new Exception("No available platform to access model");
-        	}
+                logger.info("using Hugging Face " + HUGGING_FACE_CHAT_MODEL_ID + " chat model for the web");
+            } else if (usingGithub()) {
+                chatModelForWeb = GitHubModelsChatModel.builder()
+                    .gitHubToken(GITHUB_API_KEY)
+                    .modelName(GITHUB_CHAT_MODEL_ID)
+                    .timeout(ofSeconds(TIMEOUT))
+                    .temperature(TEMPERATURE)
+                    .maxTokens(MAX_NEW_TOKEN)
+                    .build();
+                logger.info("using Github " + GITHUB_CHAT_MODEL_ID + " chat model for the web");
+            } else if (usingOllama()) {
+                chatModelForWeb = OllamaChatModel.builder()
+                    .baseUrl(OLLAMA_BASE_URL)
+                    .modelName(OLLAMA_CHAT_MODEL_ID)
+                    .timeout(ofSeconds(TIMEOUT))
+                    .temperature(TEMPERATURE)
+                    .build();
+                logger.info("using Ollama " + OLLAMA_CHAT_MODEL_ID + " chat model for the web");
+            } else {
+                throw new Exception("No available platform to access model");
+            }
         }
         return chatModelForWeb;
     }
