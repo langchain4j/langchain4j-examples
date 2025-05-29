@@ -43,8 +43,100 @@
             margin-left: 20px;
         }
         .ai-message {
-            background-color: rgba(0, 150, 100, 0.5);
+            background-color: rgba(255, 198, 0, 0.5);
             margin-right: 20px;
+        }
+        .ai-message pre {
+            background-color: #1e1e1e;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        .ai-message code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            white-space: pre;
+            color: #d4d4d4;
+            display: block;
+        }
+        .ai-message h3 {
+            color: #ffffff;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 8px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .ai-message ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+        .ai-message li {
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+        .ai-message strong {
+            color: #ffd700;
+            font-weight: bold;
+        }
+        .ai-message ol {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+        .ai-message code:not(pre code) {
+            background-color: rgba(30, 30, 30, 0.5);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 0.9em;
+            display: inline;
+        }
+        .ai-message .output {
+            background-color: #2d2d2d;
+            border-left: 4px solid #ffd700;
+            padding: 10px 15px;
+            margin: 10px 0;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        }
+        .ai-message ul {
+            padding-left: 0;
+            margin: 15px 0;
+            list-style: none;
+        }
+        .ai-message ul li {
+            position: relative;
+            padding-left: 25px;
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+        .ai-message ul li::before {
+            content: "•";
+            color: #ffd700;
+            font-size: 1.2em;
+            position: absolute;
+            left: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .ai-message .endpoint-list li {
+            background-color: rgba(30, 30, 30, 0.3);
+            border-radius: 5px;
+            padding: 8px 12px 8px 35px;
+            margin: 8px 0;
+        }
+        .ai-message .endpoint-list li::before {
+            left: 12px;
+        }
+        .ai-message .http-method {
+            color: #ffd700;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .ai-message .endpoint-path {
+            color: #00a6e1;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        }
+        .ai-message .endpoint-description {
+            color: #ffffff;
+            margin-left: 8px;
         }
         .input-container {
             display: flex;
@@ -101,7 +193,26 @@
         const chatMessages = document.getElementById('chat-messages');
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${isUser ? 'user-message' : 'ai-message'}`;
-        messageDiv.textContent = message;
+
+        let formattedMessage = message.replace(/```(\w*)\n([\s\S]*?)```/g,
+            (match, language, code) => `<pre><code class="language-${language}">${code.trim()}</code></pre>`
+        );
+
+        formattedMessage = formattedMessage.replace(/###\s+(.*)/g, '<h3>$1</h3>');
+
+        formattedMessage = formattedMessage.replace(/^\*\s+(.+)$/gm, '<li>$1</li>');
+
+        formattedMessage = formattedMessage.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+        formattedMessage = formattedMessage.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+        formattedMessage = formattedMessage.replace(/<li>[\s\S]+?(?=<\/li>)/g,
+            match => `<ul>${match}</ul>`
+        );
+
+        formattedMessage = formattedMessage.replace(/^\d+\.\s+(.+)$/gm, '<li>$1</li>');
+
+        messageDiv.innerHTML = formattedMessage;
         chatMessages.appendChild(messageDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }

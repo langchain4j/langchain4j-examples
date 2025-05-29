@@ -2,7 +2,7 @@
 GET http://localhost:8080/api/openai/chat?message=What is the capital of UK?
 
 ### High Level API: Gemini ChatModel
-GET http://localhost:8080/api/gemini/chat?message=What is the capital of Brazil?
+GET http://localhost:8080/api/gemini/chat?message=How many people live in Brazil?
 
 ### High Level API: Deepseek ChatModel
 GET http://localhost:8080/api/deepseek/chat?message=What is the name of Pope Leo XIV?
