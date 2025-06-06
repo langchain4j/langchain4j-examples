@@ -50,6 +50,7 @@
         <module>google-alloydb-example</module>
         <module>wildfly-example</module>
         <module>helidon-examples</module>
+        <module>payara-micro-example</module>
     </modules>
 
 </project>
