@@ -1,7 +1,0 @@
-version: 2
-updates:
-- package-ecosystem: maven
-  directory: "/jakartaee-microprofile-example"
-  schedule:
-    interval: monthly
-  open-pull-requests-limit: 50
