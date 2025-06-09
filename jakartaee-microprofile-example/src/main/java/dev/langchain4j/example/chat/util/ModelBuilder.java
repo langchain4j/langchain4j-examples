@@ -33,11 +33,11 @@ public class ModelBuilder {
     private String HUGGING_FACE_API_KEY;
 
     @Inject
-    @ConfigProperty(name = "hugging.language.model.id")
+    @ConfigProperty(name = "hugging.face.language.model.id")
     private String HUGGING_FACE_LANGUAGE_MODEL_ID;
 
     @Inject
-    @ConfigProperty(name = "hugging.chat.model.id")
+    @ConfigProperty(name = "hugging.face.chat.model.id")
     private String HUGGING_FACE_CHAT_MODEL_ID;
 
     @Inject

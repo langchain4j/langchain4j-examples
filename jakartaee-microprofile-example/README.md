@@ -53,6 +53,7 @@ Set the `HUGGING_FACE_API_KEY` environment variable if using Hugging Face.
 unset GITHUB_API_KEY
 unset OLLAMA_BASE_URL
 export HUGGING_FACE_API_KEY=<your Hugging Face read token>
+export HUGGING_FACE_CHAT_MODEL_ID=<chat model>
 ```
 
 ## Start the application
