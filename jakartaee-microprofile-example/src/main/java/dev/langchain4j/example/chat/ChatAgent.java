@@ -40,9 +40,7 @@ public class ChatAgent {
     }
 
     public String chat(String sessionId, String message) throws Exception {
-        String reply = getAssistant().chat(sessionId, message).trim();
-        int i = reply.lastIndexOf(message);
-        return i > 0 ? reply.substring(i) : reply;
+        return getAssistant().chat(sessionId, message).trim();
     }
 
 }

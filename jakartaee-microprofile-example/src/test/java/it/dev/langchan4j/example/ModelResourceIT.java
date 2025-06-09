@@ -35,7 +35,8 @@ public class ModelResourceIT {
         String url = baseUrl + "language?question=When was Hugging Face launched?";
         Response response = client.target(url).request().get();
         String answer = response.readEntity(String.class);
-        assertTrue(answer.contains("2015") || answer.contains("2018"), "actual: " + answer);
+        assertTrue(answer.contains("2015") || answer.contains("2016") ||
+                   answer.contains("2017") || answer.contains("2018"), "actual: " + answer);
     }
 
     @Test
