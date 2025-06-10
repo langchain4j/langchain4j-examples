@@ -16,6 +16,10 @@ This example demonstrates LangChain4J in a Jakarta EE / MicroProfile application
       - `ollama pull llama3.2`
       - `ollama pull all-minilm`
       - `ollama pull tinydolphin`
+  - Mistral AI
+    - Sign up and log in to https://console.mistral.ai/home.
+    - Go to [Your API keys](https://console.mistral.ai/api-keys).
+    - Create a new key.
   - Hugging Face
     - Sign up and log in to https://huggingface.co.
     - Go to [Access Tokens](https://huggingface.co/settings/tokens).
@@ -38,6 +42,7 @@ Set the `GITHUB_API_KEY` environment variable if using Github.
 ```
 unset HUGGING_FACE_API_KEY
 unset OLLAMA_BASE_URL
+unset MISTRAL_AI_API_KEY
 export GITHUB_API_KEY=<your Github API token>
 ```
 
@@ -45,13 +50,23 @@ Set the `OLLAMA_BASE_URL` environment variable if using Ollama. Use your Ollama 
 ```
 unset HUGGING_FACE_API_KEY
 unset GITHUB_API_KEY
+unset MISTRAL_AI_API_KEY
 export OLLAMA_BASE_URL=http://localhost:11434
+```
+
+Set the `MISTRAL_AI_API_KEY` environment variable if using Mistral AI.
+```
+unset GITHUB_API_KEY
+unset OLLAMA_BASE_URL
+unset MISTRAL_AI_API_KEY
+export MISTRAL_AI_API_KEY=<your Mistral AI API key>
 ```
 
 Set the `HUGGING_FACE_API_KEY` environment variable if using Hugging Face.
 ```
 unset GITHUB_API_KEY
 unset OLLAMA_BASE_URL
+unset MISTRAL_AI_API_KEY
 export HUGGING_FACE_API_KEY=<your Hugging Face read token>
 ```
 
