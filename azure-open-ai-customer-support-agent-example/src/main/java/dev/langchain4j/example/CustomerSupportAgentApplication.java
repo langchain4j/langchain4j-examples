@@ -90,7 +90,9 @@ public class CustomerSupportAgentApplication {
     }
 
     @Bean
-    EmbeddingStore<TextSegment> embeddingStore(EmbeddingModel embeddingModel, ResourceLoader resourceLoader) throws IOException {
+    EmbeddingStore<TextSegment> embeddingStore(EmbeddingModel embeddingModel,
+                                               ResourceLoader resourceLoader,
+                                               TokenCountEstimator tokenCountEstimator) throws IOException {
 
         // Normally, you would already have your embedding store filled with your data.
         // However, for the purpose of this demonstration, we will:
@@ -106,7 +108,7 @@ public class CustomerSupportAgentApplication {
         // 4. Convert segments into embeddings
         // 5. Store embeddings into embedding store
         // All this can be done manually, but we will use EmbeddingStoreIngestor to automate this:
-        DocumentSplitter documentSplitter = DocumentSplitters.recursive(100, 0, new AzureOpenAiTokenCountEstimator("gpt-4o-mini"));
+        DocumentSplitter documentSplitter = DocumentSplitters.recursive(100, 0, tokenCountEstimator);
         EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
                 .documentSplitter(documentSplitter)
                 .embeddingModel(embeddingModel)
@@ -115,6 +117,11 @@ public class CustomerSupportAgentApplication {
         ingestor.ingest(document);
 
         return embeddingStore;
+    }
+
+    @Bean
+    TokenCountEstimator tokenCountEstimator() {
+        return new AzureOpenAiTokenCountEstimator("gpt-4o-mini");
     }
 
     public static void main(String[] args) {
