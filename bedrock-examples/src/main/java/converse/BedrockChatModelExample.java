@@ -112,7 +112,7 @@ public class BedrockChatModelExample {
 
             ChatRequestParameters defaultParameters = BedrockChatRequestParameters.builder()
                     // enabling reasoning with a budget of 1024 tokens
-                    .enableReasoning(1024L)
+                    .enableReasoning(1024)
                     .build();
 
             ChatModel chatModel = BedrockChatModel.builder()
