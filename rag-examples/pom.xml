@@ -51,18 +51,6 @@
             <artifactId>langchain4j-experimental-sql</artifactId>
             <version>1.1.0-beta7</version>
         </dependency>
-        
-        <dependency>
-            <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j-community-neo4j</artifactId>
-            <version>1.0.1-beta7</version>
-        </dependency>
-
-        <dependency>
-            <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j-community-neo4j-retriever</artifactId>
-            <version>1.0.1-beta6</version>
-        </dependency>
 
         <dependency>
             <groupId>com.h2database</groupId>
