@@ -105,10 +105,10 @@ public class Neo4jRagAsAToolExample {
 
             // Ask a question answered by retrieval QA chain
             String chat = assistant.chat("""
-                    Ingest from document 'myname.txt', and then return the answer for the question 'What is the cancellation policy?'""");
+                    Ingest from document 'miles-of-smiles-terms-of-use.txt', and then return the answer for the question 'What is the cancellation policy?'""");
             System.out.println("ANSWER: " + chat);
             // example output:
-            // `ANSWER: John Doe is a Super Saiyan`
+            // `ANSWER: Reservations can be cancelled up to 7 days prior to the start of the booking period.
         }
     }
 }
