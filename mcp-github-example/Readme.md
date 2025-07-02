@@ -45,7 +45,8 @@ Run the `McpGithubToolsExample` class. This will:
 - Use the LLM to summarise the last 3 commits of the [LangChain4j GitHub repository](https://github.com/langchain4j/langchain4j).
 
 You can run the example from your IDE or with Maven:
-`mvn exec:java -Dexec.mainClass=dev.langchain4j.example.mcp.github.McpGithubToolsExample`
+
+```mvn exec:java -Dexec.mainClass=dev.langchain4j.example.mcp.github.McpGithubToolsExample```
 
 ## Notes
 
