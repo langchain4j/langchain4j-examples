@@ -29,7 +29,7 @@
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-spring-boot-starter</artifactId>
-            <version>1.0.1-beta6</version>
+            <version>1.1.0-beta7</version>
         </dependency>
         <dependency>
             <groupId>dev.langchain4j</groupId>
@@ -51,7 +51,7 @@
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-embeddings-all-minilm-l6-v2</artifactId>
-            <version>1.0.1-beta6</version>
+            <version>1.1.0-beta7</version>
         </dependency>
 
         <dependency>
@@ -62,7 +62,7 @@
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-open-ai</artifactId>
-            <version>1.0.1</version>
+            <version>1.1.0</version>
         </dependency>
 
     </dependencies>

@@ -20,7 +20,6 @@ public class BedrockStreamingChatModelExample {
         StreamingChatModel model = BedrockStreamingChatModel.builder()
                 .modelId("anthropic.claude-3-5-sonnet-20240620-v1:0")
                 .region(Region.US_EAST_1)
-                .maxRetries(2)
                 .timeout(Duration.ofMinutes(1))
                 // Other parameters can be set as well
                 .build();
