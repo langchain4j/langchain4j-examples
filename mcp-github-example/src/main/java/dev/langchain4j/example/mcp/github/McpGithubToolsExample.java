@@ -22,10 +22,10 @@ public class McpGithubToolsExample {
      * <p>
      * Running this example requires Docker to be installed on your machine,
      * because it spawns the GitHub MCP Server as a subprocess via Docker:
-     * `docker run -i mcp/github`.
+     * `docker run -i mcp/git`.
      * <p>
-     * You first need to build the Docker image of the GitHub MCP Server that is available at `mcp/github`.
-     * See https://github.com/modelcontextprotocol/servers/tree/main/src/github to build the image.
+     * You first need to build the Docker image of the GitHub MCP Server that is available at `mcp/git`.
+     * See https://github.com/modelcontextprotocol/servers/tree/main/src/git to build the image.
      * <p>
      * The communication with the GitHub MCP server is done directly via stdin/stdout.
      */
@@ -39,7 +39,7 @@ public class McpGithubToolsExample {
                 .build();
 
         McpTransport transport = new StdioMcpTransport.Builder()
-                .command(List.of("/usr/local/bin/docker", "run", "-e", "GITHUB_PERSONAL_ACCESS_TOKEN", "-i", "mcp/github"))
+                .command(List.of("/usr/local/bin/docker", "run", "-e", "GITHUB_PERSONAL_ACCESS_TOKEN", "-i", "mcp/git"))
                 .logEvents(true)
                 .build();
 
