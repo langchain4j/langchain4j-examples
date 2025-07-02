@@ -32,8 +32,7 @@ public class McpGithubToolsExample {
     public static void main(String[] args) throws Exception {
 
         ChatModel model = OpenAiChatModel.builder()
-                .apiKey("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")
-//                .apiKey(System.getenv("OPENAI_API_KEY"))
+                .apiKey(System.getenv("OPENAI_API_KEY"))
                 .modelName("gpt-4o-mini")
                 .logRequests(true)
                 .logResponses(true)
