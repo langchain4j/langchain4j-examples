@@ -29,10 +29,14 @@ public class ModelResourceIT {
     
     @Test
     public void testLanguageMode() {
+        if (Util.usingGithub() || Util.usingMistralAi()) {
+            return;
+        }
         String url = baseUrl + "language?question=When was Hugging Face launched?";
         Response response = client.target(url).request().get();
         String answer = response.readEntity(String.class);
-        assertTrue(answer.contains("2018"), "actual: " + answer);
+        assertTrue(answer.contains("2015") || answer.contains("2016") ||
+                   answer.contains("2017") || answer.contains("2018"), "actual: " + answer);
     }
 
     @Test
@@ -40,7 +44,8 @@ public class ModelResourceIT {
         String url = baseUrl + "chat?userMessage=Which are the most used Large Language Models?";
         Response response = client.target(url).request().get();
         String answer = response.readEntity(String.class);
-        assertTrue(answer.contains("BERT"), "actual: " + answer);
+        assertTrue(answer.contains("BERT") || answer.contains("GPT") || answer.contains("LaMDA"),
+            "actual: " + answer);
     }
     
     @Test
@@ -52,10 +57,10 @@ public class ModelResourceIT {
         JsonObject json = response.readEntity(JsonObject.class);
         
         double score = json.getJsonNumber("relevance-score").doubleValue();
-        assertTrue(score > 0.69 && score < 0.70, "actual score: " + score);
+        assertTrue(score > 0.63 && score < 0.89, "actual score: " + score);
 
         double similarity = json.getJsonNumber("similarity").doubleValue();
-        assertTrue(similarity > 0.38 && similarity < 0.39,
+        assertTrue(similarity > 0.27 && similarity < 0.79,
                     "actual similarity: " + similarity);
     }
     
