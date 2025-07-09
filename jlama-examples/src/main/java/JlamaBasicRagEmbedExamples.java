@@ -5,7 +5,7 @@ import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.segment.TextSegment;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.input.Prompt;
 import dev.langchain4j.model.input.PromptTemplate;
@@ -84,7 +84,7 @@ public class JlamaBasicRagEmbedExamples {
             Prompt prompt = promptTemplate.apply(promptInputs);
 
             // Now we can use the Jlama chat model to generate the answer to the user question based on the context information.
-            ChatLanguageModel chatModel = JlamaChatModel.builder()
+            ChatModel chatModel = JlamaChatModel.builder()
                     .modelName("tjake/Llama-3.2-1B-Instruct-JQ4")
                     .temperature(0.2f) // expect a more focused and deterministic answer
                     .build();

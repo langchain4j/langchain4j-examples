@@ -1,8 +1,8 @@
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.community.rag.content.retriever.neo4j.Neo4jGraph;
+import dev.langchain4j.community.rag.content.retriever.neo4j.Neo4jText2CypherRetriever;
+import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.rag.content.Content;
-import dev.langchain4j.rag.content.retriever.neo4j.Neo4jContentRetriever;
 import dev.langchain4j.rag.query.Query;
-import dev.langchain4j.store.graph.neo4j.Neo4jGraph;
 import org.neo4j.driver.AuthTokens;
 import org.neo4j.driver.Driver;
 import org.neo4j.driver.GraphDatabase;
@@ -11,18 +11,23 @@ import org.testcontainers.containers.Neo4jContainer;
 
 import java.util.List;
 
+import static dev.langchain4j.internal.Utils.getOrDefault;
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
+
 public class Neo4jContentRetrieverExample {
+    // You can use "demo" api key for demonstration purposes.
+    // You can get your own OpenAI API key here: https://platform.openai.com/account/api-keys
+    public static final String OPENAI_API_KEY = getOrDefault(System.getenv("OPENAI_API_KEY"), "demo");
+    public static final String OPENAI_BASE_URL = "demo".equals(OPENAI_API_KEY) ? "http://langchain4j.dev/demo/openai/v1" : null;
 
-    private final ChatLanguageModel chatLanguageModel;
+    public static void main(String[] args) {
+        final OpenAiChatModel chatLanguageModel = OpenAiChatModel.builder()
+                .apiKey(OPENAI_API_KEY)
+                .baseUrl(OPENAI_BASE_URL)
+                .modelName(GPT_4_O_MINI)
+                .build();
 
-    public Neo4jContentRetrieverExample(final ChatLanguageModel chatLanguageModel) {
-
-        this.chatLanguageModel = chatLanguageModel;
-    }
-
-    public void neo4jContentRetriever() {
-
-        try (Neo4jContainer<?> neo4jContainer = new Neo4jContainer<>("neo4j:5.16.0")
+        try (Neo4jContainer<?> neo4jContainer = new Neo4jContainer<>("neo4j:5.26")
                 .withoutAuthentication()
                 .withLabsPlugins("apoc")) {
             neo4jContainer.start();
@@ -31,11 +36,15 @@ public class Neo4jContentRetrieverExample {
                     try (Session session = driver.session()) {
                         session.run("CREATE (book:Book {title: 'Dune'})<-[:WROTE]-(author:Person {name: 'Frank Herbert'})");
                     }
+                    // The refreshSchema is needed only if we execute write operation after the `Neo4jGraph` instance, 
+                    // in this case `CREATE (book:Book...`
+                    // If CREATE (and in general write operations to the db) are performed externally before Neo4jGraph.builder(), 
+                    // the refreshSchema() is not needed
                     graph.refreshSchema();
-                    
-                    Neo4jContentRetriever retriever = Neo4jContentRetriever.builder()
+
+                    Neo4jText2CypherRetriever retriever = Neo4jText2CypherRetriever.builder()
                             .graph(graph)
-                            .chatLanguageModel(chatLanguageModel)
+                            .chatModel(chatLanguageModel)
                             .build();
 
                     Query query = new Query("Who is the author of the book 'Dune'?");

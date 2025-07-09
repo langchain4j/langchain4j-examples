@@ -3,7 +3,7 @@ package dev.langchain4j.example.utils;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import dev.langchain4j.data.message.SystemMessage;
 import dev.langchain4j.data.message.UserMessage;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.chat.request.ChatRequest;
 import dev.langchain4j.model.chat.request.ChatRequestParameters;
 import dev.langchain4j.model.chat.request.ResponseFormat;
@@ -42,15 +42,15 @@ public class JudgeModelAssertions {
             .jsonSchema(JsonSchemas.jsonSchemaFrom(ConditionAssessments.class).get())
             .build();
 
-    public static ModelAssertion with(ChatLanguageModel judgeModel) {
+    public static ModelAssertion with(ChatModel judgeModel) {
         return new ModelAssertion(judgeModel);
     }
 
     public static class ModelAssertion {
 
-        private final ChatLanguageModel judgeModel;
+        private final ChatModel judgeModel;
 
-        ModelAssertion(ChatLanguageModel judgeModel) {
+        ModelAssertion(ChatModel judgeModel) {
             this.judgeModel = ensureNotNull(judgeModel, "judgeModel");
         }
 
@@ -61,10 +61,10 @@ public class JudgeModelAssertions {
 
     public static class TextAssertion {
 
-        private final ChatLanguageModel judgeModel;
+        private final ChatModel judgeModel;
         private final String text;
 
-        TextAssertion(ChatLanguageModel judgeModel, String text) {
+        TextAssertion(ChatModel judgeModel, String text) {
             this.judgeModel = ensureNotNull(judgeModel, "judgeModel");
             this.text = ensureNotNull(text, "text");
         }

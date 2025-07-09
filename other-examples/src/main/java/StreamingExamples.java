@@ -1,6 +1,6 @@
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.model.StreamingResponseHandler;
-import dev.langchain4j.model.chat.StreamingChatLanguageModel;
+import dev.langchain4j.model.chat.StreamingChatModel;
 import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
 import dev.langchain4j.model.language.StreamingLanguageModel;
@@ -19,12 +19,12 @@ import static java.util.Arrays.asList;
 
 public class StreamingExamples {
 
-    static class StreamingChatLanguageModel_Example {
+    static class StreamingChatModel_Example {
 
         public static void main(String[] args) {
 
             // Sorry, "demo" API key does not support streaming. Please use your own key.
-            StreamingChatLanguageModel model = OpenAiStreamingChatModel.builder()
+            StreamingChatModel model = OpenAiStreamingChatModel.builder()
                     .apiKey(ApiKeys.OPENAI_API_KEY)
                     .modelName(GPT_4_O_MINI)
                     .build();

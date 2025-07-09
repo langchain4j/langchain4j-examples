@@ -6,13 +6,13 @@
 
     <groupId>dev.langchain4j</groupId>
     <artifactId>oracle-example</artifactId>
-    <version>1.0.0-beta3</version>
+    <version>1.1.0-beta7</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jdbc.version>23.6.0.24.10</jdbc.version>
+        <jdbc.version>23.5.0.24.07</jdbc.version>
     </properties>
 
     <dependencies>
@@ -26,13 +26,13 @@
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-oracle</artifactId>
-            <version>1.0.0-beta3</version>
+            <version>1.1.0-beta7</version>
         </dependency>
 
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-embeddings-all-minilm-l6-v2-q</artifactId>
-            <version>1.0.0-beta3</version>
+            <version>1.1.0-beta7</version>
         </dependency>
 
         <dependency>

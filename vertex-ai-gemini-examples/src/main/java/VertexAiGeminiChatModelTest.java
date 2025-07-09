@@ -5,11 +5,11 @@ import dev.langchain4j.agent.tool.ToolSpecifications;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.chat.request.ChatRequest;
 import dev.langchain4j.model.chat.request.ChatRequestParameters;
 import dev.langchain4j.model.chat.response.ChatResponse;
-import dev.langchain4j.model.vertexai.VertexAiGeminiChatModel;
+import dev.langchain4j.model.vertexai.gemini.VertexAiGeminiChatModel;
 import dev.langchain4j.service.AiServices;
 import org.junit.jupiter.api.Test;
 
@@ -28,7 +28,7 @@ class VertexAiGeminiChatModelTest {
     private static final String LOCATION = "us-central1";
     private static final String MODEL_NAME = "gemini-pro";
 
-    ChatLanguageModel model = VertexAiGeminiChatModel.builder()
+    ChatModel model = VertexAiGeminiChatModel.builder()
             .project(PROJECT)
             .location(LOCATION)
             .modelName(MODEL_NAME)
@@ -79,7 +79,7 @@ class VertexAiGeminiChatModelTest {
         Calculator calculator = spy(new Calculator());
 
         Assistant assistant = AiServices.builder(Assistant.class)
-                .chatLanguageModel(model)
+                .chatModel(model)
                 .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
                 .tools(calculator)
                 .build();

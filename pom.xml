@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>dev.langchain4j</groupId>
     <artifactId>langchain4j-examples</artifactId>
-    <version>1.0.0-beta3</version>
+    <version>1.1.0-beta7</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -27,6 +27,7 @@
         <module>mcp-github-example</module>
         <module>milvus-example</module>
         <module>mistral-ai-examples</module>
+        <module>native-java-gemini-function-calling-example</module>
         <module>neo4j-example</module>
         <module>ollama-examples</module>
         <module>open-ai-examples</module>
@@ -48,6 +49,9 @@
         <module>voyage-ai-examples</module>
         <module>google-alloydb-example</module>
         <module>google-cloud-sql-pg-example</module>
+        <module>wildfly-example</module>
+        <module>helidon-examples</module>
+        <module>payara-micro-example</module>
     </modules>
 
 </project>

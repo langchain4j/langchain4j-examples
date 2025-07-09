@@ -1,7 +1,7 @@
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.SystemMessage;
 import dev.langchain4j.data.message.UserMessage;
-import dev.langchain4j.model.chat.StreamingChatLanguageModel;
+import dev.langchain4j.model.chat.StreamingChatModel;
 import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
 import dev.langchain4j.model.jlama.JlamaStreamingChatModel;
@@ -16,7 +16,7 @@ public class JlamaStreamingChatModelExamples {
         public static void main(String[] args) {
             CompletableFuture<ChatResponse> futureResponse = new CompletableFuture<>();
 
-            StreamingChatLanguageModel model = JlamaStreamingChatModel.builder()
+            StreamingChatModel model = JlamaStreamingChatModel.builder()
                     .modelName("tjake/Llama-3.2-1B-Instruct-JQ4")
                     .temperature(0.3f)
                     .build();

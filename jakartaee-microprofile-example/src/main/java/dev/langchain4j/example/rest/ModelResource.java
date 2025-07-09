@@ -23,7 +23,6 @@ import java.util.Properties;
 
 import static dev.langchain4j.data.segment.TextSegment.textSegment;
 import static dev.langchain4j.model.huggingface.HuggingFaceModelName.SENTENCE_TRANSFORMERS_ALL_MINI_LM_L6_V2;
-import static dev.langchain4j.model.huggingface.HuggingFaceModelName.TII_UAE_FALCON_7B_INSTRUCT;
 import static dev.langchain4j.store.embedding.CosineSimilarity.between;
 import static dev.langchain4j.store.embedding.RelevanceScore.fromCosineSimilarity;
 import static java.time.Duration.ofSeconds;
@@ -36,6 +35,10 @@ public class ModelResource {
     @ConfigProperty(name = "hugging.face.api.key")
     private String HUGGING_FACE_API_KEY;
 
+    @Inject
+    @ConfigProperty(name = "language.model.id")
+    private String LANGUAGE_MODEL_ID;
+
     private HuggingFaceLanguageModel languageModel = null;
     private HuggingFaceEmbeddingModel embeddingModel = null;
 
@@ -43,7 +46,7 @@ public class ModelResource {
         if (languageModel == null) {
             languageModel = HuggingFaceLanguageModel.builder()
                     .accessToken(HUGGING_FACE_API_KEY)
-                    .modelId(TII_UAE_FALCON_7B_INSTRUCT)
+                    .modelId(LANGUAGE_MODEL_ID)
                     .timeout(ofSeconds(120))
                     .temperature(1.0)
                     .maxNewTokens(30)
@@ -99,7 +102,7 @@ public class ModelResource {
 
         HuggingFaceChatModel model = HuggingFaceChatModel.builder()
                 .accessToken(HUGGING_FACE_API_KEY)
-                .modelId(TII_UAE_FALCON_7B_INSTRUCT)
+                .modelId(LANGUAGE_MODEL_ID)
                 .timeout(ofSeconds(120))
                 .temperature(1.0)
                 .maxNewTokens(200)

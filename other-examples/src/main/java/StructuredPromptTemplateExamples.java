@@ -1,5 +1,5 @@
 import dev.langchain4j.data.message.AiMessage;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.input.Prompt;
 import dev.langchain4j.model.input.structured.StructuredPrompt;
 import dev.langchain4j.model.input.structured.StructuredPromptProcessor;
@@ -13,7 +13,7 @@ import static java.util.Arrays.asList;
 
 public class StructuredPromptTemplateExamples {
 
-    static ChatLanguageModel model = OpenAiChatModel.builder()
+    static ChatModel model = OpenAiChatModel.builder()
             .apiKey(ApiKeys.OPENAI_API_KEY)
             .modelName(GPT_4_O_MINI)
             .timeout(ofSeconds(60))

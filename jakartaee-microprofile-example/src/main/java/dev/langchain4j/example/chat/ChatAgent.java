@@ -56,7 +56,7 @@ public class ChatAgent {
                 .waitForModel(true)
                 .build();
             assistant = AiServices.builder(Assistant.class)
-                .chatLanguageModel(model)
+                .chatModel(model)
                 .chatMemoryProvider(
                     sessionId -> MessageWindowChatMemory.withMaxMessages(MAX_MESSAGES))
                 .build();

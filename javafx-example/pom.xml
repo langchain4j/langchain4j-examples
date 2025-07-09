@@ -15,7 +15,7 @@
 
         <!-- DEPENDENCIES VERSIONS -->
         <javafx.version>21.0.1</javafx.version>
-        <langchain4j.version>1.0.0-beta3</langchain4j.version>
+        <langchain4j.version>1.1.0-beta7</langchain4j.version>
         <log4j.version>2.22.1</log4j.version>
 
         <!-- BUILD PLUGIN VERSIONS -->
@@ -34,12 +34,12 @@
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j</artifactId>
-            <version>${langchain4j.version}</version>
+            <version>1.1.0</version>
         </dependency>
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-open-ai</artifactId>
-            <version>${langchain4j.version}</version>
+            <version>1.1.0</version>
         </dependency>
 
         <!-- Logging -->

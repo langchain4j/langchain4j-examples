@@ -1,9 +1,9 @@
-import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain4j.model.chat.StreamingChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
+import dev.langchain4j.model.chat.StreamingChatModel;
 import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
-import dev.langchain4j.model.vertexai.VertexAiGeminiChatModel;
-import dev.langchain4j.model.vertexai.VertexAiGeminiStreamingChatModel;
+import dev.langchain4j.model.vertexai.gemini.VertexAiGeminiChatModel;
+import dev.langchain4j.model.vertexai.gemini.VertexAiGeminiStreamingChatModel;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -21,7 +21,7 @@ public class VertexAiGeminiChatModelExamples {
 
         public static void main(String[] args) {
 
-            ChatLanguageModel model = VertexAiGeminiChatModel.builder()
+            ChatModel model = VertexAiGeminiChatModel.builder()
                     .project(PROJECT)
                     .location(LOCATION)
                     .modelName(MODEL_NAME)
@@ -37,7 +37,7 @@ public class VertexAiGeminiChatModelExamples {
 
         public static void main(String[] args) {
 
-            StreamingChatLanguageModel model = VertexAiGeminiStreamingChatModel.builder()
+            StreamingChatModel model = VertexAiGeminiStreamingChatModel.builder()
                     .project(PROJECT)
                     .location(LOCATION)
                     .modelName(MODEL_NAME)

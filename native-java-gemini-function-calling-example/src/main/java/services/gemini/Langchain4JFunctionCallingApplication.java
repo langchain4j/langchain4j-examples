@@ -21,8 +21,8 @@ import com.google.cloud.vertexai.generativeai.GenerativeModel;
 import dev.langchain4j.agent.tool.P;
 import dev.langchain4j.agent.tool.Tool;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
-import dev.langchain4j.model.vertexai.VertexAiGeminiChatModel;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
+import dev.langchain4j.model.vertexai.gemini.VertexAiGeminiChatModel;
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.service.SystemMessage;
 import java.util.Map;
@@ -50,7 +50,7 @@ public class Langchain4JFunctionCallingApplication {
 	private String location;
 
 	@Value("${langchain4j.gemini.chat.options.model}")
-	private String chatModel;
+	private String chatModelName;
 
 	static class FunctionCallingService {
 		record Transaction(String id) { }
@@ -93,10 +93,10 @@ public class Langchain4JFunctionCallingApplication {
 	private void functionCallGeminiWithGRPC(String userMessage) {
 		long start = System.currentTimeMillis();
 
-		ChatLanguageModel model = VertexAiGeminiChatModel.builder()
+		ChatModel chatModel = VertexAiGeminiChatModel.builder()
 				.project(project)
 				.location(location)
-				.modelName(chatModel)
+				.modelName(chatModelName)
 				.temperature(0.2f)
 				.maxOutputTokens(1000)
 				.build();
@@ -104,7 +104,7 @@ public class Langchain4JFunctionCallingApplication {
 		FunctionCallingService service = new FunctionCallingService();
 
 		Assistant assistant = AiServices.builder(Assistant.class)
-				.chatLanguageModel(model)
+				.chatModel(chatModel)
 				.chatMemory(MessageWindowChatMemory.withMaxMessages(10))
 				.tools(service)
 				.build();
@@ -118,15 +118,15 @@ public class Langchain4JFunctionCallingApplication {
 			long start = System.currentTimeMillis();
 
 			VertexAI vertexAi = new VertexAI.Builder().setProjectId(project).setLocation(location).setTransport(Transport.REST).build();
-			GenerativeModel generativeModel = new GenerativeModel(chatModel, vertexAi);
+			GenerativeModel generativeModel = new GenerativeModel(chatModelName, vertexAi);
 			GenerationConfig generationConfig = GenerationConfig.newBuilder().setTemperature(0.2f).setMaxOutputTokens(1000).build();
 
-			ChatLanguageModel model = new VertexAiGeminiChatModel(generativeModel, generationConfig, 1);
+			ChatModel chatModel = new VertexAiGeminiChatModel(generativeModel, generationConfig, 1);
 
 			FunctionCallingService service = new FunctionCallingService();
 
 			Assistant assistant = AiServices.builder(Assistant.class)
-					.chatLanguageModel(model)
+					.chatModel(chatModel)
 					.chatMemory(MessageWindowChatMemory.withMaxMessages(10))
 					.tools(service)
 					.build();

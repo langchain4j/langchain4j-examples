@@ -6,7 +6,7 @@ import dev.langchain4j.memory.chat.TokenWindowChatMemory;
 import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
 import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
-import dev.langchain4j.model.openai.OpenAiTokenizer;
+import dev.langchain4j.model.openai.OpenAiTokenCountEstimator;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -23,12 +23,12 @@ public class _05_Memory {
                 .modelName(GPT_4_O_MINI)
                 .build();
 
-        ChatMemory chatMemory = TokenWindowChatMemory.withMaxTokens(1000, new OpenAiTokenizer(GPT_4_O_MINI));
+        ChatMemory chatMemory = TokenWindowChatMemory.withMaxTokens(1000, new OpenAiTokenCountEstimator(GPT_4_O_MINI));
 
         SystemMessage systemMessage = SystemMessage.from(
                 "You are a senior developer explaining to another senior developer, "
                         + "the project you are working on is an e-commerce platform with Java back-end, " +
-                        "Oracle database,and Spring Data JPA");
+                        "Oracle database, and Spring Data JPA");
         chatMemory.add(systemMessage);
 
 
@@ -39,6 +39,24 @@ public class _05_Memory {
 
         System.out.println("[User]: " + userMessage1.singleText());
         System.out.print("[LLM]: ");
+
+        AiMessage aiMessage1 = streamChat(model, chatMemory);
+        chatMemory.add(aiMessage1);
+
+        UserMessage userMessage2 = userMessage(
+                "Give a concrete example implementation of the first point? " +
+                        "Be short, 10 lines of code maximum.");
+        chatMemory.add(userMessage2);
+
+        System.out.println("\n\n[User]: " + userMessage2.singleText());
+        System.out.print("[LLM]: ");
+
+        AiMessage aiMessage2 = streamChat(model, chatMemory);
+        chatMemory.add(aiMessage2);
+    }
+
+    private static AiMessage streamChat(OpenAiStreamingChatModel model, ChatMemory chatMemory)
+            throws ExecutionException, InterruptedException {
 
         CompletableFuture<AiMessage> futureAiMessage = new CompletableFuture<>();
 
@@ -60,16 +78,6 @@ public class _05_Memory {
         };
 
         model.chat(chatMemory.messages(), handler);
-        chatMemory.add(futureAiMessage.get());
-
-        UserMessage userMessage2 = userMessage(
-                "Give a concrete example implementation of the first point? " +
-                        "Be short, 10 lines of code maximum.");
-        chatMemory.add(userMessage2);
-
-        System.out.println("\n\n[User]: " + userMessage2.singleText());
-        System.out.print("[LLM]: ");
-
-        model.chat(chatMemory.messages(), handler);
+        return futureAiMessage.get();
     }
 }

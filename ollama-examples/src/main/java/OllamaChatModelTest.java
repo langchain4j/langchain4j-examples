@@ -1,7 +1,7 @@
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.langchain4j.data.message.UserMessage;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.chat.request.ChatRequest;
 import dev.langchain4j.model.chat.request.ChatRequestParameters;
 import dev.langchain4j.model.chat.request.ResponseFormat;
@@ -32,7 +32,7 @@ class OllamaChatModelTest extends AbstractOllamaInfrastructure {
     @Test
     void simple_example() {
 
-        ChatLanguageModel chatModel = OllamaChatModel.builder()
+        ChatModel chatModel = OllamaChatModel.builder()
                 .baseUrl(ollamaBaseUrl(ollama))
                 .modelName(MODEL_NAME)
                 .logRequests(true)
@@ -55,7 +55,7 @@ class OllamaChatModelTest extends AbstractOllamaInfrastructure {
             Person extractPersonFrom(String text);
         }
 
-        ChatLanguageModel chatModel = OllamaChatModel.builder()
+        ChatModel chatModel = OllamaChatModel.builder()
                 .baseUrl(ollamaBaseUrl(ollama))
                 .modelName(MODEL_NAME)
                 .temperature(0.0)
@@ -74,7 +74,7 @@ class OllamaChatModelTest extends AbstractOllamaInfrastructure {
     @Test
     void json_schema_with_low_level_chat_api_example() {
 
-        ChatLanguageModel chatModel = OllamaChatModel.builder()
+        ChatModel chatModel = OllamaChatModel.builder()
                 .baseUrl(ollamaBaseUrl(ollama))
                 .modelName(MODEL_NAME)
                 .temperature(0.0)
@@ -109,7 +109,7 @@ class OllamaChatModelTest extends AbstractOllamaInfrastructure {
     @Test
     void json_schema_with_low_level_model_builder_example() {
 
-        ChatLanguageModel chatModel = OllamaChatModel.builder()
+        ChatModel chatModel = OllamaChatModel.builder()
                 .baseUrl(ollamaBaseUrl(ollama))
                 .modelName(MODEL_NAME)
                 .temperature(0.0)
@@ -134,7 +134,7 @@ class OllamaChatModelTest extends AbstractOllamaInfrastructure {
     @Test
     void json_mode_with_low_level_model_builder_example() {
 
-        ChatLanguageModel chatModel = OllamaChatModel.builder()
+        ChatModel chatModel = OllamaChatModel.builder()
                 .baseUrl(ollamaBaseUrl(ollama))
                 .modelName(MODEL_NAME)
                 .temperature(0.0)

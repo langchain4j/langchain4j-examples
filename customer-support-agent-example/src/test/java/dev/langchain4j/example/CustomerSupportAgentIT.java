@@ -3,7 +3,7 @@ package dev.langchain4j.example;
 import dev.langchain4j.example.booking.Booking;
 import dev.langchain4j.example.booking.BookingService;
 import dev.langchain4j.example.booking.Customer;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.output.TokenUsage;
 import dev.langchain4j.service.Result;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,7 +36,7 @@ class CustomerSupportAgentIT {
     BookingService bookingService;
 
     @Autowired
-    ChatLanguageModel judgeModel;
+    ChatModel judgeModel;
 
     String memoryId = UUID.randomUUID().toString();
 

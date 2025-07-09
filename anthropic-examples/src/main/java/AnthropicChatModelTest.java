@@ -5,7 +5,7 @@ import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.model.anthropic.AnthropicChatModel;
 import dev.langchain4j.model.anthropic.AnthropicChatModelName;
 import dev.langchain4j.model.anthropic.AnthropicTokenUsage;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.chat.response.ChatResponse;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class AnthropicChatModelTest {
 
-    ChatLanguageModel model = AnthropicChatModel.builder()
+    ChatModel model = AnthropicChatModel.builder()
             // API key can be created here: https://console.anthropic.com/settings/keys
             .apiKey(System.getenv("ANTHROPIC_API_KEY"))
             .modelName("claude-3-haiku-20240307")
@@ -51,7 +51,7 @@ class AnthropicChatModelTest {
 
     @Test
     void AnthropicChatModel_with_cache_system_message_Example() {
-        ChatLanguageModel modelWithCache = AnthropicChatModel.builder()
+        ChatModel modelWithCache = AnthropicChatModel.builder()
                 .apiKey(System.getenv("ANTHROPIC_API_KEY"))
                 .beta("prompt-caching-2024-07-31")
                 .modelName(AnthropicChatModelName.CLAUDE_3_HAIKU_20240307)
