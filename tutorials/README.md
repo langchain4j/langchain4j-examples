@@ -10,7 +10,7 @@ mvn -Pcomplete package
 2. Run individual apps, such as `_00_HelloWorld`, with the following command:
 
 ```shell
-java -cp ./target/tutorials-1.1.0-beta7-jar-with-dependencies.jar _00_HelloWorld "what is Java?"
+java -cp ./target/tutorials-1.2.0-beta8-jar-with-dependencies.jar _00_HelloWorld "what is Java?"
 ```
 
 ## Running the examples as GraalVM native images
@@ -18,7 +18,7 @@ java -cp ./target/tutorials-1.1.0-beta7-jar-with-dependencies.jar _00_HelloWorld
 In case you want to produce a native executable version of your app, same command as above works with `native-image`:
 
 ```shell
-native-image -cp ./target/tutorials-1.1.0-beta7-jar-with-dependencies.jar _00_HelloWorld -o native-helloworld
+native-image -cp ./target/tutorials-1.2.0-beta8-jar-with-dependencies.jar _00_HelloWorld -o native-helloworld
 
 ```
 
