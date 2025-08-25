@@ -1,7 +1,6 @@
 package _3_loop_workflow;
 
-import agent_interfaces.CvReviewer;
-import agent_interfaces.ScoredCvTailor;
+import _2_sequential_workflow.ScoredCvTailor;
 import dev.langchain4j.agentic.AgenticServices;
 import dev.langchain4j.agentic.UntypedAgent;
 import dev.langchain4j.model.chat.ChatModel;
@@ -9,11 +8,13 @@ import dev.langchain4j.model.openai.OpenAiChatModel;
 import model.CvReview;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 
-public class Loop_Agent_Example {
+public class _3_Loop_Agent_Example {
 
     /**
      * This example demonstrates how to implement a CvReviewer agent that we can add to a loop
@@ -43,20 +44,24 @@ public class Loop_Agent_Example {
         UntypedAgent reviewedCvGenerator = AgenticServices // use UntypedAgent unless you define the resulting compound agent, see below
                 .loopBuilder().subAgents(scoredCvTailor, cvReviewer) // this can be as many as you want, order matters
                 .outputName("tailoredCv") // this is the final output we want to observe
-                .exitCondition(agenticScope -> ((CvReview) agenticScope.readState("cvReview")).score > 0.8) // exit condition based on the score given by the CvReviewer agent, when >= 0.7 we are satisfied
+                .exitCondition(agenticScope -> {
+                            CvReview review = (CvReview) agenticScope.readState("cvReview");
+                            System.out.println("Checking exit condition with score=" + review.score); // we log intermediary scores
+                            return review.score > 0.8;
+                        }) // exit condition based on the score given by the CvReviewer agent, when > 0.8 we are satisfied
+                // note that the exit condition is checked after each agent invocation, not just after the entire loop
                 .maxIterations(3) // safety to avoid infinite loops, in case exit condition is never met
                 .build();
 
         // 5. Load the original arguments from text files in resources/documents/
         // - master_cv.txt
         // - job_description_backend.txt
-        // TODO .md? will still read in?
-        String masterCv = new String(Loop_Agent_Example.class.getResourceAsStream("/documents/master_cv.txt").readAllBytes());
-        String jobDescription = new String(Loop_Agent_Example.class.getResourceAsStream("/documents/job_description_backend.txt").readAllBytes());
+        String masterCv = new String(_3_Loop_Agent_Example.class.getResourceAsStream("/documents/master_cv.txt").readAllBytes());
+        String jobDescription = new String(_3_Loop_Agent_Example.class.getResourceAsStream("/documents/job_description_backend.txt").readAllBytes());
         String instructions = "Adapt the CV to the job description below." + jobDescription;
 
         // 5. Because we use an untyped agent, we need to pass a map of arguments
-        Map<String, Object> arguments = Map.of( // TODO masterCv is not picked up
+        Map<String, Object> arguments = Map.of(
                 "masterCv", masterCv, // matches the variable name in agent_interfaces/CvTailor.java
                 "cvReview", new CvReview(0.5, instructions), // matches the variable name in agent_interfaces/CvTailor.java
                 "jobDescription", jobDescription // matches the variable name in agent_interfaces/CvReviewer.java
@@ -94,7 +99,11 @@ public class Loop_Agent_Example {
 
         // If failing to meet the exit condition within the max iterations is
         // important for information for your use case (eg. John may not even want to bother
-        // applying for this job), you can change the output variable to also contain the last score and feedback:
+        // applying for this job), you can change the output variable to also contain the last score and feedback
+        // You can also store the intermediary values in a mutable list to inspect later.
+        // The code below does both things at the same time.
+
+        List<CvReview> reviewHistory = new ArrayList<>();
 
         UntypedAgent reviewedCvGeneratorWithExitCheck = AgenticServices // use UntypedAgent unless you define the resulting compound agent, see below
                 .loopBuilder().subAgents(scoredCvTailor, cvReviewer) // this can be as many as you want, order matters
@@ -106,13 +115,18 @@ public class Loop_Agent_Example {
                     );
                     return cvAndReview;
                 })
-                .exitCondition(agenticScope -> ((CvReview) agenticScope.readState("cvReview")).score > 0.8) // exit condition based on the score given by the CvReviewer agent, when >= 0.7 we are satisfied
+                .exitCondition(scope -> {
+                    CvReview review = (CvReview) scope.readState("cvReview");
+                    reviewHistory.add(review); // capture the score+feedback at every agent invocation
+                    System.out.println("Exit check with score=" + review.score);
+                    return review.score >= 0.8;
+                })
                 .maxIterations(3) // safety to avoid infinite loops, in case exit condition is never met
                 .build();
 
         // now you get the finalReview in the output map so you can check
         // if the final score and feedback meet your requirements
-
+        // in reviewHistory you find the full history of reviews
 
     }
 }

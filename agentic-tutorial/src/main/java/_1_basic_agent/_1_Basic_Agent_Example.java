@@ -1,7 +1,5 @@
 package _1_basic_agent;
 
-import agent_interfaces.CvGenerator;
-import agent_interfaces.CvGeneratorStructuredOutput;
 import dev.langchain4j.agentic.AgenticServices;
 import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
@@ -11,7 +9,7 @@ import java.io.IOException;
 
 import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 
-public class Basic_Agent_Example {
+public class _1_Basic_Agent_Example {
 
     /**
      * This example demonstrates how to implement a basic agent that will
@@ -44,7 +42,7 @@ public class Basic_Agent_Example {
 
         // 4. Load text file from resources/documents/user_life_story.txt
         String lifeStory = new String(
-                Basic_Agent_Example.class.getResourceAsStream("/documents/user_life_story.txt").readAllBytes()
+                _1_Basic_Agent_Example.class.getResourceAsStream("/documents/user_life_story.txt").readAllBytes()
         );
 
         // 5. We call the agent to generate the CV

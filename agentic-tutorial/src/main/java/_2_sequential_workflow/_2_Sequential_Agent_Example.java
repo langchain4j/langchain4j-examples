@@ -1,8 +1,6 @@
 package _2_sequential_workflow;
 
-import agent_interfaces.CvGenerator;
-import agent_interfaces.CvTailor;
-import agent_interfaces.SequenceCvGeneratorMapOutput;
+import _1_basic_agent.CvGenerator;
 import dev.langchain4j.agentic.AgenticServices;
 import dev.langchain4j.agentic.UntypedAgent;
 import dev.langchain4j.model.chat.ChatModel;
@@ -13,7 +11,7 @@ import java.util.Map;
 
 import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 
-public class Sequential_Agent_Example {
+public class _2_Sequential_Agent_Example {
 
     /**
      * This example demonstrates how to implement two agents:
@@ -71,10 +69,10 @@ public class Sequential_Agent_Example {
         // - user_life_story.txt
         // - job_description_backend.txt
         String lifeStory = new String(
-                Sequential_Agent_Example.class.getResourceAsStream("/documents/user_life_story.txt").readAllBytes()
+                _2_Sequential_Agent_Example.class.getResourceAsStream("/documents/user_life_story.txt").readAllBytes()
         );
         String instructions = "Adapt the CV to the job description below." + new String(
-                Sequential_Agent_Example.class.getResourceAsStream("/documents/job_description_backend.txt").readAllBytes()
+                _2_Sequential_Agent_Example.class.getResourceAsStream("/documents/job_description_backend.txt").readAllBytes()
         );
 
         // 5. Because we use an untyped agent, we need to pass a map of arguments
@@ -91,7 +89,7 @@ public class Sequential_Agent_Example {
         System.out.println((String) tailoredCv); // you can observe that the CV looks very different
         // when you'd use job_description_fullstack.txt as input
 
-        ////////////////// TYPED EXAMPLE WITH MULTIPLE OUTPUTS //////////////////////
+        ////////////////// TYPED EXAMPLE WITH MULTIPLE OUTPUTS AND INVOCATION TRACE //////////////////////
 
         // Note that the untyped compound agent uses the generic 'invoke' method and
         // both input and output include Objects to support generic use cases.
@@ -101,15 +99,16 @@ public class Sequential_Agent_Example {
         // Another thing we'll illustrate here is how to output multiple variables from the AgenticScope
         // including input variables, intermediary variables and output variables.
 
-        SequenceCvGeneratorMapOutput sequenceCvGenerator = AgenticServices
-                .sequenceBuilder(SequenceCvGeneratorMapOutput.class) // here we specify the typed interface
+        SequenceCvGenerator sequenceCvGenerator = AgenticServices
+                .sequenceBuilder(SequenceCvGenerator.class) // here we specify the typed interface
                 .subAgents(cvGenerator, cvTailor)
                 .outputName("bothCvs")
                 .output(agenticScope -> {
                     Map<String, String> bothCvs = Map.of(
                             "userInfo", agenticScope.readState("userInfo", ""),
                             "masterCv", agenticScope.readState("masterCv", ""),
-                            "tailoredCv", agenticScope.readState("tailoredCv", "")
+                            "tailoredCv", agenticScope.readState("tailoredCv", ""),
+                            "invocationTrace", agenticScope.contextAsConversation()
                     );
                     return bothCvs;
                     })
@@ -122,11 +121,15 @@ public class Sequential_Agent_Example {
         System.out.println(bothCvs.get("masterCv"));
         System.out.println("=== TAILORED CV TYPED (output) ===");
         System.out.println(bothCvs.get("tailoredCv"));
+        System.out.println("=== INVOCATION TRACE (all messages in the conversation) ===");
+        System.out.println(bothCvs.get("invocationTrace"));
+        // TODO agenticScope.contextAsConversation() seems empty
+        // TODO important to be able to trace:
+        //  - what agent had which inputs (or what was the variables state)
+        //  - which one called which (trace with unique IDs allowing to link one to another)
 
         // Both untyped and typed agents give the same result (differences are due to the non-deterministic nature of LLMs)
         // but the typed agent is easier to use and safer because of compile-time type checking
 
-        // TODO how to show the call chain? (ideally with input and output parameters per agent and some internal invocation ID allowing to still see what happened even if several agents get called multiple times from different places)
-        // TODO how to show intermediary steps that variables went through? especially important to observe in loop system
     }
 }

@@ -1,11 +1,11 @@
-package agent_interfaces;
+package _2_sequential_workflow;
 
 import dev.langchain4j.agentic.Agent;
 import dev.langchain4j.service.V;
 
 import java.util.Map;
 
-public interface SequenceCvGeneratorMapOutput {
+public interface SequenceCvGenerator {
     @Agent("Generates a CV based on user-provided information and tailored to instructions")
     Map<String, String> generateTailoredCv(@V("userInfo") String userInfo, @V("instructions") String instructions);
 }
