@@ -1,0 +1,68 @@
+**John Doe**
+[Your Address]
+[City, State, Zip]
+[Your Phone Number]
+[Your Email Address]
+[LinkedIn Profile]
+[GitHub Profile]
+
+---
+
+**PROFESSIONAL SUMMARY**
+Experienced software engineer with a strong background in backend development, specializing in Java and related technologies. Proven track record of building efficient internal tools, leading project migrations, and fostering a culture of clean code and knowledge sharing. Passionate about product development and efficient workflows, seeking to leverage software engineering skills in a dynamic product-focused company.
+
+---
+
+**PROFESSIONAL EXPERIENCE**
+
+**Software Engineer**
+[Your Current or Most Recent Company Name], [City, State]
+[Month, Year] – Present
+- Developed and maintained backend systems using Java (Spring Boot) and PostgreSQL.
+- Designed and implemented an internal pricing tool that reduced quote generation time by approximately 35%.
+- Led a small task force in successfully migrating legacy SOAP APIs to RESTful services, improving overall system performance and maintainability.
+- Collaborated closely with team members while prioritizing efficient product delivery over unnecessary meetings.
+- Mentored interns, emphasizing the importance of clean code and best practices.
+
+**Software Developer**
+[Previous Company Name], [City, State]
+[Month, Year] – [Month, Year]
+- Contributed to backend software development, primarily using Java and Spring Boot.
+- Gained foundational knowledge of Kafka and Docker, and utilized CI with GitHub Actions for streamlined development processes.
+- Worked on minor front-end tasks using React for various admin panel applications.
+- Engaged in side projects, including a budgeting app developed with Spring and Vue, as well as an IoT home project utilizing ESP32 and MQTT.
+
+---
+
+**EDUCATION**
+
+**Java Bootcamp**
+[Bootcamp Name], [City, State]
+2019 – 2020
+
+**Bachelor of Science in Mechanical Engineering**
+[University Name], [City, State]
+2016
+
+---
+
+**SKILLS**
+- **Programming Languages:** Java, some React
+- **Frameworks & Technologies:** Spring Boot, PostgreSQL, Docker, Kafka (basics)
+- **Tools:** GitHub Actions, CI/CD
+- **Languages:** Dutch (native), English (C1), French (B1)
+- **Other:** Clean code principles, mentoring interns, product-centric development
+
+---
+
+**SIDE PROJECTS**
+- **Budgeting Application:** Developed a small application using Spring and Vue to help users manage personal finances.
+- **Home IoT System:** Created an Internet of Things system using ESP32 and MQTT protocol for smart home automation.
+
+---
+
+**ADDITIONAL INFORMATION**
+- Preferences for employment: Product companies over agencies.
+- Known for a pragmatic approach to software development, focusing on delivering results efficiently.
+
+---

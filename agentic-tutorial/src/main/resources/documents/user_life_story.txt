@@ -1,0 +1,25 @@
+Professional trajectory of John Doe:
+
+- switched from mechanical engineering to software in 2020 after evening bootcamp.
+
+- 4 years total in software; last 2 years backend Java (Spring Boot, PostgreSQL, Kafka basics).
+
+- built internal pricing tool; cut quote time by ~35%.
+
+- led small task force (3 people) migrating legacy SOAP to REST.
+
+- comfortable with Docker, CI (GitHub Actions).
+
+- some React for admin panels (not strong).
+
+- cares about clean code, mentoring interns.
+
+- dislikes endless meetings; prefers shipping.
+
+- prefers product companies over agencies.
+
+- languages: Dutch (native), English (C1), French (B1).
+
+- Education: BSc Mechanical Engineering (2016), Java bootcamp (2019–2020).
+
+- Side projects: small budgeting app (Spring + Vue), home IoT (ESP32 + MQTT).
