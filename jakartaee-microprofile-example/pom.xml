@@ -92,7 +92,7 @@
         <dependency>
             <groupId>org.eclipse.jetty.websocket</groupId>
             <artifactId>websocket-jakarta-client</artifactId>
-            <version>11.0.25</version>
+            <version>11.0.26</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -109,7 +109,7 @@
                 <plugin>
                     <groupId>io.openliberty.tools</groupId>
                     <artifactId>liberty-maven-plugin</artifactId>
-                    <version>3.11.4</version>
+                    <version>3.11.5</version>
                 </plugin>
             </plugins>
         </pluginManagement>
