@@ -51,6 +51,7 @@
         <module>wildfly-example</module>
         <module>helidon-examples</module>
         <module>payara-micro-example</module>
+        <module>gpullama3.java-example</module>
     </modules>
 
 </project>
