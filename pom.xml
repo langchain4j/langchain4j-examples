@@ -51,6 +51,7 @@
         <module>wildfly-example</module>
         <module>helidon-examples</module>
         <module>payara-micro-example</module>
+        <module>watsonx-ai-examples</module>
     </modules>
 
 </project>
