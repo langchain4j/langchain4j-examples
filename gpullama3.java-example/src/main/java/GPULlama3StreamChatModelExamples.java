@@ -12,6 +12,8 @@ public class GPULlama3StreamChatModelExamples {
     public static void main(String[] args) {
         CompletableFuture<ChatResponse> futureResponse = new CompletableFuture<>();
 
+        // Change this path to the path of your model file.
+        // Supports Mistral, Llama3, Phi-3, Qwen2.5 and Qwen3 in gguf format.
         Path modelPath = Paths.get("beehive-llama-3.2-1b-instruct-fp16.gguf");
 
         StreamingChatModel model = GPULlama3StreamingChatModel.builder().modelPath(modelPath).build();
