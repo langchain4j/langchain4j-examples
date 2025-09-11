@@ -1,0 +1,48 @@
+Candidate: John Doe
+Position: Backend Engineer
+Date: 2025-09-05
+Interviewer: Sarah Jacobs (HR Specialist)
+
+---
+
+## 1. Work Authorization & Logistics
+- Citizenship/Work Permit: Belgian citizen; authorized to work in the EU.
+- Location: Lives in Antwerp, Belgium. Open to hybrid; prefers 3 remote days/week.
+- Availability: 3 months notice period.
+- Relocation: Not required.
+
+---
+
+## 2. Compensation & Benefits
+- Current Salary: ~€62,000/year.
+- Expected Salary: ~€75,000/year.
+- Benefits Expectations: Standard benefits, plus training budget interest.
+
+---
+
+## 3. Experience Overview (from phone screen)
+- ~4 years backend development experience (Java/Spring Boot, PostgreSQL).
+- Led pricing automation project; confident communicator.
+- Used Kafka primarily in proofs of concept, not large-scale deployments.
+- Interested in mentoring; no formal leadership roles yet.
+
+---
+
+## 4. Career Stability
+- Current company tenure: ~4 years.
+- Previous company: ~1.5 years.
+- No major gaps in employment.
+
+---
+
+## 5. Communication & Soft Skills
+- Languages: Dutch (native), English (C1).
+- Communication: Clear and confident.
+- Work style: Pragmatic, product-focused.
+
+---
+
+## 6. Notes
+- Salary expectations slightly above typical range.
+- Availability later than preferred start date.
+- Limited distributed systems exposure.

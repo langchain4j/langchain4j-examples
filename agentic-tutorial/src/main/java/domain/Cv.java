@@ -1,4 +1,4 @@
-package model;
+package domain;
 
 import dev.langchain4j.model.output.structured.Description;
 
