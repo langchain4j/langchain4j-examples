@@ -1,4 +1,4 @@
-package _3_loop_workflow;
+package _4_parallel_workflow;
 
 import dev.langchain4j.agentic.Agent;
 import dev.langchain4j.service.SystemMessage;
@@ -6,9 +6,9 @@ import dev.langchain4j.service.UserMessage;
 import dev.langchain4j.service.V;
 import domain.CvReview;
 
-public interface CvReviewer {
+public interface ManagerCvReviewer {
 
-    @Agent("Reviews a CV according to specific instructions, gives feedback and a score")
+    @Agent("Reviews a CV based on a job description, gives feedback and a score")
     @SystemMessage("""
             You are the hiring manager for this job:
             {{jobDescription}}
@@ -17,7 +17,7 @@ public interface CvReviewer {
             You can ignore things like missing address and placeholders.
             """)
     @UserMessage("""
-            Review this CV: {{cv}}
+            Review this CV: {{candidateCv}}
             """)
-    CvReview reviewCv(@V("cv") String cv, @V("jobDescription") String jobDescription);
+    CvReview reviewCv(@V("candidateCv") String cv, @V("jobDescription") String jobDescription);
 }

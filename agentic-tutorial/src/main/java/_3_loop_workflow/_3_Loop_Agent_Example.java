@@ -1,53 +1,61 @@
 package _3_loop_workflow;
 
-import _2_sequential_workflow.ScoredCvTailor;
 import dev.langchain4j.agentic.AgenticServices;
 import dev.langchain4j.agentic.UntypedAgent;
 import dev.langchain4j.model.chat.ChatModel;
-import dev.langchain4j.model.openai.OpenAiChatModel;
-import model.CvReview;
+import domain.CvReview;
+import util.ChatModelProvider;
+import util.StringLoader;
+import util.log.CustomLogging;
+import util.log.LogLevels;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
-
 public class _3_Loop_Agent_Example {
+
+    static {
+        CustomLogging.setLevel(LogLevels.PRETTY, 300);  // control how much you see from the model calls
+    }
 
     /**
      * This example demonstrates how to implement a CvReviewer agent that we can add to a loop
-     * with our CvTailor agent. We will implement three agents:
-     * - CvGenerator (takes in a life story and generates a complete master CV)
-     * - CvTailor (takes in the master CV and tailors it to specific instructions (job description, feedback, ...)
-     * - CvReviewer (takes in the tailored CV and reviews it, providing feedback for improvement (new instructions for the CvTailor), and a score between 0 and 1
+     * with our CvTailor agent. We will implement two agents:
+     * - ScoredCvTailor (takes in a CV and tailors it to a CvReview (feedback/instruction + score))
+     * - CvReviewer (takes in the tailored CV and job description, and returns a CvReview object (feedback + score)
      * Additionally, the loop ends when the score is above a certain threshold (e.g. 0.7) (exit condition)
      */
 
     // 1. Define the model that will power the agents
-    private static final ChatModel CHAT_MODEL = OpenAiChatModel.builder().apiKey(System.getenv("OPENAI_API_KEY")).modelName(GPT_4_O_MINI).logRequests(true).logResponses(true).build();
+    private static final ChatModel CHAT_MODEL = ChatModelProvider.createChatModel();
 
     public static void main(String[] args) throws IOException {
 
-        // 2. Define the two sub-agents in:
-        //      - agent_interfaces/CvTailor.java
-        //      - agent_interfaces/CvReviewer.java
+        // 2. Define the two sub-agents in this package:
+        //      - CvTailor.java
+        //      - CvReviewer.java
 
         // 3. Create all agents using AgenticServices
-        ScoredCvTailor scoredCvTailor = AgenticServices.agentBuilder(ScoredCvTailor.class).chatModel(CHAT_MODEL).outputName("tailoredCv") // this will be overwritten in every iteration, and also be used as the final output we want to observe
+        ScoredCvTailor scoredCvTailor = AgenticServices.agentBuilder(ScoredCvTailor.class)
+                .chatModel(CHAT_MODEL)
+                .outputName("cv") // this will be updated in every iteration, continuously improving the CV
                 .build();
-        CvReviewer cvReviewer = AgenticServices.agentBuilder(CvReviewer.class).chatModel(CHAT_MODEL).outputName("cvReview") // this overwrites the original input instructions, and is overwritten in every iteration and used as new instructions for the CvTailor
+        CvReviewer cvReviewer = AgenticServices.agentBuilder(CvReviewer.class)
+                .chatModel(CHAT_MODEL)
+                .outputName("cvReview") // this gets updated in every iteration with new feedback for the next tailoring
                 .build();
 
         // 4. Build the sequence
-        UntypedAgent reviewedCvGenerator = AgenticServices // use UntypedAgent unless you define the resulting compound agent, see below
+        UntypedAgent reviewedCvGenerator = AgenticServices // use UntypedAgent unless you define the resulting compound agent, see _2_Sequential_Agent_Example
                 .loopBuilder().subAgents(scoredCvTailor, cvReviewer) // this can be as many as you want, order matters
-                .outputName("tailoredCv") // this is the final output we want to observe
+                .outputName("cv") // this is the final output we want to observe (the improved CV)
                 .exitCondition(agenticScope -> {
                             CvReview review = (CvReview) agenticScope.readState("cvReview");
                             System.out.println("Checking exit condition with score=" + review.score); // we log intermediary scores
                             return review.score > 0.8;
+                            // TODO Mario would be nice to access the loop counter
                         }) // exit condition based on the score given by the CvReviewer agent, when > 0.8 we are satisfied
                 // note that the exit condition is checked after each agent invocation, not just after the entire loop
                 .maxIterations(3) // safety to avoid infinite loops, in case exit condition is never met
@@ -56,15 +64,15 @@ public class _3_Loop_Agent_Example {
         // 5. Load the original arguments from text files in resources/documents/
         // - master_cv.txt
         // - job_description_backend.txt
-        String masterCv = new String(_3_Loop_Agent_Example.class.getResourceAsStream("/documents/master_cv.txt").readAllBytes());
-        String jobDescription = new String(_3_Loop_Agent_Example.class.getResourceAsStream("/documents/job_description_backend.txt").readAllBytes());
-        String instructions = "Adapt the CV to the job description below." + jobDescription;
+        String masterCv = StringLoader.loadFromResource("/documents/master_cv.txt");
+        String jobDescription = StringLoader.loadFromResource("/documents/job_description_backend.txt");
+        CvReview cvReview = new CvReview(0.5, "Adapt the CV to the following job description as good as you can without inventing skills. Stick to the given facts.: " + jobDescription);
 
         // 5. Because we use an untyped agent, we need to pass a map of arguments
         Map<String, Object> arguments = Map.of(
-                "masterCv", masterCv, // matches the variable name in agent_interfaces/CvTailor.java
-                "cvReview", new CvReview(0.5, instructions), // matches the variable name in agent_interfaces/CvTailor.java
-                "jobDescription", jobDescription // matches the variable name in agent_interfaces/CvReviewer.java
+                "cv", masterCv, // start with the master CV, it will be continuously improved
+                "cvReview", cvReview,
+                "jobDescription", jobDescription
         );
 
         // 5. Call the compound agent to generate the tailored CV
@@ -80,11 +88,12 @@ public class _3_Loop_Agent_Example {
 
         // if you want to see it fail, try with this jobDescription:
         String fluteJobDescription = "We are looking for a passionate flute teacher to join our music academy.";
+        CvReview fluteJobCvReview = new CvReview(0.5, "Adapt the CV to the following job description as good as you can without inventing skills. Stick to the given facts.: " + fluteJobDescription);
 
         // reuse the same masterCv and instructions, just swap job description
         Map<String, Object> fluteArgs = Map.of(
-                "masterCv", masterCv,
-                "cvReview", new CvReview(0.5, instructions),
+                "cv", masterCv, // start with the master CV, it will be continuously improved
+                "cvReview", fluteJobCvReview,
                 "jobDescription", fluteJobDescription
         );
 
@@ -109,9 +118,9 @@ public class _3_Loop_Agent_Example {
                 .loopBuilder().subAgents(scoredCvTailor, cvReviewer) // this can be as many as you want, order matters
                 .outputName("cvAndReview") // this is the final output we want to observe
                 .output(agenticScope -> {
-                    Map<String, String> cvAndReview = Map.of(
-                            "tailoredCv", agenticScope.readState("tailoredCv", ""),
-                            "finalReview", agenticScope.readState("cvReview", "")
+                    Map<String, Object> cvAndReview = Map.of(
+                            "cv", agenticScope.readState("cv"),
+                            "finalReview", agenticScope.readState("cvReview")
                     );
                     return cvAndReview;
                 })
@@ -126,7 +135,14 @@ public class _3_Loop_Agent_Example {
 
         // now you get the finalReview in the output map so you can check
         // if the final score and feedback meet your requirements
+
+        Map<String, Object> cvAndReview = (Map<String, Object>) reviewedCvGeneratorWithExitCheck.invoke(fluteArgs);
+        System.out.println("=== CV AND FINAL REVIEW FOR FLUTE TEACHER ===");
+        System.out.println(cvAndReview);
+
         // in reviewHistory you find the full history of reviews
+        System.out.println("=== FULL REVIEW HISTORY FOR FLUTE TEACHER ===");
+        System.out.println(reviewHistory);
 
     }
 }

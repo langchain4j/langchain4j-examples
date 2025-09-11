@@ -4,14 +4,19 @@ import _1_basic_agent.CvGenerator;
 import dev.langchain4j.agentic.AgenticServices;
 import dev.langchain4j.agentic.UntypedAgent;
 import dev.langchain4j.model.chat.ChatModel;
-import dev.langchain4j.model.openai.OpenAiChatModel;
+import util.ChatModelProvider;
+import util.StringLoader;
+import util.log.CustomLogging;
+import util.log.LogLevels;
 
 import java.io.IOException;
 import java.util.Map;
 
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
-
 public class _2_Sequential_Agent_Example {
+
+    static {
+        CustomLogging.setLevel(LogLevels.PRETTY, 300);  // control how much you see from the model calls
+    }
 
     /**
      * This example demonstrates how to implement two agents:
@@ -24,18 +29,13 @@ public class _2_Sequential_Agent_Example {
      */
 
     // 1. Define the model that will power the agents
-    private static final ChatModel CHAT_MODEL = OpenAiChatModel.builder()
-            .apiKey(System.getenv("OPENAI_API_KEY"))
-            .modelName(GPT_4_O_MINI)
-            .logRequests(true)
-            .logResponses(true)
-            .build();
+    private static final ChatModel CHAT_MODEL = ChatModelProvider.createChatModel();
 
     public static void main(String[] args) throws IOException {
 
-        // 2. Define the two sub-agents in:
-        //      - agent_interfaces/CvGenerator.java
-        //      - agent_interfaces/CvTailor.java
+        // 2. Define the two sub-agents in this package:
+        //      - CvGenerator.java
+        //      - CvTailor.java
 
         // 3. Create both agents using AgenticServices
         CvGenerator cvGenerator = AgenticServices
@@ -68,16 +68,12 @@ public class _2_Sequential_Agent_Example {
         // 4. Load the arguments from text files in resources/documents/
         // - user_life_story.txt
         // - job_description_backend.txt
-        String lifeStory = new String(
-                _2_Sequential_Agent_Example.class.getResourceAsStream("/documents/user_life_story.txt").readAllBytes()
-        );
-        String instructions = "Adapt the CV to the job description below." + new String(
-                _2_Sequential_Agent_Example.class.getResourceAsStream("/documents/job_description_backend.txt").readAllBytes()
-        );
+        String lifeStory = StringLoader.loadFromResource("/documents/user_life_story.txt");
+        String instructions = "Adapt the CV to the job description below." + StringLoader.loadFromResource("/documents/job_description_backend.txt");
 
         // 5. Because we use an untyped agent, we need to pass a map of arguments
         Map<String, Object> arguments = Map.of(
-                "userInfo", lifeStory, // matches the variable name in agent_interfaces/CvGenerator.java
+                "lifeStory", lifeStory, // matches the variable name in agent_interfaces/CvGenerator.java
                 "instructions", instructions // matches the variable name in agent_interfaces/CvTailor.java
         );
 
@@ -105,10 +101,10 @@ public class _2_Sequential_Agent_Example {
                 .outputName("bothCvs")
                 .output(agenticScope -> {
                     Map<String, String> bothCvs = Map.of(
-                            "userInfo", agenticScope.readState("userInfo", ""),
+                            "lifeStory", agenticScope.readState("lifeStory", ""),
                             "masterCv", agenticScope.readState("masterCv", ""),
                             "tailoredCv", agenticScope.readState("tailoredCv", ""),
-                            "invocationTrace", agenticScope.contextAsConversation()
+                            "invocationTrace", agenticScope.contextAsConversation("tailorCv")
                     );
                     return bothCvs;
                     })
@@ -116,15 +112,15 @@ public class _2_Sequential_Agent_Example {
 
         Map<String,String> bothCvs = sequenceCvGenerator.generateTailoredCv(lifeStory, instructions);
         System.out.println("=== USER INFO (input) ===");
-        System.out.println(bothCvs.get("userInfo"));
+        System.out.println(bothCvs.get("lifeStory"));
         System.out.println("=== MASTER CV TYPED (intermediary variable) ===");
         System.out.println(bothCvs.get("masterCv"));
         System.out.println("=== TAILORED CV TYPED (output) ===");
         System.out.println(bothCvs.get("tailoredCv"));
         System.out.println("=== INVOCATION TRACE (all messages in the conversation) ===");
         System.out.println(bothCvs.get("invocationTrace"));
-        // TODO agenticScope.contextAsConversation() seems empty
-        // TODO important to be able to trace:
+        // TODO Mario agenticScope.contextAsConversation() seems empty
+        // TODO Mario important to be able to trace:
         //  - what agent had which inputs (or what was the variables state)
         //  - which one called which (trace with unique IDs allowing to link one to another)
 
