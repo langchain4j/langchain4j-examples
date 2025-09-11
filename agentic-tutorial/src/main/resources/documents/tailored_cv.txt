@@ -1,66 +1,15 @@
-John Doe
+John Doe – Backend Engineer
+Antwerp, Belgium | john.doe.dev@protonmail.com | +32 495 67 89 23 | LinkedIn | GitHub
 
-Rue des Carmes 12, 2000 Antwerp, Belgium
-john.doe.dev@protonmail.com | +32 495 67 89 23
-LinkedIn | GitHub
+SUMMARY
+Backend engineer (Java, Spring Boot, PostgreSQL) with 4+ yrs’ experience in scalable systems, API modernization, and automation. Fluent Dutch, English C1.
 
-PROFESSIONAL SUMMARY
-
-Backend engineer with hands-on experience building reliable and scalable systems using Java (Spring Boot) and PostgreSQL. Skilled in API modernization, event-driven workflows, and containerization with Docker. Proven ability to deliver measurable efficiency improvements through pricing automation tools and robust backend design. Pragmatic, product-focused developer fluent in English and Dutch, with a passion for clean code and mentoring.
-
-PROFESSIONAL EXPERIENCE
-
-Software Engineer
-BrightPay Systems, Antwerp, Belgium
-Feb 2021 – Present
-
-Built and maintained backend services in Java (Spring Boot) with PostgreSQL.
-
-Designed and delivered a pricing automation tool, cutting quote generation time by 35%.
-
-Led the migration of legacy SOAP APIs to RESTful services, improving scalability and maintainability.
-
-Advocated for clean coding standards and mentored interns, fostering engineering best practices.
-
-Partnered with product teams to prioritize feature delivery with minimal overhead.
-
-Software Developer
-CodeWave Solutions, Ghent, Belgium
-Jul 2019 – Jan 2021
-
-Contributed to backend feature development using Spring Boot and PostgreSQL.
-
-Introduced CI/CD pipelines with GitHub Actions, streamlining deployments.
-
-Gained experience with Kafka for event-driven services and Docker for containerization.
-
-Developed small-scale admin UI improvements using React.
-
-Delivered personal and side projects, including a Spring + Vue budgeting app and IoT automation tools.
+EXPERIENCE
+BrightPay Systems (2021–Present): Built backend services; pricing tool (-35% quote time); SOAP→REST migration; mentoring interns.
+CodeWave Solutions (2019–2021): Backend dev; CI/CD (GitHub Actions); Docker, Kafka (PoC); small React admin UI; side projects (Spring+Vue budgeting app, IoT automation).
 
 EDUCATION
+Java Bootcamp, BeCode (2019–2020); B.Sc. Mechanical Engineering, KU Leuven (2016)
 
-Java Bootcamp – BeCode, Brussels, Belgium (2019 – 2020)
-B.Sc. Mechanical Engineering – KU Leuven, Leuven, Belgium (2016)
-
-KEY SKILLS
-
-Languages & Frameworks: Java, Spring Boot, React (basic)
-
-Databases & Messaging: PostgreSQL, Kafka (foundational)
-
-Infrastructure & CI/CD: Docker, GitHub Actions, containerization
-
-API Development: REST API design, legacy migrations
-
-Languages: Dutch (native), English (C1), French (B1)
-
-Soft Skills: Mentoring, product-focused mindset, clean code practices
-
-SELECTED PROJECTS
-
-Pricing Automation Tool: Internal service reducing quote generation by 35%.
-
-API Modernization: Migration of critical services from SOAP to REST.
-
-Budgeting App: Spring + Vue app for personal finance tracking.
+SKILLS
+Java, Spring Boot, PostgreSQL, Docker, Kafka (basic), CI/CD, REST design, clean code, mentoring; Dutch (native), English (C1), French (B1).

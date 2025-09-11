@@ -27,6 +27,7 @@ public class _6_Composed_Workflow_Example {
     static {
         CustomLogging.setLevel(LogLevels.PRETTY, 300);  // control how much you see from the model calls
     }
+    // TODO Mario: my workaround on the logs... how would you do this properly and should we integrate it?
 
     /**
      * Every agent, whether a single-task agent, a sequential workflow,..., is still just an Agent.
@@ -44,68 +45,68 @@ public class _6_Composed_Workflow_Example {
     private static final ChatModel CHAT_MODEL = ChatModelProvider.createChatModel();
 
     public static void main(String[] args) throws IOException {
-//
-//        ////////////////// CANDIDATE COMPOSED WORKFLOW //////////////////////
-//        // We'll go from life story > CV > Review > review loop until we pass
-//        // then email our CV to the company
-//
-//        // 1. Create all necessary agents for candidate workflow
-//        CvGenerator cvGenerator = AgenticServices
-//                .agentBuilder(CvGenerator.class)
-//                .chatModel(CHAT_MODEL)
-//                .outputName("cv")
-//                .build();
-//
-//        ScoredCvTailor scoredCvTailor = AgenticServices
-//                .agentBuilder(ScoredCvTailor.class)
-//                .chatModel(CHAT_MODEL)
-//                .outputName("cv")
-//                .build();
-//
-//        CvReviewer cvReviewer = AgenticServices
-//                .agentBuilder(CvReviewer.class)
-//                .chatModel(CHAT_MODEL)
-//                .outputName("cvReview")
-//                .build();
-//
-//        // 2. Create the loop workflow for CV improvement
-//        UntypedAgent cvImprovementLoop = AgenticServices
-//                .loopBuilder()
-//                .subAgents(scoredCvTailor, cvReviewer)
-//                .outputName("cv")
-//                .exitCondition(agenticScope -> {
-//                    CvReview review = (CvReview) agenticScope.readState("cvReview");
-//                    System.out.println("CV Review Score: " + review.score);
-//                    if (review.score >= 0.8)
-//                        System.out.println("CV is good enough, exiting loop.\n");
-//                    return review.score >= 0.8;
-//                })
-//                .maxIterations(3)
-//                .build();
-//
-//        // 3. Create the complete candidate workflow: Generate > Review > Improve Loop
-//        CandidateWorkflow candidateWorkflow = AgenticServices
-//                .sequenceBuilder(CandidateWorkflow.class)
-//                .subAgents(cvGenerator, cvReviewer, cvImprovementLoop)
-//                // here we use the composed agent cvImprovementLoop inside the sequenceBuilder
-//                // we also need the cvReviewer in order to generate a first review before entering the loop
-//                .outputName("cv")
-//                .build();
-//
-//        // 4. Load input data
-//        String lifeStory = StringLoader.loadFromResource("/documents/user_life_story.txt");
-//        String jobDescription = StringLoader.loadFromResource("/documents/job_description_backend.txt");
-//
-//        // 5. Execute the candidate workflow
-//        String candidateResult = candidateWorkflow.processCandidate(lifeStory, jobDescription);
-//        // Note that input parameters and intermediate parameters are all stored in one AgenticScope
-//        // that is available to all agents in the system
-//        // TODO Mario doublecheck that this is true and there's no lower and higher level AgenticScopes at play
-//
-//        System.out.println("=== CANDIDATE WORKFLOW COMPLETED ===");
-//        System.out.println("Final CV: " + candidateResult);
-//
-//        System.out.println("\n\n\n\n");
+
+        ////////////////// CANDIDATE COMPOSED WORKFLOW //////////////////////
+        // We'll go from life story > CV > Review > review loop until we pass
+        // then email our CV to the company
+
+        // 1. Create all necessary agents for candidate workflow
+        CvGenerator cvGenerator = AgenticServices
+                .agentBuilder(CvGenerator.class)
+                .chatModel(CHAT_MODEL)
+                .outputName("cv")
+                .build();
+
+        ScoredCvTailor scoredCvTailor = AgenticServices
+                .agentBuilder(ScoredCvTailor.class)
+                .chatModel(CHAT_MODEL)
+                .outputName("cv")
+                .build();
+
+        CvReviewer cvReviewer = AgenticServices
+                .agentBuilder(CvReviewer.class)
+                .chatModel(CHAT_MODEL)
+                .outputName("cvReview")
+                .build();
+
+        // 2. Create the loop workflow for CV improvement
+        UntypedAgent cvImprovementLoop = AgenticServices
+                .loopBuilder()
+                .subAgents(scoredCvTailor, cvReviewer)
+                .outputName("cv")
+                .exitCondition(agenticScope -> {
+                    CvReview review = (CvReview) agenticScope.readState("cvReview");
+                    System.out.println("CV Review Score: " + review.score);
+                    if (review.score >= 0.8)
+                        System.out.println("CV is good enough, exiting loop.\n");
+                    return review.score >= 0.8;
+                })
+                .maxIterations(3)
+                .build();
+
+        // 3. Create the complete candidate workflow: Generate > Review > Improve Loop
+        CandidateWorkflow candidateWorkflow = AgenticServices
+                .sequenceBuilder(CandidateWorkflow.class)
+                .subAgents(cvGenerator, cvReviewer, cvImprovementLoop)
+                // here we use the composed agent cvImprovementLoop inside the sequenceBuilder
+                // we also need the cvReviewer in order to generate a first review before entering the loop
+                .outputName("cv")
+                .build();
+
+        // 4. Load input data
+        String lifeStory = StringLoader.loadFromResource("/documents/user_life_story.txt");
+        String jobDescription = StringLoader.loadFromResource("/documents/job_description_backend.txt");
+
+        // 5. Execute the candidate workflow
+        String candidateResult = candidateWorkflow.processCandidate(lifeStory, jobDescription);
+        // Note that input parameters and intermediate parameters are all stored in one AgenticScope
+        // that is available to all agents in the system
+        // TODO Mario doublecheck that this is true and there's no lower and higher level AgenticScopes at play
+
+        System.out.println("=== CANDIDATE WORKFLOW COMPLETED ===");
+        System.out.println("Final CV: " + candidateResult);
+
+        System.out.println("\n\n\n\n");
 
         ////////////////// HIRING TEAM COMPOSED WORKFLOW //////////////////////
         // We receive an email with the candidate CV and contacts. We did the phone HR interview.
@@ -181,8 +182,7 @@ public class _6_Composed_Workflow_Example {
         String candidateContact = StringLoader.loadFromResource("/documents/candidate_contact.txt");
         String hrRequirements = StringLoader.loadFromResource("/documents/hr_requirements.txt");
         String phoneInterviewNotes = StringLoader.loadFromResource("/documents/phone_interview_notes.txt");
-        String jobDescription = StringLoader.loadFromResource("/documents/job_description_backend.txt");
-        
+
         // Put all data in a Map for easy access
         Map<String, Object> inputData = Map.of(
                 "candidateCv", candidateCv,

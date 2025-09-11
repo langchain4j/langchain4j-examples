@@ -33,11 +33,43 @@ public class ChatModelProvider {
      * @return a configured ChatModel instance
      */
     public static ChatModel createChatModel(boolean enableLogging) {
-        return OpenAiChatModel.builder()
-                .apiKey(System.getenv("OPENAI_API_KEY"))
-                .modelName(GPT_4_O_MINI)
-                .logRequests(enableLogging)
-                .logResponses(enableLogging)
-                .build();
+        return createChatModel("OPENAI", enableLogging);
+    }
+    
+    /**
+     * Creates a configured ChatModel instance for the specified provider.
+     * 
+     * @param provider the model provider ("OPENAI" or "CEREBRAS")
+     * @return a configured ChatModel instance
+     */
+    public static ChatModel createChatModel(String provider) {
+        return createChatModel(provider, true);
+    }
+    
+    /**
+     * Creates a configured ChatModel instance for the specified provider with optional logging.
+     * 
+     * @param provider the model provider ("OPENAI" or "CEREBRAS")
+     * @param enableLogging whether to enable request/response logging
+     * @return a configured ChatModel instance
+     */
+    public static ChatModel createChatModel(String provider, boolean enableLogging) {
+        if ("CEREBRAS".equalsIgnoreCase(provider)) {
+            return OpenAiChatModel.builder()
+                    .baseUrl("https://api.cerebras.ai/v1")
+                    .apiKey(System.getenv("CEREBRAS_API_KEY"))
+                    .modelName("llama-4-scout-17b-16e-instruct")
+                    .logRequests(enableLogging)
+                    .logResponses(enableLogging)
+                    .build();
+        } else {
+            // Default to OpenAI
+            return OpenAiChatModel.builder()
+                    .apiKey(System.getenv("OPENAI_API_KEY"))
+                    .modelName(GPT_4_O_MINI)
+                    .logRequests(enableLogging)
+                    .logResponses(enableLogging)
+                    .build();
+        }
     }
 }
