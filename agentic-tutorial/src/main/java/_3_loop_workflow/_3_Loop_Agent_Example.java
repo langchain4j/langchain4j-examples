@@ -55,6 +55,7 @@ public class _3_Loop_Agent_Example {
                             CvReview review = (CvReview) agenticScope.readState("cvReview");
                             System.out.println("Checking exit condition with score=" + review.score); // we log intermediary scores
                             return review.score > 0.8;
+                            // TODO Mario would be nice to access the loop counter
                         }) // exit condition based on the score given by the CvReviewer agent, when > 0.8 we are satisfied
                 // note that the exit condition is checked after each agent invocation, not just after the entire loop
                 .maxIterations(3) // safety to avoid infinite loops, in case exit condition is never met

@@ -1,29 +1,11 @@
-## 1. Basic Candidate Info
-- Name: Must be clear and identifiable
-- Contact details: Email, phone
-- Location: Antwerp, Belgium preferred; remote considered
----
-## 2. Eligibility & Logistics
-| Requirement                      | Importance | Notes                                     |
-|---------------------------------|------------|------------------------------------------|
-| Work authorization (EU)         | High       | Must be able to work in Belgium/EU       |
-| Availability / Start date       | High       | Within 1–2 months preferred              |
-| Willingness to relocate/remote  | Medium     | Optional but note preferences            |
-| Salary expectations             | High       | Within budget (€55–70k/year range)       |
----
-## 3. Employment History
-| Requirement                      | Importance | Notes                                     |
-|---------------------------------|------------|------------------------------------------|
-| Stable work history             | High       | No unexplained long gaps (>6 months)     |
-| Relevant industry experience    | Medium     | Tech/software industry preferred         |
-| Company tenure                  | Medium     | 1+ years in most roles                   |
-| Career progression              | Medium     | Growth in responsibilities               |
----
-## 4. Communication & Culture Fit
-| Requirement                      | Importance | Notes                                     |
-|---------------------------------|------------|------------------------------------------|
-| Language proficiency            | High       | Dutch (native) + English (C1) required   |
-| Professional writing style      | Medium     | CV clarity, no major grammatical issues  |
-| Team collaboration signals      | Medium     | Mentoring, teamwork, product focus       |
-| Cultural alignment              | Low        | Values appear aligned with company       |
----
+## HR Requirements
+- Name and contact details must be clear and complete.
+- Must be authorized to work in Belgium/EU.
+- Availability to start within 1–2 months preferred.
+- Salary expectations within €55–70k/year range.
+- Stable work history; no gaps >6 months.
+- At least 1 year tenure per role and relevant tech industry experience.
+- Growth in responsibilities over career is desirable.
+- Fluent Dutch (native) and English (C1) required.
+- Clear, professional writing; no major grammar issues.
+- Evidence of teamwork, mentoring, and product focus preferred.
