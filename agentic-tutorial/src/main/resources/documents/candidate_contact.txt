@@ -1,0 +1,5 @@
+Candidate Contact Card:
+John Doe
+Rue des Carmes 12, 2000 Antwerp, Belgium
+john.doe.dev@protonmail.com
++32 495 67 89 23

@@ -1,0 +1,19 @@
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+    
+    <!-- Turn off HTTP noise -->
+    <logger name="dev.langchain4j.model.openai" level="OFF"/>
+    <logger name="dev.langchain4j.http.client" level="OFF"/>
+    <logger name="okhttp3" level="OFF"/>
+    <logger name="com.fasterxml.jackson" level="OFF"/>
+    <logger name="ai.djl" level="OFF"/>
+    <logger name="org.apache.tika" level="OFF"/>
+</configuration>
