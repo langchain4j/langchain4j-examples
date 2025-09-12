@@ -63,7 +63,6 @@ $JAVA_BIN \
   -XX:-UseCompressedOops \
   -XX:+UnlockExperimentalVMOptions \
   -XX:+EnableJVMCI \
-  -XX:-UseCompressedClassPointers \
   --enable-preview \
   -Djava.library.path=/home/mikepapadim/java-ai-demos/GPULlama3.java/external/tornadovm/bin/sdk/lib \
   --module-path .:/home/mikepapadim/java-ai-demos/GPULlama3.java/external/tornadovm/bin/sdk/share/java/tornado \
@@ -99,7 +98,6 @@ bash run-direct.sh
   -XX:-UseCompressedOops \
   -XX:+UnlockExperimentalVMOptions \
   -XX:+EnableJVMCI \
-  -XX:-UseCompressedClassPointers \
   --enable-preview \
   -Djava.library.path=/home/mikepapadim/java-ai-demos/GPULlama3.java/external/tornadovm/bin/sdk/lib \
   --module-path .:/home/mikepapadim/java-ai-demos/GPULlama3.java/external/tornadovm/bin/sdk/share/java/tornado \
