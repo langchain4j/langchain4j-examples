@@ -90,3 +90,33 @@ You can save the above command as run-direct.sh and run it with:
 ```bash
 bash run-direct.sh
 ```
+
+
+### Optional: Run the program with TornadoVM
+```bash
+/home/mikepapadim/.sdkman/candidates/java/current/bin/java \
+  -server \
+  -XX:-UseCompressedOops \
+  -XX:+UnlockExperimentalVMOptions \
+  -XX:+EnableJVMCI \
+  -XX:-UseCompressedClassPointers \
+  --enable-preview \
+  -Djava.library.path=/home/mikepapadim/java-ai-demos/GPULlama3.java/external/tornadovm/bin/sdk/lib \
+  --module-path .:/home/mikepapadim/java-ai-demos/GPULlama3.java/external/tornadovm/bin/sdk/share/java/tornado \
+  -Dtornado.load.api.implementation=uk.ac.manchester.tornado.runtime.tasks.TornadoTaskGraph \
+  -Dtornado.load.runtime.implementation=uk.ac.manchester.tornado.runtime.TornadoCoreRuntime \
+  -Dtornado.load.tornado.implementation=uk.ac.manchester.tornado.runtime.common.Tornado \
+  -Dtornado.load.annotation.implementation=uk.ac.manchester.tornado.annotation.ASMClassVisitor \
+  -Dtornado.load.annotation.parallel=uk.ac.manchester.tornado.api.annotations.Parallel \
+  --upgrade-module-path /home/mikepapadim/java-ai-demos/GPULlama3.java/external/tornadovm/bin/sdk/share/java/graalJars \
+  -XX:+UseParallelGC \
+  @/home/mikepapadim/java-ai-demos/GPULlama3.java/external/tornadovm/bin/sdk/etc/exportLists/common-exports \
+  @/home/mikepapadim/java-ai-demos/GPULlama3.java/external/tornadovm/bin/sdk/etc/exportLists/opencl-exports \
+  --add-modules ALL-SYSTEM,tornado.runtime,tornado.annotation,tornado.drivers.common,tornado.drivers.opencl \
+  -Xms6g \
+  -Xmx6g \
+  -Dtornado.device.memory=6GB \
+  -cp "target/gpullama3.java-example-1.4.0-beta10.jar:/home/mikepapadim/.m2/repository/dev/langchain4j/langchain4j-core/1.5.0-SNAPSHOT/langchain4j-core-1.5.0-SNAPSHOT.jar:/home/mikepapadim/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.19.2/jackson-annotations-2.19.2.jar:/home/mikepapadim/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.19.2/jackson-core-2.19.2.jar:/home/mikepapadim/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.19.2/jackson-databind-2.19.2.jar:/home/mikepapadim/.m2/repository/org/slf4j/slf4j-api/2.0.17/slf4j-api-2.0.17.jar:/home/mikepapadim/.m2/repository/org/jspecify/jspecify/1.0.0/jspecify-1.0.0.jar:/home/mikepapadim/.m2/repository/dev/langchain4j/langchain4j-gpu-llama3/1.5.0-SNAPSHOT/langchain4j-gpu-llama3-1.5.0-SNAPSHOT.jar:/home/mikepapadim/.m2/repository/org/beehive/gpullama3/gpu-llama3/2.0-SNAPSHOT/gpu-llama3-2.0-SNAPSHOT.jar" \
+  GPULlama3StreamChatModelExamples
+
+```
