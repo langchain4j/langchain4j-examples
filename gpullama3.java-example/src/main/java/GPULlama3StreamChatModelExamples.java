@@ -33,8 +33,11 @@ public class GPULlama3StreamChatModelExamples {
         Path modelPath = Paths.get("beehive-llama-3.2-1b-instruct-fp16.gguf");
 
 
-        GPULlama3StreamingChatModel model = GPULlama3StreamingChatModel.builder().modelPath(modelPath).build();
-
+        GPULlama3StreamingChatModel model = GPULlama3StreamingChatModel.builder()
+                .onGPU(Boolean.TRUE) // if false, runs on CPU though a lightweight implementation of llama3.java
+                .modelPath(modelPath)
+                .build();
+        // @formatter:on
 
         model.chat(request, new StreamingChatResponseHandler() {
 

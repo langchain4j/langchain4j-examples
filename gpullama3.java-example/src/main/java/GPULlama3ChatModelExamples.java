@@ -34,7 +34,7 @@ public class GPULlama3ChatModelExamples {
 
         GPULlama3ChatModel model = GPULlama3ChatModel.builder()
                 .modelPath(modelPath)
-                .onGPU(Boolean.TRUE)
+                .onGPU(Boolean.TRUE) //if false, runs on CPU though a lightweight implementation of llama3.java
                 .build();
         // @formatter:on
 
