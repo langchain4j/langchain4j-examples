@@ -26,7 +26,7 @@ public class AssistantConfiguration {
 
     /**
      * This listener will be injected into every {@link ChatModel} and {@link StreamingChatModel}
-     * bean found in the application context.
+     * bean   found in the application context.
      * It will listen for {@link ChatModel} in the {@link ChatModelController} as well as
      * {@link Assistant} and {@link StreamingAssistant}.
      */
