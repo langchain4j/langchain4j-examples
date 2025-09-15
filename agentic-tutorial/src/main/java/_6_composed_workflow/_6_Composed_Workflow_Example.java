@@ -19,6 +19,7 @@ import util.log.CustomLogging;
 import util.log.LogLevels;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.concurrent.Executors;
 
 public class _6_Composed_Workflow_Example {
@@ -28,15 +29,13 @@ public class _6_Composed_Workflow_Example {
     }
 
     /**
-     * Every agent, whether a single-task agent, a sequential workflow,..., is still just an Agent.
-     * This makes agents fully composable:
-     * - You can bundle smaller agents into super-agents
-     * - Or decompose tasks into subagents
-     * - And freely mix sequential, parallel, loop, supervisor, ... workflows at any level
-     * Every agent, whether a single-task agent, a sequential workflow,..., is still just an Agent.
-     * <p>
-     * In this example, we’ll take the composed agents we built earlier (Sequential, Parallel, etc.)
-     * and combine them into two larger agents that orchestrate the entire application process.
+     * Every agent, whether a single-task agent, a sequential workflow,..., is still an Agent object.
+     * This makes agents fully composable. You can
+     * - bundle smaller agents into super-agents
+     * - decompose tasks with sub-agents
+     * - mix sequential, parallel, loop, supervisor, ... workflows at any level
+     * In this example, we’ll take the composed agents we built earlier (sequential, parallel, etc.)
+     * and combine them into two larger composed agents that orchestrate the entire application process.
      */
 
     // 1. Define the model that will power the agents
@@ -98,7 +97,7 @@ public class _6_Composed_Workflow_Example {
         // 5. Execute the candidate workflow
         String candidateResult = candidateWorkflow.processCandidate(lifeStory, jobDescription);
         // Note that input parameters and intermediate parameters are all stored in one AgenticScope
-        // that is available to all agents in the system
+        // that is available to all agents in the system, no matter how many levels of composition we have
 
         System.out.println("=== CANDIDATE WORKFLOW COMPLETED ===");
         System.out.println("Final CV: " + candidateResult);
@@ -180,11 +179,22 @@ public class _6_Composed_Workflow_Example {
         String hrRequirements = StringLoader.loadFromResource("/documents/hr_requirements.txt");
         String phoneInterviewNotes = StringLoader.loadFromResource("/documents/phone_interview_notes.txt");
 
+        // Put all data in a Map for easy access
+        Map<String, Object> inputData = Map.of(
+                "candidateCv", candidateCv,
+                "candidateContact", candidateContact,
+                "hrRequirements", hrRequirements,
+                "phoneInterviewNotes", phoneInterviewNotes,
+                "jobDescription", jobDescription
+        );
+
         // 6. Execute the hiring team workflow
         hiringTeamWorkflow.processApplication(candidateCv, jobDescription, hrRequirements, phoneInterviewNotes, candidateContact);
 
         System.out.println("=== HIRING TEAM WORKFLOW COMPLETED ===");
         System.out.println("Parallel reviews completed and decision made");
 
+        // Note: as workflows become more complex, make sure that names of input, intermediate and output parameters
+        // are unique to avoid inadvertent overwriting of data in the shared AgenticScope
     }
 }

@@ -57,10 +57,12 @@ public class _4_Parallel_Workflow_Example {
                 .build();
 
         // 4. Build the sequence
-        UntypedAgent cvReviewGenerator = AgenticServices // use UntypedAgent unless you define the resulting compound agent, see _2_Sequential_Agent_Example
+        var executor = Executors.newFixedThreadPool(3);  // keep a reference for later closing
+
+        UntypedAgent cvReviewGenerator = AgenticServices // use UntypedAgent unless you define the resulting composed agent, see _2_Sequential_Agent_Example
                 .parallelBuilder()
                 .subAgents(hrCvReviewer, managerCvReviewer, teamMemberCvReviewer) // this can be as many as you want
-                .executor(Executors.newFixedThreadPool(3)) // optional, by default an internal cached thread pool is used
+                .executor(executor) // optional, by default an internal cached thread pool is used which will automatically shut down after execution is completed
                 .outputName("fullCvReview") // this is the final output we want to observe
                 .output(agenticScope -> {
                     // read the outputs of each reviewer from the agentic scope
@@ -85,7 +87,7 @@ public class _4_Parallel_Workflow_Example {
         String hrRequirements = StringLoader.loadFromResource("/documents/hr_requirements.txt");
         String phoneInterviewNotes = StringLoader.loadFromResource("/documents/phone_interview_notes.txt");
 
-        // 5. Because we use an untyped agent, we need to pass a map of arguments
+        // 6. Because we use an untyped agent, we need to pass a map of arguments
         Map<String, Object> arguments = Map.of(
                 "candidateCv", candidateCv,
                 "jobDescription", jobDescription
@@ -93,12 +95,14 @@ public class _4_Parallel_Workflow_Example {
                 ,"phoneInterviewNotes", phoneInterviewNotes
         );
 
-        // 5. Call the compound agent to generate the tailored CV
+        // 7. Call the composed agent to generate the tailored CV
         var review = cvReviewGenerator.invoke(arguments);
 
-        // 6. and print the generated CV
+        // 8. and print the generated CV
         System.out.println("=== REVIEWED CV ===");
         System.out.println(review);
 
-    }
+        // 9. Shutdown executor
+        executor.shutdown();
+   }
 }

@@ -16,7 +16,7 @@ public interface TeamMemberCvReviewer {
             You give each CV a score and feedback (both the good and the bad things).
             You can ignore things like missing address and placeholders.
             
-            IMPORTANT: Return your response as valid JSON only, without any markdown formatting or code blocks.
+            IMPORTANT: Return your response as valid JSON only, new lines as \\n, without any markdown formatting or code blocks.
             """)
     @UserMessage("""
             Review this CV: {{candidateCv}}

@@ -31,3 +31,4 @@ public class ScoreAggregator {
         return new CvReview(avgScore, combinedFeedback);
     }
 }
+

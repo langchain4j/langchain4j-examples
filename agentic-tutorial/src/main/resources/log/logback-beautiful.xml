@@ -13,6 +13,11 @@
     <logger name="dev.langchain4j.model.openai" level="DEBUG"/>
     <logger name="dev.langchain4j.http.client" level="DEBUG"/>
     <logger name="dev.langchain4j.http.client.log.LoggingHttpClient" level="DEBUG"/>
+    
+    <!-- Allow agent-related debug logs -->
+    <logger name="dev.langchain4j.agentic" level="DEBUG"/>
+    <logger name="dev.langchain4j.agentic.supervisor" level="DEBUG"/>
+    <logger name="dev.langchain4j.agentic.supervisor.SupervisorAgentServiceImpl" level="DEBUG"/>
 
     <!-- Turn off other noise -->
     <logger name="okhttp3" level="OFF"/>

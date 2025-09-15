@@ -60,6 +60,6 @@ public class BeautifulLogAppender extends AppenderBase<ILoggingEvent> {
         }
         
         // For all other logs, show with prefix for debugging
-        System.out.println("UNFILTERED LOG: [" + loggerName + "] " + message);
+        System.out.println("UNFILTERED LOG: [" + event.getLevel() + "] [" + loggerName + "] " + message);
     }
 }

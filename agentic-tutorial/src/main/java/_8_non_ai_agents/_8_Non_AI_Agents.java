@@ -29,18 +29,23 @@ public class _8_Non_AI_Agents {
     }
 
     /**
-     * This example demonstrates how to use non-AI agents (plain Java operators) within agentic workflows.
+     * Here we how to use non-AI agents (plain Java operators) within agentic workflows.
      * Non-AI agents are simply methods, but can be used as any other type of agent.
      * They are perfect for deterministic operations like calculations, data transformations,
      * and aggregations, where you rather have no LLM involvement.
-     * We show how to use the non-AI ScoreAggregator agent in a composed workflow.
+     * The more steps you can outsource to non-AI agents, the faster, correcter and cheaper your workflows will be.
+     * Non-AI agents are preferred over tools for workflows where you want to enforce determinism for certain steps.
+     * In this case we want the aggregated score of the reviewers to be calculated deterministically, not by an LLM.
+     * We also update the application status in the database deterministically based on the aggregated score.
      */
 
     private static final ChatModel CHAT_MODEL = ChatModelProvider.createChatModel();
 
     public static void main(String[] args) throws IOException {
 
-        // 1. Define all normal AI-agents
+        // 1. Define the ScoreAggregator non-AI agents in this pacckage
+
+        // 2. Build the AI sub-agents for the parallel review step
         HrCvReviewer hrReviewer = AgenticServices.agentBuilder(HrCvReviewer.class)
                 .chatModel(CHAT_MODEL)
                 .outputName("hrReview")
@@ -56,21 +61,31 @@ public class _8_Non_AI_Agents {
                 .outputName("teamMemberReview")
                 .build();
 
-        // 2. Build a composed parallel agent for step 1
+        // 3. Build the composed parallel agent
+        var executor = Executors.newFixedThreadPool(3);  // keep a reference for later closing
+
         UntypedAgent parallelReviewWorkflow = AgenticServices
                 .parallelBuilder()
                 .subAgents(hrReviewer, managerReviewer, teamReviewer)
-                .executor(Executors.newFixedThreadPool(3))
+                .executor(executor)
                 .build();
 
-        // 3. Build the full workflow incl. non-AI agent
+        // 4. Build the full workflow incl. non-AI agent
         UntypedAgent collectFeedback = AgenticServices
                 .sequenceBuilder()
-                .subAgents(parallelReviewWorkflow, new ScoreAggregator()) // no AgenticServices builder needed for non-AI agents
-                .outputName("combinedCvReview") // outputName defined on the non-AI agent annotation in ScoreAggregator.java
+                .subAgents(
+                        parallelReviewWorkflow,
+                        new ScoreAggregator(), // no AgenticServices builder needed for non-AI agents. outputname 'combinedCvReview' is defined in the class
+                        new StatusUpdate(), // takes 'combinedCvReview' as input, no output needed
+                        AgenticServices.agentAction(agenticScope -> { // another way to add non-AI agents that can operate on the AgenticScope
+                            CvReview review = (CvReview) agenticScope.readState("combinedCvReview");
+                            agenticScope.writeState("scoreAsPercentage", review.score * 100); // when agents from different systems communicate, output conversion is often needed
+                        })
+                )
+                .outputName("scoreAsPercentage") // outputName defined on the non-AI agent annotation in ScoreAggregator.java
                 .build();
 
-        // 4. Load input data
+        // 5. Load input data
         String candidateCv = StringLoader.loadFromResource("/documents/tailored_cv.txt");
         String candidateContact = StringLoader.loadFromResource("/documents/candidate_contact.txt");
         String hrRequirements = StringLoader.loadFromResource("/documents/hr_requirements.txt");
@@ -85,11 +100,13 @@ public class _8_Non_AI_Agents {
                 "jobDescription", jobDescription
         );
 
-        // 5. Invoke the workflow
-        CvReview combinedReview = (CvReview) collectFeedback.invoke(arguments);
+        // 6. Invoke the workflow
+        double scoreAsPercentage = (double) collectFeedback.invoke(arguments);
+        executor.shutdown();
 
-        System.out.println("=== COMBINED REVIEW ===");
-        System.out.println(combinedReview);
+        System.out.println("=== SCORE AS PERCENTAGE ===");
+        System.out.println(scoreAsPercentage);
+        // as we can see in the logs, the application status has also been updated accordingly
 
     }
 }
