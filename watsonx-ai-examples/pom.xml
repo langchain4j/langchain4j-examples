@@ -6,7 +6,7 @@
 
     <groupId>dev.langchain4j</groupId>
     <artifactId>watsonx-ai-examples</artifactId>
-    <version>1.4.0-beta10-SNAPSHOT</version>
+    <version>1.5.0-beta11</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -19,13 +19,13 @@
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-watsonx</artifactId>
-            <version>1.4.0-beta10-SNAPSHOT</version>
+            <version>1.5.0-beta11</version>
         </dependency>
 
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j</artifactId>
-            <version>1.4.0-SNAPSHOT</version>
+            <version>1.5.0</version>
         </dependency>
 
         <dependency>
