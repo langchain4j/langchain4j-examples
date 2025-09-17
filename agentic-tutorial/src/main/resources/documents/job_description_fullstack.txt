@@ -1,31 +1,16 @@
 Job Description ID: 123B
-
 Full-Stack Developer (SaaS Analytics, Remote EU)
 ------------------------------------------------
-
 We are seeking a **Full-Stack Developer** to join our SaaS analytics platform team. This role involves working across the backend and frontend, with a focus on delivering high-quality user experiences in a data-heavy product.
-
 **Responsibilities:**
-
 *   Develop and maintain backend services in **Java** or **Node.js**, with data stored in **PostgreSQL** and **Redis**.
-
 *   Build and enhance dashboards and admin tools using **React**.
-
 *   Collaborate with product managers and designers to launch features end-to-end.
-
 *   Contribute to scaling asynchronous job systems for data processing.
-
-
 **Requirements:**
-
 *   Solid experience in backend development (Java or Node.js).
-
 *   Hands-on experience with modern JavaScript frameworks, preferably React.
-
 *   Strong understanding of databases and caching solutions.
-
 *   Ability to work independently in a remote team and take features from concept to production.
-
 *   Previous experience delivering SaaS products is a plus.
-
 *   Proficiency in English is required.
