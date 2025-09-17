@@ -12,7 +12,7 @@
 
     <groupId>dev.langchain4j</groupId>
     <artifactId>spring-boot-example</artifactId>
-    <version>1.4.0-beta10</version>
+    <version>1.5.0-beta11</version>
 
     <properties>
         <java.version>17</java.version>
