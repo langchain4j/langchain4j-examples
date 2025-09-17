@@ -41,11 +41,13 @@ public class _5b_Conditional_Workflow_Example_Async {
                 .chatModel(CHAT_MODEL)
                 .async(true)
                 .tools(new OrganizingTools())
+                .outputName("sentEmailId")
                 .build();
         InfoRequester infoRequester = AgenticServices.agentBuilder(InfoRequester.class)
                 .chatModel(CHAT_MODEL)
-                //.async(true)
+                .async(true)
                 .tools(new OrganizingTools())
+                .outputName("sentEmailId")
                 .build();
 
         // 2. Build async conditional workflow
@@ -63,6 +65,10 @@ public class _5b_Conditional_Workflow_Example_Async {
                     CvReview hrReview = (CvReview) scope.readState("cvReview");
                     return hrReview.feedback.toLowerCase().contains("missing information:");
                 }, infoRequester) // if needed, request more info from candidate
+                .output(agenticScope ->
+                        (agenticScope.readState("managerReview", new CvReview(0, "no manager review needed"))).toString() +
+                                "\n" + agenticScope.readState("sentEmailId", 0)
+                ) // final output is the manager review (if any)
                 .build();
 
         // 3. Input arguments

@@ -55,20 +55,28 @@ public class _9b_HumanInTheLoop_Chatbot_With_Memory {
                 .build();
 
         // 3. construct the loop
-        UntypedAgent schedulingLoop = AgenticServices
-                .loopBuilder()
+        // Here we only want the exit condition to be checked once per loop, not after every agent invocation,
+        // so we bundle both agents in a sequence and give it as one agent to the loop
+        UntypedAgent agentSequence = AgenticServices
+                .sequenceBuilder()
                 .subAgents(proposer, humanInTheLoop)
-                .exitCondition(scope -> {
-                    String response = (String) scope.readState("candidateAnswer");
-                    String proposal = (String) scope.readState("proposal");
-                    return response != null && decisionService.isDecisionReached(proposal, response);
-                })
-                .maxIterations(5)
                 .output(agenticScope -> Map.of(
                         "proposal", agenticScope.readState("proposal"),
                         "candidateAnswer", agenticScope.readState("candidateAnswer")
                 ))
                 // this output contains the last date proposal + candidate's answer, which should be sufficient info for a followup agent to schedule the meeting (or abort trying)
+                .build();
+
+        UntypedAgent schedulingLoop = AgenticServices
+                .loopBuilder()
+                .subAgents(agentSequence)
+                .exitCondition(scope -> {
+                    System.out.println("--- checking exit condition ---");
+                    String response = (String) scope.readState("candidateAnswer");
+                    String proposal = (String) scope.readState("proposal");
+                    return response != null && decisionService.isDecisionReached(proposal, response);
+                })
+                .maxIterations(5)
                 .build();
 
         // 4. Run the scheduling loop

@@ -3,9 +3,6 @@ package util.log;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;
 
-/**
- * Custom Logback appender that parses LangChain4j HTTP logs and outputs clean, readable logs.
- */
 public class BeautifulLogAppender extends AppenderBase<ILoggingEvent> {
     
     private static final StringBuilder httpRequestBuffer = new StringBuilder();
@@ -63,3 +60,4 @@ public class BeautifulLogAppender extends AppenderBase<ILoggingEvent> {
         System.out.println("UNFILTERED LOG: [" + event.getLevel() + "] [" + loggerName + "] " + message);
     }
 }
+

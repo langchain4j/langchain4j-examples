@@ -6,22 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Utility class for parsing and formatting LangChain4j HTTP logs into beautiful, readable output.
- * Extracts user messages, assistant responses, and tool calls from verbose HTTP logs.
- */
 public class LogParser {
     
     private static final ObjectMapper objectMapper = new ObjectMapper();
     
-    // No state tracking - we only show what's NEW in each request/response
-    
-    /**
-     * Truncates a string to show first and last characters with clear truncation indicators.
-     * 
-     * @param input the string to truncate
-     * @return truncated string with clear truncation indicators on separate lines
-     */
     public static String truncateString(String input) {
         int maxChars = CustomLogging.getCharLimit();
         if (input == null || input.length() <= maxChars) {
@@ -35,36 +23,24 @@ public class LogParser {
                input.substring(input.length() - secondHalf);
     }
     
-    /**
-     * Logs a user message.
-     */
     public static void logUserMessage(String userMessage) {
         System.out.println("USER: " + truncateString(userMessage));
         System.out.println(); // 2 newlines for clear separation
         System.out.println();
     }
     
-    /**
-     * Logs an assistant response.
-     */
     public static void logAssistantResponse(String response) {
         System.out.println("MODEL: " + truncateString(response));
         System.out.println(); // 2 newlines for clear separation
         System.out.println();
     }
     
-    /**
-     * Logs available tools.
-     */
     public static void logAvailableTools(String tools) {
         System.out.println("\tAvailable tools: " + tools);
         System.out.println(); // 2 newlines for clear separation
         System.out.println();
     }
     
-    /**
-     * Logs a tool call request.
-     */
     public static void logToolCallRequest(String toolId, String toolName, String arguments) {
         System.out.println("MODEL REQUESTS TOOL CALL: " + toolName + " (id: " + toolId + ")");
         System.out.println("  Args: " + truncateString(arguments));
@@ -72,9 +48,7 @@ public class LogParser {
         System.out.println();
     }
     
-    /**
-     * Logs a tool call result.
-     */
+
     public static void logToolCallResult(String toolId, String toolName, String result) {
         System.out.println("TOOL RESULT: " + toolName + " (id: " + toolId + ")");
         System.out.println("  Result: " + truncateString(result));
@@ -82,11 +56,6 @@ public class LogParser {
         System.out.println();
     }
     
-    
-    
-    /**
-     * Parses HTTP request logs to extract what's NEW in this request.
-     */
     public static void parseHttpRequest(String logMessage) {
         if (!logMessage.contains("HTTP request:") || !logMessage.contains("- body:")) {
             return;
@@ -146,9 +115,7 @@ public class LogParser {
         }
     }
     
-    /**
-     * Extracts tool name from conversation history by matching tool_call_id.
-     */
+
     private static String extractToolNameFromHistory(JsonNode messages, String toolCallId) {
         for (JsonNode message : messages) {
             String role = message.get("role").asText();
@@ -166,10 +133,7 @@ public class LogParser {
         }
         return "unknown";
     }
-    
-    /**
-     * Parses HTTP response logs to extract what's NEW in this response.
-     */
+
     public static void parseHttpResponse(String logMessage) {
         if (!logMessage.contains("HTTP response:") || !logMessage.contains("- body:")) {
             return;
@@ -207,9 +171,6 @@ public class LogParser {
         }
     }
     
-    /**
-     * Extracts JSON content from log messages.
-     */
     private static String extractJsonFromLog(String logMessage) {
         // Find the JSON body after "- body:"
         Pattern pattern = Pattern.compile("- body:\\s*(.*?)(?=\\n\\n|$)", Pattern.DOTALL);

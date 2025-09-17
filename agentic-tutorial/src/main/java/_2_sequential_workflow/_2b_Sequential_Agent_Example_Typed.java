@@ -98,7 +98,7 @@ public class _2b_Sequential_Agent_Example_Typed {
         // (any differences are due to the non-deterministic nature of LLMs),
         // but the typed agent is more elegant to use and safer because of compile-time type checking
 
-        System.out.println("=== INVOCATION TRACE (all messages in the conversation) ===");
+        System.out.println("=== AGENTIC SCOPE ===");
         System.out.println(AgenticScopePrinter.printPretty(agenticScope, 100));
         // this will return this object (filled out):
         // AgenticScope {
@@ -115,7 +115,8 @@ public class _2b_Sequential_Agent_Example_Typed {
         //                     lifeStory = "..."
         //             }
         // }
-        System.out.println(agenticScope.contextAsConversation()); // will work in next release
+        System.out.println("=== CONTEXT AS CONVERSATION (all messages in the conversation) ===");
+        System.out.println(AgenticScopePrinter.printConversation(agenticScope.contextAsConversation(), 100));
 
     }
 }

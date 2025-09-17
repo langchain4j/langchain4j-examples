@@ -11,11 +11,12 @@ public interface EmailAssistant {
     @SystemMessage("""
             You send a kind email to application candidates that did not pass the first review round.
             You also update the application status to 'rejected'.
+            You return the sent email ID.
             """)
     @UserMessage("""
             Rejected candidate: {{candidateContact}}
             
             For job: {{jobDescription}}
             """)
-    String send(@V("candidateContact") String candidateContact, @V("jobDescription") String jobDescription);
+    int send(@V("candidateContact") String candidateContact, @V("jobDescription") String jobDescription);
 }
