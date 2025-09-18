@@ -32,22 +32,22 @@ public class _3a_Loop_Agent_Example {
     public static void main(String[] args) throws IOException {
 
         // 2. Define the two sub-agents in this package:
-        //      - CvTailor.java
         //      - CvReviewer.java
+        //      - CvTailor.java
 
         // 3. Create all agents using AgenticServices
-        ScoredCvTailor scoredCvTailor = AgenticServices.agentBuilder(ScoredCvTailor.class)
-                .chatModel(CHAT_MODEL)
-                .outputName("cv") // this will be updated in every iteration, continuously improving the CV
-                .build();
         CvReviewer cvReviewer = AgenticServices.agentBuilder(CvReviewer.class)
                 .chatModel(CHAT_MODEL)
                 .outputName("cvReview") // this gets updated in every iteration with new feedback for the next tailoring
                 .build();
+        ScoredCvTailor scoredCvTailor = AgenticServices.agentBuilder(ScoredCvTailor.class)
+                .chatModel(CHAT_MODEL)
+                .outputName("cv") // this will be updated in every iteration, continuously improving the CV
+                .build();
 
         // 4. Build the sequence
         UntypedAgent reviewedCvGenerator = AgenticServices // use UntypedAgent unless you define the resulting composed agent, see _2_Sequential_Agent_Example
-                .loopBuilder().subAgents(scoredCvTailor, cvReviewer) // this can be as many as you want, order matters
+                .loopBuilder().subAgents(cvReviewer, scoredCvTailor) // this can be as many as you want, order matters
                 .outputName("cv") // this is the final output we want to observe (the improved CV)
                 .exitCondition(agenticScope -> {
                             CvReview review = (CvReview) agenticScope.readState("cvReview");
@@ -63,12 +63,10 @@ public class _3a_Loop_Agent_Example {
         // - job_description_backend.txt
         String masterCv = StringLoader.loadFromResource("/documents/master_cv.txt");
         String jobDescription = StringLoader.loadFromResource("/documents/job_description_backend.txt");
-        CvReview cvReview = new CvReview(0.5, "Adapt the CV to the following job description as good as you can without inventing skills. Stick to the given facts.: " + jobDescription);
 
         // 5. Because we use an untyped agent, we need to pass a map of arguments
         Map<String, Object> arguments = Map.of(
                 "cv", masterCv, // start with the master CV, it will be continuously improved
-                "cvReview", cvReview,
                 "jobDescription", jobDescription
         );
 

@@ -8,7 +8,7 @@ import domain.CvReview;
 
 public interface CvReviewer {
 
-    @Agent("Reviews a CV according to specific instructions, gives feedback and a score")
+    @Agent("Reviews a CV according to specific instructions, gives feedback and a score. Factor in how well the CV is tailored to the job")
     @SystemMessage("""
             You are the hiring manager for this job:
             {{jobDescription}}

@@ -52,6 +52,7 @@ public class _9b_HumanInTheLoop_Chatbot_With_Memory {
                     System.out.print("> ");
                 })
                 .responseReader(() -> System.console().readLine())
+                .async(true) // no need to block the entire program while waiting for user input
                 .build();
 
         // 3. construct the loop

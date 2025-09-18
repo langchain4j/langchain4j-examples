@@ -1,19 +1,18 @@
 John Doe – Backend Engineer
-Email: john.doe.dev@protonmail.com | Antwerp, Belgium | GitHub & LinkedIn available
+Email: john.doe.dev@protonmail.com | Antwerp, Belgium |
 SUMMARY
-Backend engineer with 4+ years’ experience building reliable systems in Java (Spring Boot) and PostgreSQL. Known for pragmatic delivery, clean code, and mentoring.
+Backend engineer with 4+ years’ experience building applications in Java (Spring Boot) and PostgreSQL. Focused on pragmatic delivery and collaboration in small teams.
 EXPERIENCE
 Software Engineer – BrightPay Systems (2021–Present)
-- Built/maintained backend services in Java + PostgreSQL.
-- Designed pricing tool cutting quote time by 35%.
-- Led migration of SOAP APIs to REST; improved performance.
-- Mentored interns and championed clean coding practices.
+- Built backend services in Java and PostgreSQL.
+- Developed internal tools to support operations.
+- Worked with team members to maintain existing systems.
 Software Developer – CodeWave Solutions (2019–2021)
-- Backend development (Java/Spring Boot); CI/CD with GitHub Actions.
-- Introduced Docker, Kafka (PoC level); small React admin features.
-- Side projects: budgeting app (Spring+Vue), IoT automation with ESP32+MQTT.
+- Java/Spring Boot development for customer projects.
+- Contributed to small web features and automation scripts.
+- Built hobby apps to explore new technologies and worked with Docker.
 EDUCATION
 - Java Bootcamp, BeCode (2019–2020)
 - B.Sc. Mechanical Engineering, KU Leuven (2016)
 SKILLS
-Java, Spring Boot, PostgreSQL, Docker, Kafka (basics), CI/CD, clean code, mentoring, Dutch (native), English (C1), French (B1).
+Java, Spring Boot, PostgreSQL, Docker, SQL, software delivery, teamwork, English (C1).

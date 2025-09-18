@@ -34,13 +34,13 @@ public class _3b_Loop_Agent_Example_States_And_Fail {
     public static void main(String[] args) throws IOException {
 
         // 1. Create all sub-agents (same as before)
-        ScoredCvTailor scoredCvTailor = AgenticServices.agentBuilder(ScoredCvTailor.class)
-                .chatModel(CHAT_MODEL)
-                .outputName("cv") // this will be updated in every iteration, continuously improving the CV
-                .build();
         CvReviewer cvReviewer = AgenticServices.agentBuilder(CvReviewer.class)
                 .chatModel(CHAT_MODEL)
                 .outputName("cvReview") // this gets updated in every iteration with new feedback for the next tailoring
+                .build();
+        ScoredCvTailor scoredCvTailor = AgenticServices.agentBuilder(ScoredCvTailor.class)
+                .chatModel(CHAT_MODEL)
+                .outputName("cv") // this will be updated in every iteration, continuously improving the CV
                 .build();
 
         // 2. Build the sequence and store the reviews on each exit condition check
@@ -52,7 +52,7 @@ public class _3b_Loop_Agent_Example_States_And_Fail {
         List<CvReview> reviewHistory = new ArrayList<>();
 
         UntypedAgent reviewedCvGenerator = AgenticServices // use UntypedAgent unless you define the resulting composed agent, see below
-                .loopBuilder().subAgents(scoredCvTailor, cvReviewer) // this can be as many as you want, order matters
+                .loopBuilder().subAgents(cvReviewer, scoredCvTailor) // this can be as many as you want, order matters
                 .outputName("cvAndReview") // this is the final output we want to observe
                 .output(agenticScope -> {
                     Map<String, Object> cvAndReview = Map.of(
@@ -75,12 +75,10 @@ public class _3b_Loop_Agent_Example_States_And_Fail {
         // - job_description_backend.txt
         String masterCv = StringLoader.loadFromResource("/documents/master_cv.txt");
         String fluteJobDescription = "We are looking for a passionate flute teacher to join our music academy.";
-        CvReview fluteJobCvReview = new CvReview(0.5, "Adapt the CV to the following job description as good as you can without inventing skills. Stick to the given facts.: " + fluteJobDescription);
 
         // 4. Because we use an untyped agent, we need to pass a map of arguments
         Map<String, Object> arguments = Map.of(
                 "cv", masterCv, // start with the master CV, it will be continuously improved
-                "cvReview", fluteJobCvReview,
                 "jobDescription", fluteJobDescription
         );
 
