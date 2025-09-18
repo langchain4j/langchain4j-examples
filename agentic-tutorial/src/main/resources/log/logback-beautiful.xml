@@ -1,0 +1,32 @@
+<configuration>
+    <appender name="BEAUTIFUL" class="util.log.BeautifulLogAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="BEAUTIFUL"/>
+    </root>
+
+    <!-- Allow HTTP logs to reach our appender, but at a lower level -->
+    <logger name="dev.langchain4j.model.openai" level="DEBUG"/>
+    <logger name="dev.langchain4j.http.client" level="DEBUG"/>
+    <logger name="dev.langchain4j.http.client.log.LoggingHttpClient" level="DEBUG"/>
+    
+    <!-- Allow agent-related debug logs -->
+    <logger name="dev.langchain4j.agentic" level="DEBUG"/>
+    <logger name="dev.langchain4j.agentic.supervisor" level="DEBUG"/>
+    <logger name="dev.langchain4j.agentic.supervisor.SupervisorAgentServiceImpl" level="DEBUG"/>
+
+    <!-- Turn off other noise -->
+    <logger name="okhttp3" level="OFF"/>
+    <logger name="com.fasterxml.jackson" level="OFF"/>
+    <logger name="ai.djl" level="OFF"/>
+    <logger name="org.apache.tika" level="OFF"/>
+    
+    <!-- Turn off Logback's own logging -->
+    <logger name="ch.qos.logback" level="OFF"/>
+    <logger name="ch.qos.logback.classic" level="OFF"/>
+    <logger name="ch.qos.logback.core" level="OFF"/>
+</configuration>

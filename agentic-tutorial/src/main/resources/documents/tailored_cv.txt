@@ -1,0 +1,11 @@
+John Doe – Backend Engineer
+Antwerp, Belgium | john.doe.dev@protonmail.com | +32 495 67 89 23 | LinkedIn | GitHub
+SUMMARY
+Backend engineer (Java, Spring Boot, PostgreSQL) with 4+ yrs’ experience in scalable systems, API modernization, and automation. Fluent Dutch, English C1.
+EXPERIENCE
+BrightPay Systems (2021–Present): Built backend services; pricing tool (-35% quote time); SOAP→REST migration; mentoring interns.
+CodeWave Solutions (2019–2021): Backend dev; CI/CD (GitHub Actions); Docker, Kafka (PoC); small React admin UI; side projects (Spring+Vue budgeting app, IoT automation).
+EDUCATION
+Java Bootcamp, BeCode (2019–2020); B.Sc. Mechanical Engineering, KU Leuven (2016)
+SKILLS
+Java, Spring Boot, PostgreSQL, Docker, Kafka (basic), CI/CD, REST design, clean code, mentoring; Dutch (native), English (C1), French (B1).
