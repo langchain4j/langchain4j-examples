@@ -1,0 +1,15 @@
+Job Description ID: 123A
+Backend Engineer (FinTech, Antwerp)
+-----------------------------------
+We are looking for a **Backend Engineer** to help us build and evolve our payment and reconciliation services. You will work primarily with **Java (Spring Boot)**, and collaborate closely with the product and operations teams to ensure reliable, scalable financial transactions.
+**Responsibilities:**
+*   Design, implement, and maintain backend services that handle payments and reconciliation at scale.
+*   Work with **PostgreSQL**, **Kafka**, **Docker**, and **Kubernetes** in a cloud-native environment.
+*   Focus on building reliable and idempotent systems with strong observability.
+*   Support the migration of legacy services to modern REST APIs.
+**Requirements:**
+*   Professional experience in backend development with Java and Spring Boot.
+*   Strong understanding of relational databases and event-driven architectures.
+*   Familiarity with containerization and deployment pipelines.
+*   Experience with financial or pricing systems is a plus.
+*   Fluency in English is required; Dutch is an advantage.

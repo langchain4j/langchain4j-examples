@@ -1,0 +1,14 @@
+John Doe is based in Antwerp, Belgium (Rue des Carmes 12, 2000 Antwerp) and can be reached at john.doe.dev@protonmail.com
+ or +32 495 67 89 23. He’s active on LinkedIn
+ and GitHub.
+- Switched from mechanical engineering to software in 2020 after completing an evening Java bootcamp (2019–2020).
+- 4 years of software development experience; last 2 years specializing in backend Java (Spring Boot, PostgreSQL, Kafka basics).
+- Built an internal pricing tool that reduced quote turnaround time by ~35%.
+- Led a 3-person task force migrating legacy SOAP services to REST.
+- Comfortable with Docker and CI pipelines (GitHub Actions).
+- Has some React experience for internal admin panels (not a core strength).
+- Values clean, maintainable code and enjoys mentoring interns.
+- Prefers building products over agency work; dislikes endless meetings and focuses on shipping value.
+- Languages: Dutch (native), English (C1), French (B1).
+- Education: BSc in Mechanical Engineering (2016), Java bootcamp (2019–2020).
+- Side projects include a small budgeting app (Spring + Vue) and a home IoT setup (ESP32 + MQTT).
