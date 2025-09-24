@@ -1,6 +1,5 @@
 package dev.langchain4j.example.chat.util;
 
-import static dev.langchain4j.model.github.GitHubModelsChatModelName.PHI_3_MINI_INSTRUCT_4K;
 import static dev.langchain4j.model.github.GitHubModelsEmbeddingModelName.TEXT_EMBEDDING_3_SMALL;
 import static dev.langchain4j.model.huggingface.HuggingFaceModelName.SENTENCE_TRANSFORMERS_ALL_MINI_LM_L6_V2;
 import static dev.langchain4j.model.mistralai.MistralAiChatModelName.MISTRAL_SMALL_LATEST;
@@ -175,12 +174,12 @@ public class ModelBuilder {
             if (usingGithub()) {
                 chatModelForResource = GitHubModelsChatModel.builder()
                     .gitHubToken(GITHUB_API_KEY)
-                    .modelName(PHI_3_MINI_INSTRUCT_4K)
+                    .modelName("Phi-4-mini-instruct")
                     .timeout(ofSeconds(120))
                     .temperature(1.0)
                     .maxTokens(200)
                     .build();
-                logger.info("using Github " + PHI_3_MINI_INSTRUCT_4K + " chat model");
+                logger.info("using Github Phi-4-mini-instruct chat model");
             } else if (usingOllama()) {
                 chatModelForResource = OllamaChatModel.builder()
                     .baseUrl(OLLAMA_BASE_URL)
