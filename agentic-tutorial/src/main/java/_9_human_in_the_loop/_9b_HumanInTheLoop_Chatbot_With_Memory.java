@@ -11,6 +11,7 @@ import util.log.CustomLogging;
 import util.log.LogLevels;
 
 import java.util.Map;
+import java.util.Scanner;
 
 public class _9b_HumanInTheLoop_Chatbot_With_Memory {
 
@@ -51,7 +52,7 @@ public class _9b_HumanInTheLoop_Chatbot_With_Memory {
                     System.out.println(request);
                     System.out.print("> ");
                 })
-                .responseReader(() -> System.console().readLine())
+                .responseReader(() -> new Scanner(System.in).nextLine())
                 .async(true) // no need to block the entire program while waiting for user input
                 .build();
 
