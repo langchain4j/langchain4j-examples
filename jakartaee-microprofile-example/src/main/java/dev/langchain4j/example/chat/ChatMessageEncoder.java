@@ -8,7 +8,7 @@ public class ChatMessageEncoder implements Encoder.Text<String> {
     @Override
     public String encode(String message) throws EncodeException {
 
-        if (!message.endsWith(".")) {
+        if (!message.endsWith(".") && !message.endsWith("!") && !message.endsWith("?")) {
             message += " ...";
         }
 
