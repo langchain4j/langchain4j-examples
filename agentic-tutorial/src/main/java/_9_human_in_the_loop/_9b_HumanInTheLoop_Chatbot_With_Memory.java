@@ -66,6 +66,7 @@ public class _9b_HumanInTheLoop_Chatbot_With_Memory {
                         "proposal", agenticScope.readState("proposal"),
                         "candidateAnswer", agenticScope.readState("candidateAnswer")
                 ))
+                .outputName("proposalAndAnswer")
                 // this output contains the last date proposal + candidate's answer, which should be sufficient info for a followup agent to schedule the meeting (or abort trying)
                 .build();
 
@@ -74,10 +75,13 @@ public class _9b_HumanInTheLoop_Chatbot_With_Memory {
                 .subAgents(agentSequence)
                 .exitCondition(scope -> {
                     System.out.println("--- checking exit condition ---");
+                    System.out.println("scope:");
+                    System.out.println(scope);
                     String response = (String) scope.readState("candidateAnswer");
                     String proposal = (String) scope.readState("proposal");
                     return response != null && decisionService.isDecisionReached(proposal, response);
                 })
+                .outputName("proposalAndAnswer")
                 .maxIterations(5)
                 .build();
 
@@ -88,7 +92,7 @@ public class _9b_HumanInTheLoop_Chatbot_With_Memory {
 
         var lastProposalAndAnswer = schedulingLoop.invoke(input);
 
-        System.out.println("\n=== RETAINED MEETING SLOT OR FAILURE TO FIND A SLOT IN 5 ITERATIONS===");
+        System.out.println("=== Result: last proposalAndAnswer ===");
         System.out.println(lastProposalAndAnswer);
     }
 }
