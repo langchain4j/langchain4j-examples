@@ -1,4 +1,5 @@
 import static dev.langchain4j.internal.Utils.randomUUID;
+import static dev.langchain4j.store.embedding.chroma.ChromaApiVersion.V2;
 import static dev.langchain4j.store.embedding.filter.MetadataFilterBuilder.metadataKey;
 
 import dev.langchain4j.data.document.Metadata;
@@ -17,11 +18,11 @@ import org.testcontainers.chromadb.ChromaDBContainer;
 public class ChromaEmbeddingStoreWithMetadataExample {
 
     public static void main(String[] args) {
-        try (ChromaDBContainer chroma = new ChromaDBContainer("chromadb/chroma:0.5.4")) {
+        try (ChromaDBContainer chroma = new ChromaDBContainer("chromadb/chroma:1.1.0").withExposedPorts(8000)) {
             chroma.start();
 
-            EmbeddingStore<TextSegment> embeddingStore = ChromaEmbeddingStore
-                .builder()
+            EmbeddingStore<TextSegment> embeddingStore = ChromaEmbeddingStore.builder()
+                .apiVersion(V2)
                 .baseUrl(chroma.getEndpoint())
                 .collectionName(randomUUID())
                 .logRequests(true)

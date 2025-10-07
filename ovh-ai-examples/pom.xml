@@ -6,7 +6,7 @@
 
     <groupId>dev.langchain4j</groupId>
     <artifactId>ovh-ai-examples</artifactId>
-    <version>1.4.0-beta10</version>
+    <version>1.7.1-beta14</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -19,13 +19,13 @@
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j</artifactId>
-            <version>1.4.0</version>
+            <version>1.7.1</version>
         </dependency>
 
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-ovh-ai</artifactId>
-            <version>1.4.0-beta10</version>
+            <version>1.7.1-beta14</version>
         </dependency>
 
     </dependencies>

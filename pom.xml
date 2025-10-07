@@ -6,10 +6,11 @@
 
     <groupId>dev.langchain4j</groupId>
     <artifactId>langchain4j-examples</artifactId>
-    <version>1.4.0-beta10</version>
+    <version>1.7.1-beta14</version>
     <packaging>pom</packaging>
 
     <modules>
+        <module>agentic-tutorial</module>
         <module>anthropic-examples</module>
         <module>azure-open-ai-customer-support-agent-example</module>
         <module>azure-open-ai-examples</module>
@@ -52,6 +53,7 @@
         <module>helidon-examples</module>
         <module>payara-micro-example</module>
         <module>gpullama3.java-example</module>
+        <module>watsonx-ai-examples</module>
     </modules>
 
 </project>

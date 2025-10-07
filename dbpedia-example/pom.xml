@@ -12,7 +12,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <langchain4j.version>1.4.0-beta10</langchain4j.version>
+        <langchain4j.version>1.7.1-beta14</langchain4j.version>
         <jena.version>3.17.0</jena.version>
     </properties>
 
@@ -26,7 +26,7 @@
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j</artifactId>
-            <version>1.4.0</version>
+            <version>1.7.1</version>
         </dependency>
         <dependency>
             <groupId>dev.langchain4j</groupId>
@@ -36,7 +36,7 @@
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-open-ai</artifactId>
-            <version>1.4.0</version>
+            <version>1.7.1</version>
         </dependency>
         <dependency>
             <groupId>dev.langchain4j</groupId>
