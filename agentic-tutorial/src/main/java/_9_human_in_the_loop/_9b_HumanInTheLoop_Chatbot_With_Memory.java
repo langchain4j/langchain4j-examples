@@ -75,8 +75,6 @@ public class _9b_HumanInTheLoop_Chatbot_With_Memory {
                 .subAgents(agentSequence)
                 .exitCondition(scope -> {
                     System.out.println("--- checking exit condition ---");
-                    System.out.println("scope:");
-                    System.out.println(scope);
                     String response = (String) scope.readState("candidateAnswer");
                     String proposal = (String) scope.readState("proposal");
                     return response != null && decisionService.isDecisionReached(proposal, response);
