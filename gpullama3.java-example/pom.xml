@@ -7,7 +7,7 @@
     <parent>
         <groupId>dev.langchain4j</groupId>
         <artifactId>langchain4j-examples</artifactId>
-        <version>1.4.0-beta10</version>
+        <version>1.7.1-beta14</version>
     </parent>
 
     <artifactId>gpullama3.java-example</artifactId>
@@ -16,7 +16,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <langchain4j.version>1.5.0-SNAPSHOT</langchain4j.version>
+        <langchain4j.version>1.7.1</langchain4j.version>
     </properties>
 
     <build>
@@ -45,18 +45,12 @@
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-gpu-llama3</artifactId>
-            <version>1.5.0-SNAPSHOT</version>
+            <version>1.7.1-beta14</version>
         </dependency>
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-gpu-llama3</artifactId>
-            <version>1.5.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j-gpu-llama3</artifactId>
-            <version>1.5.0-SNAPSHOT</version>
+            <version>1.7.1-beta14</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
