@@ -6,10 +6,9 @@ import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
 import dev.langchain4j.model.gpullama3.GPULlama3StreamingChatModel;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.concurrent.CompletableFuture;
 
-public class GPULlama3StreamChatModelExample {
+public class GPULlama3StreamingChatModelExample {
 
     public static void main(String[] args) {
         // Read path to your *local* model files.
