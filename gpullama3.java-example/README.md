@@ -160,3 +160,10 @@ agentic._1_basic_agent.GPULlama3_1a_Basic_Agent_Example GPU
 tornado -cp target/gpullamas.java-example-1.7.1-beta14.jar:$(cat cp.txt) \
 agentic._1_basic_agent.GPULlama3_1b_Basic_Agent_Example_Structured GPU
 ```
+
+3) Run GPULlama3_2a_Sequential_Agent_Example on GPU:
+
+```bash
+tornado -cp target/gpullamas.java-example-1.7.1-beta14.jar:$(cat cp.txt) \
+agentic._2_sequential_workflow.GPULlama3_2a_Sequential_Agent_Example GPU
+```
