@@ -4,6 +4,23 @@ This guide explains how to run the `GPULlama3ChatModelExamples` program **withou
 
 ---
 
+## **Step 0 — Configure Local LLMs**
+
+To download GPULlama3.java compatible LLMs, follow the instructions in the [GPULlama3.java README](https://github.com/beehive-lab/GPULlama3.java/blob/main/README.md).
+
+For example to get llama3.2-1b:
+```bash
+wget https://huggingface.co/beehive-lab/Llama-3.2-1B-Instruct-GGUF-FP16/resolve/main/beehive-llama-3.2-1b-instruct-fp16.gguf
+```
+
+Export an environment variable:
+
+```bash
+export LOCAL_LLMS_PATH=/path/to/downloaded/local/llms
+```
+
+This environment variable will be used by the example applications.
+
 ## **Step 1 — Get Tornado JVM flags**
 
 Run the following command (You need to have Tornado installed):
