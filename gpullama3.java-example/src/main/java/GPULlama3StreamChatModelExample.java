@@ -12,7 +12,20 @@ import java.util.concurrent.CompletableFuture;
 public class GPULlama3StreamChatModelExample {
 
     public static void main(String[] args) {
-        CompletableFuture<ChatResponse> futureResponse = new CompletableFuture<>();
+        // Read path to your *local* model files.
+        String localLLMsPath = System.getenv("LOCAL_LLMS_PATH");
+
+        // Check if the environment variable is set
+        if (localLLMsPath == null || localLLMsPath.isEmpty()) {
+            System.err.println("Error: LOCAL_LLMS_PATH environment variable is not set.");
+            System.err.println("Please set this environment variable to the directory containing your local model files.");
+            System.exit(1);
+        }
+
+        // Change this model file name to choose any of your *local* model files.
+        // Supports Mistral, Llama3, Phi-3, Qwen2.5 and Qwen3 in gguf format.
+        String modelFile = "beehive-llama-3.2-1b-instruct-fp16.gguf";
+        Path modelPath = Path.of(localLLMsPath, modelFile);
 
         String prompt;
 
@@ -30,14 +43,13 @@ public class GPULlama3StreamChatModelExample {
                         SystemMessage.from("reply with extensive sarcasm"))
                 .build();
 
-        Path modelPath = Paths.get("beehive-llama-3.2-1b-instruct-fp16.gguf");
-
-
         GPULlama3StreamingChatModel model = GPULlama3StreamingChatModel.builder()
                 .onGPU(Boolean.TRUE) // if false, runs on CPU though a lightweight implementation of llama3.java
                 .modelPath(modelPath)
                 .build();
         // @formatter:on
+
+        CompletableFuture<ChatResponse> futureResponse = new CompletableFuture<>();
 
         model.chat(request, new StreamingChatResponseHandler() {
 
