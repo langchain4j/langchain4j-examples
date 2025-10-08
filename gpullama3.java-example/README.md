@@ -51,6 +51,13 @@ Example output:
 
 ## **Step 2 — Build the Maven classpath**
 
+First, build agentic-tutorial which is a dependency of gpullama3.java-example.
+
+```bash
+cd langchain4j-examples/agentic-tutorial
+mvn clean install
+```
+
 From the project root, run:
 
 ```bash
@@ -134,4 +141,15 @@ bash run-direct.sh
   -cp "target/gpullama3.java-example-1.4.0-beta10.jar:/home/mikepapadim/.m2/repository/dev/langchain4j/langchain4j-core/1.5.0-SNAPSHOT/langchain4j-core-1.5.0-SNAPSHOT.jar:/home/mikepapadim/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.19.2/jackson-annotations-2.19.2.jar:/home/mikepapadim/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.19.2/jackson-core-2.19.2.jar:/home/mikepapadim/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.19.2/jackson-databind-2.19.2.jar:/home/mikepapadim/.m2/repository/org/slf4j/slf4j-api/2.0.17/slf4j-api-2.0.17.jar:/home/mikepapadim/.m2/repository/org/jspecify/jspecify/1.0.0/jspecify-1.0.0.jar:/home/mikepapadim/.m2/repository/dev/langchain4j/langchain4j-gpu-llama3/1.5.0-SNAPSHOT/langchain4j-gpu-llama3-1.5.0-SNAPSHOT.jar:/home/mikepapadim/.m2/repository/org/beehive/gpullama3/gpu-llama3/2.0-SNAPSHOT/gpu-llama3-2.0-SNAPSHOT.jar" \
   GPULlama3StreamingChatModelExample
 
+```
+
+### Run agentic examples:
+
+###### Note: Make sure you have the agentic-tutorial project built first (see step 2).
+
+1) Run GPULlama3_1a_Basic_Agent_Example on GPU:
+
+```bash
+tornado -cp target/gpullamas.java-example-1.7.1-beta14.jar:$(cat cp.txt) \
+agentic._1_basic_agent.GPULlama3_1a_Basic_Agent_Example GPU
 ```
