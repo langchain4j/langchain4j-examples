@@ -153,3 +153,10 @@ bash run-direct.sh
 tornado -cp target/gpullamas.java-example-1.7.1-beta14.jar:$(cat cp.txt) \
 agentic._1_basic_agent.GPULlama3_1a_Basic_Agent_Example GPU
 ```
+
+2) Run GPULlama3_1b_Basic_Agent_Example_Structured on GPU:
+
+```bash
+tornado -cp target/gpullamas.java-example-1.7.1-beta14.jar:$(cat cp.txt) \
+agentic._1_basic_agent.GPULlama3_1b_Basic_Agent_Example_Structured GPU
+```
