@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.CompletableFuture;
 
-public class GPULlama3StreamChatModelExamples {
+public class GPULlama3StreamChatModelExample {
 
     public static void main(String[] args) {
         CompletableFuture<ChatResponse> futureResponse = new CompletableFuture<>();
