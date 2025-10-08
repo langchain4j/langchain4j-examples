@@ -3,11 +3,16 @@ import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.openai.OpenAiEmbeddingModel;
 import dev.langchain4j.model.output.Response;
 
+import static dev.langchain4j.model.openai.OpenAiEmbeddingModelName.TEXT_EMBEDDING_3_SMALL;
+
 public class OpenAiEmbeddingModelExamples {
 
     public static void main(String[] args) {
 
-        EmbeddingModel model = OpenAiEmbeddingModel.withApiKey("demo");
+        EmbeddingModel model = OpenAiEmbeddingModel.builder()
+                .apiKey(ApiKeys.OPENAI_API_KEY)
+                .modelName(TEXT_EMBEDDING_3_SMALL)
+                .build();
 
         Response<Embedding> response = model.embed("I love Java");
         Embedding embedding = response.content();

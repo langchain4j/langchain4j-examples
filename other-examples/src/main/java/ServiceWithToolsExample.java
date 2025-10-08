@@ -1,7 +1,10 @@
 import dev.langchain4j.agent.tool.Tool;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.service.AiServices;
+
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 
 public class ServiceWithToolsExample {
 
@@ -36,9 +39,14 @@ public class ServiceWithToolsExample {
 
     public static void main(String[] args) {
 
+        ChatModel model = OpenAiChatModel.builder()
+                .apiKey(ApiKeys.OPENAI_API_KEY)
+                .modelName(GPT_4_O_MINI)
+                .strictTools(true) // https://docs.langchain4j.dev/integrations/language-models/open-ai#structured-outputs-for-tools
+                .build();
+
         Assistant assistant = AiServices.builder(Assistant.class)
-                // WARNING! "demo" key does not support tools
-                .chatLanguageModel(OpenAiChatModel.withApiKey(System.getenv("OPENAI_API_KEY")))
+                .chatModel(model)
                 .tools(new Calculator())
                 .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
                 .build();

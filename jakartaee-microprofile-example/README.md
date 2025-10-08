@@ -3,7 +3,7 @@ This example demonstrates LangChain4J in a Jakarta EE / MicroProfile application
 
 ## Prerequisites:
 
-- [Java 17](https://developer.ibm.com/languages/java/semeru-runtimes/downloads)
+- [Java 21](https://developer.ibm.com/languages/java/semeru-runtimes/downloads)
 - Hugging Face API Key
   - Sign up and log in to https://huggingface.co.
   - Go to [Access Tokens](https://huggingface.co/settings/tokens). 
@@ -21,7 +21,7 @@ cd langchain4j-examples/jakartaee-microprofile-example
 Set the following environment variables:
 
 ```
-export JAVA_HOME=<your Java 17 home path>
+export JAVA_HOME=<your Java 21 home path>
 export HUGGING_FACE_API_KEY=<your Hugging Face read token>
 ```
 
@@ -44,7 +44,7 @@ Use the Maven wrapper to start the application by using the [Liberty dev mode](h
     Which are the most used models?
     ```
   - ```
-    any documentation?
+    show me the documentation
     ```
 
 
@@ -55,11 +55,12 @@ Navigate to the the [OpenAPI UI](http://localhost:9080/openapi/ui) URL for the f
 - [HuggingFaceLanguageModel](https://github.com/langchain4j/langchain4j/blob/main/langchain4j-hugging-face/src/main/java/dev/langchain4j/model/huggingface/HuggingFaceLanguageModel.java)
   - Expand the GET `/api/model/language` API.
     1. Click the **Try it out** button.
-    2. Type `When was langchain4j launched?`, or any question, in the question field.
+    2. Type `When was Hugging Face launched?`, or any question, in the question field.
     3. Click the **Execute** button.
   - Alternatively, run the following `curl` command from a command-line session:
     - ```
-      curl 'http://localhost:9080/api/model/language?question=When%20was%20langchain4j%20launched%3F'
+      curl 'http://localhost:9080/api/model/language?question=When%20was%20Hugging%20Face%20launched%3F'
+
       ```
 - [HuggingFaceChatModel](https://github.com/langchain4j/langchain4j/blob/main/langchain4j-hugging-face/src/main/java/dev/langchain4j/model/huggingface/HuggingFaceChatModel.java)
   - expand the GET `/api/model/chat` API
@@ -68,7 +69,7 @@ Navigate to the the [OpenAPI UI](http://localhost:9080/openapi/ui) URL for the f
     3. Click the **Execute** button.
   - Alternatively, run the following `curl` command from a command-line session:
     - ```
-      curl 'http://localhost:9080/api/model/chat?userMessage=Which%20are%20the%20most%20used%20Large%20Language%20models%3F' | jq
+      curl 'http://localhost:9080/api/model/chat?userMessage=Which%20are%20the%20most%20used%20Large%20Language%20Models%3F' | jq
       ```
 - [InProcessEmbeddingModel](https://github.com/langchain4j/langchain4j-embeddings)
   - expand the GET `/api/model/similarity` API

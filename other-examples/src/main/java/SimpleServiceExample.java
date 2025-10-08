@@ -1,6 +1,8 @@
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.service.AiServices;
+
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 
 public class SimpleServiceExample {
 
@@ -11,9 +13,12 @@ public class SimpleServiceExample {
 
     public static void main(String[] args) {
 
-        ChatLanguageModel chatLanguageModel = OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY);
+        ChatModel chatModel = OpenAiChatModel.builder()
+                .apiKey(ApiKeys.OPENAI_API_KEY)
+                .modelName(GPT_4_O_MINI)
+                .build();
 
-        Assistant assistant = AiServices.create(Assistant.class, chatLanguageModel);
+        Assistant assistant = AiServices.create(Assistant.class, chatModel);
 
         String answer = assistant.chat("Hello");
 

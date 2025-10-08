@@ -1,7 +1,10 @@
 import dev.langchain4j.memory.ChatMemory;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.service.AiServices;
+
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 
 public class ServiceWithMemoryExample {
 
@@ -19,8 +22,13 @@ public class ServiceWithMemoryExample {
 
         ChatMemory chatMemory = MessageWindowChatMemory.withMaxMessages(10);
 
+        ChatModel model = OpenAiChatModel.builder()
+                .apiKey(ApiKeys.OPENAI_API_KEY)
+                .modelName(GPT_4_O_MINI)
+                .build();
+
         Assistant assistant = AiServices.builder(Assistant.class)
-                .chatLanguageModel(OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY))
+                .chatModel(model)
                 .chatMemory(chatMemory)
                 .build();
 

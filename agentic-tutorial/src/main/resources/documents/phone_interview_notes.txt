@@ -1,0 +1,10 @@
+Phone Interview – John Doe (Backend Engineer) – 2025-09-05
+Interviewer: Sarah Jacobs (HR)
+Work Authorization: Belgian citizen; EU work permit.
+Location: Antwerp, prefers 3 remote days/week.
+Availability: 3 months' notice; no relocation needed.
+Salary: €62k current; expects ~€75k; wants training budget.
+Experience: ~4 yrs backend (Java, Spring Boot, PostgreSQL); led pricing tool project; Kafka PoC use; mentoring interest.
+Career: 4 yrs current role, 1.5 yrs prior; no major gaps.
+Soft Skills: Dutch native, English C1; clear communicator; pragmatic, product focus.
+Notes: Salary slightly above range; availability later than desired; limited distributed systems experience.

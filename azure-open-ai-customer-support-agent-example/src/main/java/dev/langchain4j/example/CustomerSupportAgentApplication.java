@@ -7,10 +7,10 @@ import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.memory.ChatMemory;
 import dev.langchain4j.memory.chat.TokenWindowChatMemory;
-import dev.langchain4j.model.Tokenizer;
+import dev.langchain4j.model.TokenCountEstimator;
+import dev.langchain4j.model.azure.AzureOpenAiTokenCountEstimator;
 import dev.langchain4j.model.embedding.onnx.allminilml6v2.AllMiniLmL6V2EmbeddingModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
-import dev.langchain4j.model.azure.AzureOpenAiTokenizer;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
 import dev.langchain4j.store.embedding.EmbeddingStore;
@@ -63,7 +63,7 @@ public class CustomerSupportAgentApplication {
     }
 
     @Bean
-    ChatMemory chatMemory(Tokenizer tokenizer) {
+    ChatMemory chatMemory(TokenCountEstimator tokenizer) {
         return TokenWindowChatMemory.withMaxTokens(1000, tokenizer);
     }
 
@@ -90,7 +90,9 @@ public class CustomerSupportAgentApplication {
     }
 
     @Bean
-    EmbeddingStore<TextSegment> embeddingStore(EmbeddingModel embeddingModel, ResourceLoader resourceLoader) throws IOException {
+    EmbeddingStore<TextSegment> embeddingStore(EmbeddingModel embeddingModel,
+                                               ResourceLoader resourceLoader,
+                                               TokenCountEstimator tokenCountEstimator) throws IOException {
 
         // Normally, you would already have your embedding store filled with your data.
         // However, for the purpose of this demonstration, we will:
@@ -106,7 +108,7 @@ public class CustomerSupportAgentApplication {
         // 4. Convert segments into embeddings
         // 5. Store embeddings into embedding store
         // All this can be done manually, but we will use EmbeddingStoreIngestor to automate this:
-        DocumentSplitter documentSplitter = DocumentSplitters.recursive(100, 0, new AzureOpenAiTokenizer("gpt-3.5-turbo"));
+        DocumentSplitter documentSplitter = DocumentSplitters.recursive(100, 0, tokenCountEstimator);
         EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
                 .documentSplitter(documentSplitter)
                 .embeddingModel(embeddingModel)
@@ -115,6 +117,11 @@ public class CustomerSupportAgentApplication {
         ingestor.ingest(document);
 
         return embeddingStore;
+    }
+
+    @Bean
+    TokenCountEstimator tokenCountEstimator() {
+        return new AzureOpenAiTokenCountEstimator("gpt-4o-mini");
     }
 
     public static void main(String[] args) {

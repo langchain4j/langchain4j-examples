@@ -9,6 +9,7 @@ import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.embedding.onnx.bgesmallenv15q.BgeSmallEnV15QuantizedEmbeddingModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 import static shared.Utils.OPENAI_API_KEY;
 import static shared.Utils.toPath;
 
@@ -88,8 +90,13 @@ public class _09_Advanced_RAG_Return_Sources_Example {
                 .minScore(0.6)
                 .build();
 
+        ChatModel chatModel = OpenAiChatModel.builder()
+                .apiKey(OPENAI_API_KEY)
+                .modelName(GPT_4_O_MINI)
+                .build();
+
         return AiServices.builder(Assistant.class)
-                .chatLanguageModel(OpenAiChatModel.withApiKey(OPENAI_API_KEY))
+                .chatModel(chatModel)
                 .contentRetriever(contentRetriever)
                 .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
                 .build();

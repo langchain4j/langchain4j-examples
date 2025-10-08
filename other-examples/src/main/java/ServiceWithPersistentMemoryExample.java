@@ -1,6 +1,7 @@
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.memory.ChatMemory;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.store.memory.chat.ChatMemoryStore;
@@ -12,6 +13,7 @@ import java.util.Map;
 
 import static dev.langchain4j.data.message.ChatMessageDeserializer.messagesFromJson;
 import static dev.langchain4j.data.message.ChatMessageSerializer.messagesToJson;
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 import static org.mapdb.Serializer.STRING;
 
 public class ServiceWithPersistentMemoryExample {
@@ -32,8 +34,13 @@ public class ServiceWithPersistentMemoryExample {
                 .chatMemoryStore(new PersistentChatMemoryStore())
                 .build();
 
+        ChatModel model = OpenAiChatModel.builder()
+                .apiKey(ApiKeys.OPENAI_API_KEY)
+                .modelName(GPT_4_O_MINI)
+                .build();
+
         Assistant assistant = AiServices.builder(Assistant.class)
-                .chatLanguageModel(OpenAiChatModel.withApiKey(ApiKeys.OPENAI_API_KEY))
+                .chatModel(model)
                 .chatMemory(chatMemory)
                 .build();
 

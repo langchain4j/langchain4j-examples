@@ -3,7 +3,7 @@ package _3_advanced;
 import _2_naive.Naive_RAG_Example;
 import dev.langchain4j.experimental.rag.content.retriever.sql.SqlDatabaseContentRetriever;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.service.AiServices;
@@ -17,6 +17,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 import static shared.Utils.*;
 
 public class _10_Advanced_RAG_SQL_Database_Retreiver_Example {
@@ -52,15 +53,18 @@ public class _10_Advanced_RAG_SQL_Database_Retreiver_Example {
 
         DataSource dataSource = createDataSource();
 
-        ChatLanguageModel chatLanguageModel = OpenAiChatModel.withApiKey(OPENAI_API_KEY);
+        ChatModel chatModel = OpenAiChatModel.builder()
+                .apiKey(OPENAI_API_KEY)
+                .modelName(GPT_4_O_MINI)
+                .build();
 
         ContentRetriever contentRetriever = SqlDatabaseContentRetriever.builder()
                 .dataSource(dataSource)
-                .chatLanguageModel(chatLanguageModel)
+                .chatModel(chatModel)
                 .build();
 
         return AiServices.builder(Assistant.class)
-                .chatLanguageModel(chatLanguageModel)
+                .chatModel(chatModel)
                 .contentRetriever(contentRetriever)
                 .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
                 .build();

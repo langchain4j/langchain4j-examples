@@ -1,12 +1,15 @@
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.UserMessage;
-import dev.langchain4j.model.StreamingResponseHandler;
+import dev.langchain4j.model.chat.response.ChatResponse;
+import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
 import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 import static java.time.Duration.ofSeconds;
 
 public class _06_FewShot {
@@ -15,6 +18,7 @@ public class _06_FewShot {
 
         OpenAiStreamingChatModel model = OpenAiStreamingChatModel.builder()
                 .apiKey(ApiKeys.OPENAI_API_KEY)
+                .modelName(GPT_4_O_MINI)
                 .timeout(ofSeconds(100))
                 .build();
 
@@ -45,24 +49,34 @@ public class _06_FewShot {
                 "Action: open new ticket - data loss by new feature\nReply:We apologize for the inconvenience caused. Your feedback is crucial to us, and we have reported this issue to our technical team. They are working on it on priority. We will keep you updated on the progress and notify you once the issue is resolved. Thank you for your patience and support."));
 
         // Adding real user's message
-        ChatMessage customerComplaint = UserMessage
+        UserMessage customerComplaint = UserMessage
                 .from("How can your app be so slow? Please do something about it!");
         fewShotHistory.add(customerComplaint);
 
-        System.out.println("[User]: " + customerComplaint.text());
+        System.out.println("[User]: " + customerComplaint.singleText());
         System.out.print("[LLM]: ");
 
-        model.generate(fewShotHistory, new StreamingResponseHandler<AiMessage>() {
+        CompletableFuture<ChatResponse> futureChatResponse = new CompletableFuture<>();
+
+        model.chat(fewShotHistory, new StreamingChatResponseHandler() {
 
             @Override
-            public void onNext(String token) {
-                System.out.print(token);
+            public void onPartialResponse(String partialResponse) {
+                System.out.print(partialResponse);
             }
 
             @Override
-            public void onError(Throwable throwable) {
+            public void onCompleteResponse(ChatResponse completeResponse) {
+                futureChatResponse.complete(completeResponse);
+            }
+
+            @Override
+            public void onError(Throwable error) {
+                futureChatResponse.completeExceptionally(error);
             }
         });
+
+        futureChatResponse.join();
 
         // Extract reply and send to customer
         // Perform necessary action in back-end

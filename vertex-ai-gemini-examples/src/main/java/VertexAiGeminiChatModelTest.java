@@ -5,15 +5,16 @@ import dev.langchain4j.agent.tool.ToolSpecifications;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
-import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain4j.model.output.Response;
-import dev.langchain4j.model.vertexai.VertexAiGeminiChatModel;
+import dev.langchain4j.model.chat.ChatModel;
+import dev.langchain4j.model.chat.request.ChatRequest;
+import dev.langchain4j.model.chat.request.ChatRequestParameters;
+import dev.langchain4j.model.chat.response.ChatResponse;
+import dev.langchain4j.model.vertexai.gemini.VertexAiGeminiChatModel;
 import dev.langchain4j.service.AiServices;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -27,7 +28,7 @@ class VertexAiGeminiChatModelTest {
     private static final String LOCATION = "us-central1";
     private static final String MODEL_NAME = "gemini-pro";
 
-    ChatLanguageModel model = VertexAiGeminiChatModel.builder()
+    ChatModel model = VertexAiGeminiChatModel.builder()
             .project(PROJECT)
             .location(LOCATION)
             .modelName(MODEL_NAME)
@@ -48,11 +49,16 @@ class VertexAiGeminiChatModelTest {
 
         List<ToolSpecification> toolSpecifications = ToolSpecifications.toolSpecificationsFrom(new Calculator());
 
-        UserMessage userMessage = UserMessage.from("How much is 754 + 926?");
+        ChatRequest chatRequest = ChatRequest.builder()
+                .messages(UserMessage.from("How much is 754 + 926?"))
+                .parameters(ChatRequestParameters.builder()
+                        .toolSpecifications(toolSpecifications)
+                        .build())
+                .build();
 
-        Response<AiMessage> response = model.generate(singletonList(userMessage), toolSpecifications);
+        ChatResponse chatResponse = model.chat(chatRequest);
 
-        AiMessage aiMessage = response.content();
+        AiMessage aiMessage = chatResponse.aiMessage();
         assertThat(aiMessage.hasToolExecutionRequests()).isTrue();
         assertThat(aiMessage.toolExecutionRequests()).hasSize(1);
 
@@ -73,7 +79,7 @@ class VertexAiGeminiChatModelTest {
         Calculator calculator = spy(new Calculator());
 
         Assistant assistant = AiServices.builder(Assistant.class)
-                .chatLanguageModel(model)
+                .chatModel(model)
                 .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
                 .tools(calculator)
                 .build();

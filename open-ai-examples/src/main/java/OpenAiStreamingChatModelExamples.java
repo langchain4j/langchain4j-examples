@@ -1,34 +1,41 @@
-import dev.langchain4j.data.message.AiMessage;
-import dev.langchain4j.model.StreamingResponseHandler;
-import dev.langchain4j.model.chat.StreamingChatLanguageModel;
+import dev.langchain4j.model.chat.StreamingChatModel;
+import dev.langchain4j.model.chat.response.ChatResponse;
+import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
 import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
-import dev.langchain4j.model.output.Response;
+
+import java.util.concurrent.CompletableFuture;
+
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 
 public class OpenAiStreamingChatModelExamples {
 
-    static class Simple_Prompt {
+    public static void main(String[] args) {
 
-        public static void main(String[] args) {
+        StreamingChatModel chatModel = OpenAiStreamingChatModel.builder()
+                .apiKey(ApiKeys.OPENAI_API_KEY)
+                .modelName(GPT_4_O_MINI)
+                .build();
 
-            StreamingChatLanguageModel model = OpenAiStreamingChatModel.withApiKey(System.getenv("OPENAI_API_KEY"));
+        CompletableFuture<ChatResponse> futureChatResponse = new CompletableFuture<>();
 
-            model.generate("Tell me a joke about Java", new StreamingResponseHandler<AiMessage>() {
+        chatModel.chat("Tell me a joke about Java", new StreamingChatResponseHandler() {
 
-                @Override
-                public void onNext(String token) {
-                    System.out.println("onNext(): " + token);
-                }
+            @Override
+            public void onPartialResponse(String partialResponse) {
+                System.out.print(partialResponse);
+            }
 
-                @Override
-                public void onComplete(Response<AiMessage> response) {
-                    System.out.println("onComplete(): " + response);
-                }
+            @Override
+            public void onCompleteResponse(ChatResponse completeResponse) {
+                futureChatResponse.complete(completeResponse);
+            }
 
-                @Override
-                public void onError(Throwable error) {
-                    error.printStackTrace();
-                }
-            });
-        }
+            @Override
+            public void onError(Throwable error) {
+                futureChatResponse.completeExceptionally(error);
+            }
+        });
+
+        futureChatResponse.join();
     }
 }

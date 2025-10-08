@@ -56,7 +56,7 @@ public class ChatAgent {
                 .waitForModel(true)
                 .build();
             assistant = AiServices.builder(Assistant.class)
-                .chatLanguageModel(model)
+                .chatModel(model)
                 .chatMemoryProvider(
                     sessionId -> MessageWindowChatMemory.withMaxMessages(MAX_MESSAGES))
                 .build();
@@ -65,7 +65,9 @@ public class ChatAgent {
     }
 
     public String chat(String sessionId, String message) {
-        return getAssistant().chat(sessionId, message).trim();
+        String reply = getAssistant().chat(sessionId, message).trim();
+        int i = reply.lastIndexOf(message);
+        return i > 0 ? reply.substring(i) : reply;
     }
 
 }

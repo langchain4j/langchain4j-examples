@@ -1,9 +1,11 @@
-import dev.langchain4j.data.message.AiMessage;
-import dev.langchain4j.model.StreamingResponseHandler;
-import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain4j.model.chat.StreamingChatLanguageModel;
-import dev.langchain4j.model.vertexai.VertexAiGeminiChatModel;
-import dev.langchain4j.model.vertexai.VertexAiGeminiStreamingChatModel;
+import dev.langchain4j.model.chat.ChatModel;
+import dev.langchain4j.model.chat.StreamingChatModel;
+import dev.langchain4j.model.chat.response.ChatResponse;
+import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
+import dev.langchain4j.model.vertexai.gemini.VertexAiGeminiChatModel;
+import dev.langchain4j.model.vertexai.gemini.VertexAiGeminiStreamingChatModel;
+
+import java.util.concurrent.CompletableFuture;
 
 public class VertexAiGeminiChatModelExamples {
 
@@ -19,13 +21,13 @@ public class VertexAiGeminiChatModelExamples {
 
         public static void main(String[] args) {
 
-            ChatLanguageModel model = VertexAiGeminiChatModel.builder()
+            ChatModel model = VertexAiGeminiChatModel.builder()
                     .project(PROJECT)
                     .location(LOCATION)
                     .modelName(MODEL_NAME)
                     .build();
 
-            String response = model.generate("Tell me a joke");
+            String response = model.chat("Tell me a joke");
 
             System.out.println(response);
         }
@@ -35,24 +37,33 @@ public class VertexAiGeminiChatModelExamples {
 
         public static void main(String[] args) {
 
-            StreamingChatLanguageModel model = VertexAiGeminiStreamingChatModel.builder()
+            StreamingChatModel model = VertexAiGeminiStreamingChatModel.builder()
                     .project(PROJECT)
                     .location(LOCATION)
                     .modelName(MODEL_NAME)
                     .build();
 
-            model.generate("Tell me a long joke", new StreamingResponseHandler<AiMessage>() {
+            CompletableFuture<ChatResponse> futureChatResponse = new CompletableFuture<>();
+
+            model.chat("Tell me a long joke", new StreamingChatResponseHandler() {
 
                 @Override
-                public void onNext(String token) {
-                    System.out.print(token);
+                public void onPartialResponse(String partialResponse) {
+                    System.out.print(partialResponse);
+                }
+
+                @Override
+                public void onCompleteResponse(ChatResponse completeResponse) {
+                    futureChatResponse.complete(completeResponse);
                 }
 
                 @Override
                 public void onError(Throwable error) {
-                    error.printStackTrace();
+                    futureChatResponse.completeExceptionally(error);
                 }
             });
+
+            futureChatResponse.join();
         }
     }
 }

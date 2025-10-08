@@ -162,7 +162,7 @@ public class DbPediaSparqlExample {
         // Applying the variables to the prompt template
         Prompt prompt = extractSubjectPromptTemplate.apply(variables);
         // Generating and returning the subject using the Azure OpenAI model
-        return model.generate(prompt.text());
+        return model.chat(prompt.text());
     }
 
     /**
@@ -195,6 +195,6 @@ public class DbPediaSparqlExample {
         // Applying the variables to the prompt template
         Prompt prompt = extractAnswerPromptTemplate.apply(variables);
         // Generating and returning the answer using the Azure OpenAI model
-        return model.generate(prompt.text());
+        return model.chat(prompt.text());
     }
 }

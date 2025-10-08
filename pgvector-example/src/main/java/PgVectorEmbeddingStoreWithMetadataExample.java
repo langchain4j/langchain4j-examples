@@ -23,6 +23,8 @@ public class PgVectorEmbeddingStoreWithMetadataExample {
         try (PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>(dockerImageName)) {
             postgreSQLContainer.start();
 
+            EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
+
             EmbeddingStore<TextSegment> embeddingStore = PgVectorEmbeddingStore.builder()
                     .host(postgreSQLContainer.getHost())
                     .port(postgreSQLContainer.getFirstMappedPort())
@@ -30,10 +32,8 @@ public class PgVectorEmbeddingStoreWithMetadataExample {
                     .user(postgreSQLContainer.getUsername())
                     .password(postgreSQLContainer.getPassword())
                     .table("test")
-                    .dimension(384)
+                    .dimension(embeddingModel.dimension())
                     .build();
-
-            EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
 
             TextSegment segment1 = TextSegment.from("I like football.", Metadata.metadata("userId", "1"));
             Embedding embedding1 = embeddingModel.embed(segment1).content();

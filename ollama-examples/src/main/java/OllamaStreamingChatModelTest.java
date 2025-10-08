@@ -1,61 +1,46 @@
-import dev.langchain4j.data.message.AiMessage;
-import dev.langchain4j.model.StreamingResponseHandler;
-import dev.langchain4j.model.chat.StreamingChatLanguageModel;
+import dev.langchain4j.model.chat.StreamingChatModel;
+import dev.langchain4j.model.chat.response.ChatResponse;
+import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
 import dev.langchain4j.model.ollama.OllamaStreamingChatModel;
-import dev.langchain4j.model.output.Response;
 import org.junit.jupiter.api.Test;
-import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import utils.AbstractOllamaInfrastructure;
 
 import java.util.concurrent.CompletableFuture;
 
 @Testcontainers
-class OllamaStreamingChatModelTest {
+class OllamaStreamingChatModelTest extends AbstractOllamaInfrastructure {
 
     /**
-     * The first time you run this test, it will download a Docker image with Ollama and a model.
+     * If you have Ollama running locally,
+     * please set the OLLAMA_BASE_URL environment variable (e.g., http://localhost:11434).
+     * If you do not set the OLLAMA_BASE_URL environment variable,
+     * Testcontainers will download and start Ollama Docker container.
      * It might take a few minutes.
-     * <p>
-     * This test uses modified Ollama Docker images, which already contain models inside them.
-     * All images with pre-packaged models are available here: https://hub.docker.com/repositories/langchain4j
-     * <p>
-     * However, you are not restricted to these images.
-     * You can run any model from https://ollama.ai/library by following these steps:
-     * 1. Run "docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama"
-     * 2. Run "docker exec -it ollama ollama run llama2" <- specify the desired model here
      */
-
-    static String MODEL_NAME = "orca-mini"; // try "mistral", "llama2", "codellama" or "phi"
-    static String DOCKER_IMAGE_NAME = "langchain4j/ollama-" + MODEL_NAME + ":latest";
-    static Integer PORT = 11434;
-
-    @Container
-    static GenericContainer<?> ollama = new GenericContainer<>(DOCKER_IMAGE_NAME)
-            .withExposedPorts(PORT);
 
     @Test
     void streaming_example() {
 
-        StreamingChatLanguageModel model = OllamaStreamingChatModel.builder()
-                .baseUrl(String.format("http://%s:%d", ollama.getHost(), ollama.getMappedPort(PORT)))
+        StreamingChatModel model = OllamaStreamingChatModel.builder()
+                .baseUrl(ollamaBaseUrl(ollama))
                 .modelName(MODEL_NAME)
-                .temperature(0.0)
                 .build();
 
         String userMessage = "Write a 100-word poem about Java and AI";
 
-        CompletableFuture<Response<AiMessage>> futureResponse = new CompletableFuture<>();
-        model.generate(userMessage, new StreamingResponseHandler<AiMessage>() {
+        CompletableFuture<ChatResponse> futureResponse = new CompletableFuture<>();
+
+        model.chat(userMessage, new StreamingChatResponseHandler() {
 
             @Override
-            public void onNext(String token) {
-                System.out.print(token);
+            public void onPartialResponse(String partialResponse) {
+                System.out.print(partialResponse);
             }
 
             @Override
-            public void onComplete(Response<AiMessage> response) {
-                futureResponse.complete(response);
+            public void onCompleteResponse(ChatResponse completeResponse) {
+                futureResponse.complete(completeResponse);
             }
 
             @Override

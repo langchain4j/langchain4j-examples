@@ -21,7 +21,7 @@ public class ChatServiceIT {
         countDown = new CountDownLatch(1);
         URI uri = new URI("ws://localhost:9080/chat");
         ChatClient client = new ChatClient(uri);
-        client.sendMessage("When was langchain4j launched?");
+        client.sendMessage("When was the LangChain4j launched?");
         countDown.await(120, TimeUnit.SECONDS);
         client.close();
     }

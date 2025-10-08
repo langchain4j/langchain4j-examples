@@ -1,4 +1,4 @@
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.input.Prompt;
 import dev.langchain4j.model.input.PromptTemplate;
 import dev.langchain4j.model.input.structured.StructuredPrompt;
@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 import static java.time.Duration.ofSeconds;
 import static java.util.Arrays.asList;
 
@@ -18,8 +19,9 @@ public class _03_PromptTemplate {
 
         public static void main(String[] args) {
 
-            ChatLanguageModel model = OpenAiChatModel.builder()
+            ChatModel model = OpenAiChatModel.builder()
                     .apiKey(ApiKeys.OPENAI_API_KEY)
+                    .modelName(GPT_4_O_MINI)
                     .timeout(ofSeconds(60))
                     .build();
 
@@ -32,7 +34,7 @@ public class _03_PromptTemplate {
 
             Prompt prompt = promptTemplate.apply(variables);
 
-            String response = model.generate(prompt.text());
+            String response = model.chat(prompt.text());
 
             System.out.println(response);
         }
@@ -69,8 +71,9 @@ public class _03_PromptTemplate {
 
         public static void main(String[] args) {
 
-            ChatLanguageModel model = OpenAiChatModel.builder()
+            ChatModel model = OpenAiChatModel.builder()
                     .apiKey(ApiKeys.OPENAI_API_KEY)
+                    .modelName(GPT_4_O_MINI)
                     .timeout(ofSeconds(60))
                     .build();
 
@@ -81,7 +84,7 @@ public class _03_PromptTemplate {
 
             Prompt prompt = StructuredPromptProcessor.toPrompt(createRecipePrompt);
 
-            String recipe = model.generate(prompt.text());
+            String recipe = model.chat(prompt.text());
 
             System.out.println(recipe);
         }

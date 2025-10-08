@@ -1,9 +1,9 @@
-
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
-import dev.langchain4j.model.embedding.onnx.allminilml6v2.AllMiniLmL6V2EmbeddingModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
+import dev.langchain4j.model.embedding.onnx.allminilml6v2.AllMiniLmL6V2EmbeddingModel;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
+import dev.langchain4j.store.embedding.EmbeddingSearchRequest;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.pgvector.PgVectorEmbeddingStore;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -19,6 +19,8 @@ public class PgVectorEmbeddingStoreExample {
         try (PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>(dockerImageName)) {
             postgreSQLContainer.start();
 
+            EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
+
             EmbeddingStore<TextSegment> embeddingStore = PgVectorEmbeddingStore.builder()
                     .host(postgreSQLContainer.getHost())
                     .port(postgreSQLContainer.getFirstMappedPort())
@@ -26,10 +28,8 @@ public class PgVectorEmbeddingStoreExample {
                     .user(postgreSQLContainer.getUsername())
                     .password(postgreSQLContainer.getPassword())
                     .table("test")
-                    .dimension(384)
+                    .dimension(embeddingModel.dimension())
                     .build();
-
-            EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
 
             TextSegment segment1 = TextSegment.from("I like football.");
             Embedding embedding1 = embeddingModel.embed(segment1).content();
@@ -40,7 +40,14 @@ public class PgVectorEmbeddingStoreExample {
             embeddingStore.add(embedding2, segment2);
 
             Embedding queryEmbedding = embeddingModel.embed("What is your favourite sport?").content();
-            List<EmbeddingMatch<TextSegment>> relevant = embeddingStore.findRelevant(queryEmbedding, 1);
+
+            EmbeddingSearchRequest embeddingSearchRequest = EmbeddingSearchRequest.builder()
+                    .queryEmbedding(queryEmbedding)
+                    .maxResults(1)
+                    .build();
+
+            List<EmbeddingMatch<TextSegment>> relevant = embeddingStore.search(embeddingSearchRequest).matches();
+
             EmbeddingMatch<TextSegment> embeddingMatch = relevant.get(0);
 
             System.out.println(embeddingMatch.score()); // 0.8144288608390052

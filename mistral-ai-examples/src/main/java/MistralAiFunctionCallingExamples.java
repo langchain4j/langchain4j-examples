@@ -2,19 +2,21 @@ import dev.langchain4j.agent.tool.*;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.ToolExecutionResultMessage;
+import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
+import dev.langchain4j.model.chat.request.ChatRequest;
+import dev.langchain4j.model.chat.request.ChatRequestParameters;
 import dev.langchain4j.model.mistralai.MistralAiChatModel;
-import dev.langchain4j.model.mistralai.MistralAiChatModelName;
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.service.SystemMessage;
-import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.service.tool.DefaultToolExecutor;
 import dev.langchain4j.service.tool.ToolExecutor;
 
 import java.util.*;
 
 import static dev.langchain4j.data.message.UserMessage.userMessage;
+import static dev.langchain4j.model.mistralai.MistralAiChatModelName.MISTRAL_LARGE_LATEST;
 import static java.util.stream.Collectors.toList;
 
 
@@ -22,9 +24,9 @@ public class MistralAiFunctionCallingExamples {
 
     static class Payment_Data_From_AiServices {
 
-        static ChatLanguageModel mistralAiModel = MistralAiChatModel.builder()
+        static ChatModel mistralAiModel = MistralAiChatModel.builder()
                 .apiKey(System.getenv("MISTRAL_AI_API_KEY")) // Please use your own Mistral AI API key
-                .modelName(MistralAiChatModelName.MISTRAL_LARGE_LATEST.toString())
+                .modelName(MISTRAL_LARGE_LATEST)
                 .build();
 
         interface Assistant {
@@ -46,7 +48,7 @@ public class MistralAiFunctionCallingExamples {
 
             // STEP 2: User asks the agent and AiServices call to the functions
             Assistant agent = AiServices.builder(Assistant.class)
-                    .chatLanguageModel(mistralAiModel)
+                    .chatModel(mistralAiModel)
                     .tools(paymentTool)
                     .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
                     .build();
@@ -58,75 +60,81 @@ public class MistralAiFunctionCallingExamples {
 
     }
 
-    static class Payment_Data_From_Manual_Configuration{
+    static class Payment_Data_From_Manual_Configuration {
 
-            static ChatLanguageModel mistralAiModel = MistralAiChatModel.builder()
-                    .apiKey(System.getenv("MISTRAL_AI_API_KEY")) // Please use your own Mistral AI API key
-                    .modelName(MistralAiChatModelName.MISTRAL_LARGE_LATEST.toString())
-                    .logRequests(true)
-                    .logResponses(true)
+        static ChatModel mistralAiModel = MistralAiChatModel.builder()
+                .apiKey(System.getenv("MISTRAL_AI_API_KEY")) // Please use your own Mistral AI API key
+                .modelName(MISTRAL_LARGE_LATEST)
+                .logRequests(true)
+                .logResponses(true)
+                .build();
+
+        public static void main(String[] args) throws Exception {
+            // This sample retrieve payment status as shown in this Mistral AI tutorial: https://docs.mistral.ai/guides/function-calling/
+
+            // STEP 1: User specify tools and query
+            // Tools
+            Payment_Transaction_Tool paymentTool = Payment_Transaction_Tool.build();
+            List<ToolSpecification> tools = ToolSpecifications.toolSpecificationsFrom(paymentTool);
+            // User query
+            List<ChatMessage> chatMessages = new ArrayList<>();
+            UserMessage userMessage = userMessage("What is the status of transaction T1005?");
+            chatMessages.add(userMessage);
+
+            // STEP 2: Model generate function arguments
+            // Tool_choice: it's set to "auto" by default.
+            ChatRequest chatRequest = ChatRequest.builder()
+                    .messages(chatMessages)
+                    .parameters(ChatRequestParameters.builder()
+                            .toolSpecifications(tools)
+                            .build())
                     .build();
+            AiMessage aiMessage = mistralAiModel.chat(chatRequest).aiMessage();
+            aiMessage.toolExecutionRequests().forEach(toolSpec -> { // return all tools to call to answer the user query
+                System.out.println("Function name: " + toolSpec.name());
+                System.out.println("Function args:" + toolSpec.arguments());
+            });
+            chatMessages.add(aiMessage);
 
-            public static void main(String[] args) throws Exception {
-                // This sample retrieve payment status as shown in this Mistral AI tutorial: https://docs.mistral.ai/guides/function-calling/
+            // STEP 3: User execute function to obtain tool results
+            // Tool execution results is become into user tool messages (ToolExecutionResultMessage).
+            List<ToolExecutionResultMessage> toolExecutionResultMessages = toolExecutor(paymentTool, aiMessage.toolExecutionRequests());
+            chatMessages.addAll(toolExecutionResultMessages);
 
-                // STEP 1: User specify tools and query
-                // Tools
-                Payment_Transaction_Tool paymentTool = Payment_Transaction_Tool.build();
-                List<ToolSpecification>  tools = ToolSpecifications.toolSpecificationsFrom(paymentTool);
-                // User query
-                List<ChatMessage> chatMessages = new ArrayList<>();
-                UserMessage userMessage = userMessage("What is the status of transaction T1005?");
-                chatMessages.add(userMessage);
+            // STEP 4: Model generate final response
+            AiMessage finalResponse = mistralAiModel.chat(chatMessages).aiMessage();
+            System.out.println(finalResponse.text()); //According to the payment data, the payment status of transaction T1005 is Pending.
+        }
 
-                // STEP 2: Model generate function arguments
-                // Tool_choice: With multiple tools it's set to "auto" by default.
-                AiMessage aiMessage = mistralAiModel.generate(chatMessages,tools).content();
-                aiMessage.toolExecutionRequests().forEach(toolSpec -> { // return all tools to call to answer the user query
-                    System.out.println("Function name: " + toolSpec.name());
-                    System.out.println("Function args:" + toolSpec.arguments());
-                });
-                chatMessages.add(aiMessage);
-
-                // STEP 3: User execute function to obtain tool results
-                // Tool execution results is become into user tool messages (ToolExecutionResultMessage).
-                List<ToolExecutionResultMessage> toolExecutionResultMessages = toolExecutor(paymentTool, aiMessage.toolExecutionRequests());
-                chatMessages.addAll(toolExecutionResultMessages);
-
-                // STEP 4: Model generate final response
-                AiMessage finalResponse = mistralAiModel.generate(chatMessages).content();
-                System.out.println(finalResponse.text()); //According to the payment data, the payment status of transaction T1005 is Pending.
-            }
-
-            private static List<ToolExecutionResultMessage> toolExecutor(
-                    Object objectWithTools,
-                    List<ToolExecutionRequest> toolExecutionRequests) throws Exception {
-                String memoryId = UUID.randomUUID().toString();
-                return toolExecutionRequests.stream()
-                        .map(request -> {
-                            try {
-                                ToolExecutor toolExecutor = new DefaultToolExecutor(objectWithTools,
-                                                objectWithTools.getClass().getDeclaredMethod(request.name(),
-                                                String.class));
-                                return ToolExecutionResultMessage.from(request, toolExecutor.execute(request, memoryId));
-                            } catch (NoSuchMethodException e) {
-                                System.err.println("No such tool found: " + request.name());
-                            }
-                            return null;
-                        })
-                        .collect(toList());
-            }
+        private static List<ToolExecutionResultMessage> toolExecutor(
+                Object objectWithTools,
+                List<ToolExecutionRequest> toolExecutionRequests) throws Exception {
+            String memoryId = UUID.randomUUID().toString();
+            return toolExecutionRequests.stream()
+                    .map(request -> {
+                        try {
+                            ToolExecutor toolExecutor = new DefaultToolExecutor(objectWithTools,
+                                    objectWithTools.getClass().getDeclaredMethod(request.name(),
+                                            String.class));
+                            return ToolExecutionResultMessage.from(request, toolExecutor.execute(request, memoryId));
+                        } catch (NoSuchMethodException e) {
+                            System.err.println("No such tool found: " + request.name());
+                        }
+                        return null;
+                    })
+                    .collect(toList());
+        }
     }
 
     static class Payment_Transaction_Tool {
-        static Payment_Transaction_Tool build(){
+        static Payment_Transaction_Tool build() {
             return new Payment_Transaction_Tool();
         }
 
         // Tool to be executed by mistral model to get payment status
         @Tool("Get payment status of a transaction") // function description
         static String retrievePaymentStatus(@P("Transaction id to search payment data") String transactionId) {
-           return getPaymentDataField(transactionId, "payment_status");
+            return getPaymentDataField(transactionId, "payment_status");
         }
 
         // Tool to be executed by mistral model to get payment date

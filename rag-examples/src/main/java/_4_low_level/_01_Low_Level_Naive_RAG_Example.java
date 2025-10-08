@@ -8,14 +8,15 @@ import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.segment.TextSegment;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.embedding.onnx.bgesmallenv15q.BgeSmallEnV15QuantizedEmbeddingModel;
 import dev.langchain4j.model.input.Prompt;
 import dev.langchain4j.model.input.PromptTemplate;
 import dev.langchain4j.model.openai.OpenAiChatModel;
-import dev.langchain4j.model.openai.OpenAiTokenizer;
+import dev.langchain4j.model.openai.OpenAiTokenCountEstimator;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
+import dev.langchain4j.store.embedding.EmbeddingSearchRequest;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
 
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 import static java.util.stream.Collectors.joining;
 import static shared.Utils.OPENAI_API_KEY;
 import static shared.Utils.toPath;
@@ -46,7 +48,7 @@ public class _01_Low_Level_Naive_RAG_Example {
         DocumentSplitter splitter = DocumentSplitters.recursive(
                 300,
                 0,
-                new OpenAiTokenizer("gpt-3.5-turbo")
+                new OpenAiTokenCountEstimator(GPT_4_O_MINI)
         );
         List<TextSegment> segments = splitter.split(document);
 
@@ -66,10 +68,12 @@ public class _01_Low_Level_Naive_RAG_Example {
 
         // Find relevant embeddings in embedding store by semantic similarity
         // You can play with parameters below to find a sweet spot for your specific use case
-        int maxResults = 3;
-        double minScore = 0.7;
-        List<EmbeddingMatch<TextSegment>> relevantEmbeddings
-                = embeddingStore.findRelevant(questionEmbedding, maxResults, minScore);
+        EmbeddingSearchRequest embeddingSearchRequest = EmbeddingSearchRequest.builder()
+                .queryEmbedding(questionEmbedding)
+                .maxResults(3)
+                .minScore(0.7)
+                .build();
+        List<EmbeddingMatch<TextSegment>> relevantEmbeddings = embeddingStore.search(embeddingSearchRequest).matches();
 
         // Create a prompt for the model that includes question and relevant embeddings
         PromptTemplate promptTemplate = PromptTemplate.from(
@@ -92,11 +96,12 @@ public class _01_Low_Level_Naive_RAG_Example {
         Prompt prompt = promptTemplate.apply(variables);
 
         // Send the prompt to the OpenAI chat model
-        ChatLanguageModel chatModel = OpenAiChatModel.builder()
+        ChatModel chatModel = OpenAiChatModel.builder()
                 .apiKey(OPENAI_API_KEY)
+                .modelName(GPT_4_O_MINI)
                 .timeout(Duration.ofSeconds(60))
                 .build();
-        AiMessage aiMessage = chatModel.generate(prompt.toUserMessage()).content();
+        AiMessage aiMessage = chatModel.chat(prompt.toUserMessage()).aiMessage();
 
         // See an answer from the model
         String answer = aiMessage.text();

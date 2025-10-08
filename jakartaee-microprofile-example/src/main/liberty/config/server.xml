@@ -2,13 +2,15 @@
 <server description="chat server">
 
     <featureManager>
-        <feature>cdi-4.0</feature>
-        <feature>jsonb-3.0</feature>
-        <feature>mpConfig-3.1</feature>
-        <feature>mpMetrics-5.1</feature>
-        <feature>mpOpenAPI-3.1</feature>
-        <feature>restfulWS-3.1</feature>
-        <feature>websocket-2.1</feature>
+        <platform>jakartaee-10.0</platform>
+        <platform>microprofile-7.0</platform>
+        <feature>cdi</feature>
+        <feature>jsonb</feature>
+        <feature>mpConfig</feature>
+        <feature>mpMetrics</feature>
+        <feature>mpOpenAPI</feature>
+        <feature>restfulWS</feature>
+        <feature>websocket</feature>
     </featureManager>
 
     <httpEndpoint host="*" httpPort="9080" httpsPort="9443" id="defaultHttpEndpoint"/>

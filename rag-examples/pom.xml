@@ -6,11 +6,11 @@
 
     <groupId>dev.langchain4j</groupId>
     <artifactId>rag-examples</artifactId>
-    <version>0.33.0</version>
+    <version>1.7.1-beta14</version>
 
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -19,61 +19,55 @@
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j</artifactId>
-            <version>0.33.0</version>
+            <version>1.7.1</version>
         </dependency>
 
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-easy-rag</artifactId>
-            <version>0.33.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.logging.log4j</groupId>
-                    <artifactId>log4j-api</artifactId>
-                </exclusion>
-            </exclusions>
+            <version>1.7.1-beta14</version>
         </dependency>
 
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-open-ai</artifactId>
-            <version>0.33.0</version>
+            <version>1.7.1</version>
         </dependency>
 
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-cohere</artifactId>
-            <version>0.33.0</version>
+            <version>1.7.1-beta14</version>
         </dependency>
 
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-web-search-engine-tavily</artifactId>
-            <version>0.33.0</version>
+            <version>1.7.1-beta14</version>
         </dependency>
 
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-experimental-sql</artifactId>
-            <version>0.33.0</version>
+            <version>1.7.1-beta14</version>
         </dependency>
 
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>2.2.224</version>
+            <version>2.3.232</version>
         </dependency>
 
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-embeddings-bge-small-en-v15-q</artifactId>
-            <version>0.33.0</version>
+            <version>1.7.1-beta14</version>
         </dependency>
 
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-embedding-store-filter-parser-sql</artifactId>
-            <version>0.33.0</version>
+            <version>1.7.1-beta14</version>
         </dependency>
 
         <dependency>
@@ -91,7 +85,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.5.3</version>
+            <version>1.5.12</version>
         </dependency>
 
     </dependencies>

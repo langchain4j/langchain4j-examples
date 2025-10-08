@@ -16,7 +16,6 @@ class CustomerSupportAgentApplicationTest {
     void should_provide_booking_details_and_explain_why_cancellation_is_not_possible() {
 
         // Please define API keys in application.properties before running this test.
-        // Tip: Use gpt-4 for this example, as gpt-3.5-turbo tends to hallucinate often and invent name and surname.
 
         interact(agent, "Hi, I forgot when my booking is.");
         interact(agent, "123-457");

@@ -1,6 +1,6 @@
 import dev.langchain4j.memory.ChatMemory;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.input.structured.StructuredPrompt;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.output.structured.Description;
@@ -11,16 +11,17 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Arrays;
 import java.util.List;
 
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 import static java.time.Duration.ofSeconds;
 import static java.util.Arrays.asList;
 
 public class _08_AIServiceExamples {
 
-    static ChatLanguageModel model = OpenAiChatModel.builder()
+    static ChatModel model = OpenAiChatModel.builder()
             .apiKey(ApiKeys.OPENAI_API_KEY)
+            .modelName(GPT_4_O_MINI)
             .timeout(ofSeconds(60))
             .build();
 
@@ -130,29 +131,13 @@ public class _08_AIServiceExamples {
     static class Hotel_Review_AI_Service_Example {
 
         public enum IssueCategory {
-
-            @Description("The feedback mentions issues with the hotel's maintenance, such as air conditioning and plumbing problems")
             MAINTENANCE_ISSUE,
-
-            @Description("The feedback mentions issues with the service provided, such as slow room service")
             SERVICE_ISSUE,
-
-            @Description("The feedback mentions issues affecting the comfort of the stay, such as uncomfortable room conditions")
             COMFORT_ISSUE,
-
-            @Description("The feedback mentions issues with hotel facilities, such as problems with the bathroom plumbing")
             FACILITY_ISSUE,
-
-            @Description("The feedback mentions issues with the cleanliness of the hotel, such as dust and stains")
             CLEANLINESS_ISSUE,
-
-            @Description("The feedback mentions issues with internet connectivity, such as unreliable Wi-Fi")
             CONNECTIVITY_ISSUE,
-
-            @Description("The feedback mentions issues with the check-in process, such as it being tedious and time-consuming")
             CHECK_IN_ISSUE,
-
-            @Description("The feedback mentions a general dissatisfaction with the overall hotel experience due to multiple issues")
             OVERALL_EXPERIENCE_ISSUE
         }
 
@@ -266,6 +251,7 @@ public class _08_AIServiceExamples {
 
         static class Person {
 
+            @Description("first name of a person") // you can add an optional description to help an LLM have a better understanding
             private String firstName;
             private String lastName;
             private LocalDate birthDate;
@@ -282,11 +268,23 @@ public class _08_AIServiceExamples {
 
         interface PersonExtractor {
 
-            @UserMessage("Extract information about a person from {{it}}")
+            @UserMessage("Extract a person from the following text: {{it}}")
             Person extractPersonFrom(String text);
         }
 
         public static void main(String[] args) {
+
+            ChatModel model = OpenAiChatModel.builder()
+                    .apiKey(ApiKeys.OPENAI_API_KEY)
+                    .modelName(GPT_4_O_MINI)
+                    // When extracting POJOs with the LLM that supports the "json mode" feature
+                    // (e.g., OpenAI, Azure OpenAI, Vertex AI Gemini, Ollama, etc.),
+                    // it is advisable to enable it (json mode) to get more reliable results.
+                    // When using this feature, LLM will be forced to output a valid JSON.
+                    .responseFormat("json_schema")
+                    .strictJsonSchema(true) // https://docs.langchain4j.dev/integrations/language-models/open-ai#structured-outputs-for-json-mode
+                    .timeout(ofSeconds(60))
+                    .build();
 
             PersonExtractor extractor = AiServices.create(PersonExtractor.class, model);
 
@@ -344,6 +342,18 @@ public class _08_AIServiceExamples {
 
         public static void main(String[] args) {
 
+            ChatModel model = OpenAiChatModel.builder()
+                    .apiKey(ApiKeys.OPENAI_API_KEY)
+                    .modelName(GPT_4_O_MINI)
+                    // When extracting POJOs with the LLM that supports the "json mode" feature
+                    // (e.g., OpenAI, Azure OpenAI, Vertex AI Gemini, Ollama, etc.),
+                    // it is advisable to enable it (json mode) to get more reliable results.
+                    // When using this feature, LLM will be forced to output a valid JSON.
+                    .responseFormat("json_schema")
+                    .strictJsonSchema(true) // https://docs.langchain4j.dev/integrations/language-models/open-ai#structured-outputs-for-json-mode
+                    .timeout(ofSeconds(60))
+                    .build();
+
             Chef chef = AiServices.create(Chef.class, model);
 
             Recipe recipe = chef.createRecipeFrom("cucumber", "tomato", "feta", "onion", "olives", "lemon");
@@ -387,7 +397,7 @@ public class _08_AIServiceExamples {
             ChatMemory chatMemory = MessageWindowChatMemory.withMaxMessages(10);
 
             Assistant assistant = AiServices.builder(Assistant.class)
-                    .chatLanguageModel(model)
+                    .chatModel(model)
                     .chatMemory(chatMemory)
                     .build();
 
@@ -409,7 +419,7 @@ public class _08_AIServiceExamples {
         public static void main(String[] args) {
 
             Assistant assistant = AiServices.builder(Assistant.class)
-                    .chatLanguageModel(model)
+                    .chatModel(model)
                     .chatMemoryProvider(memoryId -> MessageWindowChatMemory.withMaxMessages(10))
                     .build();
 

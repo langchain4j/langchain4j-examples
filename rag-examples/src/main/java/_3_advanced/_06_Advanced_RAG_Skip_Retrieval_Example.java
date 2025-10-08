@@ -10,7 +10,7 @@ import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.embedding.onnx.bgesmallenv15q.BgeSmallEnV15QuantizedEmbeddingModel;
 import dev.langchain4j.model.input.Prompt;
@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static shared.Utils.*;
@@ -86,8 +87,9 @@ public class _06_Advanced_RAG_Skip_Retrieval_Example {
                 .minScore(0.6)
                 .build();
 
-        ChatLanguageModel chatLanguageModel = OpenAiChatModel.builder()
+        ChatModel chatModel = OpenAiChatModel.builder()
                 .apiKey(OPENAI_API_KEY)
+                .modelName(GPT_4_O_MINI)
                 .build();
 
         // Let's create a query router.
@@ -104,7 +106,7 @@ public class _06_Advanced_RAG_Skip_Retrieval_Example {
 
                 Prompt prompt = PROMPT_TEMPLATE.apply(query.text());
 
-                AiMessage aiMessage = chatLanguageModel.generate(prompt.toUserMessage()).content();
+                AiMessage aiMessage = chatModel.chat(prompt.toUserMessage()).aiMessage();
                 System.out.println("LLM decided: " + aiMessage.text());
 
                 if (aiMessage.text().toLowerCase().contains("no")) {
@@ -120,7 +122,7 @@ public class _06_Advanced_RAG_Skip_Retrieval_Example {
                 .build();
 
         return AiServices.builder(Assistant.class)
-                .chatLanguageModel(chatLanguageModel)
+                .chatModel(chatModel)
                 .retrievalAugmentor(retrievalAugmentor)
                 .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
                 .build();

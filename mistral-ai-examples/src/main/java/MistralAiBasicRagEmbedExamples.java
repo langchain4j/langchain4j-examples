@@ -5,13 +5,14 @@ import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.segment.TextSegment;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.input.Prompt;
 import dev.langchain4j.model.input.PromptTemplate;
 import dev.langchain4j.model.mistralai.MistralAiChatModel;
 import dev.langchain4j.model.mistralai.MistralAiEmbeddingModel;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
+import dev.langchain4j.store.embedding.EmbeddingSearchRequest;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
 
@@ -24,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 
 import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
+import static dev.langchain4j.model.mistralai.MistralAiChatModelName.MISTRAL_MEDIUM_LATEST;
+import static dev.langchain4j.model.mistralai.MistralAiEmbeddingModelName.MISTRAL_EMBED;
 import static java.util.stream.Collectors.joining;
 
 public class MistralAiBasicRagEmbedExamples {
@@ -43,7 +46,10 @@ public class MistralAiBasicRagEmbedExamples {
 
             // Now, for each text segment, we need to create text embeddings, which are numeric representations of the text in the vector space.
             // Of course, we will use Mistral AI for this purpose.
-            EmbeddingModel embeddingModel = MistralAiEmbeddingModel.withApiKey(System.getenv("MISTRAL_AI_API_KEY"));
+            EmbeddingModel embeddingModel = MistralAiEmbeddingModel.builder()
+                    .apiKey(System.getenv("MISTRAL_AI_API_KEY"))
+                    .modelName(MISTRAL_EMBED)
+                    .build();
             List<Embedding> embeddings = embeddingModel.embedAll(segments).content();
 
             // Once we get the text embeddings, we will store them in a vector database for efficient processing and retrieval.
@@ -56,10 +62,12 @@ public class MistralAiBasicRagEmbedExamples {
             Embedding questionEmbedding = embeddingModel.embed(question).content();
 
             // We can perform a search on the vector database and retrieve the most relevant text chunks based on the user question.
-            int maxResults = 3;
-            double minScore = 0.7;
-            List<EmbeddingMatch<TextSegment>> relevantEmbeddings
-                    = embeddingStore.findRelevant(questionEmbedding, maxResults, minScore);
+            EmbeddingSearchRequest embeddingSearchRequest = EmbeddingSearchRequest.builder()
+                    .queryEmbedding(questionEmbedding)
+                    .maxResults(3)
+                    .minScore(0.7)
+                    .build();
+            List<EmbeddingMatch<TextSegment>> relevantEmbeddings = embeddingStore.search(embeddingSearchRequest).matches();
 
             // Now we can offer the relevant information as the context information within the prompt.
             // Here is a prompt template where we can include both the retrieved text and user question in the prompt.
@@ -82,15 +90,15 @@ public class MistralAiBasicRagEmbedExamples {
             Prompt prompt = promptTemplate.apply(promptInputs);
 
             // Now we can use the Mistral AI chat model to generate the answer to the user question based on the context information.
-            ChatLanguageModel chatModel = MistralAiChatModel.builder()
+            ChatModel chatModel = MistralAiChatModel.builder()
                     .apiKey(System.getenv("MISTRAL_AI_API_KEY"))
-                    .modelName("mistral-medium")
+                    .modelName(MISTRAL_MEDIUM_LATEST)
                     .temperature(0.2) // expect a more focused and deterministic answer
                     .logRequests(true)
                     .logResponses(true)
                     .build();
 
-            AiMessage aiMessage = chatModel.generate(prompt.toUserMessage()).content();
+            AiMessage aiMessage = chatModel.chat(prompt.toUserMessage()).aiMessage();
             String answer = aiMessage.text();
             System.out.println(answer); // According to Inca legend, the llamas were created by the mythical founders of the Inca Empire....
         }

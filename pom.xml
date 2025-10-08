@@ -6,23 +6,29 @@
 
     <groupId>dev.langchain4j</groupId>
     <artifactId>langchain4j-examples</artifactId>
-    <version>0.33.0</version>
+    <version>1.7.1-beta14</version>
     <packaging>pom</packaging>
 
     <modules>
+        <module>agentic-tutorial</module>
         <module>anthropic-examples</module>
         <module>azure-open-ai-customer-support-agent-example</module>
         <module>azure-open-ai-examples</module>
         <module>bedrock-examples</module>
         <module>chroma-example</module>
+        <module>couchbase-example</module>
         <module>customer-support-agent-example</module>
         <module>tutorials</module>
         <module>elasticsearch-example</module>
+        <module>github-models-examples</module>
         <module>infinispan-example</module>
         <module>jakartaee-microprofile-example</module>
         <module>jlama-examples</module>
+        <module>mcp-example</module>
+        <module>mcp-github-example</module>
         <module>milvus-example</module>
         <module>mistral-ai-examples</module>
+        <module>native-java-gemini-function-calling-example</module>
         <module>neo4j-example</module>
         <module>ollama-examples</module>
         <module>open-ai-examples</module>
@@ -32,7 +38,7 @@
         <module>pinecone-example</module>
         <module>pgvector-example</module>
         <module>qdrant-example</module>
-        <module>rag-examples</module>  
+        <module>rag-examples</module>
         <module>redis-example</module>
         <module>spring-boot-example</module>
         <module>vertex-ai-gemini-examples</module>
@@ -41,6 +47,12 @@
         <module>javafx-example</module>
         <module>quarkus-example</module>
         <module>oracle-example</module>
+        <module>voyage-ai-examples</module>
+        <module>google-alloydb-example</module>
+        <module>wildfly-example</module>
+        <module>helidon-examples</module>
+        <module>payara-micro-example</module>
+        <module>watsonx-ai-examples</module>
     </modules>
 
 </project>
