@@ -13,6 +13,7 @@ public class GPULlama3ChatModelProvider {
     public static ChatModel createChatModel(boolean onGPU) {
         return GPULlama3ChatModel.builder()
                 .modelPath(getModelPath())
+                .maxTokens(1500)
                 .onGPU(onGPU) //if false, runs on CPU though a lightweight implementation of llama3.java
                 .build();
     }
