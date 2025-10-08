@@ -11,8 +11,21 @@ public class GPULlama3ChatModelExamples {
 
     public static void main(String[] args) {
 
-        // Change this path to the path of your model file.
+        // Read path to your *local* model files.
+        String localLLMsPath = System.getenv("LOCAL_LLMS_PATH");
+
+        // Check if the environment variable is set
+        if (localLLMsPath == null || localLLMsPath.isEmpty()) {
+            System.err.println("Error: LOCAL_LLMS_PATH environment variable is not set.");
+            System.err.println("Please set this environment variable to the directory containing your local model files.");
+            System.exit(1);
+        }
+
+        // Change this model file name to choose any of your *local* model files.
         // Supports Mistral, Llama3, Phi-3, Qwen2.5 and Qwen3 in gguf format.
+        String modelFile = "beehive-llama-3.2-1b-instruct-fp16.gguf";
+        Path modelPath = Path.of(localLLMsPath, modelFile);
+
         String prompt;
 
         if (args.length > 0) {
@@ -23,13 +36,17 @@ public class GPULlama3ChatModelExamples {
             System.out.println("Example Prompt: " + prompt);
         }
 
+
+
+        System.out.println("Path: " + modelPath);
+
         // @formatter:off
         ChatRequest request = ChatRequest.builder().messages(
                 UserMessage.from(prompt),
                 SystemMessage.from("reply with extensive sarcasm"))
                 .build();
 
-        Path modelPath = Paths.get("beehive-llama-3.2-1b-instruct-fp16.gguf");
+        //Path modelPath = Paths.get("beehive-llama-3.2-1b-instruct-fp16.gguf");
 
 
         GPULlama3ChatModel model = GPULlama3ChatModel.builder()
