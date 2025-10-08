@@ -1,6 +1,6 @@
 # Running GPULlama3 Example Directly with Java
 
-This guide explains how to run the `GPULlama3ChatModelExamples` program **without using the Tornado launcher**, directly with `java`, using TornadoVM flags and the Maven-built JAR and dependencies.
+This guide explains how to run the `GPULlama3ChatModelExample` program **without using the Tornado launcher**, directly with `java`, using TornadoVM flags and the Maven-built JAR and dependencies.
 
 ---
 
@@ -97,7 +97,7 @@ $JAVA_BIN \
   -Xms6g -Xmx6g \
   -Dtornado.device.memory=6GB \
   -cp "$CP" \
-  GPULlama3ChatModelExamples
+  GPULlama3ChatModelExample
 
 ```
 

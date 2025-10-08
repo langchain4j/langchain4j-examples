@@ -27,7 +27,7 @@
                 <version>3.3.0</version>
                 <configuration>
                     <executable>${java.home}/bin/java</executable>
-                    <mainClass>GPULlama3ChatModelExamples</mainClass>
+                    <mainClass>GPULlama3ChatModelExample</mainClass>
                 </configuration>
             </plugin>
         </plugins>

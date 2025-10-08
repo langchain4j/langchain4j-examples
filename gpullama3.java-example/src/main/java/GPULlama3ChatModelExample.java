@@ -5,9 +5,8 @@ import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.model.gpullama3.GPULlama3ChatModel;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
-public class GPULlama3ChatModelExamples {
+public class GPULlama3ChatModelExample {
 
     public static void main(String[] args) {
 
