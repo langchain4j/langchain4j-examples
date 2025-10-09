@@ -52,6 +52,7 @@
         <module>wildfly-example</module>
         <module>helidon-examples</module>
         <module>payara-micro-example</module>
+        <module>gpullama3.java-example</module>
         <module>watsonx-ai-examples</module>
     </modules>
 
