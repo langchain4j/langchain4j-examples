@@ -32,12 +32,12 @@
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j</artifactId>
-            <version>1.4.0</version>
+            <version>1.7.1</version>
         </dependency>
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-hugging-face</artifactId>
-            <version>1.5.0-beta11</version>
+            <version>1.7.1-beta14</version>
         </dependency>
         <dependency>
             <groupId>dev.langchain4j</groupId>

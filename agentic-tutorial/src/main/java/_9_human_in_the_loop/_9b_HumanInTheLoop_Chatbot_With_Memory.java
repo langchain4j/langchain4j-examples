@@ -11,6 +11,7 @@ import util.log.CustomLogging;
 import util.log.LogLevels;
 
 import java.util.Map;
+import java.util.Scanner;
 
 public class _9b_HumanInTheLoop_Chatbot_With_Memory {
 
@@ -51,7 +52,7 @@ public class _9b_HumanInTheLoop_Chatbot_With_Memory {
                     System.out.println(request);
                     System.out.print("> ");
                 })
-                .responseReader(() -> System.console().readLine())
+                .responseReader(() -> new Scanner(System.in).nextLine())
                 .async(true) // no need to block the entire program while waiting for user input
                 .build();
 
@@ -65,6 +66,7 @@ public class _9b_HumanInTheLoop_Chatbot_With_Memory {
                         "proposal", agenticScope.readState("proposal"),
                         "candidateAnswer", agenticScope.readState("candidateAnswer")
                 ))
+                .outputName("proposalAndAnswer")
                 // this output contains the last date proposal + candidate's answer, which should be sufficient info for a followup agent to schedule the meeting (or abort trying)
                 .build();
 
@@ -77,6 +79,7 @@ public class _9b_HumanInTheLoop_Chatbot_With_Memory {
                     String proposal = (String) scope.readState("proposal");
                     return response != null && decisionService.isDecisionReached(proposal, response);
                 })
+                .outputName("proposalAndAnswer")
                 .maxIterations(5)
                 .build();
 
@@ -87,7 +90,7 @@ public class _9b_HumanInTheLoop_Chatbot_With_Memory {
 
         var lastProposalAndAnswer = schedulingLoop.invoke(input);
 
-        System.out.println("\n=== RETAINED MEETING SLOT OR FAILURE TO FIND A SLOT IN 5 ITERATIONS===");
+        System.out.println("=== Result: last proposalAndAnswer ===");
         System.out.println(lastProposalAndAnswer);
     }
 }

@@ -38,7 +38,7 @@ public class _9a_HumanInTheLoop_Simple_Validator {
                     System.out.println("Options: Invite on-site (I), Reject (R), Hold (H)");
                     System.out.print("> "); // we  needs input validation and error handling in real life systems
                 })
-                .responseReader(() -> System.console().readLine())
+                .responseReader(() -> new Scanner(System.in).nextLine())
                 .build();
 
         // 3. Chain agents into a workflow
