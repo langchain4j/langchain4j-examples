@@ -7,7 +7,7 @@
     <parent>
         <groupId>dev.langchain4j</groupId>
         <artifactId>langchain4j-examples</artifactId>
-        <version>1.7.1-beta14</version>
+        <version>1.8.0-beta15</version>
     </parent>
 
     <artifactId>gpullama3.java-example</artifactId>
@@ -16,7 +16,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <langchain4j.version>1.7.1</langchain4j.version>
+        <langchain4j.version>1.8.0</langchain4j.version>
     </properties>
 
     <build>
@@ -38,19 +38,19 @@
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-gpu-llama3</artifactId>
-            <version>1.7.1-beta14</version>
+            <version>1.8.0-beta15</version>
         </dependency>
 
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-agentic</artifactId>
-            <version>1.7.1-beta14</version>
+            <version>1.8.0-beta15</version>
         </dependency>
 
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>agentic-tutorial</artifactId>
-            <version>1.7.1</version> <!-- Match the version in agentic-tutorial's POM -->
+            <version>1.8.0</version> <!-- Match the version in agentic-tutorial's POM -->
         </dependency>
     </dependencies>
 </project>
