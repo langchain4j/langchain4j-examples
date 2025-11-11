@@ -24,14 +24,14 @@ public class _9a_HumanInTheLoop_Simple_Validator {
         // 3. Create involved agents
         HiringDecisionProposer decisionProposer = AgenticServices.agentBuilder(HiringDecisionProposer.class)
                 .chatModel(CHAT_MODEL)
-                .outputName("modelDecision")
+                .outputKey("modelDecision")
                 .build();
 
         // 2. Define human in the loop for validation
         HumanInTheLoop humanValidator = AgenticServices.humanInTheLoopBuilder()
                 .description("validates the model's proposed hiring decision")
-                .inputName("modelDecision")
-                .outputName("finalDecision") // checked by human
+                .inputKey("modelDecision")
+                .outputKey("finalDecision") // checked by human
                 .requestWriter(request -> {
                     System.out.println("AI hiring assistant suggests: " + request);
                     System.out.println("Please confirm the final decision.");
@@ -44,7 +44,7 @@ public class _9a_HumanInTheLoop_Simple_Validator {
         // 3. Chain agents into a workflow
         UntypedAgent hiringDecisionWorkflow = AgenticServices.sequenceBuilder()
                 .subAgents(decisionProposer, humanValidator)
-                .outputName("finalDecision")
+                .outputKey("finalDecision")
                 .build();
 
         // 4. Prepare input arguments

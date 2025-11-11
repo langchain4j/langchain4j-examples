@@ -34,14 +34,14 @@ public class GPULlama3_2a_Sequential_Agent_Example {
         CvGenerator cvGenerator = AgenticServices
                 .agentBuilder(CvGenerator.class)
                 .chatModel(CHAT_MODEL)
-                .outputName("masterCv") // if you want to pass this variable from agent 1 to agent 2,
-                // then make sure the output name here matches the input variable name
+                .outputKey("masterCv") // if you want to pass this variable from agent 1 to agent 2,
+                // then make sure the output key here matches the input variable name
                 // specified in the second agent interface agent_interfaces/CvTailor.java
                 .build();
         CvTailor cvTailor = AgenticServices
                 .agentBuilder(CvTailor.class)
                 .chatModel(CHAT_MODEL) // note that it is also possible to use a different model for a different agent
-                .outputName("tailoredCv") // we need to define the name of the output object
+                .outputKey("tailoredCv") // we need to define the key of the output object
                 // if we would put "masterCv" here, the original master CV would be overwritten
                 // by the second agent. In this case we don't want this, but it's a useful feature.
                 .build();
@@ -52,7 +52,7 @@ public class GPULlama3_2a_Sequential_Agent_Example {
         UntypedAgent tailoredCvGenerator = AgenticServices // use UntypedAgent unless you define the resulting composed agent, see below
                 .sequenceBuilder()
                 .subAgents(cvGenerator, cvTailor) // this can be as many as you want, order matters
-                .outputName("tailoredCv") // this is the final output of the composed agent
+                .outputKey("tailoredCv") // this is the final output of the composed agent
                 // note that you can use as output any field that is part of the AgenticScope
                 // for example you could output 'masterCv' instead of tailoredCv (even if in this case that makes no sense)
                 .build();

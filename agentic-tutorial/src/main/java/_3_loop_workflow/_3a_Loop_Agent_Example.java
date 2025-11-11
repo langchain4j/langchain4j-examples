@@ -38,17 +38,17 @@ public class _3a_Loop_Agent_Example {
         // 3. Create all agents using AgenticServices
         CvReviewer cvReviewer = AgenticServices.agentBuilder(CvReviewer.class)
                 .chatModel(CHAT_MODEL)
-                .outputName("cvReview") // this gets updated in every iteration with new feedback for the next tailoring
+                .outputKey("cvReview") // this gets updated in every iteration with new feedback for the next tailoring
                 .build();
         ScoredCvTailor scoredCvTailor = AgenticServices.agentBuilder(ScoredCvTailor.class)
                 .chatModel(CHAT_MODEL)
-                .outputName("cv") // this will be updated in every iteration, continuously improving the CV
+                .outputKey("cv") // this will be updated in every iteration, continuously improving the CV
                 .build();
 
         // 4. Build the sequence
         UntypedAgent reviewedCvGenerator = AgenticServices // use UntypedAgent unless you define the resulting composed agent, see _2_Sequential_Agent_Example
                 .loopBuilder().subAgents(cvReviewer, scoredCvTailor) // this can be as many as you want, order matters
-                .outputName("cv") // this is the final output we want to observe (the improved CV)
+                .outputKey("cv") // this is the final output we want to observe (the improved CV)
                 .exitCondition(agenticScope -> {
                             CvReview review = (CvReview) agenticScope.readState("cvReview");
                             System.out.println("Checking exit condition with score=" + review.score); // we log intermediary scores

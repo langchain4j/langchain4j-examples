@@ -47,7 +47,7 @@ public class GPULlama3_1a_Basic_Agent_Example {
         CvGenerator cvGenerator = AgenticServices
                 .agentBuilder(CvGenerator.class)
                 .chatModel(CHAT_MODEL)
-                .outputName("masterCv") // we can optionally define the name of the output object
+                .outputKey("masterCv") // we can optionally define the key of the output object
                 .build();
 
         // 4. Load text file from resources/documents/user_life_story.txt

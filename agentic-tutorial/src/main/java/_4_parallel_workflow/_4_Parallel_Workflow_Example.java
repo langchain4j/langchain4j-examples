@@ -43,17 +43,17 @@ public class _4_Parallel_Workflow_Example {
         // 3. Create all agents using AgenticServices
         HrCvReviewer hrCvReviewer = AgenticServices.agentBuilder(HrCvReviewer.class)
                 .chatModel(CHAT_MODEL)
-                .outputName("hrReview") // this will be overwritten in every iteration, and also be used as the final output we want to observe
+                .outputKey("hrReview") // this will be overwritten in every iteration, and also be used as the final output we want to observe
                 .build();
 
         ManagerCvReviewer managerCvReviewer = AgenticServices.agentBuilder(ManagerCvReviewer.class)
                 .chatModel(CHAT_MODEL)
-                .outputName("managerReview") // this overwrites the original input instructions, and is overwritten in every iteration and used as new instructions for the CvTailor
+                .outputKey("managerReview") // this overwrites the original input instructions, and is overwritten in every iteration and used as new instructions for the CvTailor
                 .build();
 
         TeamMemberCvReviewer teamMemberCvReviewer = AgenticServices.agentBuilder(TeamMemberCvReviewer.class)
                 .chatModel(CHAT_MODEL)
-                .outputName("teamMemberReview") // this overwrites the original input instructions, and is overwritten in every iteration and used as new instructions for the CvTailor
+                .outputKey("teamMemberReview") // this overwrites the original input instructions, and is overwritten in every iteration and used as new instructions for the CvTailor
                 .build();
 
         // 4. Build the sequence
@@ -63,7 +63,7 @@ public class _4_Parallel_Workflow_Example {
                 .parallelBuilder()
                 .subAgents(hrCvReviewer, managerCvReviewer, teamMemberCvReviewer) // this can be as many as you want
                 .executor(executor) // optional, by default an internal cached thread pool is used which will automatically shut down after execution is completed
-                .outputName("fullCvReview") // this is the final output we want to observe
+                .outputKey("fullCvReview") // this is the final output we want to observe
                 .output(agenticScope -> {
                     // read the outputs of each reviewer from the agentic scope
                     CvReview hrReview = (CvReview) agenticScope.readState("hrReview");
