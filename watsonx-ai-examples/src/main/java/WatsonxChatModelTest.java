@@ -13,7 +13,7 @@ class WatsonxChatModelTest {
                 .baseUrl(System.getenv("WATSONX_URL"))
                 .apiKey(System.getenv("WATSONX_API_KEY"))
                 .projectId(System.getenv("WATSONX_PROJECT_ID"))
-                .modelName("ibm/granite-3-8b-instruct")
+                .modelName("ibm/granite-4-h-small")
                 .build();
 
             System.out.println("--------------------------------------------------");
