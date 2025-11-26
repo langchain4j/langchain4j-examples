@@ -32,7 +32,7 @@ class WatsonxToolsTest {
         try {
             
             ChatModel model = WatsonxChatModel.builder()
-                .url(System.getenv("WATSONX_URL"))
+                .baseUrl(System.getenv("WATSONX_URL"))
                 .apiKey(System.getenv("WATSONX_API_KEY"))
                 .projectId(System.getenv("WATSONX_PROJECT_ID"))
                 .modelName("meta-llama/llama-3-3-70b-instruct")

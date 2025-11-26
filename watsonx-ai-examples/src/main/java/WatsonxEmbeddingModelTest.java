@@ -8,7 +8,7 @@ public class WatsonxEmbeddingModelTest {
         try {
 
             EmbeddingModel model = WatsonxEmbeddingModel.builder()
-                .url(System.getenv("WATSONX_URL"))
+                .baseUrl(System.getenv("WATSONX_URL"))
                 .apiKey(System.getenv("WATSONX_API_KEY"))
                 .projectId(System.getenv("WATSONX_PROJECT_ID"))
                 .modelName("ibm/granite-embedding-278m-multilingual")
