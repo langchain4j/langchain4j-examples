@@ -174,12 +174,12 @@ public class ModelBuilder {
             if (usingGithub()) {
                 chatModelForResource = GitHubModelsChatModel.builder()
                     .gitHubToken(GITHUB_API_KEY)
-                    .modelName("Phi-4-mini-instruct")
+                    .modelName(GITHUB_CHAT_MODEL_ID)
                     .timeout(ofSeconds(120))
                     .temperature(1.0)
                     .maxTokens(200)
                     .build();
-                logger.info("using Github Phi-4-mini-instruct chat model");
+                logger.info("using Github " + GITHUB_CHAT_MODEL_ID + " chat model");
             } else if (usingOllama()) {
                 chatModelForResource = OllamaChatModel.builder()
                     .baseUrl(OLLAMA_BASE_URL)
