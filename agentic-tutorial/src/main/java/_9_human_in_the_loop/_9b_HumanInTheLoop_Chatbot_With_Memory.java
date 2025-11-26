@@ -36,7 +36,7 @@ public class _9b_HumanInTheLoop_Chatbot_With_Memory {
                 .agentBuilder(MeetingProposer.class)
                 .chatModel(CHAT_MODEL)
                 .chatMemoryProvider(memoryId -> MessageWindowChatMemory.withMaxMessages(15)) // so the agent remembers what he proposed already
-                .outputName("proposal")
+                .outputKey("proposal")
                 .build();
 
         // 2. Add an AiService to judge if a decision has been reached (this can be a tiny local model because the assignment is so simple)
@@ -46,8 +46,8 @@ public class _9b_HumanInTheLoop_Chatbot_With_Memory {
         HumanInTheLoop humanInTheLoop = AgenticServices
                 .humanInTheLoopBuilder()
                 .description("agent that asks input from the user")
-                .outputName("candidateAnswer") // matches one of the proposer's input variable names
-                .inputName("proposal") // must match the output of the proposer agent
+                .outputKey("candidateAnswer") // matches one of the proposer's input variable names
+                .inputKey("proposal") // must match the output of the proposer agent
                 .requestWriter(request -> {
                     System.out.println(request);
                     System.out.print("> ");
@@ -66,7 +66,7 @@ public class _9b_HumanInTheLoop_Chatbot_With_Memory {
                         "proposal", agenticScope.readState("proposal"),
                         "candidateAnswer", agenticScope.readState("candidateAnswer")
                 ))
-                .outputName("proposalAndAnswer")
+                .outputKey("proposalAndAnswer")
                 // this output contains the last date proposal + candidate's answer, which should be sufficient info for a followup agent to schedule the meeting (or abort trying)
                 .build();
 
@@ -79,7 +79,7 @@ public class _9b_HumanInTheLoop_Chatbot_With_Memory {
                     String proposal = (String) scope.readState("proposal");
                     return response != null && decisionService.isDecisionReached(proposal, response);
                 })
-                .outputName("proposalAndAnswer")
+                .outputKey("proposalAndAnswer")
                 .maxIterations(5)
                 .build();
 

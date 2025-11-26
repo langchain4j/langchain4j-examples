@@ -51,26 +51,26 @@ public class _6_Composed_Workflow_Example {
         CvGenerator cvGenerator = AgenticServices
                 .agentBuilder(CvGenerator.class)
                 .chatModel(CHAT_MODEL)
-                .outputName("cv")
+                .outputKey("cv")
                 .build();
 
         ScoredCvTailor scoredCvTailor = AgenticServices
                 .agentBuilder(ScoredCvTailor.class)
                 .chatModel(CHAT_MODEL)
-                .outputName("cv")
+                .outputKey("cv")
                 .build();
 
         CvReviewer cvReviewer = AgenticServices
                 .agentBuilder(CvReviewer.class)
                 .chatModel(CHAT_MODEL)
-                .outputName("cvReview")
+                .outputKey("cvReview")
                 .build();
 
         // 2. Create the loop workflow for CV improvement
         UntypedAgent cvImprovementLoop = AgenticServices
                 .loopBuilder()
                 .subAgents(scoredCvTailor, cvReviewer)
-                .outputName("cv")
+                .outputKey("cv")
                 .exitCondition(agenticScope -> {
                     CvReview review = (CvReview) agenticScope.readState("cvReview");
                     System.out.println("CV Review Score: " + review.score);
@@ -87,7 +87,7 @@ public class _6_Composed_Workflow_Example {
                 .subAgents(cvGenerator, cvReviewer, cvImprovementLoop)
                 // here we use the composed agent cvImprovementLoop inside the sequenceBuilder
                 // we also need the cvReviewer in order to generate a first review before entering the loop
-                .outputName("cv")
+                .outputKey("cv")
                 .build();
 
         // 4. Load input data
@@ -112,19 +112,19 @@ public class _6_Composed_Workflow_Example {
         HrCvReviewer hrCvReviewer = AgenticServices
                 .agentBuilder(HrCvReviewer.class)
                 .chatModel(CHAT_MODEL)
-                .outputName("hrReview")
+                .outputKey("hrReview")
                 .build();
 
         ManagerCvReviewer managerCvReviewer = AgenticServices
                 .agentBuilder(ManagerCvReviewer.class)
                 .chatModel(CHAT_MODEL)
-                .outputName("managerReview")
+                .outputKey("managerReview")
                 .build();
 
         TeamMemberCvReviewer teamMemberCvReviewer = AgenticServices
                 .agentBuilder(TeamMemberCvReviewer.class)
                 .chatModel(CHAT_MODEL)
-                .outputName("teamMemberReview")
+                .outputKey("teamMemberReview")
                 .build();
 
         EmailAssistant emailAssistant = AgenticServices
@@ -144,7 +144,7 @@ public class _6_Composed_Workflow_Example {
                 .parallelBuilder()
                 .subAgents(hrCvReviewer, managerCvReviewer, teamMemberCvReviewer)
                 .executor(Executors.newFixedThreadPool(3))
-                .outputName("combinedCvReview")
+                .outputKey("combinedCvReview")
                 .output(agenticScope -> {
                     CvReview hrReview = (CvReview) agenticScope.readState("hrReview");
                     CvReview managerReview = (CvReview) agenticScope.readState("managerReview");

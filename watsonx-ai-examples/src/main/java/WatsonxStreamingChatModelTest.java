@@ -12,7 +12,7 @@ class WatsonxStreamingChatModelTest {
         try {
 
         StreamingChatModel model = WatsonxStreamingChatModel.builder()
-            .url(System.getenv("WATSONX_URL"))
+            .baseUrl(System.getenv("WATSONX_URL"))
             .apiKey(System.getenv("WATSONX_API_KEY"))
             .projectId(System.getenv("WATSONX_PROJECT_ID"))
             .modelName("mistralai/mistral-small-3-1-24b-instruct-2503")
