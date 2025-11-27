@@ -35,7 +35,7 @@ class WatsonxToolsTest {
                 .baseUrl(System.getenv("WATSONX_URL"))
                 .apiKey(System.getenv("WATSONX_API_KEY"))
                 .projectId(System.getenv("WATSONX_PROJECT_ID"))
-                .modelName("meta-llama/llama-3-3-70b-instruct")
+                .modelName("ibm/granite-4-h-small")
                 .build();
 
             AiService aiService = AiServices.builder(AiService.class)

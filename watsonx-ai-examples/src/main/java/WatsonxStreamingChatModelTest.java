@@ -15,7 +15,7 @@ class WatsonxStreamingChatModelTest {
             .baseUrl(System.getenv("WATSONX_URL"))
             .apiKey(System.getenv("WATSONX_API_KEY"))
             .projectId(System.getenv("WATSONX_PROJECT_ID"))
-            .modelName("mistralai/mistral-small-3-1-24b-instruct-2503")
+            .modelName("ibm/granite-4-h-small")
             .build();
 
         CountDownLatch latch = new CountDownLatch(1);
