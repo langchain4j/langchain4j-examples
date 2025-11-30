@@ -20,7 +20,7 @@ public class AnswerService {
 
     private void initChat(SearchAction action) {
         StreamingChatModel model = OpenAiStreamingChatModel.builder()
-                .apiKey(ApiKeys.OPENAI_API_KEY)
+                .apiKey(ApiKeys.getOpenAiApiKey())
                 .modelName(GPT_4_O_MINI)
                 .build();
 
