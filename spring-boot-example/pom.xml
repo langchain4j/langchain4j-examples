@@ -12,7 +12,7 @@
 
     <groupId>dev.langchain4j</groupId>
     <artifactId>spring-boot-example</artifactId>
-    <version>1.8.0-beta15</version>
+    <version>1.9.1-beta17</version>
 
     <properties>
         <java.version>17</java.version>
@@ -23,7 +23,7 @@
             <dependency>
                 <groupId>dev.langchain4j</groupId>
                 <artifactId>langchain4j-bom</artifactId>
-                <version>1.8.0</version>
+                <version>1.9.1</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

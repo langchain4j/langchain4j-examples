@@ -10,7 +10,7 @@ public class WatsonxScoringModelTest {
         try {
 
             ScoringModel model = WatsonxScoringModel.builder()
-                .url(System.getenv("WATSONX_URL"))
+                .baseUrl(System.getenv("WATSONX_URL"))
                 .apiKey(System.getenv("WATSONX_API_KEY"))
                 .projectId(System.getenv("WATSONX_PROJECT_ID"))
                 .modelName("cross-encoder/ms-marco-minilm-l-12-v2")
