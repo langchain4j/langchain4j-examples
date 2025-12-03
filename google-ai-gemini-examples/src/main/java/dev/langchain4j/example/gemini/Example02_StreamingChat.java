@@ -25,7 +25,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 public class Example02_StreamingChat {
      static class WaitingChatResponseHandler implements StreamingChatResponseHandler {
         // Future used to wait for a response
-        private CompletableFuture<ChatResponse> futureResponse = new CompletableFuture<>();
+        private final CompletableFuture<ChatResponse> futureResponse = new CompletableFuture<>();
 
         @Override
         public void onPartialResponse(String partialResponse) {

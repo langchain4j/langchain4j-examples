@@ -38,6 +38,7 @@ public class Example13_BatchEmbeddingInline {
         GoogleAiGeminiBatchEmbeddingModel batchModel =
                 GoogleAiGeminiBatchEmbeddingModel.builder().apiKey(System.getenv("GOOGLE_AI_GEMINI_API_KEY"))
                         .modelName("gemini-embedding-001")
+                        .logRequestsAndResponses(true)
                         .build();
 
         List<TextSegment> segments = List.of(

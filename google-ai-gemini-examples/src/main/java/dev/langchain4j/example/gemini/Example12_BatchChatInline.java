@@ -35,14 +35,13 @@ import java.util.List;
 public class Example12_BatchChatInline {
 
     public static void main(String[] args) throws Exception {
-        GoogleAiGeminiBatchChatModel batchModel = createBatchModel();
-//                GoogleAiGeminiBatchChatModel.builder()
-//                .apiKey(System.getenv("GOOGLE_AI_GEMINI_API_KEY"))
-//                .modelName("gemini-2.5-flash-lite")
-//                .build();
+        var batchModel = GoogleAiGeminiBatchChatModel.builder()
+                .apiKey(System.getenv("GOOGLE_AI_GEMINI_API_KEY"))
+                .modelName("gemini-2.5-flash-lite")
+                .logRequestsAndResponses(true)
+                .build();
 
-
-        List<ChatRequest> requests = List.of(
+        var requests = List.of(
                 ChatRequest.builder()
                         .modelName("gemini-2.5-flash-lite")
                         .messages(UserMessage.from("What is the capital of France?"))
@@ -59,7 +58,7 @@ public class Example12_BatchChatInline {
 
         System.out.println("Submitting batch with " + requests.size() + " requests...");
 
-        BatchResponse<?> response = batchModel.createBatchInline("capitals-batch",  0L, requests );
+        BatchResponse<?> response = batchModel.createBatchInline("capitals-batch", 0L, requests);
         BatchName batchName = getBatchName(response);
 
         System.out.println("Batch created: " + batchName.value());
@@ -114,6 +113,9 @@ public class Example12_BatchChatInline {
 
         Method modelNameMethod = builderClass.getMethod("modelName", String.class);
         builder = modelNameMethod.invoke(builder, "gemini-2.5-flash-lite");
+
+        Method logMethodName = builderClass.getMethod("logRequestsAndResponses", Boolean.class);
+        builder = logMethodName.invoke(builder, true);
 
         Method buildMethod = builderClass.getMethod("build");
         return (GoogleAiGeminiBatchChatModel) buildMethod.invoke(builder);
