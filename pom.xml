@@ -18,11 +18,15 @@
         <module>chroma-example</module>
         <module>couchbase-example</module>
         <module>customer-support-agent-example</module>
-        <module>tutorials</module>
         <module>elasticsearch-example</module>
         <module>github-models-examples</module>
+        <module>google-ai-gemini-examples</module>
+        <module>google-alloydb-example</module>
+        <module>gpullama3.java-example</module>
+        <module>helidon-examples</module>
         <module>infinispan-example</module>
         <module>jakartaee-microprofile-example</module>
+        <module>javafx-example</module>
         <module>jlama-examples</module>
         <module>mcp-example</module>
         <module>mcp-github-example</module>
@@ -33,27 +37,24 @@
         <module>ollama-examples</module>
         <module>open-ai-examples</module>
         <module>opensearch-example</module>
-        <module>ovh-ai-examples</module>
+        <module>oracle-example</module>
         <module>other-examples</module>
-        <module>pinecone-example</module>
+        <module>ovh-ai-examples</module>
+        <module>payara-micro-example</module>
         <module>pgvector-example</module>
+        <module>pinecone-example</module>
         <module>qdrant-example</module>
+        <module>quarkus-example</module>
         <module>rag-examples</module>
         <module>redis-example</module>
         <module>spring-boot-example</module>
+        <module>tutorials</module>
         <module>vertex-ai-gemini-examples</module>
         <module>vespa-example</module>
-        <module>weaviate-example</module>
-        <module>javafx-example</module>
-        <module>quarkus-example</module>
-        <module>oracle-example</module>
         <module>voyage-ai-examples</module>
-        <module>google-alloydb-example</module>
-        <module>wildfly-example</module>
-        <module>helidon-examples</module>
-        <module>payara-micro-example</module>
-        <module>gpullama3.java-example</module>
         <module>watsonx-ai-examples</module>
+        <module>weaviate-example</module>
+        <module>wildfly-example</module>
         <module>yugabytedb-example</module>
     </modules>
 
