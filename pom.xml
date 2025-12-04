@@ -54,6 +54,7 @@
         <module>payara-micro-example</module>
         <module>gpullama3.java-example</module>
         <module>watsonx-ai-examples</module>
+        <module>jvector-example</module>
         <module>yugabytedb-example</module>
     </modules>
 
