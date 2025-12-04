@@ -55,6 +55,7 @@
         <module>watsonx-ai-examples</module>
         <module>weaviate-example</module>
         <module>wildfly-example</module>
+        <module>jvector-example</module>
         <module>yugabytedb-example</module>
     </modules>
 
