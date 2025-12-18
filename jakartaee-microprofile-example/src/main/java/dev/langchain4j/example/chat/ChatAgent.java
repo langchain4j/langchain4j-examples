@@ -1,11 +1,10 @@
 package dev.langchain4j.example.chat;
 
-import static java.time.Duration.ofSeconds;
-
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
+import dev.langchain4j.example.chat.util.ModelBuilder;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
-import dev.langchain4j.model.huggingface.HuggingFaceChatModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.UserMessage;
@@ -16,24 +15,7 @@ import jakarta.inject.Inject;
 public class ChatAgent {
 
     @Inject
-    @ConfigProperty(name = "hugging.face.api.key")
-    private String HUGGING_FACE_API_KEY;
-
-    @Inject
-    @ConfigProperty(name = "chat.model.id")
-    private String CHAT_MODEL_ID;
-
-    @Inject
-    @ConfigProperty(name = "chat.model.timeout")
-    private Integer TIMEOUT;
-
-    @Inject
-    @ConfigProperty(name = "chat.model.max.token")
-    private Integer MAX_NEW_TOKEN;
-
-    @Inject
-    @ConfigProperty(name = "chat.model.temperature")
-    private Double TEMPERATURE;
+    private ModelBuilder modelBuilder;
 
     @Inject
     @ConfigProperty(name = "chat.memory.max.messages")
@@ -45,16 +27,9 @@ public class ChatAgent {
 
     private Assistant assistant = null;
 
-    public Assistant getAssistant() {
+    public Assistant getAssistant() throws Exception {
         if (assistant == null) {
-            HuggingFaceChatModel model = HuggingFaceChatModel.builder()
-                .accessToken(HUGGING_FACE_API_KEY)
-                .modelId(CHAT_MODEL_ID)
-                .timeout(ofSeconds(TIMEOUT))
-                .temperature(TEMPERATURE)
-                .maxNewTokens(MAX_NEW_TOKEN)
-                .waitForModel(true)
-                .build();
+            ChatModel model = modelBuilder.getChatModelForWeb();
             assistant = AiServices.builder(Assistant.class)
                 .chatModel(model)
                 .chatMemoryProvider(
@@ -64,10 +39,8 @@ public class ChatAgent {
         return assistant;
     }
 
-    public String chat(String sessionId, String message) {
-        String reply = getAssistant().chat(sessionId, message).trim();
-        int i = reply.lastIndexOf(message);
-        return i > 0 ? reply.substring(i) : reply;
+    public String chat(String sessionId, String message) throws Exception {
+        return getAssistant().chat(sessionId, message).trim();
     }
 
 }
