@@ -9,7 +9,7 @@
     </parent>
     <groupId>dev.langchain4j</groupId>
     <artifactId>wildfly-example</artifactId>
-    <version>1.9.1-beta17</version>
+    <version>1.10.0-beta18</version>
     <packaging>war</packaging>
     <name>WildFly langchain4j - Example</name>
 
