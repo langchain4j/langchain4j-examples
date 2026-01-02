@@ -15,11 +15,16 @@ mvn -pl code-execution-engines/langchain4j-code-execution-engine-graalvm-polyglo
 Run these as two separate commands. In PowerShell you can also do:
 `mvn -pl langchain4j-mcp -am -DskipTests install; mvn -pl code-execution-engines/langchain4j-code-execution-engine-graalvm-polyglot -am -DskipTests install`
 
-2. From this directory, build the example:
+2. Change into this directory, then build the example:
 
 ```bash
+cd mcp-stdio-server-example
 mvn -DskipTests package
 ```
+
+Note: running this from the `langchain4j-examples` root will NOT build this
+example's fat JAR. You should see `target/mcp-stdio-server-example-<version>.jar`
+in this directory.
 
 ## Configure MCP client
 
