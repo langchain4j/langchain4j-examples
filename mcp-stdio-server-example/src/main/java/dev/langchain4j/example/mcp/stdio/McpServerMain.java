@@ -1,5 +1,6 @@
 package dev.langchain4j.example.mcp.stdio;
 
+import dev.langchain4j.agent.tool.graalvm.GraalVmJavaScriptExecutionTool;
 import dev.langchain4j.mcp.protocol.McpImplementation;
 import dev.langchain4j.mcp.server.McpServer;
 import dev.langchain4j.mcp.server.transport.StdioMcpServerTransport;
@@ -12,7 +13,9 @@ public class McpServerMain {
         serverInfo.setName("mcp-stdio-server-example");
         serverInfo.setVersion("1.0.0");
 
-        McpServer server = new McpServer(List.of(new Calculator()), serverInfo);
+        GraalVmJavaScriptExecutionTool jsTool = new GraalVmJavaScriptExecutionTool(); // already @Tool
+
+        McpServer server = new McpServer(List.of(new Calculator(), jsTool), serverInfo);
         new StdioMcpServerTransport(System.in, System.out, server);
 
         // Keep the process alive while stdio is open
