@@ -21,23 +21,6 @@ Run these as two separate commands. In PowerShell you can also do:
 mvn -DskipTests package
 ```
 
-## Build (released)
-
-Update `langchain4j.version` in `pom.xml` to a released version (or switch to
-the LangChain4j BOM), then run:
-
-```bash
-mvn -DskipTests package
-```
-
-## Run
-
-```bash
-java -jar target/mcp-stdio-server-example-1.11.0-beta19-SNAPSHOT.jar
-```
-
-If you changed the version, update the JAR name accordingly.
-
 ## Configure MCP client
 
 ### Claude Desktop
