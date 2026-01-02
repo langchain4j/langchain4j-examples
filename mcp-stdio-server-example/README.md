@@ -12,6 +12,9 @@ mvn -pl langchain4j-mcp -am -DskipTests install
 mvn -pl code-execution-engines/langchain4j-code-execution-engine-graalvm-polyglot -am -DskipTests install
 ```
 
+Run these as two separate commands. In PowerShell you can also do:
+`mvn -pl langchain4j-mcp -am -DskipTests install; mvn -pl code-execution-engines/langchain4j-code-execution-engine-graalvm-polyglot -am -DskipTests install`
+
 2. From this directory, build the example:
 
 ```bash
