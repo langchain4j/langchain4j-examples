@@ -1,9 +1,9 @@
 package dev.langchain4j.example.mcp.stdio;
 
 import dev.langchain4j.agent.tool.graalvm.GraalVmJavaScriptExecutionTool;
+import dev.langchain4j.community.mcp.server.McpServer;
+import dev.langchain4j.community.mcp.server.transport.StdioMcpServerTransport;
 import dev.langchain4j.mcp.protocol.McpImplementation;
-import dev.langchain4j.mcp.server.McpServer;
-import dev.langchain4j.mcp.server.transport.StdioMcpServerTransport;
 import java.util.List;
 
 public class McpServerMain {
