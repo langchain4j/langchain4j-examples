@@ -5,7 +5,7 @@ as an MCP stdio server. Only enable code execution in trusted environments.
 
 ## Build (local SNAPSHOT for PRs)
 
-1. From the `langchain4j` repository root, build the MCP artifacts:
+1. From the `langchain4j` repository root, build the required SNAPSHOT artifacts:
 
 ```bash
 mvn -pl langchain4j-mcp -am -DskipTests install
@@ -15,7 +15,13 @@ mvn -pl code-execution-engines/langchain4j-code-execution-engine-graalvm-polyglo
 Run these as two separate commands. In PowerShell you can also do:
 `mvn -pl langchain4j-mcp -am -DskipTests install; mvn -pl code-execution-engines/langchain4j-code-execution-engine-graalvm-polyglot -am -DskipTests install`
 
-2. Change into this directory, then build the example:
+2. From the `langchain4j-community` repository root, build the MCP server module:
+
+```bash
+mvn -pl mcp/langchain4j-community-mcp-server -am -DskipTests install
+```
+
+3. Change into this directory, then build the example:
 
 ```bash
 cd mcp-stdio-server-example
