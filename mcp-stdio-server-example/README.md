@@ -50,7 +50,7 @@ mvn -pl mcp/langchain4j-community-mcp-server -am -DskipTests install
 3. Build this example using SNAPSHOT versions:
 
 ```bash
-mvn -Dlangchain4j.version=1.11.0-beta19-SNAPSHOT -Dlangchain4j-community.version=1.11.0-beta19-SNAPSHOT -DskipTests package
+mvn "-Dlangchain4j.version=1.11.0-beta19-SNAPSHOT" "-Dlangchain4j-community.version=1.11.0-beta19-SNAPSHOT" -DskipTests package
 ```
 
 If you also want the optional JavaScript tool, add `-Pjavascript-tool` and run the JAR with `--enable-js-tool`.
