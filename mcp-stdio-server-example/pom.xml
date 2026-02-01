@@ -6,14 +6,14 @@
 
     <groupId>dev.langchain4j</groupId>
     <artifactId>mcp-stdio-server-example</artifactId>
-    <version>1.11.0-beta19-SNAPSHOT</version>
+    <version>1.11.0-beta19</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <langchain4j.version>1.11.0-beta19-SNAPSHOT</langchain4j.version>
-        <langchain4j-community.version>1.11.0-beta19-SNAPSHOT</langchain4j-community.version>
+        <langchain4j.version>1.11.0-beta19</langchain4j.version>
+        <langchain4j-community.version>1.11.0-beta19</langchain4j-community.version>
     </properties>
 
     <dependencies>
@@ -27,12 +27,20 @@
             <artifactId>langchain4j-community-mcp-server</artifactId>
             <version>${langchain4j-community.version}</version>
         </dependency>
-        <dependency>
-            <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j-code-execution-engine-graalvm-polyglot</artifactId>
-            <version>${langchain4j.version}</version>
-        </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>javascript-tool</id>
+            <dependencies>
+                <dependency>
+                    <groupId>dev.langchain4j</groupId>
+                    <artifactId>langchain4j-code-execution-engine-graalvm-polyglot</artifactId>
+                    <version>${langchain4j.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 
     <build>
         <plugins>
