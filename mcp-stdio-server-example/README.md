@@ -5,7 +5,6 @@ This example exposes a simple calculator tool as an MCP stdio server.
 ## Build
 
 This example requires released versions of LangChain4j and LangChain4j Community that include `langchain4j-community-mcp-server`.
-If you are reviewing unreleased changes, use the SNAPSHOT instructions below.
 
 Change into this directory, then build the example fat JAR:
 
@@ -28,34 +27,6 @@ mvn -Pjavascript-tool -DskipTests package
 ```
 
 Then run the JAR with `--enable-js-tool`.
-
-<details>
-<summary>Build against SNAPSHOT builds (development / PR review)</summary>
-
-If you need to test unreleased changes (for example when reviewing PRs),
-you can build and install SNAPSHOT artifacts locally and override the versions used by this example.
-
-1. From the `langchain4j` repository root, install the required SNAPSHOT artifacts:
-
-```bash
-mvn -pl langchain4j-mcp -am -DskipTests install
-```
-
-2. From the `langchain4j-community` repository root, install the MCP server module:
-
-```bash
-mvn -pl mcp/langchain4j-community-mcp-server -am -DskipTests install
-```
-
-3. Build this example using SNAPSHOT versions:
-
-```bash
-mvn "-Dlangchain4j.version=1.11.0-beta19-SNAPSHOT" "-Dlangchain4j-community.version=1.11.0-beta19-SNAPSHOT" -DskipTests package
-```
-
-If you also want the optional JavaScript tool, add `-Pjavascript-tool` and run the JAR with `--enable-js-tool`.
-
-</details>
 
 ## Configure MCP client
 
