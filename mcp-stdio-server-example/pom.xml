@@ -29,19 +29,6 @@
         </dependency>
     </dependencies>
 
-    <profiles>
-        <profile>
-            <id>javascript-tool</id>
-            <dependencies>
-                <dependency>
-                    <groupId>dev.langchain4j</groupId>
-                    <artifactId>langchain4j-code-execution-engine-graalvm-polyglot</artifactId>
-                    <version>${langchain4j.version}</version>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
-
     <build>
         <plugins>
             <plugin>
