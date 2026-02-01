@@ -4,6 +4,9 @@ This example exposes a simple calculator tool as an MCP stdio server.
 
 ## Build
 
+This example requires released versions of LangChain4j and LangChain4j Community that include `langchain4j-community-mcp-server`.
+If you are reviewing unreleased changes, use the SNAPSHOT instructions below.
+
 Change into this directory, then build the example fat JAR:
 
 ```bash
