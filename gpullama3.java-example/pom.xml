@@ -50,7 +50,7 @@
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>agentic-tutorial</artifactId>
-            <version>1.11.0</version> <!-- Match the version in agentic-tutorial's POM -->
+            <version>1.12.1</version>
         </dependency>
     </dependencies>
 </project>
