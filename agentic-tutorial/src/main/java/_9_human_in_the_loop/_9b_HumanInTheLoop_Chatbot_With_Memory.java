@@ -10,6 +10,9 @@ import util.ChatModelProvider;
 import util.log.CustomLogging;
 import util.log.LogLevels;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -47,12 +50,16 @@ public class _9b_HumanInTheLoop_Chatbot_With_Memory {
                 .humanInTheLoopBuilder()
                 .description("agent that asks input from the user")
                 .outputKey("candidateAnswer") // matches one of the proposer's input variable names
-                .inputKey("proposal") // must match the output of the proposer agent
-                .requestWriter(request -> {
-                    System.out.println(request);
+                .responseProvider(scope -> {
+                    System.out.println(scope.readState("request"));
                     System.out.print("> ");
+                    try {
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+                        return reader.readLine();
+                    } catch (IOException e) {
+                        throw new RuntimeException("Failed to read input", e);
+                    }
                 })
-                .responseReader(() -> new Scanner(System.in).nextLine())
                 .async(true) // no need to block the entire program while waiting for user input
                 .build();
 
