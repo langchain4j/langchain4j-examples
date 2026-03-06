@@ -46,6 +46,7 @@
         <module>qdrant-example</module>
         <module>quarkus-example</module>
         <module>rag-examples</module>
+        <module>reasoning-bank-example</module>
         <module>redis-example</module>
         <module>spring-boot-example</module>
         <module>tutorials</module>
