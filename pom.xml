@@ -24,6 +24,7 @@
         <module>google-alloydb-example</module>
         <module>gpullama3.java-example</module>
         <module>helidon-examples</module>
+        <module>hibernate-example</module>
         <module>infinispan-example</module>
         <module>jakartaee-microprofile-example</module>
         <module>javafx-example</module>
