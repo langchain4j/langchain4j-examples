@@ -16,100 +16,77 @@ import dev.langchain4j.store.embedding.filter.logical.And;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 /**
- * Example demonstrating the ArcadeDB embedding store integration.
+ * Example demonstrating the ArcadeDB embedding store in <b>embedded</b> mode, where ArcadeDB
+ * runs in-process inside the same JVM — no separate server or Docker container required.
  *
- * <p>Requires a running ArcadeDB instance. The quickest way to start one is via Docker:
- * <pre>
- *   docker run -d \
- *     --name arcadedb \
- *     -p 2480:2480 \
- *     -e JAVA_OPTS="-Darcadedb.server.rootPassword=playwithdata" \
- *     arcadedata/arcadedb:latest
- * </pre>
+ * <p>The database is stored on the local filesystem at a path you provide.  The store is opened
+ * (or created, if it does not yet exist) automatically.  Always call {@link ArcadeDBEmbeddingStore#close()}
+ * when you are finished to release resources.
+ *
+ * <p>For usage against a remote ArcadeDB server, see {@link ArcadeDBEmbeddingStoreRemoteExample}.
  *
  * <p>This example demonstrates:
  * <ul>
- *   <li>Basic embedding store usage with COSINE similarity</li>
+ *   <li>Basic embedded store usage (HNSW index, COSINE similarity)</li>
  *   <li>Metadata-enriched embeddings and metadata filtering</li>
- *   <li>Using a different similarity function (EUCLIDEAN)</li>
+ *   <li>Persistent reuse of an existing database directory</li>
  * </ul>
  */
-public class ArcadeDBEmbeddingStoreExample {
-
-    // ArcadeDB connection settings — adjust these to match your environment
-    private static final String HOST = "localhost";
-    private static final int PORT = 2480;
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "playwithdata";
+public class ArcadeDBEmbeddingStoreEmbeddedExample {
 
     private static final String TEST_DOCUMENT = "test-document.txt";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        EmbeddingModel embeddingModel = new AllMiniLmL6V2QuantizedEmbeddingModel();
+
+        List<String> lines = readLinesFromResource(TEST_DOCUMENT);
+        System.out.println("Read " + lines.size() + " lines from " + TEST_DOCUMENT);
+        System.out.println();
+
+        // Example 1: basic embedded store — database is created in a temp directory
+        Path dbPath1 = Files.createTempDirectory("arcadedb-example-basic");
+        System.out.println("Database path: " + dbPath1);
+
+        ArcadeDBEmbeddingStore basicStore = ArcadeDBEmbeddingStore.embeddedBuilder()
+                .databasePath(dbPath1.toString())
+                .dimension(384)
+                .maxConnections(16)
+                .beamWidth(100)
+                .build();
+
         try {
-            EmbeddingModel embeddingModel = new AllMiniLmL6V2QuantizedEmbeddingModel();
-
-            List<String> lines = readLinesFromResource(TEST_DOCUMENT);
-            System.out.println("Read " + lines.size() + " lines from " + TEST_DOCUMENT);
-            System.out.println();
-
-            // Example 1: basic store with COSINE similarity (default)
-            EmbeddingStore<TextSegment> cosineStore = ArcadeDBEmbeddingStore.builder()
-                    .host(HOST)
-                    .port(PORT)
-                    .databaseName("example_cosine")
-                    .username(USERNAME)
-                    .password(PASSWORD)
-                    .typeName("EmbeddingDocument")
-                    .dimension(384)
-                    .similarityFunction("COSINE")
-                    .maxConnections(16)
-                    .beamWidth(100)
-                    .createDatabase(true)
-                    .build();
-
-            runBasicSearch(cosineStore, embeddingModel, lines, "ArcadeDB(COSINE)");
-
-            // Example 2: store with metadata filtering
-            ArcadeDBEmbeddingStore filteringStore = ArcadeDBEmbeddingStore.builder()
-                    .host(HOST)
-                    .port(PORT)
-                    .databaseName("example_filtering")
-                    .username(USERNAME)
-                    .password(PASSWORD)
-                    .typeName("EmbeddingDocument")
-                    .dimension(384)
-                    .similarityFunction("COSINE")
-                    .createDatabase(true)
-                    .build();
-
-            runMetadataFilteringExample(filteringStore, embeddingModel);
-
-            // Example 3: store with EUCLIDEAN similarity
-            EmbeddingStore<TextSegment> euclideanStore = ArcadeDBEmbeddingStore.builder()
-                    .host(HOST)
-                    .port(PORT)
-                    .databaseName("example_euclidean")
-                    .username(USERNAME)
-                    .password(PASSWORD)
-                    .typeName("EmbeddingDocument")
-                    .dimension(384)
-                    .similarityFunction("EUCLIDEAN")
-                    .maxConnections(32)
-                    .beamWidth(200)
-                    .createDatabase(true)
-                    .build();
-
-            runBasicSearch(euclideanStore, embeddingModel, lines, "ArcadeDB(EUCLIDEAN, maxConnections=32, beamWidth=200)");
-
-        } catch (Exception e) {
-            System.err.println("Failed to run the example: " + e.getMessage());
-            e.printStackTrace();
+            runBasicSearch(basicStore, embeddingModel, lines, "ArcadeDB Embedded (basic)");
+        } finally {
+            basicStore.close();
         }
+
+        // Example 2: embedded store with metadata filtering
+        Path dbPath2 = Files.createTempDirectory("arcadedb-example-filtering");
+        System.out.println("Database path: " + dbPath2);
+
+        ArcadeDBEmbeddingStore filteringStore = ArcadeDBEmbeddingStore.embeddedBuilder()
+                .databasePath(dbPath2.toString())
+                .dimension(384)
+                .build();
+
+        try {
+            runMetadataFilteringExample(filteringStore, embeddingModel);
+        } finally {
+            filteringStore.close();
+        }
+
+        // Example 3: reopen a persistent database — same databasePath, data is still there
+        Path dbPath3 = Files.createTempDirectory("arcadedb-example-persistent");
+        System.out.println("Database path: " + dbPath3);
+
+        runPersistenceExample(dbPath3, embeddingModel);
     }
 
     /**
@@ -178,7 +155,7 @@ public class ArcadeDBEmbeddingStoreExample {
     private static void runMetadataFilteringExample(ArcadeDBEmbeddingStore store,
                                                     EmbeddingModel embeddingModel) {
 
-        System.out.println("=== Metadata Filtering Example ===");
+        System.out.println("=== Metadata Filtering Example (Embedded) ===");
 
         // Add science documents
         addWithMetadata(store, embeddingModel,
@@ -234,6 +211,57 @@ public class ArcadeDBEmbeddingStoreExample {
         System.out.println();
     }
 
+    /**
+     * Demonstrates that an embedded database is persistent: data written in one session is
+     * still available when the database is reopened using the same {@code databasePath}.
+     */
+    private static void runPersistenceExample(Path dbPath, EmbeddingModel embeddingModel) {
+        System.out.println("=== Persistence Example ===");
+        System.out.println("Opening database for the first time and adding two embeddings...");
+
+        // First session: write data
+        ArcadeDBEmbeddingStore firstSession = ArcadeDBEmbeddingStore.embeddedBuilder()
+                .databasePath(dbPath.toString())
+                .dimension(384)
+                .build();
+
+        String text1 = "The speed of light is approximately 299,792 km/s.";
+        String text2 = "Newton's laws describe the motion of objects under force.";
+        firstSession.add(embeddingModel.embed(TextSegment.from(text1)).content(), TextSegment.from(text1));
+        firstSession.add(embeddingModel.embed(TextSegment.from(text2)).content(), TextSegment.from(text2));
+        firstSession.close();
+        System.out.println("First session closed.");
+
+        // Second session: read the same data back
+        System.out.println("Reopening the same database directory...");
+        ArcadeDBEmbeddingStore secondSession = ArcadeDBEmbeddingStore.embeddedBuilder()
+                .databasePath(dbPath.toString())
+                .dimension(384)
+                .build();
+
+        try {
+            Embedding query = embeddingModel.embed("How fast does light travel?").content();
+            EmbeddingSearchResult<TextSegment> result = secondSession.search(
+                    EmbeddingSearchRequest.builder()
+                            .queryEmbedding(query)
+                            .maxResults(2)
+                            .build());
+
+            System.out.println("Query: \"How fast does light travel?\"");
+            System.out.println("Results from reopened database:");
+            for (int i = 0; i < result.matches().size(); i++) {
+                EmbeddingMatch<TextSegment> match = result.matches().get(i);
+                System.out.printf("  %d. Score: %.4f - %s%n",
+                        i + 1, match.score(), match.embedded().text());
+            }
+        } finally {
+            secondSession.close();
+        }
+
+        System.out.println("=== Finished Persistence Example ===");
+        System.out.println();
+    }
+
     private static void addWithMetadata(EmbeddingStore<TextSegment> store,
                                         EmbeddingModel embeddingModel,
                                         String text,
@@ -275,7 +303,7 @@ public class ArcadeDBEmbeddingStoreExample {
      */
     private static List<String> readLinesFromResource(String resourceName) {
         List<String> lines = new ArrayList<>();
-        try (InputStream inputStream = ArcadeDBEmbeddingStoreExample.class
+        try (InputStream inputStream = ArcadeDBEmbeddingStoreEmbeddedExample.class
                 .getClassLoader()
                 .getResourceAsStream(resourceName)) {
             if (inputStream == null) {
