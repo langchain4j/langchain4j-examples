@@ -45,3 +45,6 @@ Configure a local stdio MCP server with the same `command` and `args` above.
 Ask the client:
 
 > "Please calculate 1234 + 5678 using the calculator tool."
+
+For raw JSON-RPC testing, inspect the `tools/list` response first and use the returned
+`inputSchema.properties` keys when building `tools/call` arguments.
