@@ -1,0 +1,5 @@
+LangChain4j is a Java library for building LLM-powered applications.
+It supports RAG (Retrieval-Augmented Generation) by combining embedding models,
+vector stores, and content retrievers. Spring Boot integration is available
+via the langchain4j-spring-boot-starter module, allowing developers to define
+AI services and RAG pipelines as standard Spring beans.
