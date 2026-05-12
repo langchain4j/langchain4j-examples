@@ -42,14 +42,14 @@ public class _2b_Sequential_Agent_Example_Typed {
         CvGenerator cvGenerator = AgenticServices
                 .agentBuilder(CvGenerator.class)
                 .chatModel(CHAT_MODEL)
-                .outputName("masterCv") // if you want to pass this variable from agent 1 to agent 2,
-                // then make sure the output name here matches the input variable name
+                .outputKey("masterCv") // if you want to pass this variable from agent 1 to agent 2,
+                // then make sure the output key here matches the input variable name
                 // specified in the second agent interface agent_interfaces/CvTailor.java
                 .build();
         CvTailor cvTailor = AgenticServices
                 .agentBuilder(CvTailor.class)
                 .chatModel(CHAT_MODEL) // note that it is also possible to use a different model for a different agent
-                .outputName("tailoredCv") // we need to define the name of the output object
+                .outputKey("tailoredCv") // we need to define the key of the output object
                 // if we would put "masterCv" here, the original master CV would be overwritten
                 // by the second agent. In this case we don't want this, but it's a useful feature.
                 .build();
@@ -66,7 +66,7 @@ public class _2b_Sequential_Agent_Example_Typed {
         SequenceCvGenerator sequenceCvGenerator = AgenticServices
                 .sequenceBuilder(SequenceCvGenerator.class) // here we specify the typed interface
                 .subAgents(cvGenerator, cvTailor)
-                .outputName("bothCvsAndLifeStory")
+                .outputKey("bothCvsAndLifeStory")
                 .output(agenticScope -> { // any method is possible, but we collect some internal variables.
                     Map<String, String> bothCvsAndLifeStory = Map.of(
                             "lifeStory", agenticScope.readState("lifeStory", ""),

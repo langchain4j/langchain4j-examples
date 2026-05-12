@@ -48,17 +48,17 @@ public class _8_Non_AI_Agents {
         // 2. Build the AI sub-agents for the parallel review step
         HrCvReviewer hrReviewer = AgenticServices.agentBuilder(HrCvReviewer.class)
                 .chatModel(CHAT_MODEL)
-                .outputName("hrReview")
+                .outputKey("hrReview")
                 .build();
 
         ManagerCvReviewer managerReviewer = AgenticServices.agentBuilder(ManagerCvReviewer.class)
                 .chatModel(CHAT_MODEL)
-                .outputName("managerReview")
+                .outputKey("managerReview")
                 .build();
 
         TeamMemberCvReviewer teamReviewer = AgenticServices.agentBuilder(TeamMemberCvReviewer.class)
                 .chatModel(CHAT_MODEL)
-                .outputName("teamMemberReview")
+                .outputKey("teamMemberReview")
                 .build();
 
         // 3. Build the composed parallel agent
@@ -75,14 +75,14 @@ public class _8_Non_AI_Agents {
                 .sequenceBuilder()
                 .subAgents(
                         parallelReviewWorkflow,
-                        new ScoreAggregator(), // no AgenticServices builder needed for non-AI agents. outputname 'combinedCvReview' is defined in the class
+                        new ScoreAggregator(), // no AgenticServices builder needed for non-AI agents. outputKey 'combinedCvReview' is defined in the class
                         new StatusUpdate(), // takes 'combinedCvReview' as input, no output needed
                         AgenticServices.agentAction(agenticScope -> { // another way to add non-AI agents that can operate on the AgenticScope
                             CvReview review = (CvReview) agenticScope.readState("combinedCvReview");
                             agenticScope.writeState("scoreAsPercentage", review.score * 100); // when agents from different systems communicate, output conversion is often needed
                         })
                 )
-                .outputName("scoreAsPercentage") // outputName defined on the non-AI agent annotation in ScoreAggregator.java
+                .outputKey("scoreAsPercentage") // outputKey defined on the non-AI agent annotation in ScoreAggregator.java
                 .build();
 
         // 5. Load input data

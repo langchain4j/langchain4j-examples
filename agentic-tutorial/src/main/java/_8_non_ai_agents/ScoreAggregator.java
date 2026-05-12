@@ -11,7 +11,7 @@ import domain.CvReview;
  */
 public class ScoreAggregator {
 
-    @Agent(description = "Aggregates HR/Manager/Team reviews into a combined review", outputName = "combinedCvReview")
+    @Agent(description = "Aggregates HR/Manager/Team reviews into a combined review", outputKey = "combinedCvReview")
     public CvReview aggregate(@V("hrReview") CvReview hr,
                              @V("managerReview") CvReview mgr,
                              @V("teamMemberReview") CvReview team) {

@@ -44,7 +44,7 @@ public class _7a_Supervisor_Orchestration {
         // 1. Define all sub-agents
         HrCvReviewer hrReviewer = AgenticServices.agentBuilder(HrCvReviewer.class)
                 .chatModel(CHAT_MODEL)
-                .outputName("hrReview")
+                .outputKey("hrReview")
                 .build();
         // importantly, if we use the same method names for multiple agents
         // (in this case: 'reviewCv' for all reviewers) we best name our agents, like this:
@@ -52,12 +52,12 @@ public class _7a_Supervisor_Orchestration {
 
         ManagerCvReviewer managerReviewer = AgenticServices.agentBuilder(ManagerCvReviewer.class)
                 .chatModel(CHAT_MODEL)
-                .outputName("managerReview")
+                .outputKey("managerReview")
                 .build();
 
         TeamMemberCvReviewer teamReviewer = AgenticServices.agentBuilder(TeamMemberCvReviewer.class)
                 .chatModel(CHAT_MODEL)
-                .outputName("teamMemberReview")
+                .outputKey("teamMemberReview")
                 .build();
 
         InterviewOrganizer interviewOrganizer = AgenticServices.agentBuilder(InterviewOrganizer.class)

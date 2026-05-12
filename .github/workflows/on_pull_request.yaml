@@ -1,0 +1,29 @@
+name: On Pull Request
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java_version:
+          - 25
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ matrix.java_version }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ matrix.java_version }}
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Compile with JDK ${{ matrix.java_version }}
+        run: |
+          mvn -B -U -T8C compile

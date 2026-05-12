@@ -10,6 +10,9 @@ import util.ChatModelProvider;
 import util.log.CustomLogging;
 import util.log.LogLevels;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -36,7 +39,7 @@ public class _9b_HumanInTheLoop_Chatbot_With_Memory {
                 .agentBuilder(MeetingProposer.class)
                 .chatModel(CHAT_MODEL)
                 .chatMemoryProvider(memoryId -> MessageWindowChatMemory.withMaxMessages(15)) // so the agent remembers what he proposed already
-                .outputName("proposal")
+                .outputKey("proposal")
                 .build();
 
         // 2. Add an AiService to judge if a decision has been reached (this can be a tiny local model because the assignment is so simple)
@@ -46,13 +49,17 @@ public class _9b_HumanInTheLoop_Chatbot_With_Memory {
         HumanInTheLoop humanInTheLoop = AgenticServices
                 .humanInTheLoopBuilder()
                 .description("agent that asks input from the user")
-                .outputName("candidateAnswer") // matches one of the proposer's input variable names
-                .inputName("proposal") // must match the output of the proposer agent
-                .requestWriter(request -> {
-                    System.out.println(request);
+                .outputKey("candidateAnswer") // matches one of the proposer's input variable names
+                .responseProvider(scope -> {
+                    System.out.println(scope.readState("request"));
                     System.out.print("> ");
+                    try {
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+                        return reader.readLine();
+                    } catch (IOException e) {
+                        throw new RuntimeException("Failed to read input", e);
+                    }
                 })
-                .responseReader(() -> new Scanner(System.in).nextLine())
                 .async(true) // no need to block the entire program while waiting for user input
                 .build();
 
@@ -66,7 +73,7 @@ public class _9b_HumanInTheLoop_Chatbot_With_Memory {
                         "proposal", agenticScope.readState("proposal"),
                         "candidateAnswer", agenticScope.readState("candidateAnswer")
                 ))
-                .outputName("proposalAndAnswer")
+                .outputKey("proposalAndAnswer")
                 // this output contains the last date proposal + candidate's answer, which should be sufficient info for a followup agent to schedule the meeting (or abort trying)
                 .build();
 
@@ -79,7 +86,7 @@ public class _9b_HumanInTheLoop_Chatbot_With_Memory {
                     String proposal = (String) scope.readState("proposal");
                     return response != null && decisionService.isDecisionReached(proposal, response);
                 })
-                .outputName("proposalAndAnswer")
+                .outputKey("proposalAndAnswer")
                 .maxIterations(5)
                 .build();
 

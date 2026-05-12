@@ -1,4 +1,3 @@
-import java.time.Duration;
 import java.util.List;
 import com.ibm.watsonx.ai.chat.model.ExtractionTags;
 import dev.langchain4j.data.message.ChatMessage;
@@ -14,11 +13,10 @@ class WatsonxChatModelReasoningTest {
         try {
             
             ChatModel chatModel = WatsonxChatModel.builder()
-                .url(System.getenv("WATSONX_URL"))
+                .baseUrl(System.getenv("WATSONX_URL"))
                 .apiKey(System.getenv("WATSONX_API_KEY"))
                 .projectId(System.getenv("WATSONX_PROJECT_ID"))
                 .modelName("ibm/granite-3-3-8b-instruct")
-                .timeLimit(Duration.ofSeconds(30))
                 .thinking(ExtractionTags.of("think", "response"))
                 .build();
 

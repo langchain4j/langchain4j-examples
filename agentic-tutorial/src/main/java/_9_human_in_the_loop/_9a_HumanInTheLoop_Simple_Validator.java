@@ -9,6 +9,9 @@ import util.ChatModelProvider;
 import util.log.CustomLogging;
 import util.log.LogLevels;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -24,27 +27,31 @@ public class _9a_HumanInTheLoop_Simple_Validator {
         // 3. Create involved agents
         HiringDecisionProposer decisionProposer = AgenticServices.agentBuilder(HiringDecisionProposer.class)
                 .chatModel(CHAT_MODEL)
-                .outputName("modelDecision")
+                .outputKey("modelDecision")
                 .build();
 
         // 2. Define human in the loop for validation
         HumanInTheLoop humanValidator = AgenticServices.humanInTheLoopBuilder()
                 .description("validates the model's proposed hiring decision")
-                .inputName("modelDecision")
-                .outputName("finalDecision") // checked by human
-                .requestWriter(request -> {
-                    System.out.println("AI hiring assistant suggests: " + request);
+                .outputKey("finalDecision") // checked by human
+                .responseProvider(scope -> {
+                    System.out.println("AI hiring assistant suggests: " + scope.readState("request"));
                     System.out.println("Please confirm the final decision.");
                     System.out.println("Options: Invite on-site (I), Reject (R), Hold (H)");
-                    System.out.print("> "); // we  needs input validation and error handling in real life systems
+                    System.out.print("> "); // we need input validation and error handling in real-life systems
+                    try {
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+                        return reader.readLine();
+                    } catch (IOException e) {
+                        throw new RuntimeException("Failed to read input", e);
+                    }
                 })
-                .responseReader(() -> new Scanner(System.in).nextLine())
                 .build();
 
         // 3. Chain agents into a workflow
         UntypedAgent hiringDecisionWorkflow = AgenticServices.sequenceBuilder()
                 .subAgents(decisionProposer, humanValidator)
-                .outputName("finalDecision")
+                .outputKey("finalDecision")
                 .build();
 
         // 4. Prepare input arguments

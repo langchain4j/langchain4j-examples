@@ -54,12 +54,12 @@ public class _7b_Supervisor_Orchestration_Advanced {
         InterviewOrganizer interviewOrganizer = AgenticServices.agentBuilder(InterviewOrganizer.class)
                 .chatModel(CHAT_MODEL)
                 .tools(new OrganizingTools())
-                .outputName("response")
+                .outputKey("response")
                 .build();
         EmailAssistant emailAssistant = AgenticServices.agentBuilder(EmailAssistant.class)
                 .chatModel(CHAT_MODEL)
                 .tools(new OrganizingTools())
-                .outputName("response")
+                .outputKey("response")
                 .build();
 
         // 2. Build supervisor

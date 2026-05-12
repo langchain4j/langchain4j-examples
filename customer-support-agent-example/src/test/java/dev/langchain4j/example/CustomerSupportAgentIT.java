@@ -26,8 +26,8 @@ class CustomerSupportAgentIT {
     private static final String CUSTOMER_NAME = "John";
     private static final String CUSTOMER_SURNAME = "Doe";
     private static final String BOOKING_NUMBER = "MS-777";
-    private static final LocalDate BOOKING_BEGIN_DATE = LocalDate.of(2025, 12, 13);
-    private static final LocalDate BOOKING_END_DATE = LocalDate.of(2025, 12, 31);
+    private static final LocalDate BOOKING_BEGIN_DATE = LocalDate.of(2026, 12, 13);
+    private static final LocalDate BOOKING_END_DATE = LocalDate.of(2026, 12, 31);
 
     @Autowired
     CustomerSupportAgent agent;

@@ -35,19 +35,19 @@ public class _5b_Conditional_Workflow_Example_Async {
         ManagerCvReviewer managerCvReviewer = AgenticServices.agentBuilder(ManagerCvReviewer.class)
                 .chatModel(CHAT_MODEL)
                 .async(true) // async agent
-                .outputName("managerReview")
+                .outputKey("managerReview")
                 .build();
         EmailAssistant emailAssistant = AgenticServices.agentBuilder(EmailAssistant.class)
                 .chatModel(CHAT_MODEL)
                 .async(true)
                 .tools(new OrganizingTools())
-                .outputName("sentEmailId")
+                .outputKey("sentEmailId")
                 .build();
         InfoRequester infoRequester = AgenticServices.agentBuilder(InfoRequester.class)
                 .chatModel(CHAT_MODEL)
                 .async(true)
                 .tools(new OrganizingTools())
-                .outputName("sentEmailId")
+                .outputKey("sentEmailId")
                 .build();
 
         // 2. Build async conditional workflow

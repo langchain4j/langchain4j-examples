@@ -58,19 +58,20 @@ public class InProcessEmbeddingModelExamples {
             // You can also convert any other model into ONNX format by following this guide: https://huggingface.co/docs/optimum/exporters/onnx/usage_guides/export_a_model
 
             // requires "langchain4j-embeddings" Maven/Gradle dependency, see pom.xml
-            EmbeddingModel embeddingModel = new OnnxEmbeddingModel(
-                    "/home/langchain4j/model_quantized.onnx",
-                    "/home/langchain4j/tokenizer.json",
+            EmbeddingModel custom = new OnnxEmbeddingModel(
+                    "C:\\dev\\repo\\langchain4j-embeddings\\langchain4j-embeddings-all-minilm-l6-v2\\target\\classes\\ololo\\all-minilm-l6-v2.onnx",
+                    "C:\\dev\\repo\\langchain4j-embeddings\\langchain4j-embeddings-all-minilm-l6-v2\\target\\classes\\all-minilm-l6-v2-tokenizer.json",
                     PoolingMode.MEAN
             );
 
+            AllMiniLmL6V2EmbeddingModel packaged = new AllMiniLmL6V2EmbeddingModel();
+
             String englishText = "Hello, how are you doing?";
-            String frenchText = "Bonjour comment allez-vous?";
 
-            Embedding englishTextEmbedding = embeddingModel.embed(englishText).content();
-            Embedding frenchTextEmbedding = embeddingModel.embed(frenchText).content();
+            Embedding customEmbedding = custom.embed(englishText).content();
+            Embedding packagedEmbedding = packaged.embed(englishText).content();
 
-            System.out.println(CosineSimilarity.between(englishTextEmbedding, frenchTextEmbedding)); // 0.9060777281158113
+            System.out.println(CosineSimilarity.between(customEmbedding, packagedEmbedding));
         }
     }
 }
