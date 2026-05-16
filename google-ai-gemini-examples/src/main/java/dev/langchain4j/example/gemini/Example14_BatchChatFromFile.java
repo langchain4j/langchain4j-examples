@@ -40,7 +40,7 @@ public class Example14_BatchChatFromFile {
         var apiKey = System.getenv("GOOGLE_AI_GEMINI_API_KEY");
 
         var batchModel = GoogleAiGeminiBatchChatModel.builder()
-                .apiKey(System.getenv("GOOGLE_AI_GEMINI_API_KEY"))
+                .apiKey(apiKey)
                 .modelName("gemini-2.5-flash-lite")
                 .logRequestsAndResponses(true)
                 .build();
