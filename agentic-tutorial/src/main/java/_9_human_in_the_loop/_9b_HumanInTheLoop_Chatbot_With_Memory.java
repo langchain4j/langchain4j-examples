@@ -51,7 +51,7 @@ public class _9b_HumanInTheLoop_Chatbot_With_Memory {
                 .description("agent that asks input from the user")
                 .outputKey("candidateAnswer") // matches one of the proposer's input variable names
                 .responseProvider(scope -> {
-                    System.out.println(scope.readState("request"));
+                    System.out.println(scope.readState("proposal"));
                     System.out.print("> ");
                     try {
                         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
