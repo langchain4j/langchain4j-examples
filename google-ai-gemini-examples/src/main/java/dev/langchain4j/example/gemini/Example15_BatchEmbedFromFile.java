@@ -2,10 +2,13 @@ package dev.langchain4j.example.gemini;
 
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
-import dev.langchain4j.model.googleai.BatchRequestResponse.*;
+import dev.langchain4j.model.batch.BatchResponse;
+import dev.langchain4j.model.batch.BatchState;
+import dev.langchain4j.model.googleai.BatchRequestResponse.BatchFileRequest;
 import dev.langchain4j.model.googleai.GeminiFiles;
 import dev.langchain4j.model.googleai.GoogleAiGeminiBatchEmbeddingModel;
 import dev.langchain4j.model.googleai.jsonl.JsonLinesWriters;
+import dev.langchain4j.model.output.Response;
 
 import java.nio.file.Files;
 import java.util.List;
@@ -18,7 +21,7 @@ import java.util.List;
  * <ol>
  *   <li>Write batch requests to a local JSONL file</li>
  *   <li>Upload the file using the Gemini Files API</li>
- *   <li>Create a batch job referencing the uploaded file</li>
+ *   <li>Submit a batch job referencing the uploaded file</li>
  *   <li>Poll for completion and retrieve results</li>
  *   <li>Process results</li>
  * </ol>
@@ -45,6 +48,7 @@ public class Example15_BatchEmbedFromFile {
 
         var geminiFiles = GeminiFiles.builder().apiKey(apiKey).build();
 
+        // Each request is paired with a unique key so results can be correlated back to the input.
         var segments = List.of(
                 new BatchFileRequest<>("ai-text", TextSegment.from("Artificial intelligence is transforming industries worldwide.")),
                 new BatchFileRequest<>("ml-text", TextSegment.from("Machine learning enables computers to learn from data.")),
@@ -54,9 +58,10 @@ public class Example15_BatchEmbedFromFile {
 
         // Step 1: Write requests to a local JSONL file
         var tempFile = Files.createTempFile("batch-embed-requests-", ".jsonl");
-        var writer = JsonLinesWriters.streaming(tempFile);
         System.out.println("Writing batch embedding requests to: " + tempFile);
-        batchModel.writeBatchToFile(writer, segments);
+        try (var writer = JsonLinesWriters.streaming(tempFile)) {
+            batchModel.writeBatchToFile(writer, segments);
+        }
 
         // Verify JSONL content
         System.out.println("JSONL content:");
@@ -82,29 +87,29 @@ public class Example15_BatchEmbedFromFile {
 
         System.out.println("File is now ACTIVE");
 
-        // Step 3: Create batch job from the uploaded file
-        System.out.println("\nCreating batch embedding job from uploaded file...");
-        BatchResponse<?> response = batchModel.createBatchFromFile("file-based-embedding-batch", uploadedFile);
-        BatchName batchName = getBatchName(response);
+        // Step 3: Submit a batch embedding job from the uploaded file
+        System.out.println("\nSubmitting batch embedding job from uploaded file...");
+        BatchResponse<Response<Embedding>> response = batchModel.submit("file-based-embedding-batch", uploadedFile);
+        var batchId = response.batchId();
 
-        System.out.println("Batch created: " + batchName.value());
+        System.out.println("Batch created: " + batchId);
         System.out.println("Polling for completion...");
 
-        // Step 4: Poll until complete
-        do {
+        // Step 4: Poll until the batch reaches a terminal state
+        while (!response.state().isTerminal()) {
             Thread.sleep(5000);
-            response = batchModel.retrieveBatchResults(batchName);
-            System.out.println("  Status: " + response.getClass().getSimpleName());
-        } while (response instanceof BatchIncomplete);
+            response = batchModel.retrieve(batchId);
+            System.out.println("  State: " + response.state());
+        }
 
         // Step 5: Process results
-        if (response instanceof BatchSuccess<?> success) {
+        if (response.state() == BatchState.SUCCEEDED) {
             System.out.println("\nBatch completed successfully!");
             System.out.println("Results:");
 
-            var results = success.responses();
-            for (int i = 0; i < results.size(); i++) {
-                var embedding = (Embedding) results.get(i);
+            var responses = response.responses();
+            for (int i = 0; i < responses.size(); i++) {
+                Embedding embedding = responses.get(i).content();
                 System.out.println("\n  " + (i + 1) + ". " + segments.get(i).key());
                 System.out.println("     Dimension: " + embedding.dimension());
                 System.out.print("     Vector (first 5 values): [");
@@ -114,12 +119,12 @@ public class Example15_BatchEmbedFromFile {
                 System.out.println("]");
             }
         } else {
-            System.err.println("Batch failed: " + response);
+            System.err.println("Batch did not succeed. State: " + response.state() + ", errors: " + response.errors());
         }
 
         // Clean up
         System.out.println("\nCleaning up...");
-        batchModel.deleteBatchJob(batchName);
+        batchModel.deleteBatchJob(batchId);
         System.out.println("Batch job deleted.");
 
         geminiFiles.deleteFile(uploadedFile.name());
@@ -127,15 +132,5 @@ public class Example15_BatchEmbedFromFile {
 
         Files.deleteIfExists(tempFile);
         System.out.println("Local temp file deleted.");
-    }
-
-    private static BatchName getBatchName(BatchResponse<?> response) {
-        if (response instanceof BatchSuccess<?> success) {
-            return success.batchName();
-        } else if (response instanceof BatchIncomplete<?> incomplete) {
-            return incomplete.batchName();
-        } else {
-            throw new IllegalStateException("Unexpected response type: " + response);
-        }
     }
 }
