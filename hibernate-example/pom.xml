@@ -21,13 +21,13 @@
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j</artifactId>
-            <version>1.18.0</version>
+            <version>1.18.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-hibernate</artifactId>
-            <version>1.18.0-beta28</version>
+            <version>1.18.1-beta28</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate.orm</groupId>
