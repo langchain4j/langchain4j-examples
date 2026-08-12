@@ -43,6 +43,7 @@
         <module>ovh-ai-examples</module>
         <module>payara-micro-example</module>
         <module>pgvector-example</module>
+        <module>pgvector-rag-springboot</module>
         <module>pinecone-example</module>
         <module>qdrant-example</module>
         <module>quarkus-example</module>
