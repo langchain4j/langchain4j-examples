@@ -1,14 +1,29 @@
 # LangChain4j in Jakarta EE and MicroProfile
-This example demonstrates LangChain4J in a Jakarta EE / MicroProfile application on Open Liberty. The application is a chatbot built with LangChain4J and uses Jakarta CDI, Jakarta RESTful Web Services, Jakarta WebSocket, MicroProfile Config, MicroProfile Metrics, and MicroProfile OpenAPI features.
+This example demonstrates LangChain4J in a Jakarta EE / MicroProfile application on Open Liberty. The application is a chatbot built with LangChain4J and uses Jakarta CDI, Jakarta RESTful Web Services, Jakarta WebSocket, MicroProfile Config, MicroProfile Metrics, and MicroProfile OpenAPI features. The application allows to use models from either Github, Ollama, or Hugging Face.
 
 ## Prerequisites:
 
 - [Java 21](https://developer.ibm.com/languages/java/semeru-runtimes/downloads)
-- Hugging Face API Key
-  - Sign up and log in to https://huggingface.co.
-  - Go to [Access Tokens](https://huggingface.co/settings/tokens). 
-  - Create a new access token with `read` role.
-  
+- Either one of the following model providers:
+  - Github
+    - Sign up and sign in to https://github.com.
+    - Go to your [Settings](https://github.com/settings/profile)/[Developer Settings](https://github.com/settings/developers)/[Persional access tokens](https://github.com/settings/personal-access-tokens).
+    - Generate a new token
+  - Ollama
+    - Download and install [Ollama](https://ollama.com/download)
+      - see the [README.md](https://github.com/ollama/ollama/blob/main/README.md#ollama)
+    - Pull the following models
+      - `ollama pull llama3.2`
+      - `ollama pull all-minilm`
+      - `ollama pull tinydolphin`
+  - Mistral AI
+    - Sign up and log in to https://console.mistral.ai/home.
+    - Go to [Your API keys](https://console.mistral.ai/api-keys).
+    - Create a new key.
+  - Hugging Face
+    - Sign up and log in to https://huggingface.co.
+    - Go to [Access Tokens](https://huggingface.co/settings/tokens).
+    - Create a new access token with `read` role.
 
 ## Environment Set Up
 
@@ -18,10 +33,40 @@ To run this example application, navigate  to the `jakartaee-microprofile-exampl
 cd langchain4j-examples/jakartaee-microprofile-example
 ```
 
-Set the following environment variables:
-
+Set the `JAVA_HOME` environment variable:
 ```
 export JAVA_HOME=<your Java 21 home path>
+```
+
+Set the `GITHUB_API_KEY` environment variable if using Github.
+```
+unset HUGGING_FACE_API_KEY
+unset OLLAMA_BASE_URL
+unset MISTRAL_AI_API_KEY
+export GITHUB_API_KEY=<your Github API token>
+```
+
+Set the `OLLAMA_BASE_URL` environment variable if using Ollama. Use your Ollama URL if not using the default.
+```
+unset HUGGING_FACE_API_KEY
+unset GITHUB_API_KEY
+unset MISTRAL_AI_API_KEY
+export OLLAMA_BASE_URL=http://localhost:11434
+```
+
+Set the `MISTRAL_AI_API_KEY` environment variable if using Mistral AI.
+```
+unset GITHUB_API_KEY
+unset OLLAMA_BASE_URL
+unset MISTRAL_AI_API_KEY
+export MISTRAL_AI_API_KEY=<your Mistral AI API key>
+```
+
+Set the `HUGGING_FACE_API_KEY` environment variable if using Hugging Face.
+```
+unset GITHUB_API_KEY
+unset OLLAMA_BASE_URL
+unset MISTRAL_AI_API_KEY
 export HUGGING_FACE_API_KEY=<your Hugging Face read token>
 ```
 
@@ -52,7 +97,7 @@ Use the Maven wrapper to start the application by using the [Liberty dev mode](h
 
 Navigate to the the [OpenAPI UI](http://localhost:9080/openapi/ui) URL for the following 3 REST APIs:
 
-- [HuggingFaceLanguageModel](https://github.com/langchain4j/langchain4j/blob/main/langchain4j-hugging-face/src/main/java/dev/langchain4j/model/huggingface/HuggingFaceLanguageModel.java)
+- [LanguageModel](https://javadoc.io/doc/dev.langchain4j/langchain4j-core/latest/dev/langchain4j/model/language/LanguageModel.html)
   - Expand the GET `/api/model/language` API.
     1. Click the **Try it out** button.
     2. Type `When was Hugging Face launched?`, or any question, in the question field.
@@ -60,9 +105,8 @@ Navigate to the the [OpenAPI UI](http://localhost:9080/openapi/ui) URL for the f
   - Alternatively, run the following `curl` command from a command-line session:
     - ```
       curl 'http://localhost:9080/api/model/language?question=When%20was%20Hugging%20Face%20launched%3F'
-
       ```
-- [HuggingFaceChatModel](https://github.com/langchain4j/langchain4j/blob/main/langchain4j-hugging-face/src/main/java/dev/langchain4j/model/huggingface/HuggingFaceChatModel.java)
+- [ChatModel](https://javadoc.io/doc/dev.langchain4j/langchain4j-core/latest/dev/langchain4j/model/chat/ChatModel.html)
   - expand the GET `/api/model/chat` API
     1. Click the **Try it out** button.
     2. Type `Which are the most used Large Language Models?`, or any question, in the question field.
@@ -71,7 +115,7 @@ Navigate to the the [OpenAPI UI](http://localhost:9080/openapi/ui) URL for the f
     - ```
       curl 'http://localhost:9080/api/model/chat?userMessage=Which%20are%20the%20most%20used%20Large%20Language%20Models%3F' | jq
       ```
-- [InProcessEmbeddingModel](https://github.com/langchain4j/langchain4j-embeddings)
+- [EmbeddingModel](https://javadoc.io/doc/dev.langchain4j/langchain4j-core/latest/dev/langchain4j/model/embedding/EmbeddingModel.html)
   - expand the GET `/api/model/similarity` API
     1. Click the **Try it out** button.
     2. Type `I like Jakarta EE and MicroProfile.`, or any text, in the the **text1** field.
