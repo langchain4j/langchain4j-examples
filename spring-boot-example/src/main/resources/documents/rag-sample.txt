@@ -1,0 +1,40 @@
+LangChain4j — Sample Knowledge Base
+====================================
+
+What is LangChain4j?
+--------------------
+LangChain4j is a Java library that simplifies building LLM-powered
+applications on the JVM. It provides a unified API over many model
+providers (OpenAI, Anthropic, Google, Ollama, Bedrock, and others),
+embedding stores, document loaders, and high-level abstractions such as
+AI Services, Tools, and Retrieval-Augmented Generation (RAG).
+
+What is Retrieval-Augmented Generation (RAG)?
+---------------------------------------------
+RAG is a technique that grounds a language model's response in
+external knowledge. Documents are split into chunks, each chunk is
+converted into a vector embedding, and the embeddings are stored in
+a vector database. At query time, the user's question is embedded with
+the same model, the most similar chunks are retrieved, and they are
+injected into the prompt sent to the LLM. This reduces hallucination
+and lets the model answer questions about content it was never
+trained on.
+
+How does this Spring Boot example wire RAG?
+-------------------------------------------
+At startup, RagIngestor reads this file from the classpath, splits it
+into ~300-character chunks with a 30-character overlap, embeds each
+chunk with the OpenAI embedding model, and stores the vectors in an
+in-memory store. The EmbeddingStoreContentRetriever bean is auto-wired
+into the RagAssistant AI Service. Every call to /rag/chat retrieves
+up to 3 relevant chunks (minimum cosine similarity 0.6) and feeds them
+to the chat model alongside the user's question.
+
+Why use an in-memory embedding store?
+-------------------------------------
+For demos and tests, an in-memory store needs zero external
+infrastructure — no database, no container, no network calls beyond
+the LLM provider. For production, swap InMemoryEmbeddingStore for a
+persistent store such as PgVector, Qdrant, Pinecone, Milvus, or
+Elasticsearch; the rest of the wiring stays the same.
+
