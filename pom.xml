@@ -60,6 +60,7 @@
         <module>jvector-example</module>
         <module>s3-vectors-example</module>
         <module>yugabytedb-example</module>
+        <module>onnx-image-embedding-example</module>
     </modules>
 
 </project>
