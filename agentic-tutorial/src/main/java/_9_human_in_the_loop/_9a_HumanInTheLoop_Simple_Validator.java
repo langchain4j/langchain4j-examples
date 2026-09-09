@@ -35,7 +35,7 @@ public class _9a_HumanInTheLoop_Simple_Validator {
                 .description("validates the model's proposed hiring decision")
                 .outputKey("finalDecision") // checked by human
                 .responseProvider(scope -> {
-                    System.out.println("AI hiring assistant suggests: " + scope.readState("request"));
+                    System.out.println("AI hiring assistant suggests: " + scope.readState("modelDecision"));
                     System.out.println("Please confirm the final decision.");
                     System.out.println("Options: Invite on-site (I), Reject (R), Hold (H)");
                     System.out.print("> "); // we need input validation and error handling in real-life systems
