@@ -2,6 +2,7 @@ import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.input.structured.StructuredPrompt;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.output.structured.Description;
+import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.service.*;
 
 import java.math.BigDecimal;
@@ -380,6 +381,7 @@ public class OtherServiceExamples {
 
             Assistant assistant = AiServices.builder(Assistant.class)
                     .chatModel(chatModel)
+                    .chatMemoryProvider(memoryId -> MessageWindowChatMemory.withMaxMessages(10))
                     .systemMessageProvider(systemMessageProvider)
                     .build();
 
