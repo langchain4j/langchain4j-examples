@@ -47,7 +47,7 @@ public class _5b_Conditional_Workflow_Example_Async {
                 .chatModel(CHAT_MODEL)
                 .async(true)
                 .tools(new OrganizingTools())
-                .outputKey("sentEmailId")
+                .outputKey("infoRequestResult")
                 .build();
 
         // 2. Build async conditional workflow
@@ -67,7 +67,8 @@ public class _5b_Conditional_Workflow_Example_Async {
                 }, infoRequester) // if needed, request more info from candidate
                 .output(agenticScope ->
                         (agenticScope.readState("managerReview", new CvReview(0, "no manager review needed"))).toString() +
-                                "\n" + agenticScope.readState("sentEmailId", 0)
+                                "\nRejection email ID: " + agenticScope.readState("sentEmailId", 0) +
+                                "\nInfo request result: " + agenticScope.readState("infoRequestResult", "none")
                 ) // final output is the manager review (if any)
                 .build();
 
@@ -92,7 +93,8 @@ public class _5b_Conditional_Workflow_Example_Async {
 
 
         // 4. Run the conditional async workflow
-        candidateResponder.invoke(arguments);
+        String invoke = (String) candidateResponder.invoke(arguments);
+        System.out.println(invoke);
 
         System.out.println("=== Finished execution of async conditional workflow ===");
     }
