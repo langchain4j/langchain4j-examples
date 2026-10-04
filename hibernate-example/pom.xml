@@ -21,13 +21,13 @@
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j</artifactId>
-            <version>1.20.0</version>
+            <version>1.21.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-hibernate</artifactId>
-            <version>1.20.0-beta30</version>
+            <version>1.21.0-beta31</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate.orm</groupId>
@@ -50,7 +50,7 @@
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-embeddings-all-minilm-l6-v2</artifactId>
-            <version>1.20.0-beta30</version>
+            <version>1.21.0-beta31</version>
         </dependency>
 
         <dependency>
