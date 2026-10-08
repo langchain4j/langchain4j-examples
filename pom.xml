@@ -49,6 +49,7 @@
         <module>redis-example</module>
         <module>spring-boot4-example</module>
         <module>spring-boot-example</module>
+        <module>tachyon-mcp-server-example</module>
         <module>tutorials</module>
         <module>vertex-ai-gemini-examples</module>
         <module>vespa-example</module>
