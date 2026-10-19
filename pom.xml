@@ -18,6 +18,7 @@
         <module>chroma-example</module>
         <module>couchbase-example</module>
         <module>customer-support-agent-example</module>
+        <module>deepseek-examples</module>
         <module>elasticsearch-example</module>
         <module>google-ai-gemini-examples</module>
         <module>google-alloydb-example</module>
