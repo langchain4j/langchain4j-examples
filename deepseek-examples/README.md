@@ -36,7 +36,7 @@ Or run any `main` method from your IDE.
 
 | Model | Notes |
 |---|---|
-| `deepseek-chat` | General-purpose chat model |
-| `deepseek-reasoner` | Reasoning model (returns chain of thought) |
+| `deepseek-flash` | General-purpose chat model |
+| `deepseek-v4-pro` | Reasoning model (returns chain of thought) |
 
 Pricing and peak/off-peak hours: https://api-docs.deepseek.com/quick_start/pricing

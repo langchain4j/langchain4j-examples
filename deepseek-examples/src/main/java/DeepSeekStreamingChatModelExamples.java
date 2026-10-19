@@ -15,7 +15,7 @@ public class DeepSeekStreamingChatModelExamples {
         StreamingChatModel model = OpenAiStreamingChatModel.builder()
                 .apiKey(System.getenv("DEEPSEEK_API_KEY")) // Please use your own DeepSeek API key
                 .baseUrl("https://api.deepseek.com")
-                .modelName("deepseek-chat")
+                .modelName("deepseek-flash")
                 .logRequests(true)
                 .logResponses(true)
                 .build();

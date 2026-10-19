@@ -10,8 +10,8 @@ import dev.langchain4j.model.openai.OpenAiChatModel;
  *
  * Supported model names (see https://api-docs.deepseek.com/quick_start/pricing):
  * <ul>
- *     <li>{@code deepseek-chat} - the general-purpose chat model</li>
- *     <li>{@code deepseek-reasoner} - the reasoning model</li>
+ *     <li>{@code deepseek-flash} - the fast, general-purpose chat model</li>
+ *     <li>{@code deepseek-v4-pro} - the larger, reasoning-capable model</li>
  * </ul>
  *
  * Get your API key at https://platform.deepseek.com/api_keys
@@ -25,7 +25,7 @@ public class DeepSeekChatModelExamples {
             ChatModel model = OpenAiChatModel.builder()
                     .apiKey(System.getenv("DEEPSEEK_API_KEY")) // Please use your own DeepSeek API key
                     .baseUrl("https://api.deepseek.com")
-                    .modelName("deepseek-chat")
+                    .modelName("deepseek-flash")
                     .logRequests(true)
                     .logResponses(true)
                     .build();
@@ -43,7 +43,7 @@ public class DeepSeekChatModelExamples {
             ChatModel model = OpenAiChatModel.builder()
                     .apiKey(System.getenv("DEEPSEEK_API_KEY")) // Please use your own DeepSeek API key
                     .baseUrl("https://api.deepseek.com")
-                    .modelName("deepseek-reasoner")
+                    .modelName("deepseek-v4-pro")
                     .logRequests(true)
                     .logResponses(true)
                     .build();
