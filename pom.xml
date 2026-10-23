@@ -30,6 +30,7 @@
         <module>jlama-examples</module>
         <module>mcp-example</module>
         <module>mcp-github-example</module>
+        <module>mcp-stdio-server-example</module>
         <module>milvus-example</module>
         <module>mistral-ai-examples</module>
         <module>native-java-gemini-function-calling-example</module>
