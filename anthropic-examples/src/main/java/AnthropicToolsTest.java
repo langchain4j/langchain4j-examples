@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import static dev.langchain4j.model.anthropic.AnthropicChatModelName.CLAUDE_3_HAIKU_20240307;
+import static dev.langchain4j.model.anthropic.AnthropicChatModelName.CLAUDE_HAIKU_4_5_20251001;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AnthropicToolsTest {
@@ -15,7 +15,7 @@ class AnthropicToolsTest {
     ChatModel model = AnthropicChatModel.builder()
             // API key can be created here: https://console.anthropic.com/settings/keys
             .apiKey(System.getenv("ANTHROPIC_API_KEY"))
-            .modelName(CLAUDE_3_HAIKU_20240307)
+            .modelName(CLAUDE_HAIKU_4_5_20251001)
             .logRequests(true)
             .logResponses(true)
             // Other parameters can be set as well

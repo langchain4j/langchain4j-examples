@@ -1,15 +1,13 @@
 package dev.langchain4j.example.gemini;
 
 import dev.langchain4j.data.message.UserMessage;
+import dev.langchain4j.model.batch.BatchResponse;
+import dev.langchain4j.model.batch.BatchState;
 import dev.langchain4j.model.chat.request.ChatRequest;
-import dev.langchain4j.model.googleai.BatchRequestResponse;
-import dev.langchain4j.model.googleai.BatchRequestResponse.BatchIncomplete;
-import dev.langchain4j.model.googleai.BatchRequestResponse.BatchName;
-import dev.langchain4j.model.googleai.BatchRequestResponse.BatchResponse;
-import dev.langchain4j.model.googleai.BatchRequestResponse.BatchSuccess;
+import dev.langchain4j.model.chat.response.ChatResponse;
+import dev.langchain4j.model.googleai.GeminiBatchRequest;
 import dev.langchain4j.model.googleai.GoogleAiGeminiBatchChatModel;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -34,90 +32,62 @@ import java.util.List;
  */
 public class Example12_BatchChatInline {
 
+    private static final String MODEL_NAME = "gemini-2.5-flash-lite";
+
     public static void main(String[] args) throws Exception {
         var batchModel = GoogleAiGeminiBatchChatModel.builder()
                 .apiKey(System.getenv("GOOGLE_AI_GEMINI_API_KEY"))
-                .modelName("gemini-2.5-flash-lite")
+                .modelName(MODEL_NAME)
                 .logRequestsAndResponses(true)
                 .build();
 
         var requests = List.of(
                 ChatRequest.builder()
-                        .modelName("gemini-2.5-flash-lite")
+                        .modelName(MODEL_NAME)
                         .messages(UserMessage.from("What is the capital of France?"))
                         .build(),
                 ChatRequest.builder()
-                        .modelName("gemini-2.5-flash-lite")
+                        .modelName(MODEL_NAME)
                         .messages(UserMessage.from("What is the capital of Japan?"))
                         .build(),
                 ChatRequest.builder()
-                        .modelName("gemini-2.5-flash-lite")
+                        .modelName(MODEL_NAME)
                         .messages(UserMessage.from("What is the capital of Brazil?"))
                         .build()
         );
 
         System.out.println("Submitting batch with " + requests.size() + " requests...");
 
-        BatchResponse<?> response = batchModel.createBatchInline("capitals-batch", 0L, requests);
-        BatchName batchName = getBatchName(response);
+        // Submit the batch. The returned response carries the batch id and its current state.
+        BatchResponse<ChatResponse> response =
+                batchModel.submit(GeminiBatchRequest.from(requests, "capitals-batch", 0L));
+        var batchId = response.batchId();
 
-        System.out.println("Batch created: " + batchName.value());
+        System.out.println("Batch created: " + batchId);
         System.out.println("Polling for completion...");
 
-        // Poll until complete
-        do {
+        // Poll until the batch reaches a terminal state.
+        while (!response.state().isTerminal()) {
             Thread.sleep(5000);
-            response = batchModel.retrieveBatchResults(batchName);
-            System.out.println("  Status: " + response.getClass().getSimpleName());
-        } while (response instanceof BatchIncomplete);
+            response = batchModel.retrieve(batchId);
+            System.out.println("  State: " + response.state());
+        }
 
-        // Process results
-        if (response instanceof BatchSuccess<?> success) {
+        // Process results.
+        if (response.state() == BatchState.SUCCEEDED) {
             System.out.println("\nBatch completed successfully!");
             System.out.println("Results:");
 
-            var results = success.responses();
-            for (int i = 0; i < results.size(); i++) {
-                var chatResponse = (dev.langchain4j.model.chat.response.ChatResponse) results.get(i);
-                System.out.println("  " + (i + 1) + ". " + chatResponse.aiMessage().text());
+            var responses = response.responses();
+            for (int i = 0; i < responses.size(); i++) {
+                System.out.println("  " + (i + 1) + ". " + responses.get(i).aiMessage().text());
             }
         } else {
-            System.err.println("Batch failed: " + response);
+            System.err.println("Batch did not succeed. State: " + response.state() + ", errors: " + response.errors());
         }
 
-        // Clean up
-        batchModel.deleteBatchJob(batchName);
+        // Clean up.
+        batchModel.deleteBatchJob(batchId);
         System.out.println("\nBatch job deleted.");
-    }
-
-    private static BatchName getBatchName(BatchResponse<?> response) {
-        if (response instanceof BatchSuccess<?> success) {
-            return success.batchName();
-        } else if (response instanceof BatchIncomplete incomplete) {
-            return incomplete.batchName();
-        } else {
-            throw new IllegalStateException("Unexpected response type: " + response);
-        }
-    }
-
-    private static GoogleAiGeminiBatchChatModel createBatchModel() throws Exception {
-        // Use reflection to access the non-public builder() method
-        Method builderMethod = GoogleAiGeminiBatchChatModel.class.getDeclaredMethod("builder");
-        builderMethod.setAccessible(true);
-        Object builder = builderMethod.invoke(null);
-
-        Class<?> builderClass = builder.getClass();
-
-        Method apiKeyMethod = builderClass.getMethod("apiKey", String.class);
-        builder = apiKeyMethod.invoke(builder, System.getenv("GOOGLE_AI_GEMINI_API_KEY"));
-
-        Method modelNameMethod = builderClass.getMethod("modelName", String.class);
-        builder = modelNameMethod.invoke(builder, "gemini-2.5-flash-lite");
-
-        Method logMethodName = builderClass.getMethod("logRequestsAndResponses", Boolean.class);
-        builder = logMethodName.invoke(builder, true);
-
-        Method buildMethod = builderClass.getMethod("build");
-        return (GoogleAiGeminiBatchChatModel) buildMethod.invoke(builder);
     }
 }

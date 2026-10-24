@@ -1,0 +1,8 @@
+### Low Level API: ChatModel
+GET http://localhost:8082/model?message=What is the capital of Germany?
+
+### High Level API: AI Service with tools
+GET http://localhost:8082/assistant?message=What is the current time?
+
+### High Level API: Streaming AI Service with tools
+GET http://localhost:8082/streamingAssistant?message=What is the current time?

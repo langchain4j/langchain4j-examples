@@ -1,14 +1,15 @@
 package dev.langchain4j.example.gemini;
 
 import dev.langchain4j.data.message.UserMessage;
+import dev.langchain4j.model.batch.BatchResponse;
+import dev.langchain4j.model.batch.BatchState;
 import dev.langchain4j.model.chat.request.ChatRequest;
 import dev.langchain4j.model.chat.response.ChatResponse;
-import dev.langchain4j.model.googleai.BatchRequestResponse.*;
+import dev.langchain4j.model.googleai.BatchRequestResponse.BatchFileRequest;
 import dev.langchain4j.model.googleai.GeminiFiles;
 import dev.langchain4j.model.googleai.GoogleAiGeminiBatchChatModel;
 import dev.langchain4j.model.googleai.jsonl.JsonLinesWriters;
 
-import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.util.List;
 
@@ -20,7 +21,7 @@ import java.util.List;
  * <ol>
  *   <li>Write batch requests to a local JSONL file</li>
  *   <li>Upload the file using the Gemini Files API</li>
- *   <li>Create a batch job referencing the uploaded file</li>
+ *   <li>Submit a batch job referencing the uploaded file</li>
  *   <li>Poll for completion and retrieve results</li>
  *   <li>Process results</li>
  * </ol>
@@ -40,12 +41,13 @@ public class Example14_BatchChatFromFile {
         var apiKey = System.getenv("GOOGLE_AI_GEMINI_API_KEY");
 
         var batchModel = GoogleAiGeminiBatchChatModel.builder()
-                .apiKey(System.getenv("GOOGLE_AI_GEMINI_API_KEY"))
+                .apiKey(apiKey)
                 .modelName("gemini-2.5-flash-lite")
                 .logRequestsAndResponses(true)
                 .build();
         var geminiFiles = GeminiFiles.builder().apiKey(apiKey).build();
 
+        // Each request is paired with a unique key so results can be correlated back to the input.
         var requests = List.of(
                 new BatchFileRequest<>("solar-system",
                         ChatRequest.builder()
@@ -67,9 +69,10 @@ public class Example14_BatchChatFromFile {
 
         // Step 1: Write requests to a local JSONL file
         var tempFile = Files.createTempFile("batch-requests-", ".jsonl");
-        var writer = JsonLinesWriters.streaming(tempFile);
         System.out.println("Writing batch requests to: " + tempFile);
-        batchModel.writeBatchToFile(writer, requests);
+        try (var writer = JsonLinesWriters.streaming(tempFile)) {
+            batchModel.writeBatchToFile(writer, requests);
+        }
 
         // Verify JSONL content
         System.out.println("JSONL content:");
@@ -95,38 +98,37 @@ public class Example14_BatchChatFromFile {
 
         System.out.println("File is now ACTIVE");
 
-        // Step 3: Create batch job from the uploaded file
-        System.out.println("\nCreating batch job from uploaded file...");
-        BatchResponse<?> response = batchModel.createBatchFromFile("file-based-batch", uploadedFile);
-        BatchName batchName = getBatchName(response);
+        // Step 3: Submit a batch job from the uploaded file
+        System.out.println("\nSubmitting batch job from uploaded file...");
+        BatchResponse<ChatResponse> response = batchModel.submit("file-based-batch", uploadedFile);
+        var batchId = response.batchId();
 
-        System.out.println("Batch created: " + batchName.value());
+        System.out.println("Batch created: " + batchId);
         System.out.println("Polling for completion...");
 
-        // Step 4: Poll until complete
-        do {
+        // Step 4: Poll until the batch reaches a terminal state
+        while (!response.state().isTerminal()) {
             Thread.sleep(5000);
-            response = batchModel.retrieveBatchResults(batchName);
-            System.out.println("  Status: " + response.getClass().getSimpleName());
-        } while (response instanceof BatchIncomplete);
+            response = batchModel.retrieve(batchId);
+            System.out.println("  State: " + response.state());
+        }
 
         // Step 5: Process results
-        if (response instanceof BatchSuccess<?> success) {
+        if (response.state() == BatchState.SUCCEEDED) {
             System.out.println("\nBatch completed successfully!");
             System.out.println("Results:");
 
-            var results = success.responses();
-            for (int i = 0; i < results.size(); i++) {
-                var chatResponse = (ChatResponse) results.get(i);
-                System.out.println("  " + (i + 1) + ". " + chatResponse.aiMessage().text());
+            var responses = response.responses();
+            for (int i = 0; i < responses.size(); i++) {
+                System.out.println("  " + (i + 1) + ". " + responses.get(i).aiMessage().text());
             }
         } else {
-            System.err.println("Batch failed: " + response);
+            System.err.println("Batch did not succeed. State: " + response.state() + ", errors: " + response.errors());
         }
 
         // Clean up
         System.out.println("\nCleaning up...");
-        batchModel.deleteBatchJob(batchName);
+        batchModel.deleteBatchJob(batchId);
         System.out.println("Batch job deleted.");
 
         geminiFiles.deleteFile(uploadedFile.name());
@@ -134,15 +136,5 @@ public class Example14_BatchChatFromFile {
 
         Files.deleteIfExists(tempFile);
         System.out.println("Local temp file deleted.");
-    }
-
-    private static BatchName getBatchName(BatchResponse<?> response) {
-        if (response instanceof BatchSuccess<?> success) {
-            return success.batchName();
-        } else if (response instanceof BatchIncomplete incomplete) {
-            return incomplete.batchName();
-        } else {
-            throw new IllegalStateException("Unexpected response type: " + response);
-        }
     }
 }

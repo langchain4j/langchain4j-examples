@@ -4,7 +4,7 @@ import dev.langchain4j.mcp.McpToolProvider;
 import dev.langchain4j.mcp.client.DefaultMcpClient;
 import dev.langchain4j.mcp.client.McpClient;
 import dev.langchain4j.mcp.client.transport.McpTransport;
-import dev.langchain4j.mcp.client.transport.http.HttpMcpTransport;
+import dev.langchain4j.mcp.client.transport.http.StreamableHttpMcpTransport;
 import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.service.AiServices;
@@ -19,9 +19,9 @@ public class McpToolsExampleOverHttp {
      * This example uses the `server-everything` MCP server that showcases some aspects of the MCP protocol.
      * In particular, we use its 'add' tool that adds two numbers.
      * <p>
-     * Before running this example, you need to start the `everything` server in SSE mode on localhost:3001.
+     * Before running this example, you need to start the `everything` server in streamable HTTP mode on localhost:3001.
      * Check out https://github.com/modelcontextprotocol/servers/tree/main/src/everything
-     * and run `npm install` and `node dist/sse.js`.
+     * and run `npm install` and `node dist/streamableHttp.js`.
      * <p>
      * Of course, feel free to swap out the server with any other MCP server.
      * <p>
@@ -36,8 +36,8 @@ public class McpToolsExampleOverHttp {
                 .logResponses(true)
                 .build();
 
-        McpTransport transport = new HttpMcpTransport.Builder()
-                .sseUrl("http://localhost:3001/sse")
+        McpTransport transport = new StreamableHttpMcpTransport.Builder()
+                .url("http://localhost:3001/mcp")
                 .timeout(Duration.ofSeconds(60))
                 .logRequests(true)
                 .logResponses(true)

@@ -100,20 +100,23 @@ You can also run directly from your IDE by executing the `main` method of any ex
 
 ### Batch Workflow
 
-1. **Create** a batch job (inline or from file)
-2. **Poll** for completion using `retrieveBatchResults()`
-3. **Process** results when `BatchSuccess` is returned
-4. **Clean up** by deleting the batch job and any uploaded files (Optional as batches are removed after )
+1. **Submit** a batch job with `submit(...)` (inline via `GeminiBatchRequest`, or from an uploaded file)
+2. **Poll** for completion with `retrieve(batchId)` until `response.state().isTerminal()`
+3. **Process** results via `response.responses()` (or `response.results()` to correlate each outcome with its request) once the state is `SUCCEEDED`
+4. **Clean up** with `deleteBatchJob(batchId)` and by deleting any uploaded files (optional, as batches are removed automatically after a retention period)
 
 ### Batch States
 
+The `BatchState` enum (`response.state()`) reports the lifecycle of a job. Use `state().isTerminal()` to detect completion.
+
 | State | Description |
 |-------|-------------|
-| `BATCH_STATE_PENDING` | Job is queued |
-| `BATCH_STATE_RUNNING` | Job is processing |
-| `BATCH_STATE_SUCCEEDED` | Job completed successfully |
-| `BATCH_STATE_FAILED` | Job failed |
-| `BATCH_STATE_CANCELLED` | Job was cancelled |
+| `PENDING` | Job is queued |
+| `RUNNING` | Job is processing |
+| `SUCCEEDED` | Job completed successfully |
+| `FAILED` | Job failed |
+| `CANCELLED` | Job was cancelled |
+| `EXPIRED` | Job expired before completion |
 
 ## Models
 

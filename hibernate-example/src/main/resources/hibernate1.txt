@@ -1,0 +1,1 @@
+A book about Hibernate ORM, the de-facto standard Java framework for object relational database access.

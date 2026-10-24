@@ -2,6 +2,8 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import com.ibm.watsonx.ai.chat.model.ExtractionTags;
+import com.ibm.watsonx.ai.chat.model.ExtractionTags.Response;
+import com.ibm.watsonx.ai.chat.model.ExtractionTags.Think;
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.model.chat.StreamingChatModel;
@@ -22,7 +24,7 @@ class WatsonxStreamingChatModelReasoningTest {
                 .apiKey(System.getenv("WATSONX_API_KEY"))
                 .projectId(System.getenv("WATSONX_PROJECT_ID"))
                 .modelName("ibm/granite-3-3-8b-instruct")
-                .thinking(ExtractionTags.of("think", "response"))
+                .thinking(ExtractionTags.of(new Think("<think>", "</think>"), new Response("<response>", "</response>")))
                 .build();
 
             CountDownLatch latch = new CountDownLatch(1);

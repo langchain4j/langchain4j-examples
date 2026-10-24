@@ -1,5 +1,7 @@
 import java.util.List;
 import com.ibm.watsonx.ai.chat.model.ExtractionTags;
+import com.ibm.watsonx.ai.chat.model.ExtractionTags.Response;
+import com.ibm.watsonx.ai.chat.model.ExtractionTags.Think;
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.model.chat.ChatModel;
@@ -17,7 +19,7 @@ class WatsonxChatModelReasoningTest {
                 .apiKey(System.getenv("WATSONX_API_KEY"))
                 .projectId(System.getenv("WATSONX_PROJECT_ID"))
                 .modelName("ibm/granite-3-3-8b-instruct")
-                .thinking(ExtractionTags.of("think", "response"))
+                .thinking(ExtractionTags.of(new Think("<think>", "</think>"), new Response("<response>", "</response>")))
                 .build();
 
             List<ChatMessage> messages = List.of(
