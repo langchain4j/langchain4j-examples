@@ -57,6 +57,7 @@
         <module>weaviate-example</module>
         <module>wildfly-example</module>
         <module>jvector-example</module>
+        <module>memcode-memory-example</module>
         <module>s3-vectors-example</module>
         <module>yugabytedb-example</module>
     </modules>
