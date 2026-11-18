@@ -1,0 +1,40 @@
+The Earth completes one revolution around the Sun in approximately 365.25 days.
+Each year the Earth makes a full orbit around the Sun, taking about 365.25 days.
+Machine learning is a field of AI that builds models to learn patterns from data.
+ML focuses on creating algorithms that learn from examples and improve over time.
+The Pacific Ocean covers more area than any other ocean and is also the deepest.
+The Pacific is the biggest and deepest ocean on the planet, containing the deepest trenches.
+Photosynthesis enables plants to convert light energy into chemical energy and oxygen.
+Plants use photosynthesis to transform sunlight into glucose and release oxygen.
+The Great Wall of China stretches thousands of kilometers and is a famous historic structure.
+China's Great Wall is a renowned fortified structure built over centuries across the landscape.
+Python is a versatile high-level language commonly used for data analysis and scripting.
+Python's simplicity and libraries make it a preferred language for data science tasks.
+Mount Everest stands at about 8,848 meters and is the highest peak on Earth.
+At roughly 8,848 meters above sea level, Mount Everest is the planet's tallest mountain.
+Shakespeare authored plays such as Hamlet and many other notable works.
+William Shakespeare wrote famous plays including Hamlet, Othello, and Macbeth.
+DNA stores the genetic code that guides the growth and functioning of living organisms.
+The sequence of nucleotides in DNA encodes the hereditary information for organisms.
+The Eiffel Tower in Paris was finished in 1889 and measures around 330 meters tall.
+Completed in 1889, the Eiffel Tower rises to approximately 330 meters above Paris.
+Artificial neural networks are inspired by the structure and function of biological neurons.
+Neural network models imitate networks of neurons to process information and learn.
+The Amazon rainforest is estimated to produce about twenty percent of the world's oxygen.
+About one-fifth of global oxygen production is attributed to the vast Amazon rainforest.
+Albert Einstein introduced the theory of relativity in the early twentieth century.
+Einstein developed both special and general relativity during the early 1900s.
+James Naismith invented the game of basketball in 1891 while in Massachusetts.
+Basketball was created by James Naismith in 1891 at a Massachusetts training school.
+The adult human brain contains on the order of 86 billion neurons forming complex networks.
+Researchers estimate the human brain has roughly 86 billion nerve cells.
+Coffee ranks among the most widely consumed beverages worldwide each day.
+Globally, coffee is one of the leading beverages consumed by millions daily.
+The speed of light in a vacuum is approximately 299,792 kilometers per second.
+In vacuum, light travels at about 299,792 km/s, a fundamental physical constant.
+Ancient Egyptians constructed pyramids to serve as monumental tombs for their pharaohs.
+The pyramids were built by the ancient Egyptians as burial complexes for their rulers.
+Quantum computing harnesses quantum phenomena like superposition to perform computation.
+Quantum computers use entanglement and superposition to tackle certain computational problems.
+The Mona Lisa was painted by Leonardo da Vinci during the sixteenth century.
+Leonardo da Vinci created the Mona Lisa in the 1500s, one of the most famous paintings.
