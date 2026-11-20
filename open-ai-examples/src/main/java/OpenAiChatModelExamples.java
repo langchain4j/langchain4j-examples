@@ -8,8 +8,6 @@ import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.openai.OpenAiChatRequestParameters;
 
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
-
 public class OpenAiChatModelExamples {
 
     static class Simple_Prompt {
@@ -18,7 +16,8 @@ public class OpenAiChatModelExamples {
 
             ChatModel chatModel = OpenAiChatModel.builder()
                     .apiKey(ApiKeys.OPENAI_API_KEY)
-                    .modelName(GPT_4_O_MINI)
+                    .modelName("gpt-6-luna")
+                    .reasoningEffort("none")
                     .build();
 
             String joke = chatModel.chat("Tell me a joke about Java");
@@ -33,8 +32,9 @@ public class OpenAiChatModelExamples {
 
             ChatModel chatModel = OpenAiChatModel.builder()
                     .apiKey(ApiKeys.OPENAI_API_KEY) // Please use your own OpenAI API key
-                    .modelName(GPT_4_O_MINI)
-                    .maxTokens(50)
+                    .modelName("gpt-6-luna")
+                    .reasoningEffort("none")
+                    .maxCompletionTokens(50)
                     .build();
 
             UserMessage userMessage = UserMessage.from(
