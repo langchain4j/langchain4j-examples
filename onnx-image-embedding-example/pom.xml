@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>dev.langchain4j</groupId>
+    <artifactId>onnx-image-embedding-example</artifactId>
+    <version>1.19.0-beta29</version>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <langchain4j.version>1.19.0-beta29</langchain4j.version>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j</artifactId>
+            <version>${langchain4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-embeddings</artifactId>
+            <version>${langchain4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.5.12</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!--
+              Downloads the two halves of CLIP (vision + text towers) plus its tokenizer so that
+              the example runs fully offline, from the same files the integration tests use.
+            -->
+            <plugin>
+                <groupId>com.googlecode.maven-download-plugin</groupId>
+                <artifactId>download-maven-plugin</artifactId>
+                <version>1.13.0</version>
+                <executions>
+                    <execution>
+                        <id>download-clip-vision-model</id>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <url>https://huggingface.co/Xenova/clip-vit-base-patch32/resolve/main/onnx/vision_model_quantized.onnx</url>
+                            <outputDirectory>${project.build.directory}/clip</outputDirectory>
+                            <outputFileName>vision_model.onnx</outputFileName>
+                            <sha256>583fd1110a514667812fee7d684952aaf82a99b959760c8d7dca7e0ab9839299</sha256>
+                            <skipCache>false</skipCache>
+                            <!-- 10 minutes -->
+                            <readTimeOut>600000</readTimeOut>
+                            <retries>5</retries>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>download-clip-text-model</id>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <url>https://huggingface.co/Xenova/clip-vit-base-patch32/resolve/main/onnx/text_model_quantized.onnx</url>
+                            <outputDirectory>${project.build.directory}/clip</outputDirectory>
+                            <outputFileName>text_model.onnx</outputFileName>
+                            <sha256>73baab855d406190da9faa498cfedf65f15cf309f4cc7385b7b032e6d08e5c3a</sha256>
+                            <skipCache>false</skipCache>
+                            <readTimeOut>600000</readTimeOut>
+                            <retries>5</retries>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>download-clip-tokenizer</id>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <url>https://huggingface.co/Xenova/clip-vit-base-patch32/resolve/main/tokenizer.json</url>
+                            <outputDirectory>${project.build.directory}/clip</outputDirectory>
+                            <outputFileName>tokenizer.json</outputFileName>
+                            <sha256>f7f3b7af117d467b58374797691a6438d3e6b9e9cef800dfd5dced7f697a90cd</sha256>
+                            <skipCache>false</skipCache>
+                            <readTimeOut>600000</readTimeOut>
+                            <retries>5</retries>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <cleanupDaemonThreads>false</cleanupDaemonThreads>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
