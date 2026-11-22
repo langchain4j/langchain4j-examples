@@ -27,3 +27,6 @@ jobs:
       - name: Compile with JDK ${{ matrix.java_version }}
         run: |
           mvn -B -U -T8C compile
+
+      - name: Test Nace examples without API keys
+        run: mvn -B -f nace-examples/pom.xml test

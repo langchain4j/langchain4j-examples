@@ -32,6 +32,7 @@
         <module>mcp-github-example</module>
         <module>milvus-example</module>
         <module>mistral-ai-examples</module>
+        <module>nace-examples</module>
         <module>native-java-gemini-function-calling-example</module>
         <module>neo4j-example</module>
         <module>ollama-examples</module>
