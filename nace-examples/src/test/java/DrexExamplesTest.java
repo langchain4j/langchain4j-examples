@@ -28,6 +28,7 @@ class DrexExamplesTest {
 
     private static final String PATH = "/v1/systemone";
     private static final String TICKET = "I was charged twice. Please refund one charge.";
+    // A request for the alias returns the concrete version that served it.
     private static final String TYPED_RESPONSE = """
             {
               "model": "drex-max-v1.1",
@@ -59,7 +60,7 @@ class DrexExamplesTest {
 
     @ParameterizedTest
     @ValueSource(booleans = {false, true})
-    void sends_the_example_questions_and_retains_typed_answers(boolean async) throws Exception {
+    void sends_the_latest_alias_and_retains_resolved_model_and_typed_answers(boolean async) throws Exception {
         server.stubFor(post(urlEqualTo(PATH)).willReturn(okJson(TYPED_RESPONSE)));
         var model = model();
         var request = DrexDecisionExamples.triageRequest(TICKET);
@@ -79,7 +80,7 @@ class DrexExamplesTest {
                 .withHeader("Authorization", equalTo("Bearer test-nace-key"))
                 .withHeader("X-Nace-Client", equalTo("langchain4j-nace-examples/1.0"))
                 .withHeader("User-Agent", equalTo("langchain4j-nace-examples/1.0"))
-                .withRequestBody(matchingJsonPath("$.model", equalTo("drex-max-v1.1")))
+                .withRequestBody(matchingJsonPath("$.model", equalTo("drex-latest")))
                 .withRequestBody(matchingJsonPath("$.state", equalTo(TICKET)))
                 .withRequestBody(matchingJsonPath("$.questions.refund.type", equalTo("noul")))
                 .withRequestBody(matchingJsonPath("$.questions.team.criteria.billing", equalTo("Payments and refunds")))

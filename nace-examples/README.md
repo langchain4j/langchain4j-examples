@@ -15,7 +15,7 @@ Set `NACE_API_KEY`, then run:
 ./mvnw -f nace-examples/pom.xml compile exec:java -Dexec.mainClass=DrexDecisionExamples
 ```
 
-The example sends a support ticket to `drex-max-v1.1` and asks three questions in one request:
+The example sends a support ticket to `drex-latest` and asks three questions in one request:
 
 - Is the customer asking for a refund? (yes/no probability)
 - Which team should handle it? (choice and probabilities)
@@ -29,7 +29,8 @@ To try another ticket:
   -Dexec.args="I cannot log in after resetting my password."
 ```
 
-This example prints actual answers and token usage. The yes/no probability means
+`drex-latest` is a model alias that can move to a newer version.
+The example prints the resolved model version, actual answers and token usage. The yes/no probability means
 P(yes), not confidence in either outcome. Choose application thresholds using evaluated data.
 
 ## 2. Select a chat model for an AI Service

@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class DrexDecisionExamples {
 
-    static final String MODEL = "drex-max-v1.1";
+    static final String MODEL = "drex-latest";
     static final String CLIENT = "langchain4j-nace-examples/1.0";
 
     public static void main(String[] args) {
@@ -19,6 +19,7 @@ public class DrexDecisionExamples {
                 : String.join(" ", args);
 
         var response = decisionModel().decide(triageRequest(ticket));
+        System.out.println("Resolved decision model: " + response.modelName());
         System.out.println("Refund probability: " + response.yesNo("refund").probability());
         System.out.println("Team: " + response.choice("team").value());
         System.out.println("Team probabilities: " + response.choice("team").probabilities());
