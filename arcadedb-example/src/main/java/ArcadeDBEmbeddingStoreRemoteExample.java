@@ -34,7 +34,7 @@ import java.util.stream.IntStream;
  *     --name arcadedb \
  *     -p 2480:2480 \
  *     -e JAVA_OPTS="-Darcadedb.server.rootPassword=playwithdata" \
- *     arcadedata/arcadedb:latest
+ *     arcadedata/arcadedb:26.10.2
  * </pre>
  *
  * <p>For an alternative that requires no server setup, see
