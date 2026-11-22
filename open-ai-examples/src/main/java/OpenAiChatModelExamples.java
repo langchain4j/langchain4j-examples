@@ -8,7 +8,7 @@ import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.openai.OpenAiChatRequestParameters;
 
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_6_LUNA;
 
 public class OpenAiChatModelExamples {
 
@@ -18,7 +18,7 @@ public class OpenAiChatModelExamples {
 
             ChatModel chatModel = OpenAiChatModel.builder()
                     .apiKey(ApiKeys.OPENAI_API_KEY)
-                    .modelName(GPT_4_O_MINI)
+                    .modelName(GPT_6_LUNA)
                     .build();
 
             String joke = chatModel.chat("Tell me a joke about Java");
@@ -33,8 +33,8 @@ public class OpenAiChatModelExamples {
 
             ChatModel chatModel = OpenAiChatModel.builder()
                     .apiKey(ApiKeys.OPENAI_API_KEY) // Please use your own OpenAI API key
-                    .modelName(GPT_4_O_MINI)
-                    .maxTokens(50)
+                    .modelName(GPT_6_LUNA)
+                    .maxCompletionTokens(50)
                     .build();
 
             UserMessage userMessage = UserMessage.from(
@@ -66,7 +66,7 @@ public class OpenAiChatModelExamples {
                     .build();
 
             ChatRequestParameters parameters = ChatRequestParameters.builder()
-                    .modelName("gpt-4o-mini")
+                    .modelName("gpt-6-luna")
                     .temperature(1.0)
                     .maxOutputTokens(50)
                     .build();
@@ -102,7 +102,7 @@ public class OpenAiChatModelExamples {
 
             OpenAiChatRequestParameters parameters = OpenAiChatRequestParameters.builder()
                     .seed(67890) // OpenAI-specific parameter
-                    .modelName("gpt-4o-mini") // common parameter
+                    .modelName("gpt-6-luna") // common parameter
                     .temperature(1.0) // common parameter
                     .maxOutputTokens(50) // common parameter
                     .build();
