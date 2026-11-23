@@ -1,13 +1,23 @@
 package dev.langchain4j.example.rest;
 
+import static dev.langchain4j.data.segment.TextSegment.textSegment;
+import static dev.langchain4j.store.embedding.CosineSimilarity.between;
+import static dev.langchain4j.store.embedding.RelevanceScore.fromCosineSimilarity;
+
+import java.util.List;
+import java.util.Properties;
+
+import org.eclipse.microprofile.openapi.annotations.Operation;
+
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.SystemMessage;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.data.segment.TextSegment;
-import dev.langchain4j.model.huggingface.HuggingFaceChatModel;
-import dev.langchain4j.model.huggingface.HuggingFaceEmbeddingModel;
-import dev.langchain4j.model.huggingface.HuggingFaceLanguageModel;
+import dev.langchain4j.example.chat.util.ModelBuilder;
+import dev.langchain4j.model.chat.ChatModel;
+import dev.langchain4j.model.embedding.EmbeddingModel;
+import dev.langchain4j.model.language.LanguageModel;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
@@ -15,58 +25,13 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.eclipse.microprofile.openapi.annotations.Operation;
-
-import java.util.List;
-import java.util.Properties;
-
-import static dev.langchain4j.data.segment.TextSegment.textSegment;
-import static dev.langchain4j.model.huggingface.HuggingFaceModelName.SENTENCE_TRANSFORMERS_ALL_MINI_LM_L6_V2;
-import static dev.langchain4j.store.embedding.CosineSimilarity.between;
-import static dev.langchain4j.store.embedding.RelevanceScore.fromCosineSimilarity;
-import static java.time.Duration.ofSeconds;
 
 @ApplicationScoped
 @Path("model")
 public class ModelResource {
 
     @Inject
-    @ConfigProperty(name = "hugging.face.api.key")
-    private String HUGGING_FACE_API_KEY;
-
-    @Inject
-    @ConfigProperty(name = "language.model.id")
-    private String LANGUAGE_MODEL_ID;
-
-    private HuggingFaceLanguageModel languageModel = null;
-    private HuggingFaceEmbeddingModel embeddingModel = null;
-
-    private HuggingFaceLanguageModel getLanguageModel() {
-        if (languageModel == null) {
-            languageModel = HuggingFaceLanguageModel.builder()
-                    .accessToken(HUGGING_FACE_API_KEY)
-                    .modelId(LANGUAGE_MODEL_ID)
-                    .timeout(ofSeconds(120))
-                    .temperature(1.0)
-                    .maxNewTokens(30)
-                    .waitForModel(true)
-                    .build();
-        }
-        return languageModel;
-    }
-
-    private HuggingFaceEmbeddingModel getEmbeddingModel() {
-        if (embeddingModel == null) {
-            embeddingModel = HuggingFaceEmbeddingModel.builder()
-                    .accessToken(HUGGING_FACE_API_KEY)
-                    .modelId(SENTENCE_TRANSFORMERS_ALL_MINI_LM_L6_V2)
-                    .timeout(ofSeconds(120))
-                    .waitForModel(true)
-                    .build();
-        }
-        return embeddingModel;
-    }
+    private ModelBuilder modelBuilder;
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -75,9 +40,9 @@ public class ModelResource {
             summary = "Use the language model.",
             description = "Provide a sequence of words to a large language model.",
             operationId = "languageModelAsk")
-    public String languageModelAsk(@QueryParam("question") String question) {
+    public String languageModelAsk(@QueryParam("question") String question) throws Exception {
 
-        HuggingFaceLanguageModel model = getLanguageModel();
+        LanguageModel model = modelBuilder.getLanguageModel();
 
         String answer;
         try {
@@ -98,16 +63,9 @@ public class ModelResource {
             description = "Assume you are talking with an agent that is knowledgeable about " +
                     "Large Language Models. Ask any question about it.",
             operationId = "chatModelAsk")
-    public List<String> chatModelAsk(@QueryParam("userMessage") String userMessage) {
+    public List<String> chatModelAsk(@QueryParam("userMessage") String userMessage) throws Exception {
 
-        HuggingFaceChatModel model = HuggingFaceChatModel.builder()
-                .accessToken(HUGGING_FACE_API_KEY)
-                .modelId(LANGUAGE_MODEL_ID)
-                .timeout(ofSeconds(120))
-                .temperature(1.0)
-                .maxNewTokens(200)
-                .waitForModel(true)
-                .build();
+        ChatModel model = modelBuilder.getChatModelForResource();
 
         SystemMessage systemMessage = SystemMessage.from(
                 "You are very knowledgeable about Large Language Models. Be friendly. Give concise answers.");
@@ -137,9 +95,9 @@ public class ModelResource {
             operationId = "similarity")
     public Properties similarity(
             @QueryParam("text1") String text1,
-            @QueryParam("text2") String text2) {
+            @QueryParam("text2") String text2) throws Exception {
 
-        HuggingFaceEmbeddingModel model = getEmbeddingModel();
+        EmbeddingModel model = modelBuilder.getEmbeddingModel();
 
         List<TextSegment> textSegments = List.of(textSegment(text1), textSegment(text2));
         List<Embedding> embeddings = model.embedAll(textSegments).content();
