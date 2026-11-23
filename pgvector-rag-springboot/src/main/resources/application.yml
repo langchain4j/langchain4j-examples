@@ -1,0 +1,24 @@
+server:
+  port: 8080
+
+# Standard LangChain4j Spring Boot starter properties.
+# These auto-configure ChatModel and EmbeddingModel beans.
+langchain4j:
+  ollama:
+    chat-model:
+      base-url: http://localhost:11434
+      model-name: llama3.2
+      log-requests: true
+      log-responses: true
+    embedding-model:
+      base-url: http://localhost:11434
+      model-name: nomic-embed-text
+
+# PGVector connection properties, consumed manually in RagConfiguration
+# (see that class's Javadoc for why there's no dedicated starter yet).
+pgvector:
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:postgres}
+    username: ${POSTGRES_USER:my_user}
+    password: ${POSTGRES_PASSWORD:my_password}
+  table: document_embeddings
