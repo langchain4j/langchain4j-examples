@@ -29,6 +29,7 @@ public class Neo4jEmbeddingStoreExample {
             searchEmbeddingsWithAddAllWithMetadataMaxResultsAndMinScore();
             
             // custom embeddingStore
+            // tag::custom-embedding-store[]
             Neo4jEmbeddingStore customEmbeddingStore = Neo4jEmbeddingStore.builder()
                     .withBasicAuth(neo4j.getBoltUrl(), "neo4j", neo4j.getAdminPassword())
                     .dimension(embeddingModel.dimension())
@@ -38,16 +39,17 @@ public class Neo4jEmbeddingStoreExample {
                     .idProperty("customId")
                     .textProperty("customText")
                     .build();
+            // end::custom-embedding-store[]
             searchEmbeddingsWithSingleMaxResult(customEmbeddingStore);
         }
     }
 
     private static void searchEmbeddingsWithSingleMaxResult(EmbeddingStore<TextSegment> minimalEmbedding) {
-        
+        // tag::add-single-embedding[]
         TextSegment segment1 = TextSegment.from("I like football.");
         Embedding embedding1 = embeddingModel.embed(segment1).content();
         minimalEmbedding.add(embedding1, segment1);
-
+        // end::add-single-embedding[]
         TextSegment segment2 = TextSegment.from("The weather is good today.");
         Embedding embedding2 = embeddingModel.embed(segment2).content();
         minimalEmbedding.add(embedding2, segment2);
@@ -65,7 +67,7 @@ public class Neo4jEmbeddingStoreExample {
     }
     
     private static void searchEmbeddingsWithAddAllAndSingleMaxResult() {
-        
+        // tag::add-multiple-embeddings[]
         TextSegment segment1 = TextSegment.from("I like football.");
         Embedding embedding1 = embeddingModel.embed(segment1).content();
 
@@ -78,7 +80,8 @@ public class Neo4jEmbeddingStoreExample {
                 List.of(embedding1, embedding2, embedding3),
                 List.of(segment1, segment2, segment3)
         );
-
+        // end::add-multiple-embeddings[]
+        
         Embedding queryEmbedding = embeddingModel.embed("What are your favourites sport?").content();
         final EmbeddingSearchRequest request = EmbeddingSearchRequest.builder()
                 .queryEmbedding(queryEmbedding)
@@ -94,7 +97,8 @@ public class Neo4jEmbeddingStoreExample {
     }
 
     private static void searchEmbeddingsWithAddAllWithMetadataMaxResultsAndMinScore() {
-        
+
+        // tag::add-multiple-embeddings-metadata[]
         TextSegment segment1 = TextSegment.from("I like football.", Metadata.from("test-key-1", "test-value-1"));
         Embedding embedding1 = embeddingModel.embed(segment1).content();
 
@@ -107,7 +111,8 @@ public class Neo4jEmbeddingStoreExample {
                 List.of(embedding1, embedding2, embedding3),
                 List.of(segment1, segment2, segment3)
         );
-
+        // end::add-multiple-embeddings-metadata[]
+        
         Embedding queryEmbedding = embeddingModel.embed("What are your favourite sports?").content();
         final EmbeddingSearchRequest request = EmbeddingSearchRequest.builder()
                 .queryEmbedding(queryEmbedding)
